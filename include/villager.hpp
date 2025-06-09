@@ -3,24 +3,18 @@
 #include<string>
 #include<iostream>
 #include"location.hpp"
-class villiger
+class villager
 {
-private:
-std::string name;
-const location * safe_location;
-location *current_location;
-public:
-void set_name(std::string);
-void set_current_location();
-villiger(std::string);
+    private:
+    std::string name;
+    const location * safe_location;
+    location *current_location;
 
-
-
+    public:
+    void set_name(std::string);
+    void set_current_location();
+    villager(std::string);
 
 };
-
-
-
-
 
 #endif

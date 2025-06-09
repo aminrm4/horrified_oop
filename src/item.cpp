@@ -1,7 +1,7 @@
 #include "item.hpp"
 #include <exception>
 
-item::item(int power , std::string name , Color color /* , loc* location */)
+item::item(int power , std::string name , Color color , location* loc)
 {
     if(power <=0)
     throw std::logic_error("invalid power \n");
@@ -9,7 +9,7 @@ item::item(int power , std::string name , Color color /* , loc* location */)
     this->power = power;
     this->name = name;
     this->color = color;
-    //this->location = location;
+    this->loc = loc;
 }
 int item::get_power()
 {
@@ -24,9 +24,8 @@ Color item::get_Color()
     return color;
 }
 
-/*
-loc* get_loc()
+location* item::get_loc()
 {
-    return location;
+    return loc;
 }
-*/
+

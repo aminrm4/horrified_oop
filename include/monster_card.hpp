@@ -10,6 +10,7 @@ class monster_card
     public:
     virtual void event(perk * ,hero* hero, monster ,std::vector<std::vector<int>>& map, villager *)=0;
     virtual void munster_strike(int dice_attack,int move,monster *)=0;
+    
     protected:
     int item_count;
 
