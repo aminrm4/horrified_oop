@@ -10,6 +10,7 @@ class hero
     std::vector<villager> villagers;
     
     public:
+    void advance();
     void guide();
     void defeat();
     void move(location* loc , std::vector <villager> villagers = {});
