@@ -1,7 +1,8 @@
 # ---> C++
 # Prerequisites
 *.d
-
+.vscode
+*.drawio
 # Compiled Object files
 *.slo
 *.lo
