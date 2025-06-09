@@ -3,7 +3,7 @@
 #include<string>
 #include<iostream>
 #include"location.hpp"
-class villiger
+class villager
 {
 private:
 std::string name;
@@ -12,7 +12,7 @@ location *current_location;
 public:
 void set_name(std::string);
 void set_current_location();
-villiger(std::string);
+villager(std::string);
 
 
 

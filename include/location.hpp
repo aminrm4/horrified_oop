@@ -6,18 +6,18 @@ class location
 {
 protected:
  int loc_relation;
-bool coughen_exist;
-std::vector<villiger *> villiger_list;
-location(const int ,bool,villiger *);
- location()=delete;
-
-
+bool coffin_exist;
+std::vector<villager *> villager_list;
 
 
 public:
-   virtual void set_coughen_exist(bool)=0;
-  virtual void set_viliger(villiger *)=0;
-  virtual void set_loc_relation(int )=0;  
+    virtual void set_coffin_exist(bool)=0;
+    virtual void set_viliger(villager)=0;
+    virtual void set_loc_relation(int )=0;  
+    location(int ,bool,villager *);
+    location()=delete;
+    virtual ~location();
+
 
 };
 
