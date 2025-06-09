@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/app.dir/src/main.cpp.o -o app   -L/home/amin/raylib/build  -Wl,-rpath,/home/amin/raylib/build -lraylib -lsfml-graphics -lsfml-window -lsfml-system 
