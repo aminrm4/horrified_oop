@@ -1,4 +1,4 @@
-#pragma
+#pragma once
 #include "hero.hpp"
 #include <vector>
 class Mayor : public hero

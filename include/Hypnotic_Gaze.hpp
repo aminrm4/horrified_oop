@@ -1,4 +1,4 @@
-#pragma
+#pragma once
 #include "monster_card.hpp"
 
 class Hypnotic_Gaze : public monster_card

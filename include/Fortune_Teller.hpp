@@ -1,4 +1,4 @@
-#pragma
+#pragma once
 #include "monster_card.hpp"
 
 class Fortune_Teller : public monster_card

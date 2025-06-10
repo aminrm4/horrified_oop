@@ -1,4 +1,4 @@
-#pragma
+#pragma once
 #include "monster_card.hpp"
 
 class On_the_move : public monster_card

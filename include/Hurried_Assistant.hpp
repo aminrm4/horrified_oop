@@ -1,4 +1,4 @@
-#pragma
+#pragma once
 #include "monster_card.hpp"
 
 class Hurried_Assistant : public monster_card

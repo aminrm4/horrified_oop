@@ -15,7 +15,7 @@ public:
     void set_loc_relation(int);
     int get_loc_relation() const;
     bool get_coffin_exist() const;
-     std ::vector<villager *> &get_villager_list();
+    std ::vector<villager *> &get_villager_list();
 
     location(int, bool, villager *);
     location() = delete;
