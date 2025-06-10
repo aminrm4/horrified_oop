@@ -9,4 +9,6 @@ class invisible_man : public monster
     public:
     void stalk_unseen(villager *);
     invisible_man(int remain_hidden_item, bool is_freenzy ,int freenzy_order,location* loc);
+    void set_remain_hidden_item(int);
+    int get_remain_hidden_item();
 };

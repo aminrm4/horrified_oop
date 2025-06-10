@@ -24,3 +24,11 @@ void Drakula::Dark_charm(hero* Hero)
     cout << "Drakula used his DarkCharm Ability and teleported you to his location \n";
     Hero->move(this->loc);
 }
+int Drakula::get_remaining_coffin()
+{
+    return this->remain_coffin;
+}
+void Drakula::set_remaining_coffin(int c)
+{
+    remain_coffin = c;
+}
