@@ -4,6 +4,8 @@
 #include "vector"
 #include "villager.hpp"
 #include "perk.hpp"
+#include"Drakula.hpp"
+#include"Invisible_man.hpp"
 class hero
 {
     

@@ -11,7 +11,7 @@ enum class map1 : int
     shop = 5,
     museum = 6,
     cryptt = 7,
-    abbey,
+    abbey=8,
     mansion = 9,
     theatre = 10,
     tower = 11,
