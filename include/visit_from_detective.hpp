@@ -10,7 +10,7 @@ class programm;
 class visit_from_detective:public perk
 {
 public:
-    void play(hero *, std::vector<hero *>, monster *, location *, std::vector<item *>, std::vector<monster *>, std::vector<std::vector<int>>) override final;
+    void play(hero *, std::vector<hero *>, monster *,std:: vector<location *>, std::vector<item *>, std::vector<monster *>, std::vector<std::vector<int>>) override final;
 
     visit_from_detective()=default;
     ~visit_from_detective()=default;
