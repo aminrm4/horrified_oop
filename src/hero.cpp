@@ -303,7 +303,7 @@ void hero::defeat(Drakula* D , invisible_man* I)
     if(D->get_loc() == this->get_loc())
     {
         if(D->get_remaining_coffin() <= 0)
-        cout << "There is no more coffi";
+        cout << "There is no more coffin you can defeat him !!";
     }
     if(I->get_loc() == this->get_loc())
     {}
