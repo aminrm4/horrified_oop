@@ -1,4 +1,4 @@
-#pragma
+#pragma once
 #include <string>
 #include <Color.hpp>
 #include "location.hpp"
