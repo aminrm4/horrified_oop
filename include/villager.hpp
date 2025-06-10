@@ -1,26 +1,21 @@
 #ifndef VILLAGER_HPP
-#define VILIIAGER_HPP
-#include<string>
-#include<iostream>
-#include"location.hpp"
+#define VILLAGER_HPP
+#include <string>
+#include <iostream>
+class location;
 class villager
 {
 private:
-std::string name;
-const location * safe_location;
-location *current_location;
+    std::string name;
+    location *const safe_location;
+    location *current_location;
+
 public:
-void set_name(std::string);
-void set_current_location();
-villager(std::string);
-
-
-
-    public:
     void set_name(std::string);
-    void set_current_location();
-    villager(std::string);
-
+    void set_current_location(location *);
+    villager(std::string, location *, location *);
+    ~villager();
+    villager() = delete;
 };
 
 #endif
