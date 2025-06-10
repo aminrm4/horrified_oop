@@ -1,5 +1,6 @@
 #include "item.hpp"
 #include <exception>
+using namespace std;
 
 item::item(int power , std::string name , Color color , location* loc)
 {
@@ -29,3 +30,7 @@ location* item::get_loc()
     return loc;
 }
 
+ostream& operator<<(ostream& output , item i)
+{
+    return output<<i.get_name()<<' '<<i.get_power()<<' '<<i.get_Color();
+}

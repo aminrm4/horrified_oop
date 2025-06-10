@@ -8,4 +8,6 @@ class Drakula : public monster
     public:
     void Dark_charm(hero*);
     Drakula(int coffin, bool is_freenzy,int freenzy_order,location* ptr);
+    int get_remaining_coffin();
+    void set_remaining_coffin(int );
 };
