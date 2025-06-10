@@ -23,10 +23,16 @@ void Archaeologist::special_action(vector<vector<int>>& map , vector<location*> 
         {
             for(auto locations : loc)
                 if(locations->get_loc_relation() == node)
-                    {//locations-> need itemlist geter 
-                    ;
-                    // need fix
-                    //this->item_have.insert()
+                    { 
+                        vector<item*> items = locations->get_item_list();
+                        cout << "you picked these items :\n";
+                        for(auto item : items)
+                            cout << item << endl;
+                        
+                        cout <<endl;
+                        this->item_have.insert(items.begin() , items.end() , item_have.end());
+                    
+                        locations->set_item_list({});
                 }
         }
         else

@@ -85,6 +85,7 @@ location::~location()
         }
         
      }
+<<<<<<< HEAD
      void  location::set_hero_list(hero* hi)
      {
             if (hi==nullptr)
@@ -118,3 +119,5 @@ location::~location()
                 {
                     return monster_list;
                 }
+=======
+>>>>>>> ab67507d2beb17205e2d34f017b18e61e7443ee1

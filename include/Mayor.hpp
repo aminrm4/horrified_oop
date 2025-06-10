@@ -3,8 +3,5 @@
 #include <vector>
 class Mayor : public hero
 {
-    int action;
-    std::vector<item*> item_have;
-    std::vector<perk*> perk_have;
-
+   void special_action(vector<vector<int>>& map , vector<location*> loc);
 };
