@@ -1,8 +1,9 @@
 #include "location.hpp"
 #include "villager.hpp"
+#include "item.hpp"
 #include <iostream>
 using namespace std;
-location::location(int relation, bool coffin, villager *vill)
+location::location(int relation, bool coffin, villager *vill,item * item_lis)
 {
     try
     {
@@ -17,6 +18,7 @@ location::location(int relation, bool coffin, villager *vill)
     try
     {
         set_villager(vill);
+        set_item_list(item_lis);
     }
     catch (bad_alloc &e)
     {
@@ -66,3 +68,19 @@ bool location::get_coffin_exist() const
 location::~location()
 {
 }
+    vector<item*> & location:: get_item_list()
+    {
+        return item_list;
+    }
+     void  location ::set_item_list(item* li)
+     {
+        if (li==nullptr)
+        {
+            throw bad_alloc();
+        }
+        else
+        {
+            item_list.push_back(li);
+        }
+        
+     }

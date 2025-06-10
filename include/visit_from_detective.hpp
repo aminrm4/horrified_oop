@@ -6,6 +6,7 @@
 #include "location.hpp"
 #include <bits/stdc++.h>
 #include "perk.hpp"
+class programm;
 class visit_from_detective:public perk
 {
 public:

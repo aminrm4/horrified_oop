@@ -1,4 +1,5 @@
 #include "monster.hpp"
+
 using namespace std;
 void monster::move_to_place(std::vector <int> route , int number_route , vector<location*> locations)
 {
