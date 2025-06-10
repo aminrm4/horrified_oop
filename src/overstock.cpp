@@ -3,7 +3,7 @@
 #include <iostream>
 #include <iterator>
 using namespace std;
-void overstock::play(hero *he, std::vector<hero *> her_list, monster *mon, location *loc, std::vector<item *> item_list, std::vector<monster *> mon_list, std::vector<std::vector<int>> map)
+void overstock::play(hero * he, std::vector<hero *> he_list, monster * mo,std:: vector<location *> loc, std::vector<item *>it_list, std::vector<monster *>mo_list, std::vector<std::vector<int>>road)
 
 {
      programm help_object;
@@ -11,12 +11,12 @@ void overstock::play(hero *he, std::vector<hero *> her_list, monster *mon, locat
           set<int>temp;
      temp = help_object.random_generator(1, 35, 2);
      accesser=temp.begin();
-     auto item1 = item_list[*accesser];
+     auto item1 = it_list[*accesser];
+     item1->get_loc()->set_item_list(item1);
      accesser++;
-     auto item2 = item_list[*accesser]; // monster are players?
-     loc->set_item_list(item1);
-     loc->set_item_list(item2);
-     item_list.erase(item_list.begin()+*accesser);
+     auto item2 = it_list[*accesser]; // monster are players?
+     item2->get_loc()->set_item_list(item2);
+     it_list.erase(it_list.begin()+*accesser);
      accesser--;
-     item_list.erase(item_list.begin()+*accesser);
+     it_list.erase(it_list.begin()+*accesser);
 }

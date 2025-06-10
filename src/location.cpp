@@ -2,8 +2,9 @@
 #include "villager.hpp"
 #include "item.hpp"
 #include <iostream>
+#include"hero.hpp"
 using namespace std;
-location::location(int relation, bool coffin, villager *vill,item * item_lis)
+location::location(int relation, bool coffin, villager *vill,item * item_lis,hero*her_list,monster*mon_list)
 {
     try
     {
@@ -16,7 +17,8 @@ location::location(int relation, bool coffin, villager *vill,item * item_lis)
     }
     set_coffin_exist(coffin);
     try
-    {
+    {   set_hero_list(her_list);
+        set_monster_list(mon_list);
         set_villager(vill);
         set_item_list(item_lis);
     }
@@ -84,3 +86,36 @@ location::~location()
         }
         
      }
+     void  location::set_hero_list(hero* hi)
+     {
+            if (hi==nullptr)
+            {
+                throw bad_alloc();
+            }
+            else
+            {
+                hero_list.push_back(hi);
+            }
+            
+     }
+     void location:: set_monster_list(monster *mo)
+     {
+        if (mo==nullptr)
+        {
+            throw bad_alloc();
+        }
+        else
+        {
+            monster_list.push_back(mo);
+        }
+        
+     }
+
+         vector<hero*>&  location::get_hero_list()
+         {
+            return hero_list;
+         }
+                vector<monster*> & location:: get_monster_list()
+                {
+                    return monster_list;
+                }
