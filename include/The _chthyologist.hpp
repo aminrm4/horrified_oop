@@ -1,4 +1,4 @@
-#pragma
+#pragma once
 #include "monster_card.hpp"
 class The_Ichthyologist : public monster_card
 {

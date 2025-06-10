@@ -1,9 +1,10 @@
-#pragma
+#pragma once
 #include <item.hpp>
 #include <vector>
 #include "hero.hpp"
 #include "villager.hpp"
 #include "monster.hpp"
+#include "perk.hpp"
 
 class monster_card
 {

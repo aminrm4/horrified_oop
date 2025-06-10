@@ -1,4 +1,4 @@
-#pragma
+#pragma once
 #include "monster.hpp"
 #include "villager.hpp"
 #include "location.hpp"

@@ -1,4 +1,4 @@
-#pragma
+#pragma once
 #include "hero.hpp"
 
 class Archaeologist : public hero
@@ -8,5 +8,5 @@ class Archaeologist : public hero
     std::vector<perk*> perk_have;
 
     public: 
-    void special_action(std::vector<std::vector<int>>& map);
+    void special_action(std::vector<std::vector<int>>& map , vector<location*> loc);
 };
