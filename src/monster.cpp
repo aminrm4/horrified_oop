@@ -13,6 +13,8 @@ void monster::move_to_place(std::vector <int> route , int number_route , vector<
 }
 void monster::set_loc(location* loc)
 {
+    if(loc == NULL)
+    throw invalid_argument("invalid argument");
     this->loc = loc;
 }
 location* monster::get_loc()
