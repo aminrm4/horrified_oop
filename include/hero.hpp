@@ -14,6 +14,8 @@ class hero
     void guide();
     void defeat();
     void move(location* loc , std::vector <villager> villagers = {});
+    location* get_loc();
+    vector<villager> get_villagers();
 
 
 };
