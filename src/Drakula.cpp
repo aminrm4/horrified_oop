@@ -21,6 +21,6 @@ void Drakula::Dark_charm(hero* Hero)
     if(Hero == NULL)
     throw logic_error("Cant access the Hero \n");
     
-    cout << "Drakula used his DarkCharm Ability and teleported you to his location";
+    cout << "Drakula used his DarkCharm Ability and teleported you to his location \n";
     Hero->move(this->loc);
 }
