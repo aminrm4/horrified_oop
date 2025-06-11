@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include<bits/stdc++.h>
 enum class map1 : int
 {
 

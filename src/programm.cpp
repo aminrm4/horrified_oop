@@ -20,103 +20,78 @@ set<int> programm::random_generator(int start, int end, int count)
 programm::programm()
 { 
       my_map.resize(maxn);
-    // بیمارستان ⇄ کلیسا
     my_map[0].push_back(2);
     my_map[2].push_back(0);
 
-    // کلیسا ⇄ منشن (manschen)
     my_map[2].push_back(9);
     my_map[9].push_back(2);
 
-    // کلیسا ⇄ قبرستان
     my_map[2].push_back(1);
     my_map[1].push_back(2);
 
-    // کلیسا ⇄ موزه
     my_map[2].push_back(6);
     my_map[6].push_back(2);
 
-    // کلیسا ⇄ فروشگاه
     my_map[2].push_back(5);
     my_map[5].push_back(2);
 
-    // آزمایشگاه ⇄ موسسه (ins)
     my_map[3].push_back(4);
     my_map[4].push_back(3);
 
-    // فروشگاه ⇄ موزه
     my_map[6].push_back(5);
     my_map[5].push_back(6);
 
-    // منشن ⇄ موزه
     my_map[6].push_back(9);
     my_map[9].push_back(6);
 
-    // آزمایشگاه ⇄ فروشگاه
     my_map[4].push_back(5);
     my_map[5].push_back(4);
 
-    // منشن ⇄ فروشگاه
     my_map[9].push_back(5);
     my_map[5].push_back(9);
 
-    // منشن ⇄ صومعه (abbey)
     my_map[9].push_back(8);
     my_map[8].push_back(9);
 
-    // قبرستان زیرزمینی (crypt) ⇄ صومعه
     my_map[7].push_back(8);
     my_map[8].push_back(7);
 
-    // فروشگاه ⇄ تئاتر
     my_map[5].push_back(10);
     my_map[10].push_back(5);
 
-    // منشن ⇄ تئاتر
     my_map[9].push_back(10);
     my_map[10].push_back(9);
 
-    // منشن ⇄ اردوگاه (camp)
     my_map[9].push_back(18);
     my_map[18].push_back(9);
 
-    // منشن ⇄ کارگاه (pric)
     my_map[9].push_back(14);
     my_map[14].push_back(9);
 
-    // منشن ⇄ مهمان‌خانه (inn)
     my_map[9].push_back(13);
     my_map[13].push_back(9);
 
-    // تئاتر ⇄ برج
     my_map[10].push_back(11);
     my_map[11].push_back(10);
 
-    // تئاتر ⇄ انبار (barn)
     my_map[10].push_back(15);
     my_map[15].push_back(10);
 
-    // تئاتر ⇄ مهمان‌خانه
     my_map[10].push_back(13);
     my_map[13].push_back(10);
 
-    // تئاتر ⇄ کارگاه
     my_map[10].push_back(14);
     my_map[14].push_back(10);
 
-    // تئاتر ⇄ اردوگاه
     my_map[10].push_back(18);
     my_map[18].push_back(10);
 
-    // برج ⇄ زندان (dunjen)
     my_map[11].push_back(16);
     my_map[16].push_back(11);
 
-    // برج ⇄ پل (duck)
     my_map[11].push_back(12);
     my_map[12].push_back(11);
 
-    // اردوگاه ⇄ غار (cave)
     my_map[18].push_back(17);
     my_map[17].push_back(18);
 }

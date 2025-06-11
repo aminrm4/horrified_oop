@@ -2,9 +2,9 @@
 #include "villager.hpp"
 #include "item.hpp"
 #include <iostream>
-#include"hero.hpp"
+#include "hero.hpp"
 using namespace std;
-location::location(int relation, bool coffin, villager *vill,item * item_lis,hero*her_list,monster*mon_list)
+location::location(int relation, bool coffin, villager *vill, item *item_lis, hero *her_list, monster *mon_list)
 {
     try
     {
@@ -17,7 +17,8 @@ location::location(int relation, bool coffin, villager *vill,item * item_lis,her
     }
     set_coffin_exist(coffin);
     try
-    {   set_hero_list(her_list);
+    {
+        set_hero_list(her_list);
         set_monster_list(mon_list);
         set_villager(vill);
         set_item_list(item_lis);
@@ -63,63 +64,68 @@ bool location::get_coffin_exist() const
 {
     return coffin_exist;
 }
- vector<villager *> &location::get_villager_list() 
+vector<villager *> &location::get_villager_list()
 {
     return villager_list;
 }
 location::~location()
 {
 }
-    vector<item*> & location:: get_item_list()
+vector<item *> &location::get_item_list()
+{
+    return item_list;
+}
+void location ::set_item_list(item *li)
+{
+    if (li == nullptr)
     {
-        return item_list;
+        throw bad_alloc();
     }
-     void  location ::set_item_list(item* li)
-     {
-        if (li==nullptr)
-        {
-            throw bad_alloc();
-        }
-        else
-        {
-            item_list.push_back(li);
-        }
-        
-     }
-     void  location::set_hero_list(hero* hi)
-     {
-            if (hi==nullptr)
-            {
-                throw bad_alloc();
-            }
-            else
-            {
-                hero_list.push_back(hi);
-            }
-            
-     }
-     void location:: set_monster_list(monster *mo)
-     {
-        if (mo==nullptr)
-        {
-            throw bad_alloc();
-        }
-        else
-        {
-            monster_list.push_back(mo);
-        }
-        
-     }
+    else
+    {
+        item_list.push_back(li);
+    }
+}
+void location::set_hero_list(hero *hi)
+{
+    if (hi == nullptr)
+    {
+        throw bad_alloc();
+    }
+    else
+    {
+        hero_list.push_back(hi);
+    }
+}
+void location::set_monster_list(monster *mo)
+{
+    if (mo == nullptr)
+    {
+        throw bad_alloc();
+    }
+    else
+    {
+        monster_list.push_back(mo);
+    }
+}
 
-         vector<hero*>&  location::get_hero_list()
-         {
-            return hero_list;
-         }
-                vector<monster*> & location:: get_monster_list()
-                {
-                    return monster_list;
-                }
-                void location::delete_item()
-                {
-                    item_list.clear();
-                }
+vector<hero *> &location::get_hero_list()
+{
+    return hero_list;
+}
+vector<monster *> &location::get_monster_list()
+{
+    return monster_list;
+}
+void location::delete_item()
+{
+    item_list.clear();
+}
+void location::delete_villager_list()
+{
+    villager_list.clear();
+}
+void location ::delete_monster_list()
+{
+    monster_list.clear();
+}

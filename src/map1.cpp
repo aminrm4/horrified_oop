@@ -1,5 +1,6 @@
 #include"map1.hpp"
 #include<iostream>
+#include<bits/stdc++.h>
 using namespace std;
  std::ostream & operator<<( std::ostream & output,map1 &obj1)
  {
@@ -73,4 +74,6 @@ using namespace std;
         
     }
     return output;
+    
  }
+  
