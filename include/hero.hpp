@@ -23,6 +23,7 @@ class hero
     void defeat(Drakula* D , invisible_man* I);
     void move(location* loc , std::vector <villager*> villagers = {});
     int get_action();
+    void set_action(int);
     location* get_loc();
     vector<villager> get_villagers();
 
