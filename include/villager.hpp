@@ -16,6 +16,9 @@ public:
     villager(std::string, location *, location *);
     ~villager();
     villager() = delete;
+    location * get_currnet_location();
+    location * const  get_safe_location();
+
 };
 
 #endif
