@@ -23,8 +23,16 @@ void hero::move(location *loc, vector<villager *> villagers = {})
                 throw logic_error("invalid Character \n");
 
             if (status == 'y')
-                for (auto v : villagers)
-                    v->set_current_location(this->loc);
+                {
+                    for (auto v : villagers)
+                        v->set_current_location(this->loc);
+
+                    for (int i = 0; i < villagers.size(); i++)
+                    {
+                        if(villagers[i]->) // fix here
+                    }
+                    
+                }
         }
         catch (logic_error &e)
         {
