@@ -8,7 +8,7 @@
 class perk
 {
 public:
-    virtual void play(hero *, std::vector<hero *>, monster *,std:: vector<location *>, std::vector<item *>, std::vector<monster *>, std::vector<std::vector<int>>) = 0;
+    virtual void play(hero *he, std::vector<hero *> he_list, monster *mo, std::vector<location *> loc, std::vector<item *> it_list, std::vector<monster *> mo_list, programm help_obj1) = 0;
     perk()=default;
     ~perk()=default;
 };

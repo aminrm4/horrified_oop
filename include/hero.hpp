@@ -24,6 +24,7 @@ class hero
     void move(location* loc , std::vector <villager*> villagers = {});
     int get_action();
     void pickup();
+    void set_action(int);
     location* get_loc();
     vector<villager> get_villagers();
 
