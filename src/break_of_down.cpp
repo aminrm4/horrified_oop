@@ -3,6 +3,7 @@
 #include "map1.hpp"
 #include <bits/stdc++.h>
 #include "programm.hpp"
+using namespace std;
 void break_of_down::play(hero * he, std::vector<hero *> he_list, monster * mo,std:: vector<location *> loc, std::vector<item *>it_list, std::vector<monster *>mo_list, std::vector<std::vector<int>>road)
 {
    // continue;

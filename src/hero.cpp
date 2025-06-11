@@ -309,3 +309,7 @@ void hero::defeat(Drakula* D , invisible_man* I)
     {}
     cerr << "There is no monster here \n";
 }
+    void  hero::set_action(int set)
+    {
+            action=set;
+    }
