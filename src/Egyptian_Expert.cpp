@@ -17,7 +17,14 @@ void Egyptian_Expert::event(perk * p,hero* hero, monster ,std::vector<std::vecto
     
     
 }
-void Egyptian_Expert::monster_strike(int dice_attack,int move,monster *)
+void Egyptian_Expert::monster_strike(int dice_attack,int move,std::vector<monster *> monsters , vector<int> route , vector<location*> &loc)
 {
-    
+    for(auto m : monsters)
+        {
+            if(typeid(*m).name() == typeid(Drakula).name() || m->get_freenzy_status())
+                {
+                    m->move_to_place( route, move ,loc);
+                    cout << "look a monster moved his place be careful \n";
+                }
+        }
 }
