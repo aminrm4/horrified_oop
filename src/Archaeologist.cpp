@@ -45,6 +45,8 @@ void Archaeologist::special_action(vector<vector<int>>& map , vector<location*> 
    catch(logic_error &e)
    {
     cout << e.what();
+    special_action(map , loc);
+    return;
    }
 
 
