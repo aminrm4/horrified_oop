@@ -1,6 +1,7 @@
 #include "programm.hpp"
 using namespace std;
 #include <bits/stdc++.h>
+ int programm::night_terror=0;
 set<int> programm::random_generator(int start, int end, int count)
 {
   set<int> my_random;
@@ -143,3 +144,11 @@ std::vector<int> programm::bfs(int s, int t)
     return path;
   }
 }
+  int  programm:: get_night_terror()
+ {
+  return night_terror;
+ }
+     void  programm::set_night_terror(int value)
+    {
+      night_terror=value;
+    }

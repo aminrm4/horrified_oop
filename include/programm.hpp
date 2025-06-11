@@ -4,7 +4,9 @@
 #include "item.hpp"
 #include "perk.hpp"
 #include "location.hpp"
-#include"map1.hpp"
+#include "map1.hpp"
+#include"monster_card.hpp"
+#include"monster.hpp"
 class programm
 {
 public:
@@ -14,8 +16,14 @@ public:
     std::vector<item *> list_of_items;
     std::vector<perk *> list_of_perks;
     std::vector<std::vector<int>> my_map;
+    std::vector<monster *>monster_list;
+    std::vector<monster_card *>monster_card_list;
+    void next_frenzy();
+
+    static int night_terror;
+
     std::vector<int> bfs(int s, int t);
+    static int get_night_terror();
+    static void set_night_terror(int);
     programm();
-    
-    
 };
