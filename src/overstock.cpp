@@ -3,7 +3,7 @@
 #include <iostream>
 #include <iterator>
 using namespace std;
-void overstock::play(hero * he, std::vector<hero *> he_list, monster * mo,std:: vector<location *> loc, std::vector<item *>it_list, std::vector<monster *>mo_list, std::vector<std::vector<int>>road)
+void overstock::play(hero *he, std::vector<hero *> he_list, monster *mo, std::vector<location *> loc, std::vector<item *> it_list, std::vector<monster *> mo_list, programm help_obj1)
 
 {
      programm help_object;
@@ -19,4 +19,5 @@ void overstock::play(hero * he, std::vector<hero *> he_list, monster * mo,std:: 
      it_list.erase(it_list.begin()+*accesser);
      accesser--;
      it_list.erase(it_list.begin()+*accesser);
+
 }

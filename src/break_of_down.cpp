@@ -4,7 +4,7 @@
 #include <bits/stdc++.h>
 #include "programm.hpp"
 using namespace std;
-void break_of_down::play(hero * he, std::vector<hero *> he_list, monster * mo,std:: vector<location *> loc, std::vector<item *>it_list, std::vector<monster *>mo_list, std::vector<std::vector<int>>road)
+void break_of_down::play(hero *he, std::vector<hero *> he_list, monster *mo, std::vector<location *> loc, std::vector<item *> it_list, std::vector<monster *> mo_list, programm help_obj1)
 {
    // continue;
    // skip the monster_phase
@@ -23,4 +23,5 @@ void break_of_down::play(hero * he, std::vector<hero *> he_list, monster * mo,st
    it_list.erase(it_list.begin() + *accesser);
    accesser--;
    it_list.erase(it_list.begin() + *accesser);
+   
 }
