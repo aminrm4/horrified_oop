@@ -29,6 +29,7 @@ public:
     location(int relation, bool coffin, villager *vill,item * item_lis,hero*her_list,monster*mon_list);
     location() = delete;
     ~location();
+    void delete_item();
 };
 
 #endif
