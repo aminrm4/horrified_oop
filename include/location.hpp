@@ -30,6 +30,8 @@ public:
     location() = delete;
     ~location();
     void delete_item();
+    void delete_villager_list();
+    void delete_monster_list();
 };
 
 #endif
