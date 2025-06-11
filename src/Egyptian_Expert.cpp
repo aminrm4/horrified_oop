@@ -14,6 +14,7 @@ void Egyptian_Expert::event(perk * p,hero* hero, monster *m,std::vector<std::vec
             
 
     }
+        cout << "Prof.person sommend in cave go and help him \n";
     
     
 }

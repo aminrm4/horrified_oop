@@ -25,10 +25,9 @@ void monster_card::monster_strike(int dice_attack,int move, monster* monsters , 
             vector<villager*> v = monsters->get_loc()->get_villager_list();
             if(!v.empty())
             {
-                cout << "Oh noooooo a villager died ";
-                cout << "RIP villager \n";
-                v.erase(v.begin());
-                //monsters->get_loc()->villager_list;
+                cout << "Oh noooooo all the villagers died ";
+                cout << "RIP villager's \n";
+                monsters->get_loc()->delete_villager_list();
             }
         }
         
