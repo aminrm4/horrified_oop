@@ -29,7 +29,11 @@ void hero::move(location *loc, vector<villager *> villagers = {})
 
                     for (int i = 0; i < villagers.size(); i++)
                     {
-                        if(villagers[i]->) // fix here
+                       if(villagers[i]->get_currnet_location() == villagers[i]->get_safe_location())
+                        {
+                            cout << "thank you hero you bring me to my safe location";
+                            this->perk_have.push_back(villagers[i]->drop_the_perk());
+                        }
                     }
                     
                 }
@@ -409,4 +413,20 @@ void hero::pickup()
 void hero::set_action(int set)
 {
     action = set;
+}
+void hero::set_perks(vector<perk*> perks)
+{
+    perk_have = perks;
+}
+vector<perk*> hero::get_perks()
+{
+    return perk_have;
+}
+void hero::set_item(vector<item*> items)
+{
+    item_have = items;
+}
+vector<item*> hero::get_items()
+{
+    return item_have;
 }

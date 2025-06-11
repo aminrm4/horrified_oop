@@ -1,6 +1,6 @@
 #include "Hypnotic_Gaze.hpp"
 
-void Hypnotic_Gaze::event(perk * p,hero* hero, monster *m,std::vector<std::vector<int>>& map,std::vector<location*>& loc)
+void Hypnotic_Gaze::event(perk * p,hero* hero, monster *m,std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a)
 {
     // fix here
 }

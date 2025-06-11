@@ -1,7 +1,7 @@
 #include "Egyptian_Expert.hpp"
 #include "programm.hpp"
 using namespace std;
-void Egyptian_Expert::event(perk * p,hero* hero, monster *m,std::vector<std::vector<int>>& map,std::vector<location*>& loc)
+void Egyptian_Expert::event(perk * p,hero* hero, monster *m,std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a)
 {
     for (int i = 0; i < loc.size(); i++)
     {
@@ -9,7 +9,7 @@ void Egyptian_Expert::event(perk * p,hero* hero, monster *m,std::vector<std::vec
             for (int j = 0; j < loc.size(); j++)
             {
                 if(loc[j]->get_loc_relation() == 6)
-                    loc[i]->set_villager(new villager("Prof.person" ,loc[j] ,loc[i]));
+                    loc[i]->set_villager(new villager("Prof.person" ,loc[j] ,loc[i] , a));
             }
             
 

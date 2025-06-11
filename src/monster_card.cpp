@@ -27,8 +27,48 @@ void monster_card::monster_strike(int dice_attack,int move, monster* monsters , 
             {
                 cout << "Oh noooooo all the villagers died ";
                 cout << "RIP villager's \n";
+                p.set_night_terror(p.get_night_terror() + v.size());
                 monsters->get_loc()->delete_villager_list();
+                return ;
             }
+            vector<hero*> pp = monsters->get_loc()->get_hero_list();
+            if(!pp.empty())
+            {
+                cout << "Oh no the monster reached you u must drop item u escape from monster strike \n";
+                cout << "Do you want to do it ? [Y]es , [N]o";
+                try
+                {
+                    char status;
+                    cin >> status;
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    status = tolower(status);
+                    if(status == 'y')
+                    {
+                        int index;
+                        cout << "enter the index of your item  " << typeid(*pp[0]).name() << endl;
+                        cin >> index;
+                        vector <item*> invo = pp[0]->get_items();
+                        invo.erase(invo.begin());
+                        pp[0]->set_item(invo);
+                        return;
+                    }
+                    else
+                    {
+                        cout << "you couldnt save your self but i managed to heal you and bring you to hospital \n";
+                        p.set_night_terror(p.get_night_terror() + 1);
+                        pp[0]->move(loc[0]);
+                    }
+
+
+                }
+                catch(const logic_error& e)
+                {
+                    std::cerr << e.what() << '\n';
+
+                }
+                
+            }
+            cout << "tanks god he is far away \n";
         }
         
 }

@@ -1,7 +1,7 @@
 #include "form_of_the_bat.hpp"
 using namespace std;
 
-void form_of_the_bat::event(perk * p,hero* hero, monster *m,std::vector<std::vector<int>>& map,std::vector<location*>& loc)
+void form_of_the_bat::event(perk * p,hero* hero, monster *m,std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a)
 {
     m->set_loc(hero->get_loc());
     cout << "the form_of_the_bat monster card played and Drakula teleported to a player \n";
