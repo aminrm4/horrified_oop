@@ -21,3 +21,7 @@ location* monster::get_loc()
 {
     return this->loc;
 }
+bool monster::get_freenzy_status()
+{
+    return this->is_freenzy;
+}

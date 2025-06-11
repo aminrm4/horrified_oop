@@ -376,7 +376,28 @@ You're hosting me.)";
     }
     cerr << "There is no monster here \n";
 }
-void hero::pickup() {}
+void hero::pickup()
+{
+    vector<item*> items = this->loc->get_item_list();
+    cout << "OH look there is something hidden under this big rock move it using enter \n";
+    cin.get();
+    if(!items.empty())
+    {
+        cout << "WOW look what you just found";
+        for (int i = 0; i < items.size(); i++)
+        {
+            cout << items[i] << endl;
+        }
+        this->item_have.insert(items.begin() , items.end() , item_have.end());
+        //this->loc->item_list.clear();   fix here
+    }
+    else
+    {
+        cout << "may bad it seems noting is under this rock \n";
+    }
+    
+
+}
 void hero::set_action(int set)
 {
     action = set;
