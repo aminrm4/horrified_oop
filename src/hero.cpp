@@ -23,8 +23,20 @@ void hero::move(location *loc, vector<villager *> villagers = {})
                 throw logic_error("invalid Character \n");
 
             if (status == 'y')
-                for (auto v : villagers)
-                    v->set_current_location(this->loc);
+                {
+                    for (auto v : villagers)
+                        v->set_current_location(this->loc);
+
+                    for (int i = 0; i < villagers.size(); i++)
+                    {
+                       if(villagers[i]->get_currnet_location() == villagers[i]->get_safe_location())
+                        {
+                            cout << "thank you hero you bring me to my safe location";
+                            this->perk_have.push_back(villagers[i]->drop_the_perk());
+                        }
+                    }
+                    
+                }
         }
         catch (logic_error &e)
         {
@@ -376,8 +388,45 @@ You're hosting me.)";
     }
     cerr << "There is no monster here \n";
 }
-void hero::pickup() {}
+void hero::pickup()
+{
+    vector<item*> items = this->loc->get_item_list();
+    cout << "OH look there is something hidden under this big rock move it using enter \n";
+    cin.get();
+    if(!items.empty())
+    {
+        cout << "WOW look what you just found";
+        for (int i = 0; i < items.size(); i++)
+        {
+            cout << items[i] << endl;
+        }
+        this->item_have.insert(items.begin() , items.end() , item_have.end());
+        this->loc->delete_item();
+    }
+    else
+    {
+        cout << "may bad it seems noting is under this rock \n";
+    }
+    
+
+}
 void hero::set_action(int set)
 {
     action = set;
+}
+void hero::set_perks(vector<perk*> perks)
+{
+    perk_have = perks;
+}
+vector<perk*> hero::get_perks()
+{
+    return perk_have;
+}
+void hero::set_item(vector<item*> items)
+{
+    item_have = items;
+}
+vector<item*> hero::get_items()
+{
+    return item_have;
 }

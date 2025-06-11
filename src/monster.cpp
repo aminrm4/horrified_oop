@@ -4,6 +4,8 @@ void monster::move_to_place(std::vector <int> route , int number_route , vector<
 {
     if(!locations.empty() || !route.empty() )
         throw invalid_argument("invalid input\n");
+    if(number_route >= route.size())
+        number_route = route.size()-1;
 
     for(auto locationIndex: locations)
         if(route[number_route] == locationIndex->get_loc_relation())
@@ -20,4 +22,8 @@ void monster::set_loc(location* loc)
 location* monster::get_loc()
 {
     return this->loc;
+}
+bool monster::get_freenzy_status()
+{
+    return this->is_freenzy;
 }

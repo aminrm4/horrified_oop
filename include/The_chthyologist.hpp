@@ -1,7 +1,7 @@
 #pragma once
 #include "monster_card.hpp"
 using namespace std;
-class The_Innocent : public monster_card
+class The_chthyologist : public monster_card
 {
     public:
     void event(perk * p,hero* hero, monster *m,std::vector<std::vector<int>>& map,std::vector<location*>& loc  , programm&);
