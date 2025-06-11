@@ -389,7 +389,7 @@ void hero::pickup()
             cout << items[i] << endl;
         }
         this->item_have.insert(items.begin() , items.end() , item_have.end());
-        //this->loc->item_list.clear();   fix here
+        this->loc->delete_item();
     }
     else
     {
