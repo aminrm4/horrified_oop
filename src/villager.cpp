@@ -33,3 +33,11 @@ villager::villager(std::string name, location *safe, location *curr) : safe_loca
 villager::~villager()
 {
 }
+location *  villager::get_currnet_location()
+{
+    return current_location;
+}
+    location * const villager:: get_safe_location()
+    {
+        return safe_location;
+    }
