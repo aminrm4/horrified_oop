@@ -20,9 +20,10 @@ class hero
     virtual void special_action(vector<vector<int>>& map , vector<location*> loc) = 0;
     void advance(Drakula D , invisible_man I);
     void guide(vector<vector<int>> map);
-    void defeat(Drakula* D , invisible_man* I);
+    void defeat(Drakula* D , invisible_man* I , vector<monster*>& monsters);
     void move(location* loc , std::vector <villager*> villagers = {});
     int get_action();
+    void pickup();
     location* get_loc();
     vector<villager> get_villagers();
 

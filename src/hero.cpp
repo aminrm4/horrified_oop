@@ -6,7 +6,7 @@
 #include "Invisible_man.hpp"
 using namespace std;
 
-void hero::move(location* loc , vector<villager*>villagers = {} )
+void hero::move(location* loc , vector<villager*> villagers = {} )
 {
     this->loc = loc;
     if(!villagers.empty())
@@ -298,14 +298,104 @@ int hero::get_action()
 {
     return action;
 }
-void hero::defeat(Drakula* D , invisible_man* I)
+void hero::defeat(Drakula* D , invisible_man* I , vector<monster*>& monsters)
 {
     if(D->get_loc() == this->get_loc())
     {
         if(D->get_remaining_coffin() <= 0)
-        cout << "There is no more coffin you can defeat him !!";
+        {
+            cout << "There is no more coffin left you can defeat him using enter button!!";
+            cin.get();
+            cout << "oh look he left a massage for you \n";
+            cin.get();
+            cout<<R"(Foolish mortal...
+You have not slain evil...
+You have merely unshackled it.
+
+I was a prison, not the prisoner.
+The darkness you feared was held at bay by me.
+
+Now?
+Now it walks free.
+And it wears your face...)";
+
+            for (int i = 0; i < monsters.size(); i++)
+            {
+                if(typeid(*monsters[i]).name() == typeid(Drakula).name())
+                {
+                    monsters.erase(monsters.begin() + i);
+                    return;
+                }
+            }
+            
+        }
+        else
+        {
+            cout << "Oh noo Drakula is still strong run Away before he capture you !!! \n";
+            cin.get();
+            cout << R"(Four coffins... four hearts...
+And yet here you are, thinking a blade alone can end me.
+I do not die by steel.
+I die by wisdom... patience... sacrifice.
+Qualities you sorely lack.
+
+You see only me—but you should fear what sustains me.
+Each coffin is a pact, each soul within a seal.
+Until they are undone, I am inevitable.
+
+Go now, little hero.
+Burn the world to find my weakness—
+And when you return...
+I’ll be waiting.
+Hungrier.)";
+return;
+        }
+
     }
     if(I->get_loc() == this->get_loc())
-    {}
+    {
+        if(I->get_remain_hidden_item() <= 0)
+        {
+            cout << "There is no more item that are hidden you can defeat him using enter button!!";
+            cin.get();
+            cout <<R"(Clever.
+Painful... but clever.
+
+They’ll sing of you, yes.
+A hero who saw the unseen.
+Who caged the wind.
+
+But know this—
+I was never alone.
+Shadows don’t die.
+They wait.
+
+So sleep light, hero.
+The next whisper…
+may still be me.)";
+            for (int i = 0; i < monsters.size(); i++)
+            {
+                if(typeid(*monsters[i]).name() == typeid(invisible_man).name())
+                {
+                    monsters.erase(monsters.begin() + i);
+                    return;
+                }
+            }
+        }
+        else
+            {
+        cout << R"(You can’t kill what you can’t see.
+You swing at shadows… I carve through souls.
+
+I’ve worn your friend’s voice.
+I’ve slept in your camp.
+You prayed last night—and I listened.
+
+You're not hunting me, hero.
+You're hosting me.)";
+return;
+            }
+    }
     cerr << "There is no monster here \n";
 }
+void hero::pickup(){}
