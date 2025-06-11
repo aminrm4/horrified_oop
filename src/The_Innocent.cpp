@@ -1,8 +1,8 @@
 #include "The_Innocent.hpp"
 
-void The_Innocent::event(perk * p,hero* hero, monster *m,std::vector<std::vector<int>>& map,std::vector<location*>& loc)
+void The_Innocent::event(perk * p,hero* hero, monster *m,std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a)
 {
-    loc[15]->set_villager(new villager("Maria" ,loc[18], loc[15] ));
+    loc[15]->set_villager(new villager("Maria" ,loc[18], loc[15], a ));
                     cout << "Maria sommend in barn go and help him \n";
 
 }

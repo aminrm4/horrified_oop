@@ -1,8 +1,8 @@
 #include "The_chthyologist.hpp"
 
-void The_chthyologist::event(perk * p,hero* hero, monster *m,std::vector<std::vector<int>>& map,std::vector<location*>& loc)
+void The_chthyologist::event(perk * p,hero* hero, monster *m,std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a)
 {
-    loc[3]->set_villager(new villager("Dr.Reed" , loc[18] , loc[3]));
+    loc[3]->set_villager(new villager("Dr.Reed" , loc[18] , loc[3] , a));
             cout << "Dr.Reed sommend in institute go and help him \n";
 
 }

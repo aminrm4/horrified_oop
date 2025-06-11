@@ -1,8 +1,8 @@
 #include "The_Delivery .hpp"
 
-void The_Delivery::event(perk * p,hero* hero, monster *m,std::vector<std::vector<int>>& map,std::vector<location*>& loc)
+void The_Delivery::event(perk * p,hero* hero, monster *m,std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a)
 {
-    loc[12]->set_villager(new villager("Chick & Wilbur" , loc[16] , loc[12]));
+    loc[12]->set_villager(new villager("Chick & Wilbur" , loc[16] , loc[12] , a));
                 cout << "Chick & Wilbur sommend in docks go and help him \n";
 
 }
