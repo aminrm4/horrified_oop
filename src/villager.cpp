@@ -18,7 +18,7 @@ void villager::set_current_location(location *loc)
         current_location = loc;
     }
 }
-villager::villager(std::string name, location *safe, location *curr) : safe_location(safe)
+villager::villager(std::string name, location *safe, location *curr,programm & help_object1) : safe_location(safe)
 {
     set_name(name);
     try
@@ -29,9 +29,13 @@ villager::villager(std::string name, location *safe, location *curr) : safe_loca
     {
         cerr << "erro happend in seting villager locations" << endl;
     }
+   auto it= help_object1.random_generator(0,20,1);
+   award=help_object1.list_of_perks[*it.begin()];
+
 }
 villager::~villager()
 {
+
 }
 location *  villager::get_currnet_location()
 {
@@ -41,3 +45,7 @@ location *  villager::get_currnet_location()
     {
         return safe_location;
     }
+    perk * villager:: drop_the_perk()
+        {
+            return award;
+        }
