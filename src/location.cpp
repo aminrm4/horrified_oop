@@ -119,3 +119,7 @@ location::~location()
                 {
                     return monster_list;
                 }
+     void location:: delete_item()
+     {
+        item_list.clear();
+     }
