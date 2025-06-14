@@ -91,3 +91,5 @@ void Hypnotic_Gaze::monster_strike(int dice_attack, int move, vector<monster *> 
             monster_card::monster_strike(dice_attack, move, monsters[i], route, loc, h);
     }
 }
+//write as a test
+//write  as a test
