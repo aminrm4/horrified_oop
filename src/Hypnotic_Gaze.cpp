@@ -5,6 +5,9 @@ void Hypnotic_Gaze::event(perk *p, hero *hero, monster *m, std::vector<std::vect
 {
     vector<int> hero_places;
     vector<villager *> option;
+    vector<villager *> option1;
+    bool find = false;
+    int saver = 0;
     int mon_place = m->get_loc()->get_loc_relation();
     for (size_t i = mon_place - 1; i <= 0; i--)
     {
@@ -18,11 +21,22 @@ void Hypnotic_Gaze::event(perk *p, hero *hero, monster *m, std::vector<std::vect
 
             for (size_t j = 0; j < it.size(); j++)
             {
-                option.push_back(it[j]);
-                break;
+                if (!find)
+                {
+                    option1.push_back(it[j]);
+                }
+
+                if (a.bfs(it[j]->get_currnet_location()->get_loc_relation(), mon_place).size() == 2)
+                {
+                    option.push_back(it[j]);
+                    find = true;
+
+                    break;
+                }
             }
         }
     }
+    find = false;
     for (size_t i = mon_place + 1; i < 19; i++)
     {
         if (loc[i]->get_villager_list().empty())
@@ -35,8 +49,17 @@ void Hypnotic_Gaze::event(perk *p, hero *hero, monster *m, std::vector<std::vect
 
             for (size_t j = 0; j < it.size(); j++)
             {
-                option.push_back(it[j]);
-                break;
+                if (!find)
+                {
+                    option1.push_back(it[j]);
+                }
+
+                if (a.bfs(it[j]->get_currnet_location()->get_loc_relation(), mon_place).size() == 2)
+                {
+                    option.push_back(it[j]);
+                    find = true;
+                    break;
+                }
             }
         }
     }
@@ -47,23 +70,16 @@ void Hypnotic_Gaze::event(perk *p, hero *hero, monster *m, std::vector<std::vect
         int vb = b->get_currnet_location()->get_loc_relation();
         return std::abs(va - mon_place) < std::abs(vb - mon_place);
     };
-    auto it = min_element(option.begin(), option.end(), cmp);
-    int finall = (*it)->get_currnet_location()->get_loc_relation();
-    auto vil = loc[finall]->get_villager_list();
-
-    if (a.bfs(finall, mon_place).size() > 2)
+    if (!option.empty())
     {
-        for (size_t k = 0; k < vil.size(); k++)
-        {
-            vil[k]->set_current_location(loc[a.bfs(finall, mon_place)[1]]);
-        }
+
+        auto it = min_element(option.begin(), option.end(), cmp);
+        (*it)->set_current_location(loc[mon_place]);
     }
     else
     {
-        for (size_t k = 0; k < vil.size(); k++)
-        {
-            vil[k]->set_current_location(loc[mon_place]);
-        }
+        auto it=min_element(option1.begin(),option1.end(),cmp);
+        (*it)->set_current_location(loc [a.bfs((*it)->get_currnet_location()->get_loc_relation(),mon_place)[1]]);
     }
 }
 
