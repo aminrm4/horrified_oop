@@ -191,3 +191,16 @@ void programm::next_frenzy()
   }
   
 }
+    bool programm:: check_terro_night()
+    {
+      if (night_terror>=5)
+      {
+        return false;
+      }
+      
+    }
+perk*  programm::set_award(int index)
+{
+  return list_of_perks[index];
+}
+ 

@@ -17,15 +17,15 @@ class hero
     std::vector<perk*> perk_have;
     
     public:
-    virtual void special_action(vector<vector<int>>& map , vector<location*> loc) = 0;
-    void advance(Drakula D , invisible_man I);
-    void guide(vector<vector<int>> map);
+    virtual void special_action(vector<vector<int>>& map , const vector<location*>  & loc={}) = 0;
+    void advance(Drakula & D , invisible_man & I);
+    void guide(vector<vector<int>>&  map);
     void defeat(Drakula* D , invisible_man* I , vector<monster*>& monsters);
-    void move(location* loc , std::vector <villager*> villagers = {});
+    void move(location* loc , const std::vector <villager*>& villagers={});
     int get_action();
     void set_perks(vector<perk*> perks);
     vector<perk*> get_perks();
-    void set_item(vector<item*> items);
+    void set_item(vector<item*>  items);
     vector <item*> get_items();
     void pickup();
     void set_action(int);

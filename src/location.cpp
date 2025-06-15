@@ -64,14 +64,14 @@ bool location::get_coffin_exist() const
 {
     return coffin_exist;
 }
-vector<villager *> &location::get_villager_list()
+vector<villager *> location::get_villager_list()
 {
     return villager_list;
 }
 location::~location()
 {
 }
-vector<item *> &location::get_item_list()
+vector<item *> location::get_item_list()
 {
     return item_list;
 }
@@ -109,11 +109,11 @@ void location::set_monster_list(monster *mo)
     }
 }
 
-vector<hero *> &location::get_hero_list()
+vector<hero *> location::get_hero_list()
 {
     return hero_list;
 }
-vector<monster *> &location::get_monster_list()
+vector<monster *> location::get_monster_list()
 {
     return monster_list;
 }

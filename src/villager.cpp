@@ -30,7 +30,7 @@ villager::villager(std::string name, location *safe, location *curr,programm & h
         cerr << "erro happend in seting villager locations" << endl;
     }
    auto it= help_object1.random_generator(0,20,1);
-   award=help_object1.list_of_perks[*it.begin()];
+   award=help_object1.set_award(*it.begin());
 
 }
 villager::~villager()

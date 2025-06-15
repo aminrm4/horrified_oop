@@ -5,7 +5,7 @@
 #include "programm.hpp"
 #include  "map1.hpp"
 using namespace std;
-void repel::play(hero *he, std::vector<hero *> he_list, monster *mo, std::vector<location *> loc, std::vector<item *> it_list, std::vector<monster *> mo_list, programm help_obj1)
+void repel::play(hero *he, std::vector<hero *> & he_list, monster *mo, std::vector<location *> & loc, std::vector<item *> & it_list, std::vector<monster *> & mo_list, programm & help_obj1)
 {
 
   for (size_t i = 0; i < 2; i++)

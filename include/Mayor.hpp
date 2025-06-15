@@ -3,5 +3,5 @@
 #include <vector>
 class Mayor : public hero
 {
-   void special_action(vector<vector<int>>& map , vector<location*> loc);
+   void special_action(vector<vector<int>>& map , vector<location*> & loc);
 };

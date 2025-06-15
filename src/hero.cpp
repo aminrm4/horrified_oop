@@ -6,7 +6,7 @@
 #include "Invisible_man.hpp"
 using namespace std;
 
-void hero::move(location *loc, vector<villager *> villagers = {})
+void hero::move(location *loc,  const vector<villager *> &villagers={})//used to delete the initializer cause of the pass by refrence
 {
     this->loc = loc;
     if (!villagers.empty())
@@ -46,7 +46,7 @@ void hero::move(location *loc, vector<villager *> villagers = {})
         }
     }
 }
-void hero::guide(vector<vector<int>> map)
+void hero::guide(vector<vector<int>>& map)
 {
     int thisNumLoc = this->loc->get_loc_relation();
     for (auto related_node : map[thisNumLoc])
@@ -79,7 +79,7 @@ void hero::guide(vector<vector<int>> map)
         guide(map);
     }
 }
-void hero::advance(Drakula D, invisible_man I)
+void hero::advance(Drakula &D, invisible_man &I)
 {
     cout << "pls select a monster \n [D]rakula \n [I]nvisible man \n";
     try

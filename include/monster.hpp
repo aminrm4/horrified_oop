@@ -9,9 +9,9 @@ class monster
     location* loc;
 
     public:
-    virtual void ability(std::vector <int> route, vector<location*> locations , hero* h) = 0;
+    virtual void ability(std::vector <int> & route, vector<location*> & locations , hero* h) = 0;
     bool get_freenzy_status();
-    void move_to_place(std::vector <int> route , int number_route , vector<location*> locations);
+    void move_to_place(std::vector <int> & route , int number_route , vector<location*> & locations);
     void set_loc(location* );
     location* get_loc();
     bool get_is_frenzy();

@@ -7,7 +7,6 @@ void Hypnotic_Gaze::event(perk *p, hero *hero, monster *m, std::vector<std::vect
     vector<villager *> option;
     vector<villager *> option1;
     bool find = false;
-    int saver = 0;
     int mon_place = m->get_loc()->get_loc_relation();
     for (size_t i = mon_place - 1; i <= 0; i--)
     {
@@ -17,7 +16,7 @@ void Hypnotic_Gaze::event(perk *p, hero *hero, monster *m, std::vector<std::vect
         }
         else
         {
-            auto it = loc[i]->get_villager_list();
+            auto it = loc[i]->get_villager_list();//watch the refrences
 
             for (size_t j = 0; j < it.size(); j++)
             {
@@ -83,7 +82,7 @@ void Hypnotic_Gaze::event(perk *p, hero *hero, monster *m, std::vector<std::vect
     }
 }
 
-void Hypnotic_Gaze::monster_strike(int dice_attack, int move, vector<monster *> monsters, vector<int> route, vector<location *> &loc, hero *h)
+void Hypnotic_Gaze::monster_strike(int dice_attack, int move, vector<monster *> & monsters, vector<int> & route, vector<location *> &loc, hero *h)
 {
     for (int i = 0; i < monsters.size(); i++)
     {
@@ -91,5 +90,3 @@ void Hypnotic_Gaze::monster_strike(int dice_attack, int move, vector<monster *> 
             monster_card::monster_strike(dice_attack, move, monsters[i], route, loc, h);
     }
 }
-//write as a test
-//write  as a test
