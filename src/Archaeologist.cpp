@@ -1,6 +1,6 @@
 #include "Archaeologist.hpp"
 using namespace std;
-void Archaeologist::special_action(vector<vector<int>>& map , vector<location*> & loc)
+void Archaeologist::special_action(vector<vector<int>>& map , const vector<location*> & loc={})
 {
     int node_number = this->get_loc()->get_loc_relation();
 

@@ -6,9 +6,15 @@
 #include <map>
 #include <iostream>
 
-using namespace std;  
+using namespace std;
 using namespace ftxui;
-
+void clearScreen() {
+    #ifdef __WIN32 
+        system("cls");
+    #else 
+        system("clear");
+    #endif
+}
 struct LocationInfo {
   string items;
   string monsters;
@@ -18,7 +24,7 @@ struct LocationInfo {
 void RenderGameUI() {
   auto screen = ScreenInteractive::TerminalOutput();
 
-   const std::string map_ascii = R"MAP(
+  const std::string map_ascii = R"MAP(
 +---------------------------------------------------------------------------------------+
 |                                    institute                                          |
 |                                       │                                               |
@@ -39,7 +45,6 @@ void RenderGameUI() {
 |                                └──── dungeon                                          |
 +---------------------------------------------------------------------------------------+
 )MAP";
-
 
   map<string, LocationInfo> location_data = {
     {"Lab",      {"Garlic(2)",   "None",        "Gholi (Barn)"}},
@@ -75,7 +80,8 @@ void RenderGameUI() {
   auto vil_menu = Radiobox(&villagers, &sel_vil);
   auto act_menu = Radiobox(&actions, &sel_act);
 
-  string last_message;
+  string enter1, enter2;
+  int enter_count = 0;
 
   Component renderer = Renderer([&] {
     Elements elements;
@@ -111,10 +117,7 @@ void RenderGameUI() {
         paragraph(action_help[actions[sel_act]])
       })));
     }
-
     elements.push_back(separator());
-    elements.push_back(paragraph(last_message));
-
     return vbox(std::move(elements)) | border;
   });
 
@@ -132,17 +135,25 @@ void RenderGameUI() {
       show_act = !show_act; show_loc = show_hero = show_vil = false; return true;
     }
     if (event == Event::Return) {
+      string message;
       if (show_loc)
-        last_message = "ENTER in Location menu: " + locations[sel_loc];
+        message = "ENTER in Location menu: " + locations[sel_loc];
       else if (show_hero)
-        last_message = "ENTER in Hero panel";
+        message = "ENTER in Hero panel";
       else if (show_vil)
-        last_message = "ENTER in Villager menu: " + villagers[sel_vil];
+        message = "ENTER in Villager menu: " + villagers[sel_vil];
       else if (show_act)
-        last_message = "ENTER in Action menu: " + actions[sel_act];
+        message = "ENTER in Action menu: " + actions[sel_act];
       else
-        last_message = "ENTER pressed";
-      screen.Exit();
+        message = "ENTER pressed";
+
+      ++enter_count;
+      if (enter_count == 1) {
+        enter1 = message;
+      } else if (enter_count == 2) {
+        enter2 = message;
+        screen.Exit();
+      }
       return true;
     }
     if (show_loc)    return loc_menu->OnEvent(event);
@@ -153,11 +164,13 @@ void RenderGameUI() {
 
   screen.Loop(app);
 
-  cout << last_message << endl;
-  cin.get();
+  cout << "First ENTER: " << enter1 << endl;
+  cout << "Second ENTER: " << enter2 << endl;
 }
 
 int main() {
   RenderGameUI();
+  clearScreen();
+  RenderGameUI();
   return 0;
-} 
+}

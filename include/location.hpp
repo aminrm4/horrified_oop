@@ -3,6 +3,8 @@
 #include <bits/stdc++.h>
 #include "villager.hpp"
 #include"item.hpp"
+
+
 class location
 {
 private:
@@ -32,6 +34,7 @@ public:
     void delete_item();
     void delete_villager_list();
     void delete_monster_list();
+   
 };
 
 #endif

@@ -43,3 +43,7 @@ void monster::set_frenzy_order(int frenz)
 {
     freenzy_order=frenz;
 }
+    string monster:: get_mons_name()
+    {
+        return name_of_monster;
+    }

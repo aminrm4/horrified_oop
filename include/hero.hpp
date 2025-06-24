@@ -15,6 +15,7 @@ class hero
     int action;
     std::vector<item*> item_have;
     std::vector<perk*> perk_have;
+    string name_of_hero;
     
     public:
     virtual void special_action(vector<vector<int>>& map , const vector<location*>  & loc={}) = 0;
@@ -31,6 +32,7 @@ class hero
     void set_action(int);
     location* get_loc();
     vector<villager> get_villagers();
+    string get_hero_name();
 
 
 };

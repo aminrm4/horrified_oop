@@ -49,3 +49,7 @@ location *  villager::get_currnet_location()
         {
             return award;
         }
+        string  villager::get_name()
+        {
+            return name;
+        }

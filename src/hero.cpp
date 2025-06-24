@@ -430,3 +430,7 @@ vector<item*> hero::get_items()
 {
     return item_have;
 }
+    string  hero::get_hero_name()
+    {
+        return name_of_hero;
+    }
