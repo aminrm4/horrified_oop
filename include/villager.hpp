@@ -21,6 +21,7 @@ public:
     location * get_currnet_location();
     location * const  get_safe_location();
         perk * drop_the_perk();
+        string get_name();
 
 
 };

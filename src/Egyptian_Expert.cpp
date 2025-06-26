@@ -18,7 +18,7 @@ void Egyptian_Expert::event(perk * p,hero* hero, monster *m,std::vector<std::vec
     
     
 }
-void Egyptian_Expert::monster_strike(int dice_attack,int move, vector<monster*> monsters , vector<int> route , vector<location*>&loc , hero* h )
+void Egyptian_Expert::monster_strike(int dice_attack,int move, vector<monster*>&  monsters , vector<int>  & route , vector<location*>&loc , hero* h )
 {
     
     for (int i = 0; i < monsters.size(); i++)

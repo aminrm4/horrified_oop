@@ -30,7 +30,7 @@ location* item::get_loc()
     return loc;
 }
 
-ostream& operator<<(ostream& output , item i)
+ostream& operator<<(ostream& output , item & i)
 {
     return output<<i.get_name()<<' '<<i.get_power()<<' '<<i.get_Color();
 }

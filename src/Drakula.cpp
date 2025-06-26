@@ -16,7 +16,7 @@ Drakula::Drakula(int coffin, bool is_freenzy,int freenzy_order,location* ptr)
     this->loc = ptr;
     
 }
-void Drakula::ability(std::vector <int> route , vector<location*> locations , hero* h)
+void Drakula::ability(std::vector <int> & route , vector<location*> & locations , hero* h)
 {
     if(h == nullptr)
     throw logic_error("Cant access the hero \n");
