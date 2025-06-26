@@ -7,12 +7,13 @@
 #include "perk.hpp"
 #include "monster_card.hpp"
 #include"programm.hpp"
+class programm;
 
 class monster_card
 {
     public:
     virtual void event(perk * p,hero* hero, monster *m,std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a) =0;
-    void monster_strike(int dice_attack,int move, monster* monsters , vector<int> & route , vector<location*>&loc , hero* h );
+    void monster_strike(int dice_attack,int move, monster* monsters , std::vector<int> & route , std::vector<location*>&loc , hero* h );
     int get_item_count();
     virtual ~monster_card(){}
     protected:

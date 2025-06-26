@@ -1,6 +1,6 @@
 #include "Archaeologist.hpp"
 using namespace std;
-void Archaeologist::special_action(vector<vector<int>>& map , const vector<location*> & loc={})
+void Archaeologist::special_action(vector<vector<int>>& map , const vector<location*> & loc)
 {
     int node_number = this->get_loc()->get_loc_relation();
 
@@ -24,10 +24,11 @@ void Archaeologist::special_action(vector<vector<int>>& map , const vector<locat
             for(auto locations : loc)
                 if(locations->get_loc_relation() == node)
                     { 
-                        vector<item*> items = locations->get_item_list();
+                        vector<item*> items(locations->get_item_list());
+
                         cout << "you picked these items :\n";
-                        for(auto item : items)
-                            cout << item << endl;
+                        for(auto it : items)
+                            cout << it << endl;
                         
                         cout <<endl;
                         this->item_have.insert(items.begin() , items.end() , item_have.end());
@@ -49,5 +50,13 @@ void Archaeologist::special_action(vector<vector<int>>& map , const vector<locat
     return;
    }
 
+
+}
+Archaeologist::Archaeologist(int actions , location* starting_loc)
+{
+    if(actions < 0)
+    throw logic_error("invalid actions \n");
+
+    loc = starting_loc;
 
 }

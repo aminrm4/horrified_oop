@@ -6,6 +6,10 @@
 #include "perk.hpp"
 #include"Drakula.hpp"
 #include"Invisible_man.hpp"
+class villager;
+class location;
+class perk;
+class item;
 class hero
 {
     
@@ -18,7 +22,7 @@ class hero
     string name_of_hero;
     
     public:
-    virtual void special_action(vector<vector<int>>& map , const vector<location*>  & loc={}) = 0;
+    virtual void special_action(vector<vector<int>>& map , const vector<location*>& loc={}) = 0;
     void advance(Drakula & D , invisible_man & I);
     void guide(vector<vector<int>>&  map);
     void defeat(Drakula* D , invisible_man* I , vector<monster*>& monsters);
