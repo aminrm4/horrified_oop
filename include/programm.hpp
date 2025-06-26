@@ -10,12 +10,13 @@
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
+using namespace std;
 struct LocationInfo
 {
-  string items;
-  string monsters;
-  string villagers;
-  string hero;
+  std::string items;
+  std::string monsters;
+  std::string villagers;
+  std::string hero;
 };
 class programm
 {
@@ -28,8 +29,8 @@ public:
   std::vector<std::vector<int>> my_map;
   std::vector<monster *> monster_list;
   std::vector<monster_card *> monster_card_list;
-  vector<monster*>monster_list;
-  vector<hero *>hero_list;
+  vector<monster *> monster_list;
+  vector<hero *> hero_list;
 
 public:
   perk *set_award(int); // make the data member private and have to add this function
@@ -41,12 +42,12 @@ public:
   programm();
   bool check_terro_night();
   void run();
-  void terminal_handler(LocationInfo &info,string &,string &);
+  void terminal_handler(LocationInfo &info, string &, string &);
   string show_all_item(const vector<item *> &show, LocationInfo &);
   string show_all_villager(const vector<villager *> &, LocationInfo &);
   string show_all_hero(const vector<hero *> &, LocationInfo &);
   string show_all_mosnter(const vector<monster *> &, LocationInfo &);
-  template<typename T>
+  template <typename T>
   string show_hero_deatail(T);
-   void clearScreen();
+  void clearScreen();
 };

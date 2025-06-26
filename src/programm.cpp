@@ -1,4 +1,4 @@
-#include "programm.hpp"
+#include "../include/programm.hpp"
 using namespace std;
 using namespace ftxui;
 #include <bits/stdc++.h>
@@ -111,11 +111,37 @@ programm::programm()
 
   my_map[18].push_back(17);
   my_map[17].push_back(18);
+/*monster_list[0]=Drakula(4,true,1,)
+monster_list[1]=invisible_man();
 
-  for (size_t i = 0; i < 19; i++)
-  {
-    list_of_location[i] = new location(i, 0, nullptr, nullptr, nullptr, nullptr);
-  }
+
+
+list_of_location[0]=new location(0,0,nullptr,nullptr,nullptr,nullptr);
+list_of_location[1]=new location(1,1,nullptr,nullptr,nullptr,nullptr)
+list_of_location[2]=new location(2,0,nullptr,nullptr,nullptr,nullptr)
+list_of_location[3]=new location(3,0,nullptr,nullptr,nullptr,nullptr)
+list_of_location[4]=new location(4,0,nullptr,nullptr,nullptr,nullptr)
+list_of_location[5]=new location(5,0,nullptr,nullptr,nullptr,nullptr)
+list_of_location[6]=new location(6,0,nullptr,nullptr,nullptr,nullptr)
+list_of_location[7]=new location(7,1,nullptr,nullptr,nullptr,nullptr)
+list_of_location[8]=new location(8,0,nullptr,nullptr,nullptr,nullptr)
+list_of_location[9]=new location(9,0,nullptr,nullptr,nullptr,nullptr)
+list_of_location[10]=new location(10,0,nullptr,nullptr,nullptr,nullptr)
+list_of_location[11]=new location(11,0,nullptr,nullptr,nullptr,nullptr)
+list_of_location[12]=new location(12,0,nullptr,nullptr,nullptr,nullptr)
+list_of_location[13]=new location(13,0,nullptr,nullptr,nullptr,nullptr)
+list_of_location[14]=new location(14,0,nullptr,nullptr,nullptr,nullptr)
+list_of_location[15]=new location(15,0,nullptr,nullptr,nullptr,nullptr)
+list_of_location[16]=new location(16,1,nullptr,nullptr,nullptr,nullptr)
+list_of_location[17]=new location(17,1,nullptr,nullptr,nullptr,dra)
+list_of_location1[18]=new location(18,0,nullptr,nullptr,nullptr,nullptr)
+*/
+
+
+
+
+
+
 }
 std::vector<int> programm::bfs(int s, int t)
 {
@@ -605,5 +631,9 @@ Component app = renderer | CatchEvent([&](Event event) {
 
 void programm::run()
 {
-  cout << "welcome to HORRIFIED place full of mystery";
+  cout << "welcome to HORRIFIED  city a place full of mystery";
+
+
+
+
 }
