@@ -25,7 +25,7 @@ void break_of_down::play(hero *he, std::vector<hero *>&  he_list, monster *mo, s
    it_list.erase(it_list.begin() + *accesser);
    
 }
-    break_of_down::break_of_down(string name_of_perk)
+    break_of_down::break_of_down()
     {
-      name=name_of_perk;
+      name="break_of_down";
     } 

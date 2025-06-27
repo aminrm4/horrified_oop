@@ -17,7 +17,7 @@ class hero
     
     protected:
     location* loc;
-    std::vector<villager> villagers;
+    std::vector<villager *> villagers;
     int action;
     std::vector<item*> item_have;
     std::vector<perk*> perk_have;
@@ -39,6 +39,7 @@ class hero
     location* get_loc();
      std::vector<villager> get_villagers();
     string get_hero_name();
+    hero(std::vector<perk *> &);
 
 
 };

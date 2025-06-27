@@ -52,11 +52,12 @@ void Archaeologist::special_action(vector<vector<int>>& map , const vector<locat
 
 
 }
-Archaeologist::Archaeologist(int actions , location* starting_loc)
+Archaeologist::Archaeologist(int actions , location* starting_loc,std::vector<perk *>&perks):hero(perks)
 {
     if(actions < 0)
     throw logic_error("invalid actions \n");
-
+    action=actions;
     loc = starting_loc;
+    name_of_hero="Archaeologist";
 
 }

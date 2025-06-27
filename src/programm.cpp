@@ -22,7 +22,7 @@ set<int> programm::random_generator(int start, int end, int count)
 {
   set<int> my_random;
   srand(time(nullptr));
-  if (start - end + 1 < count)
+  if (end- start + 1 < count)
   {
     throw logic_error("cant generate the random numbers \n");
   }
@@ -111,31 +111,103 @@ programm::programm()
 
   my_map[18].push_back(17);
   my_map[17].push_back(18);
-/*monster_list[0]=Drakula(4,true,1,)
-monster_list[1]=invisible_man();
 
 
 
-list_of_location[0]=new location(0,0,nullptr,nullptr,nullptr,nullptr);
-list_of_location[1]=new location(1,1,nullptr,nullptr,nullptr,nullptr)
-list_of_location[2]=new location(2,0,nullptr,nullptr,nullptr,nullptr)
-list_of_location[3]=new location(3,0,nullptr,nullptr,nullptr,nullptr)
-list_of_location[4]=new location(4,0,nullptr,nullptr,nullptr,nullptr)
-list_of_location[5]=new location(5,0,nullptr,nullptr,nullptr,nullptr)
-list_of_location[6]=new location(6,0,nullptr,nullptr,nullptr,nullptr)
-list_of_location[7]=new location(7,1,nullptr,nullptr,nullptr,nullptr)
-list_of_location[8]=new location(8,0,nullptr,nullptr,nullptr,nullptr)
-list_of_location[9]=new location(9,0,nullptr,nullptr,nullptr,nullptr)
-list_of_location[10]=new location(10,0,nullptr,nullptr,nullptr,nullptr)
-list_of_location[11]=new location(11,0,nullptr,nullptr,nullptr,nullptr)
-list_of_location[12]=new location(12,0,nullptr,nullptr,nullptr,nullptr)
-list_of_location[13]=new location(13,0,nullptr,nullptr,nullptr,nullptr)
-list_of_location[14]=new location(14,0,nullptr,nullptr,nullptr,nullptr)
-list_of_location[15]=new location(15,0,nullptr,nullptr,nullptr,nullptr)
-list_of_location[16]=new location(16,1,nullptr,nullptr,nullptr,nullptr)
-list_of_location[17]=new location(17,1,nullptr,nullptr,nullptr,dra)
-list_of_location1[18]=new location(18,0,nullptr,nullptr,nullptr,nullptr)
-*/
+
+ location object1(0,0,nullptr,nullptr,nullptr,nullptr);
+ location object2(1,1,nullptr,nullptr,nullptr,nullptr);
+ location object3(2,0,nullptr,nullptr,nullptr,nullptr);
+ location object4(3,0,nullptr,nullptr,nullptr,nullptr);
+ location object5(4,0,nullptr,nullptr,nullptr,nullptr);
+ location object6(5,0,nullptr,nullptr,nullptr,nullptr);
+ location object7(6,0,nullptr,nullptr,nullptr,nullptr);
+ location object8(7,1,nullptr,nullptr,nullptr,nullptr);
+ location object9(8,0,nullptr,nullptr,nullptr,nullptr);
+ location object10(9,0,nullptr,nullptr,nullptr,nullptr);
+location object11(10,0,nullptr,nullptr,nullptr,nullptr);
+ location object12(11,0,nullptr,nullptr,nullptr,nullptr);
+ location object13(12,0,nullptr,nullptr,nullptr,nullptr);
+ location object14(13,0,nullptr,nullptr,nullptr,nullptr);
+ location object15(14,0,nullptr,nullptr,nullptr,nullptr);
+ location object16(15,0,nullptr,nullptr,nullptr,nullptr);
+ location object17(16,1,nullptr,nullptr,nullptr,nullptr);
+location object18(17,1,nullptr,nullptr,nullptr,nullptr);
+ location object19(18,0,nullptr,nullptr,nullptr,nullptr);
+
+
+list_of_location[0]=&object1;
+list_of_location[1]=&object2;
+list_of_location[2]=&object3;
+list_of_location[3]=&object4;
+list_of_location[4]=&object5;
+list_of_location[5]=&object6;
+list_of_location[6]=&object7;
+list_of_location[7]=&object8;
+list_of_location[8]=&object9;
+list_of_location[9]=&object10;
+list_of_location[10]=&object11;
+list_of_location[11]=&object12;
+list_of_location[12]=&object13;
+list_of_location[13]=&object14;
+list_of_location[14]=&object15;
+list_of_location[15]=&object16;
+list_of_location[16]=&object17;
+list_of_location[17]=&object18;
+list_of_location[18]=&object19;
+
+visit_from_detective perk_object1;
+visit_from_detective perk_object2;
+visit_from_detective perk_object3;
+
+break_of_down perk_object4;
+break_of_down perk_object5;
+break_of_down perk_object6;
+
+
+overstock perk_object7;
+overstock perk_object8;
+overstock perk_object9;
+overstock perk_object10;
+
+late_into_night perk_object11;
+late_into_night perk_object12;
+late_into_night perk_object13;
+late_into_night perk_object14;
+
+repel perk_object15;
+repel perk_object16;
+repel perk_object17;
+
+hurry perk_object18;
+hurry perk_object19;
+hurry perk_object20;
+
+list_of_perks[0]=&perk_object1;
+list_of_perks[1]=&perk_object2;
+list_of_perks[2]=&perk_object3;
+list_of_perks[3]=&perk_object4;
+list_of_perks[4]=&perk_object5;
+list_of_perks[5]=&perk_object6;
+list_of_perks[6]=&perk_object7;
+list_of_perks[7]=&perk_object8;
+list_of_perks[8]=&perk_object9;
+list_of_perks[9]=&perk_object10;
+list_of_perks[10]=&perk_object11;
+list_of_perks[11]=&perk_object12;
+list_of_perks[12]=&perk_object13;
+list_of_perks[13]=&perk_object14;
+list_of_perks[14]=&perk_object15;
+list_of_perks[15]=&perk_object16;
+list_of_perks[16]=&perk_object17;
+list_of_perks[17]=&perk_object18;
+ list_of_perks[18]=&perk_object19;
+list_of_perks[19]=&perk_object20;
+
+
+
+
+
 
 
 
@@ -482,8 +554,19 @@ int enter_count=0;
       {"Quit", "Exit the game.(your data will be lost)"},
       {"use perk","use the perk wich hero have(from hero panel)"}
     };
-map<string,string > heros_data={
-{ "hero name ",hero_list[0] ->get_hero_name()},
+      /*for (size_t i = 0; i < hero_list.size(); i++)
+      {
+          if (typeid (*hero_list[i]).name()==typeid(Mayor).name())
+          {   
+
+          }
+          
+      }
+      
+      */
+    map<string,string > heros_data={
+
+{ "hero name ",hero_list[0]->get_hero_name()},
 {"item have " ,show_hero_deatail(hero_list[0]->get_items())},
 {"perk have ",show_hero_deatail(hero_list[0]->get_perks())},
 {"action left ",to_string( hero_list[0]->get_action())}

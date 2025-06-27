@@ -4,6 +4,8 @@
 #include <algorithm>
 #include "Drakula.hpp"
 #include "Invisible_man.hpp"
+#include"programm.hpp"
+#include<iterator>
 using namespace std;
 
 void hero::move(location *loc,  const vector<villager *> &villagers)//used to delete the initializer cause of the pass by refrence
@@ -447,3 +449,20 @@ vector<item*> hero::get_items()
     {
         return loc;
     }
+hero:: hero(std::vector<perk *>&perks)
+{
+    programm help_object;
+    set<int>random_perk;
+    random_perk=help_object.random_generator(0,perks.size(),1);
+    set<int>::iterator it=random_perk.begin();
+     vector<perk*> temp;
+     temp=get_perks();
+    temp.push_back(perks[*it]);
+    set_perks(temp);
+    perks.erase(perks.begin()+*it);
+
+
+
+
+
+}

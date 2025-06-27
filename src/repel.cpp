@@ -19,12 +19,11 @@ void repel::play(hero *he, std::vector<hero *> & he_list, monster *mo, std::vect
     }    
     int direct = mo_list[i]->get_loc()->get_loc_relation();
     auto path = help_obj1.bfs(direct, id);
-    mo_list[i]->move_to_place(path, 2, loc);
-    mo_list[i]->set_loc(loc[id]);//wich one?;
+    mo_list[i]->move_to_place(path, 2, loc);    
   }
 }
-     repel::repel(string name_of_perk) 
+     repel::repel() 
      {
-        name=name_of_perk;
+        name="repel";
      }
 
