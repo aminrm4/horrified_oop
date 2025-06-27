@@ -1,8 +1,7 @@
 #pragma once
 #include <string>
 #include <Color.hpp>
-#include "location.hpp"
-
+class location;
 class item
 {
     int power ;

@@ -11,7 +11,7 @@ class late_into_night : public perk
 {
 public:
     void play(hero *he, std::vector<hero *> &he_list, monster *mo, std::vector<location *>& loc, std::vector<item *> &it_list, std::vector<monster *> &mo_list, programm &help_obj1) override final;
-    late_into_night()=default;
+    late_into_night(std::string);
     ~late_into_night()=default;
 };
 

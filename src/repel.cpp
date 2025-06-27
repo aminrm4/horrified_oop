@@ -23,3 +23,8 @@ void repel::play(hero *he, std::vector<hero *> & he_list, monster *mo, std::vect
     mo_list[i]->set_loc(loc[id]);//wich one?;
   }
 }
+     repel::repel(string name_of_perk) 
+     {
+        name=name_of_perk;
+     }
+

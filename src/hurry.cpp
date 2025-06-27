@@ -44,3 +44,7 @@ void hurry::play(hero *he, std::vector<hero *> &he_list, monster *mo, std::vecto
         
     }
 }
+hurry::hurry(string name_of_perk)
+{
+    name=name_of_perk;
+}

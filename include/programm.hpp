@@ -5,12 +5,14 @@
 #include "perk.hpp"
 #include "location.hpp"
 #include "map1.hpp"
-#include "monster_card.hpp"
 #include "monster.hpp"
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
 using namespace std;
+class monster_card;
+class monster_list;
+class villager;
 struct LocationInfo
 {
   std::string items;
@@ -29,7 +31,6 @@ public:
   std::vector<std::vector<int>> my_map;
   std::vector<monster *> monster_list;
   std::vector<monster_card *> monster_card_list;
-  vector<monster *> monster_list;
   vector<hero *> hero_list;
 
 public:

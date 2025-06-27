@@ -1,5 +1,7 @@
 #include "Drakula.hpp"
-#include <exception>
+#include <stdexcept>
+#include<iostream>
+#include"hero.hpp"
 using namespace std;
 Drakula::Drakula(int coffin, bool is_freenzy,int freenzy_order,location* ptr)
 {

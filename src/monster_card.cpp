@@ -1,4 +1,3 @@
-#pragma once
 #include "monster_card.hpp"
 #include "programm.hpp"
 #include "monster.hpp"

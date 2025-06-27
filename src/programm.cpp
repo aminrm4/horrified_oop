@@ -1,4 +1,4 @@
-#include "../include/programm.hpp"
+#include "programm.hpp"
 using namespace std;
 using namespace ftxui;
 #include <bits/stdc++.h>
@@ -205,7 +205,7 @@ void programm::next_frenzy()
   if (monster_list.size() != 1)
   {
 
-    if (monster_list[0]->get_is_frenzy() == false && monster_list[1] == false)
+    if (monster_list[0]->get_is_frenzy() == false && monster_list[1]->get_is_frenzy() == false)
     {
       if (monster_list[0]->get_frenzy_order() > monster_list[1]->get_frenzy_order())
       {
@@ -241,6 +241,11 @@ bool programm::check_terro_night()
   {
     return false;
   }
+  else
+  {
+    return true;
+  }
+  
 }
 string programm::show_all_item(const vector<item *> &show, LocationInfo &state)
 {
@@ -305,13 +310,13 @@ string programm::show_all_mosnter(const vector<monster *> &show, LocationInfo &s
   return state.monsters;
 } 
 template <typename T>
-  string  programm::show_hero_deatail(T)
+  string  programm::show_hero_deatail(T vec)
   {
     string temp="";
     map<string,int>same_element;
-    for ( const auto &i : T)
+    for ( const auto &i : vec)
     {
-      ++same_element[i.get_name()];
+      ++same_element[i->get_name()];
     }
 
       for (const auto &i : same_element)

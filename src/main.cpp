@@ -1,4 +1,4 @@
-#include <ftxui/component/component.hpp>
+/*#include <ftxui/component/component.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
 #include <string>
@@ -161,3 +161,4 @@ int main() {
   RenderGameUI();
   return 0;
 } 
+  */

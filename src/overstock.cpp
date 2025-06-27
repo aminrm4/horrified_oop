@@ -21,3 +21,7 @@ void overstock::play(hero *he, std::vector<hero *>&  he_list, monster *mo, std::
      it_list.erase(it_list.begin()+*accesser);
 
 }
+     overstock::overstock(std::string name_of_perk):perk()
+     {
+          name=name_of_perk;
+     }

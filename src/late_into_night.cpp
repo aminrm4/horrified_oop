@@ -25,3 +25,8 @@ using namespace std;
         
 
     }
+
+        late_into_night::late_into_night(string name_of_perk)
+        {
+                name=name_of_perk;
+        }

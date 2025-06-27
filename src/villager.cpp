@@ -1,6 +1,7 @@
 #include "location.hpp"
 #include "villager.hpp"
 #include <iostream>
+#include"programm.hpp"
 using namespace std;
 void villager::set_name(std::string nam)
 {

@@ -2,7 +2,8 @@
 #define VILLAGER_HPP
 #include <string>
 #include <iostream>
-#include"programm.hpp"
+class programm;
+class perk;
 class location;
 class villager
 {
@@ -21,7 +22,7 @@ public:
     location * get_currnet_location();
     location * const  get_safe_location();
         perk * drop_the_perk();
-        string get_name();
+         std::string get_name();
 
 
 };

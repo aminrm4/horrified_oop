@@ -1,6 +1,6 @@
 #include "Color.hpp"
 
-std::ostream& operator<<(std::ostream& output , Color & color)
+std::ostream& operator<<(std::ostream& output , Color  color) //does it need pass by refrence?
 {
     switch (color)
     {
