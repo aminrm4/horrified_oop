@@ -228,7 +228,7 @@ void hero::advance(Drakula &D, invisible_man &I)
                                     int index;
                                     cin >> index;
                                     indexes.push_back(index);
-                                    if (item_have[index]->get_Color() == Color::Yellow)
+                                    if (item_have[index]->get_Color() == rgb::Color::Yellow)
                                         sum_power += item_have[index]->get_power();
                                     else
                                     {

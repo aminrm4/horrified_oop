@@ -1,19 +1,20 @@
 #include "Color.hpp"
-
-std::ostream& operator<<(std::ostream& output , Color  color) //does it need pass by refrence?
+namespace rgb
+{
+std::ostream& operator<<(std::ostream& output , rgb::Color  color) //does it need pass by refrence?
 {
     switch (color)
     {
 
-        case Color::Red :
+        case rgb::Color::Red :
             output << "Red";
         break;
     
-        case Color::Yellow :
+        case rgb::Color::Yellow :
             output << "Yellow";
         break;
     
-        case Color::Blue :
+        case rgb::Color::Blue :
             output << "Blue";
         break;
         
@@ -21,4 +22,5 @@ std::ostream& operator<<(std::ostream& output , Color  color) //does it need pas
             break;
     }
     return output;
+}
 }

@@ -1,6 +1,6 @@
 #include "Thief.hpp"
 
-void event(perk * p,hero* hero, monster *m,std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a)
+void Thief::event(perk * p,hero* hero, monster *m,std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a)
 {
     int max_item = 0;
     for (int i = 0; i < loc.size(); i++)

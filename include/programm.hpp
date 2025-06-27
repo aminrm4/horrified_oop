@@ -15,6 +15,7 @@
 #include"late_into_night.hpp"
 #include"break_of_down.hpp"
 #include"overstock.hpp"
+#include<Color.hpp>
 using namespace std;
 class monster_card;
 class monster_list;
@@ -38,7 +39,6 @@ public:
   std::vector<monster *> monster_list;
   std::vector<monster_card *> monster_card_list;
   vector<hero *> hero_list;
-
 public:
   perk *set_award(int); // make the data member private and have to add this function
   void next_frenzy();

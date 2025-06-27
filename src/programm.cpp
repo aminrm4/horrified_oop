@@ -8,6 +8,22 @@ using namespace ftxui;
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
 #include <iostream>
+#include"Drakula.hpp"
+#include"Invisible_man.hpp"
+#include"monster_card.hpp"
+#include"Egyptian_Expert.hpp"
+#include"form_of_the_bat.hpp"
+#include"Former_Employer.hpp"
+#include"Fortune_Teller.hpp"
+#include"Hurried_Assistant.hpp"
+#include"Hypnotic_Gaze.hpp"
+#include"Sunrise.hpp"
+#include"The_Innocent.hpp"
+#include"Thief.hpp"
+#include"The_Delivery.hpp"
+#include"The_chthyologist.hpp"
+#include"On_the_move.hpp"
+#include"Color.hpp"
 int programm::night_terror = 0;
    void programm::clearScreen()
    {
@@ -204,8 +220,380 @@ list_of_perks[17]=&perk_object18;
  list_of_perks[18]=&perk_object19;
 list_of_perks[19]=&perk_object20;
 
+Mayor hero_object1(5,list_of_location[10],list_of_perks);
+Archaeologist hero_object2(4,list_of_location[12],list_of_perks);
+
+hero_list.push_back(&hero_object1);
+hero_list.push_back(&hero_object2);
 
 
+
+
+Drakula monster_object1(4,true,1,list_of_location[7]);
+invisible_man monster_object2(5,false,6,list_of_location[13]);//5 is right?
+
+monster_list.push_back(&monster_object1);
+monster_list.push_back(&monster_object2);
+
+
+
+
+form_of_the_bat card_object1;
+form_of_the_bat card_object2;
+form_of_the_bat card_object3;
+
+
+Sunrise card_object4;
+Sunrise card_object5;
+Sunrise card_object6;
+
+
+Thief card_object7;
+Thief card_object8;
+Thief card_object9;
+Thief card_object10;
+Thief card_object11;
+
+
+
+The_Delivery card_object12;
+
+
+Fortune_Teller card_object13;
+
+Former_Employer card_object14;
+
+Hurried_Assistant card_object15;
+
+The_Innocent card_object16;
+
+Egyptian_Expert card_object17;
+
+The_chthyologist card_object18;
+
+Hypnotic_Gaze card_object19;
+  Hypnotic_Gaze card_object20;
+
+
+On_the_move card_object21;
+On_the_move card_object22;
+
+
+monster_card_list.push_back(& card_object1);
+monster_card_list.push_back(&card_object2);
+monster_card_list.push_back(& card_object3);
+monster_card_list.push_back(&card_object4);
+monster_card_list.push_back(&card_object5);
+monster_card_list.push_back(& card_object6);
+monster_card_list.push_back(&card_object7);
+monster_card_list.push_back(& card_object8);
+monster_card_list.push_back(& card_object9);
+monster_card_list.push_back(& card_object10);
+monster_card_list.push_back(& card_object11);
+monster_card_list.push_back(& card_object12);
+monster_card_list.push_back(& card_object13);
+monster_card_list.push_back(& card_object14);
+monster_card_list.push_back(&card_object15);
+monster_card_list.push_back(& card_object16);
+monster_card_list.push_back(&card_object17);
+monster_card_list.push_back(&card_object18);
+monster_card_list.push_back(&card_object19);
+monster_card_list.push_back(&card_object20);
+monster_card_list.push_back(&card_object21);
+monster_card_list.push_back(&card_object22);
+
+
+
+
+
+item item_object1(2,"flower",rgb::Color::Yellow,list_of_location[12]);
+item item_object2(2,"flower",rgb::Color::Yellow,list_of_location[12]);
+
+
+item item_object3(3,"tarot deck",rgb::Color::Yellow,list_of_location[18]);
+item item_object4(3,"tarot deck",rgb::Color::Yellow,list_of_location[18]);
+
+
+
+
+item item_object5(2,"garlic",rgb::Color::Yellow,list_of_location[13]);
+item item_object6(2,"garlic",rgb::Color::Yellow,list_of_location[13]);
+
+
+
+
+item item_object7(3,"mirrored box",rgb::Color::Yellow,list_of_location[9]);
+item item_object8(3,"mirrored box",rgb::Color::Yellow,list_of_location[9]);
+
+
+
+
+
+item item_object9(3,"stake",rgb::Color::Yellow,list_of_location[8]);
+item item_object10(3,"stake",rgb::Color::Yellow,list_of_location[8]);
+
+
+
+
+
+item item_object11(4,"scroll of thoth",rgb::Color::Yellow,list_of_location[6]);
+item item_object12(4,"scroll of thoth",rgb::Color::Yellow,list_of_location[6]);
+
+
+
+
+item item_object13(3,"violin",rgb::Color::Yellow,list_of_location[18]);
+item item_object14(3,"violin",rgb::Color::Yellow,list_of_location[18]);
+
+
+
+
+item item_object15(3,"tablet",rgb::Color::Yellow,list_of_location[6]);
+item item_object16(3,"tablet",rgb::Color::Yellow,list_of_location[6]);
+
+
+
+
+
+item item_object17(4,"wolfsbane",rgb::Color::Yellow,list_of_location[18]);
+item item_object18(4,"wolfsbane",rgb::Color::Yellow,list_of_location[18]);
+
+
+
+
+
+item item_object19(4,"charm",rgb::Color::Yellow,list_of_location[18]);
+item item_object20(4,"charm",rgb::Color::Yellow,list_of_location[18]);
+
+
+
+
+
+item item_object21(2,"dart",rgb::Color::Red,list_of_location[13]);
+item item_object22(2,"dart",rgb::Color::Red,list_of_location[13]);
+
+
+
+
+
+item item_object23(3,"fire poker",rgb::Color::Red,list_of_location[9]);
+item item_object24(3,"fire poker",rgb::Color::Red,list_of_location[9]);
+
+
+
+
+
+item item_object25(5,"rapier",rgb::Color::Red,list_of_location[10]);
+item item_object26(5,"rapier",rgb::Color::Red,list_of_location[10]);
+
+
+
+
+item item_object27(2,"shovel",rgb::Color::Red,list_of_location[1]);
+item item_object28(2,"shovel",rgb::Color::Red,list_of_location[1]);
+
+
+
+
+item item_object29(5,"torch",rgb::Color::Red,list_of_location[15]);
+item item_object30(5,"torch",rgb::Color::Red,list_of_location[15]);
+
+
+
+
+item item_object31(4,"pitch fork",rgb::Color::Red,list_of_location[15]);
+item item_object32(4,"pitch fork",rgb::Color::Red,list_of_location[15]);
+
+
+
+
+item item_object33(6,"rifle",rgb::Color::Red,list_of_location[15]);
+item item_object34(6,"rifle",rgb::Color::Red,list_of_location[15]);
+
+
+
+
+item item_object35(6,"silver cane",rgb::Color::Red,list_of_location[5]);
+item item_object36(6,"silver cane",rgb::Color::Red ,list_of_location[5]);
+
+
+
+
+item item_object37(3,"knife",rgb::Color::Red,list_of_location[12]);
+item item_object38(3,"knife",rgb::Color::Red,list_of_location[12]);
+
+
+
+
+item item_object39(6,"pistol",rgb::Color::Red,list_of_location[14]);
+item item_object40(6,"pistol",rgb::Color::Red,list_of_location[14]);
+
+
+
+
+item item_object41(4,"bear trap",rgb::Color::Red,list_of_location[5]);
+item item_object42(4,"bear trap",rgb::Color::Red,list_of_location[5]);
+
+
+
+
+item item_object43(4,"speargun",rgb::Color::Red,list_of_location[3]);
+item item_object44(4,"speargun",rgb::Color::Red,list_of_location[3]);
+
+
+
+
+item item_object45(1,"anatomy text",rgb::Color::Blue,list_of_location[3]);
+item item_object46(1,"anatomy text",rgb::Color::Blue,list_of_location[3]);
+
+
+
+
+item item_object47(1,"centrifuge",rgb::Color::Blue,list_of_location[4]);
+item item_object48(1,"centrifuge",rgb::Color::Blue,list_of_location[4]);
+
+
+
+item item_object49(1,"kite",rgb::Color::Blue,list_of_location[11]);
+item item_object50(1,"kite",rgb::Color::Blue,list_of_location[11]);
+
+
+
+
+item item_object51(2,"research",rgb::Color::Blue,list_of_location[11]);
+item item_object52(2,"research",rgb::Color::Blue,list_of_location[11]);
+
+
+
+
+
+item item_object53(2,"telescope",rgb::Color::Blue,list_of_location[9]);
+item item_object54(2,"telescope",rgb::Color::Blue,list_of_location[9]);
+
+
+
+
+
+item item_object55(2,"searchlight",rgb::Color::Blue,list_of_location[14]);
+item item_object56(2,"searchlight",rgb::Color::Blue,list_of_location[14]);
+
+
+
+
+
+item item_object57(2,"experiment",rgb::Color::Blue,list_of_location[4]);
+item item_object58(2,"experiment",rgb::Color::Blue,list_of_location[4]);
+
+
+
+
+
+
+item item_object59(2,"analysis",rgb::Color::Blue,list_of_location[3]);
+item item_object60(2,"analysis",rgb::Color::Blue,list_of_location[3]);
+
+
+
+
+item item_object61(3,"rotenone",rgb::Color::Blue,list_of_location[3]);
+item item_object62(3,"rotenone",rgb::Color::Blue,list_of_location[3]);
+
+
+
+
+item item_object63(3,"cosmic diffuser",rgb::Color::Blue,list_of_location[11]);
+item item_object64(3,"cosmic diffuser",rgb::Color::Blue,list_of_location[11]);
+
+
+
+
+item item_object65(3,"nebularium",rgb::Color::Blue,list_of_location[11]);
+item item_object66(3,"nebularium",rgb::Color::Blue,list_of_location[11]);
+
+
+
+
+item item_object67(3,"monocane mixture",rgb::Color::Blue,list_of_location[13]);
+item item_object68(3,"monocane mixture",rgb::Color::Blue,list_of_location[13]);
+
+
+
+item item_object69(3,"fossil",rgb::Color::Blue,list_of_location[18]);
+item item_object70(3,"fossil",rgb::Color::Blue,list_of_location[18]);
+
+
+list_of_items.push_back(&item_object1);
+list_of_items.push_back(&item_object2);
+list_of_items.push_back(&item_object3);
+list_of_items.push_back(&item_object4);
+list_of_items.push_back(&item_object5);
+list_of_items.push_back(&item_object6);
+list_of_items.push_back(&item_object7);
+list_of_items.push_back(&item_object8);
+list_of_items.push_back(&item_object9);
+list_of_items.push_back(&item_object10);
+list_of_items.push_back(&item_object11);
+list_of_items.push_back(&item_object12);
+list_of_items.push_back(&item_object13);
+list_of_items.push_back(&item_object14);
+list_of_items.push_back(&item_object15);
+list_of_items.push_back(&item_object16);
+list_of_items.push_back(&item_object17);
+list_of_items.push_back(&item_object18);
+list_of_items.push_back(&item_object19);
+list_of_items.push_back(&item_object20);
+list_of_items.push_back(&item_object21);
+list_of_items.push_back(&item_object22);
+list_of_items.push_back(&item_object23);
+list_of_items.push_back(&item_object24);
+list_of_items.push_back(&item_object25);
+list_of_items.push_back(&item_object26);
+list_of_items.push_back(&item_object27);
+list_of_items.push_back(&item_object28);
+list_of_items.push_back(&item_object29);
+list_of_items.push_back(&item_object30);
+list_of_items.push_back(&item_object31);
+list_of_items.push_back(&item_object32);
+list_of_items.push_back(&item_object33);
+list_of_items.push_back(&item_object34);
+list_of_items.push_back(&item_object35);
+list_of_items.push_back(&item_object36);
+list_of_items.push_back(&item_object36);
+list_of_items.push_back(&item_object37);
+list_of_items.push_back(&item_object38);
+list_of_items.push_back(&item_object39);
+list_of_items.push_back(&item_object40);
+list_of_items.push_back(&item_object41);
+list_of_items.push_back(&item_object42);
+list_of_items.push_back(&item_object43);
+list_of_items.push_back(&item_object44);
+list_of_items.push_back(&item_object45);
+list_of_items.push_back(&item_object46);
+list_of_items.push_back(&item_object47);
+list_of_items.push_back(&item_object48);
+list_of_items.push_back(&item_object49);
+list_of_items.push_back(&item_object50);
+list_of_items.push_back(&item_object51);
+list_of_items.push_back(&item_object52);
+list_of_items.push_back(&item_object53);
+list_of_items.push_back(&item_object54);
+list_of_items.push_back(&item_object55);
+list_of_items.push_back(&item_object56);
+list_of_items.push_back(&item_object57);
+list_of_items.push_back(&item_object58);
+list_of_items.push_back(&item_object59);
+list_of_items.push_back(&item_object60);
+list_of_items.push_back(&item_object61);
+list_of_items.push_back(&item_object62);
+list_of_items.push_back(&item_object63);
+list_of_items.push_back(&item_object64);
+list_of_items.push_back(&item_object65);
+list_of_items.push_back(&item_object66);
+list_of_items.push_back(&item_object67);
+list_of_items.push_back(&item_object67);
+list_of_items.push_back(&item_object68);
+list_of_items.push_back(&item_object69);
+list_of_items.push_back(&item_object70);
 
 
 
@@ -720,8 +1108,9 @@ Component app = renderer | CatchEvent([&](Event event) {
 void programm::run()
 {
   cout << "welcome to HORRIFIED  city a place full of mystery";
-
-
+  LocationInfo data_saver;
+  string a,b;
+terminal_handler(data_saver,a,b);
 
 
 }
