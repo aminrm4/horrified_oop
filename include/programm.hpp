@@ -5,12 +5,21 @@
 #include "perk.hpp"
 #include "location.hpp"
 #include "map1.hpp"
-#include "monster_card.hpp"
 #include "monster.hpp"
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
+#include"visit_from_detective.hpp"
+#include"repel.hpp"
+#include"hurry.hpp"
+#include"late_into_night.hpp"
+#include"break_of_down.hpp"
+#include"overstock.hpp"
+#include<Color.hpp>
 using namespace std;
+class monster_card;
+class monster_list;
+class villager;
 struct LocationInfo
 {
   std::string items;
@@ -29,9 +38,7 @@ public:
   std::vector<std::vector<int>> my_map;
   std::vector<monster *> monster_list;
   std::vector<monster_card *> monster_card_list;
-  vector<monster *> monster_list;
   vector<hero *> hero_list;
-
 public:
   perk *set_award(int); // make the data member private and have to add this function
   void next_frenzy();
@@ -39,9 +46,9 @@ public:
   std::vector<int> bfs(int s, int t);
   static int get_night_terror();
   static void set_night_terror(int);
-  programm();
   bool check_terro_night();
   void run();
+  programm();
   void terminal_handler(LocationInfo &info, string &, string &);
   string show_all_item(const vector<item *> &show, LocationInfo &);
   string show_all_villager(const vector<villager *> &, LocationInfo &);

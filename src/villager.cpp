@@ -1,6 +1,7 @@
 #include "location.hpp"
 #include "villager.hpp"
 #include <iostream>
+#include"programm.hpp"
 using namespace std;
 void villager::set_name(std::string nam)
 {
@@ -9,14 +10,9 @@ void villager::set_name(std::string nam)
 void villager::set_current_location(location *loc)
 {
 
-    if (loc == nullptr)
-    {
-        throw bad_alloc();
-    }
-    else
-    {
+    
         current_location = loc;
-    }
+    
 }
 villager::villager(std::string name, location *safe, location *curr,programm & help_object1) : safe_location(safe)
 {

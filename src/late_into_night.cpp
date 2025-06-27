@@ -25,3 +25,8 @@ using namespace std;
         
 
     }
+
+        late_into_night::late_into_night()
+        {
+                name="late_into_night";
+        }

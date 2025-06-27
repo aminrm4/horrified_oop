@@ -1,9 +1,8 @@
 #pragma once
 #include <vector>
-#include "location.hpp"
 class location;
 class hero;
-
+#include<string>
 class monster
 {
     protected:

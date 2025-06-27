@@ -3,7 +3,8 @@
 #include <bits/stdc++.h>
 #include "villager.hpp"
 #include"item.hpp"
-
+class hero;
+class monster;
 
 class location
 {

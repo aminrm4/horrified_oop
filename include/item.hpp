@@ -1,20 +1,20 @@
 #pragma once
 #include <string>
 #include <Color.hpp>
-#include "location.hpp"
-
+class Color;
+class location;
 class item
 {
     int power ;
     std::string name;
-    Color color;
+     rgb::Color color;
     location * loc;
     
     public:
-    item(int , std::string , Color , location*);
+    item(int , std::string ,  rgb::Color , location*);
     int get_power();
     std::string get_name();
-    Color get_Color();
+     rgb::Color get_Color();
     location* get_loc();
 
 };

@@ -3,7 +3,7 @@
 #include "villager.hpp"
 #include "location.hpp"
 #include <vector>
-#include "hero.hpp"
+class hero;
 using namespace std;
 class invisible_man : public monster
 {

@@ -25,6 +25,3 @@ enum class map1 : int
     camp = 18,
 
 };
-std::ostream &operator<<(std::ostream &output, map1 &obj1)
-{
-}

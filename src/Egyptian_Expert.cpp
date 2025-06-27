@@ -1,5 +1,6 @@
 #include "Egyptian_Expert.hpp"
 #include "programm.hpp"
+#include"Drakula.hpp"
 using namespace std;
 void Egyptian_Expert::event(perk * p,hero* hero, monster *m,std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a)
 {

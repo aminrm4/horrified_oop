@@ -14,3 +14,7 @@ void visit_from_detective::play(hero *he, std::vector<hero *> & he_list, monster
             mo->set_loc(loc[static_cast<int>(router)]);
             
 }
+    visit_from_detective::visit_from_detective()
+    {
+        name="visit_from_detective";
+    }

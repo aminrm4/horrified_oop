@@ -2,7 +2,7 @@
 #include<iostream>
 #include<bits/stdc++.h>
 using namespace std;
- std::ostream & operator<<( std::ostream & output,map1 &obj1)
+ std::ostream &  operator<<( std::ostream & output,map1 &obj1)
  {
     
     switch (obj1)

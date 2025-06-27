@@ -2,6 +2,7 @@
 #include "hurry.hpp"
 #include "programm.hpp"
 #include <iostream>
+#include<string>
 using namespace std;
 void hurry::play(hero *he, std::vector<hero *> &he_list, monster *mo, std::vector<location *> & loc, std::vector<item *>  &it_list, std::vector<monster *> & mo_list, programm & help_obj1)
 {
@@ -23,8 +24,10 @@ void hurry::play(hero *he, std::vector<hero *> &he_list, monster *mo, std::vecto
         {
             cout << " ohhhhhh, there are some villager in your position , would you like to help them \n";
             char right;
-            cin.get(right);
-            if (right == 'yes')
+            cin>>right;
+               cin.ignore();
+               right=tolower(right);
+            if (right == 'y')
             {
                 auto it =he_list[i]->get_loc()->get_villager_list();//force to do
                 he_list[i]->move(loc[id],it);
@@ -43,4 +46,8 @@ void hurry::play(hero *he, std::vector<hero *> &he_list, monster *mo, std::vecto
         }
         
     }
+}
+hurry::hurry()
+{
+    name="hurry";
 }

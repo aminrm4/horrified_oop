@@ -4,9 +4,11 @@
 #include <algorithm>
 #include "Drakula.hpp"
 #include "Invisible_man.hpp"
+#include"programm.hpp"
+#include<iterator>
 using namespace std;
 
-void hero::move(location *loc,  const vector<villager *> &villagers={})//used to delete the initializer cause of the pass by refrence
+void hero::move(location *loc,  const vector<villager *> &villagers)//used to delete the initializer cause of the pass by refrence
 {
     this->loc = loc;
     if (!villagers.empty())
@@ -97,6 +99,7 @@ void hero::advance(Drakula &D, invisible_man &I)
         switch (m)
         {
         case 'i':
+        {
             cout << "For defeating this monster you must find 5 evidence and put them in precinct\n";
             if (this->get_loc()->get_loc_relation() == 14)
             {
@@ -109,25 +112,31 @@ void hero::advance(Drakula &D, invisible_man &I)
                     switch (temp)
                     {
                     case 13:
+                    
                         counter++;
                         break;
+                    
 
                     case 15:
+                
                         counter++;
                         break;
-
+                
                     case 3:
+            
                         counter++;
                         break;
-
+            
                     case 4:
+                    
                         counter++;
                         break;
-
+                    
                     case 9:
+                    
                         counter++;
                         break;
-
+                    
                     default:
                         break;
                     }
@@ -179,8 +188,10 @@ void hero::advance(Drakula &D, invisible_man &I)
             }
 
             break;
+        }
 
         case 'd':
+        {
             cout << "For deafeting Drakula you must destroy his coffin's \n";
             int temp = this->get_loc()->get_loc_relation();
 
@@ -217,7 +228,7 @@ void hero::advance(Drakula &D, invisible_man &I)
                                     int index;
                                     cin >> index;
                                     indexes.push_back(index);
-                                    if (item_have[index]->get_Color() == Color::Yellow)
+                                    if (item_have[index]->get_Color() == rgb::Color::Yellow)
                                         sum_power += item_have[index]->get_power();
                                     else
                                     {
@@ -270,21 +281,21 @@ void hero::advance(Drakula &D, invisible_man &I)
                 cout << "There is not any coffin here \n";
             }
             break;
-
+        }
         default:
+        {
             break;
         }
+        }
+
     }
+
     catch (const logic_error &e)
     {
         std::cerr << e.what() << '\n';
         advance(D, I);
     }
-    catch (invalid_argument &e)
-    {
-        cerr << e.what();
-        advance(D, I);
-    }
+  
 }
 int hero::get_action()
 {
@@ -434,3 +445,18 @@ vector<item*> hero::get_items()
     {
         return name_of_hero;
     }
+    location* hero:: get_loc()
+    {
+        return loc;
+    }
+hero:: hero(std::vector<perk *>&perks)
+{   int random;
+    srand(time(0));
+    random= rand()%perks.size();
+    perk_have.push_back(perks[random]);
+    perks.erase(perks.begin()+random);
+
+
+
+
+}

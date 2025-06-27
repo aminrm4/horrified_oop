@@ -1,5 +1,6 @@
 #pragma once
 #include "monster_card.hpp"
+#include"Drakula.hpp"
 using namespace std;
 class Hurried_Assistant : public monster_card
 {

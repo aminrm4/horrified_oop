@@ -2,7 +2,7 @@
 #include <exception>
 using namespace std;
 
-item::item(int power , std::string name , Color color , location* loc)
+item::item(int power , std::string name , rgb::Color color , location* loc)
 {
     if(power <=0)
     throw std::logic_error("invalid power \n");
@@ -20,7 +20,7 @@ std::string item::get_name()
 {
     return name;
 }
-Color item::get_Color()
+ rgb::Color item::get_Color()
 {
     return color;
 }

@@ -1,9 +1,11 @@
 #pragma once
 #include <iostream>
-
-enum class Color
+namespace rgb
+{
+enum  class Color
 {
     Red , Blue , Yellow
 };
 
-std::ostream& operator<<(std::ostream& output , Color color);
+std::ostream& operator<<(std::ostream& output , rgb::Color color);
+}
