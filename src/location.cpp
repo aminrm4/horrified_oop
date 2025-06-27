@@ -35,18 +35,13 @@ void location::set_coffin_exist(bool num)
 }
 void location::set_villager(villager *vill)
 {
-    if (vill == nullptr)
-    {
-        throw bad_alloc();
-    }
-    else
-    {
+
         villager_list.push_back(vill);
-    }
+    
 }
 void location::set_loc_relation(int rel)
 {
-    if (rel <= 0)
+    if (rel <0)
     {
         throw invalid_argument("bad relatonship entered \n");
     }
@@ -77,36 +72,28 @@ vector<item *> location::get_item_list()
 }
 void location ::set_item_list(item *li)
 {
-    if (li == nullptr)
-    {
-        throw bad_alloc();
-    }
-    else
-    {
+    
+    
+    
         item_list.push_back(li);
-    }
+    
 }
 void location::set_hero_list(hero *hi)
 {
-    if (hi == nullptr)
-    {
-        throw bad_alloc();
-    }
-    else
-    {
+    
+    
+
+    
         hero_list.push_back(hi);
-    }
+    
 }
 void location::set_monster_list(monster *mo)
 {
-    if (mo == nullptr)
-    {
-        throw bad_alloc();
-    }
-    else
-    {
+
+
+    
         monster_list.push_back(mo);
-    }
+    
 }
 
 vector<hero *> location::get_hero_list()

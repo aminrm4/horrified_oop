@@ -11,6 +11,6 @@ Mayor::Mayor(int actions, location *starting_loc,std::vector<perk *>& perks):her
     if (actions < 0)
         throw logic_error("invalid actions \n");
         action=actions;
-
+      
     loc = starting_loc;
 }

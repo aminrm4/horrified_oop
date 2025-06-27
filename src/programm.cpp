@@ -130,47 +130,45 @@ programm::programm()
 
 
 
+ location object1(0,0,{},{},{},{});
+ location object2(1,1,{},{},{},{});
+ location object3(2,0,{},{},{},{});
+ location object4(3,0,{},{},{},{});
+ location object5(4,0,{},{},{},{});
+ location object6(5,0,{},{},{},{});
+ location object7(6,0,{},{},{},{});
+ location object8(7,1,{},{},{},{});
+ location object9(8,0,{},{},{},{});
+ location object10(9,0,{},{},{},{});
+location object11(10,0,{},{},{},{});
+ location object12(11,0,{},{},{},{});
+ location object13(12,0,{},{},{},{});
+ location object14(13,0,{},{},{},{});
+ location object15(14,0,{},{},{},{});
+ location object16(15,0,{},{},{},{});
+ location object17(16,1,{},{},{},{});
+location object18(17,1,{},{},{},{});
+ location object19(18,0,{},{},{},{});
 
- location object1(0,0,nullptr,nullptr,nullptr,nullptr);
- location object2(1,1,nullptr,nullptr,nullptr,nullptr);
- location object3(2,0,nullptr,nullptr,nullptr,nullptr);
- location object4(3,0,nullptr,nullptr,nullptr,nullptr);
- location object5(4,0,nullptr,nullptr,nullptr,nullptr);
- location object6(5,0,nullptr,nullptr,nullptr,nullptr);
- location object7(6,0,nullptr,nullptr,nullptr,nullptr);
- location object8(7,1,nullptr,nullptr,nullptr,nullptr);
- location object9(8,0,nullptr,nullptr,nullptr,nullptr);
- location object10(9,0,nullptr,nullptr,nullptr,nullptr);
-location object11(10,0,nullptr,nullptr,nullptr,nullptr);
- location object12(11,0,nullptr,nullptr,nullptr,nullptr);
- location object13(12,0,nullptr,nullptr,nullptr,nullptr);
- location object14(13,0,nullptr,nullptr,nullptr,nullptr);
- location object15(14,0,nullptr,nullptr,nullptr,nullptr);
- location object16(15,0,nullptr,nullptr,nullptr,nullptr);
- location object17(16,1,nullptr,nullptr,nullptr,nullptr);
-location object18(17,1,nullptr,nullptr,nullptr,nullptr);
- location object19(18,0,nullptr,nullptr,nullptr,nullptr);
-
-
-list_of_location[0]=&object1;
-list_of_location[1]=&object2;
-list_of_location[2]=&object3;
-list_of_location[3]=&object4;
-list_of_location[4]=&object5;
-list_of_location[5]=&object6;
-list_of_location[6]=&object7;
-list_of_location[7]=&object8;
-list_of_location[8]=&object9;
-list_of_location[9]=&object10;
-list_of_location[10]=&object11;
-list_of_location[11]=&object12;
-list_of_location[12]=&object13;
-list_of_location[13]=&object14;
-list_of_location[14]=&object15;
-list_of_location[15]=&object16;
-list_of_location[16]=&object17;
-list_of_location[17]=&object18;
-list_of_location[18]=&object19;
+list_of_location.push_back(&object1);
+list_of_location.push_back(&object2);
+list_of_location.push_back(&object3);
+list_of_location.push_back(&object4);
+list_of_location.push_back(&object5);
+list_of_location.push_back(&object6);
+list_of_location.push_back(&object7);
+list_of_location.push_back(&object8);
+list_of_location.push_back(&object9);
+list_of_location.push_back(&object10);
+list_of_location.push_back(&object11);
+list_of_location.push_back(&object12);
+list_of_location.push_back(&object13);
+list_of_location.push_back(&object14);
+list_of_location.push_back(&object15);
+list_of_location.push_back(&object16);
+list_of_location.push_back(&object17);
+list_of_location.push_back(&object18);
+list_of_location.push_back(&object19);
 
 visit_from_detective perk_object1;
 visit_from_detective perk_object2;
@@ -199,26 +197,26 @@ hurry perk_object18;
 hurry perk_object19;
 hurry perk_object20;
 
-list_of_perks[0]=&perk_object1;
-list_of_perks[1]=&perk_object2;
-list_of_perks[2]=&perk_object3;
-list_of_perks[3]=&perk_object4;
-list_of_perks[4]=&perk_object5;
-list_of_perks[5]=&perk_object6;
-list_of_perks[6]=&perk_object7;
-list_of_perks[7]=&perk_object8;
-list_of_perks[8]=&perk_object9;
-list_of_perks[9]=&perk_object10;
-list_of_perks[10]=&perk_object11;
-list_of_perks[11]=&perk_object12;
-list_of_perks[12]=&perk_object13;
-list_of_perks[13]=&perk_object14;
-list_of_perks[14]=&perk_object15;
-list_of_perks[15]=&perk_object16;
-list_of_perks[16]=&perk_object17;
-list_of_perks[17]=&perk_object18;
- list_of_perks[18]=&perk_object19;
-list_of_perks[19]=&perk_object20;
+list_of_perks.push_back(&perk_object1);
+list_of_perks.push_back(&perk_object1);
+list_of_perks.push_back(&perk_object1);
+list_of_perks.push_back(&perk_object1);
+list_of_perks.push_back(&perk_object1);
+list_of_perks.push_back(&perk_object1);
+list_of_perks.push_back(&perk_object1);
+list_of_perks.push_back(&perk_object1);
+list_of_perks.push_back(&perk_object1);
+list_of_perks.push_back(&perk_object1);
+list_of_perks.push_back(&perk_object1);
+list_of_perks.push_back(&perk_object1);
+list_of_perks.push_back(&perk_object1);
+list_of_perks.push_back(&perk_object1);
+list_of_perks.push_back(&perk_object1);
+list_of_perks.push_back(&perk_object1);
+list_of_perks.push_back(&perk_object1);
+list_of_perks.push_back(&perk_object1);
+ list_of_perks.push_back(&perk_object1);
+list_of_perks.push_back(&perk_object1);
 
 Mayor hero_object1(5,list_of_location[10],list_of_perks);
 Archaeologist hero_object2(4,list_of_location[12],list_of_perks);
@@ -599,6 +597,15 @@ list_of_items.push_back(&item_object70);
 
 
 
+for (int i = 0; i <12; i++)
+{
+   int random;
+    srand(time(0)+i);
+    random= rand()%list_of_items.size();
+    list_of_items[random]->get_loc()->set_item_list(list_of_items[random]);
+    list_of_items.erase(list_of_items.begin()+random);
+
+}
 
 
 
@@ -709,16 +716,24 @@ bool programm::check_terro_night()
 }
 string programm::show_all_item(const vector<item *> &show, LocationInfo &state)
 {
-  state.items = "";
+  cout<<"im in func"<<endl;
+    state.items = "";
   map<string, int> same_element;
-  for (const auto &i : show)
+  for (int i=0;i<show.size() ; i++)
   {
-    ++same_element[i->get_name()];
+    if (show[i]!=nullptr)
+    {
+          ++same_element[show[i]->get_name()];
+
+    }
+    
   }
+  cout<<2<<endl;
   for (const auto &i : same_element)
   {
     state.items = state.items + " " + (i.first + "(" + to_string(i.second) + ")");
   }
+  cout<<2<<endl;
   return state.items;
 }
 
@@ -791,7 +806,7 @@ void programm::terminal_handler(LocationInfo &info,string & first_enter,string &
 int enter_count=0;
   auto screen = ScreenInteractive::TerminalOutput();
 
-  static const std::string map_ascii = R"MAP(
+   const std::string map_ascii = R"MAP(
 +---------------------------------------------------------------------------------------+
 |                                                                                       |
 |                       )MAP";get_night_terror() ;R"MAP(                                |
@@ -815,7 +830,7 @@ int enter_count=0;
 |                                └──── dungeon                                          |
 +---------------------------------------------------------------------------------------+
 )MAP";
- 
+  cout<<list_of_location[4]->get_item_list()[1]->get_name()<<endl;
   map<string, LocationInfo> location_data = {
       {"Lab", {
                   show_all_item(list_of_location[4]->get_item_list(), info),
@@ -932,6 +947,7 @@ int enter_count=0;
             show_all_mosnter(list_of_location[14]->get_monster_list(),info), 
             show_all_villager(list_of_location[14]->get_villager_list(),info),
           }}};
+          cout<<1<<endl;
   map<string, string> action_help = {
       {"Move", "Move to another location."},
       {"Guide", "move the villager one step to the hero,or move a villager to the neighbor house base on the hero location"},
@@ -942,16 +958,8 @@ int enter_count=0;
       {"Quit", "Exit the game.(your data will be lost)"},
       {"use perk","use the perk wich hero have(from hero panel)"}
     };
-      /*for (size_t i = 0; i < hero_list.size(); i++)
-      {
-          if (typeid (*hero_list[i]).name()==typeid(Mayor).name())
-          {   
-
-          }
-          
-      }
-      
-      */
+   
+      cout<<1<<endl;
     map<string,string > heros_data={
 
 { "hero name ",hero_list[0]->get_hero_name()},
@@ -960,7 +968,7 @@ int enter_count=0;
 {"action left ",to_string( hero_list[0]->get_action())}
                            
 };
-
+cout<<1<<endl;
 map<string,string>secend_heros_data={
 
 { "hero name ",hero_list[1] ->get_hero_name()},
@@ -1107,7 +1115,7 @@ Component app = renderer | CatchEvent([&](Event event) {
 
 void programm::run()
 {
-  cout << "welcome to HORRIFIED  city a place full of mystery";
+  cout << "welcome to HORRIFIED  city a place full of mystery"<<endl;
   LocationInfo data_saver;
   string a,b;
 terminal_handler(data_saver,a,b);
