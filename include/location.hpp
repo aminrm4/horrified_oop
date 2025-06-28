@@ -11,10 +11,10 @@ class location
 private:
     int loc_relation;
     bool coffin_exist;
-    std::vector<villager *> villager_list;
-    std::vector<item*> item_list;
-    std::vector<hero *>hero_list;
-    std::vector<monster*>monster_list;
+    std::vector<villager *> villager_list = {};
+    std::vector<item*> item_list = {};
+    std::vector<hero *>hero_list = {};
+    std::vector<monster*>monster_list = {};
 
 public:
     void set_coffin_exist(bool);
@@ -29,7 +29,7 @@ public:
     std::vector<item*>  get_item_list();
     std::vector<hero*> get_hero_list();
     std::vector<monster*> get_monster_list();
-    location(int relation, bool coffin, villager *vill,item * item_lis,hero*her_list,monster*mon_list);
+    location(int relation, bool coffin);
     location() = delete;
     ~location();
     void delete_item();
