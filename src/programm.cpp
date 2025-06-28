@@ -25,6 +25,7 @@ using namespace ftxui;
 #include"On_the_move.hpp"
 #include"Color.hpp"
 #include <stdexcept>
+#include<format>
 int programm::night_terror = 0;
    void programm::clearScreen()
    {
@@ -304,6 +305,15 @@ list_of_items.push_back(new item(3,"fossil",rgb::Color::Blue,list_of_location[18
         //delete list_of_items.at(random);
         list_of_items.erase(list_of_items.begin() + random);
     }
+      for (auto i : monster_list)
+      {
+        i->get_loc()->set_monster_list(i);
+      }
+      for (auto i : hero_list)
+      {
+        i->get_loc()->set_hero_list(i);
+      }
+      
 
 }
 std::vector<int> programm::bfs(int s, int t)
@@ -544,11 +554,9 @@ void programm::terminal_handler(LocationInfo &info,string & first_enter,string &
 {
 int enter_count=0;
   auto screen = ScreenInteractive::TerminalOutput();
-
-   const std::string map_ascii = R"MAP(
-+---------------------------------------------------------------------------------------+
-|                                                                                       |
-|                       )MAP";get_night_terror() ;R"MAP(                                |
+    std::string terror_text = "night terror level : " + to_string(get_night_terror());
+    static constexpr const char* map_template = R"MAP(
+|{0:^87}|
 |                                                                                       |
 |                                    institute                                          |
 |                                       │                                               |
@@ -567,126 +575,135 @@ int enter_count=0;
 |                                │   \                                                  |
 |                                │    docks                                             |
 |                                └──── dungeon                                          |
-+---------------------------------------------------------------------------------------+
 )MAP";
-
+    std::string map_ascii = std::format(map_template, terror_text);
   map<string, LocationInfo> location_data = {
       {"Lab", {
-                  show_all_item(list_of_location[4]->get_item_list(), info),
-                  show_all_hero(list_of_location[4]->get_hero_list(), info),
-                  show_all_mosnter(list_of_location[4]->get_monster_list(), info),
-                  show_all_villager(list_of_location[4]->get_villager_list(), info),
-              }},
+    show_all_item(list_of_location[4]->get_item_list(), info),
+    show_all_mosnter(list_of_location[4]->get_monster_list(), info),
+    show_all_villager(list_of_location[4]->get_villager_list(), info),
+    show_all_hero(list_of_location[4]->get_hero_list(), info)           
+   }},
 
       {"church", {
-        show_all_item(list_of_location[2]->get_item_list(), info),
-         show_all_hero(list_of_location[2]->get_hero_list(),info),
-          show_all_mosnter(list_of_location[2]->get_monster_list(),info),
-           show_all_villager(list_of_location[2]->get_villager_list(),info),
-          }},
-      {"grave_yard",
-         {show_all_item(list_of_location[1]->get_item_list(), info),
-           show_all_hero(list_of_location[1]->get_hero_list(),info),
-            show_all_mosnter(list_of_location[1]->get_monster_list(),info), 
-            show_all_villager(list_of_location[1]->get_villager_list(),info),
-          }},
-      {"Hospital",
-         {show_all_item(list_of_location[0]->get_item_list(), info),
-           show_all_hero(list_of_location[0]->get_hero_list(),info), 
-           show_all_mosnter(list_of_location[0]->get_monster_list(),info),
-            show_all_villager(list_of_location[0]->get_villager_list(),info),
-          }},
-      {"Mansion",
-         {show_all_item(list_of_location[9]->get_item_list(), info),
-           show_all_hero(list_of_location[9]->get_hero_list(),info), 
-           show_all_mosnter(list_of_location[9]->get_monster_list(),info),
-            show_all_villager(list_of_location[9]->get_villager_list(),info),
-          }},
-      {"institute",
-         {show_all_item(list_of_location[3]->get_item_list(), info),
-           show_all_hero(list_of_location[3]->get_hero_list(),info),
-            show_all_mosnter(list_of_location[3]->get_monster_list(),info),
-             show_all_villager(list_of_location[3]->get_villager_list(),info),
-            }},
-      {"museum",
-         {show_all_item(list_of_location[6]->get_item_list(), info),
-           show_all_hero(list_of_location[6]->get_hero_list(),info), 
-           show_all_mosnter(list_of_location[6]->get_monster_list(),info),
-            show_all_villager(list_of_location[6]->get_villager_list(),info),
-          }},
-      {"shop",
-         {show_all_item(list_of_location[5]->get_item_list(), info), 
-          show_all_hero(list_of_location[5]->get_hero_list(),info),
-           show_all_mosnter(list_of_location[5]->get_monster_list(),info),
-            show_all_villager(list_of_location[5]->get_villager_list(),info),
-          }},
-      {"cave",
-         {show_all_item(list_of_location[17]->get_item_list(), info),
-           show_all_hero(list_of_location[17]->get_hero_list(),info),
-            show_all_mosnter(list_of_location[17]->get_monster_list(),info),
-             show_all_villager(list_of_location[17]->get_villager_list(),info),
-            }},
-      {"camp",
-         {show_all_item(list_of_location[18]->get_item_list(), info),
-           show_all_hero(list_of_location[18]->get_hero_list(),info), 
-           show_all_mosnter(list_of_location[18]->get_monster_list(),info),
-            show_all_villager(list_of_location[18]->get_villager_list(),info),
-          }},
+show_all_item(list_of_location[2]->get_item_list(), info),
+show_all_mosnter(list_of_location[2]->get_monster_list(),info),
+show_all_villager(list_of_location[2]->get_villager_list(),info),
+  show_all_hero(list_of_location[2]->get_hero_list(),info)
+}},
+ 
+ 
+{"grave_yard",
+{show_all_item(list_of_location[1]->get_item_list(), info),
+show_all_mosnter(list_of_location[1]->get_monster_list(),info), 
+show_all_villager(list_of_location[1]->get_villager_list(),info),
+   show_all_hero(list_of_location[1]->get_hero_list(),info)
+}},
+ 
+{"Hospital",
+{show_all_item(list_of_location[0]->get_item_list(), info),
+show_all_mosnter(list_of_location[0]->get_monster_list(),info),
+show_all_villager(list_of_location[0]->get_villager_list(),info),
+show_all_hero(list_of_location[0]->get_hero_list(),info)     
+ }},
+
+{"Mansion",
+{show_all_item(list_of_location[9]->get_item_list(), info),
+show_all_mosnter(list_of_location[9]->get_monster_list(),info),
+show_all_villager(list_of_location[9]->get_villager_list(),info),
+show_all_hero(list_of_location[9]->get_hero_list(),info)  
+}},
+{"institute",
+{show_all_item(list_of_location[3]->get_item_list(), info),
+show_all_mosnter(list_of_location[3]->get_monster_list(),info),
+show_all_villager(list_of_location[3]->get_villager_list(),info),
+show_all_hero(list_of_location[3]->get_hero_list(),info)
+}},
+ 
+{"museum",
+{show_all_item(list_of_location[6]->get_item_list(), info),
+show_all_mosnter(list_of_location[6]->get_monster_list(),info),
+show_all_villager(list_of_location[6]->get_villager_list(),info),
+show_all_hero(list_of_location[6]->get_hero_list(),info)
+  }},
+{"shop",
+{show_all_item(list_of_location[5]->get_item_list(), info), 
+show_all_mosnter(list_of_location[5]->get_monster_list(),info),
+show_all_villager(list_of_location[5]->get_villager_list(),info),
+show_all_hero(list_of_location[5]->get_hero_list(),info)
+
+}},
+ 
+{"cave",
+{show_all_item(list_of_location[17]->get_item_list(), info),
+show_all_mosnter(list_of_location[17]->get_monster_list(),info),
+show_all_villager(list_of_location[17]->get_villager_list(),info),
+show_all_hero(list_of_location[17]->get_hero_list(),info)
+}},
+
+{"camp",
+{show_all_item(list_of_location[18]->get_item_list(), info),
+show_all_mosnter(list_of_location[18]->get_monster_list(),info),
+show_all_villager(list_of_location[18]->get_villager_list(),info),
+    show_all_hero(list_of_location[18]->get_hero_list(),info) 
+       }},
       {"barn",
          {show_all_item(list_of_location[15]->get_item_list(), info), 
-          show_all_hero(list_of_location[15]->get_hero_list(),info),
            show_all_mosnter(list_of_location[15]->get_monster_list(),info), 
            show_all_villager(list_of_location[15]->get_villager_list(),info),
-          }},
+             show_all_hero(list_of_location[15]->get_hero_list(),info)   
+                   }},
       {"dungeon", 
         {show_all_item(list_of_location[16]->get_item_list(), info), 
-          show_all_hero(list_of_location[16]->get_hero_list(),info),
            show_all_mosnter(list_of_location[16]->get_monster_list(),info), 
            show_all_villager(list_of_location[16]->get_villager_list(),info),
-          }},
+             show_all_hero(list_of_location[16]->get_hero_list(),info)        
+              }},
       {"tower",
          {show_all_item(list_of_location[11]->get_item_list(), info),
-           show_all_hero(list_of_location[11]->get_hero_list(),info),
             show_all_mosnter(list_of_location[11]->get_monster_list(),info),
              show_all_villager(list_of_location[11]->get_villager_list(),info),
+               show_all_hero(list_of_location[11]->get_hero_list(),info)
             }},
-      {"inn",
-         {show_all_item(list_of_location[13]->get_item_list(), info),
-           show_all_hero(list_of_location[13]->get_hero_list(),info), 
-           show_all_mosnter(list_of_location[13]->get_monster_list(),info),
-            show_all_villager(list_of_location[13]->get_villager_list(),info),
-          }},
+{"inn",
+{show_all_item(list_of_location[13]->get_item_list(), info),
+show_all_mosnter(list_of_location[13]->get_monster_list(),info),
+show_all_villager(list_of_location[13]->get_villager_list(),info),
+    show_all_hero(list_of_location[13]->get_hero_list(),info)  
+    }},
       {"docks",
          {show_all_item(list_of_location[12]->get_item_list(), info),
-           show_all_hero(list_of_location[12]->get_hero_list(),info),
             show_all_mosnter(list_of_location[12]->get_monster_list(),info),
              show_all_villager(list_of_location[12]->get_villager_list(),info),
+               show_all_hero(list_of_location[12]->get_hero_list(),info)
             }},
       {"theatre", 
         {show_all_item(list_of_location[10]->get_item_list(), info),
-           show_all_hero(list_of_location[10]->get_hero_list(),info),
             show_all_mosnter(list_of_location[10]->get_monster_list(),info),
              show_all_villager(list_of_location[10]->get_villager_list(),info),
+               show_all_hero(list_of_location[10]->get_hero_list(),info)
             }},
       {"abbey",
-         {show_all_item(list_of_location[8]->get_item_list(), info),
-           show_all_hero(list_of_location[8]->get_hero_list(),info),
-            show_all_mosnter(list_of_location[8]->get_monster_list(),info), 
-            show_all_villager(list_of_location[8]->get_villager_list(),info),
+{show_all_item(list_of_location[8]->get_item_list(), info),
+show_all_mosnter(list_of_location[8]->get_monster_list(),info), 
+show_all_villager(list_of_location[8]->get_villager_list(),info),
+show_all_hero(list_of_location[8]->get_hero_list(),info)
+
           }},
-      {"cryptt", 
-        {show_all_item(list_of_location[7]->get_item_list(), info),
-           show_all_hero(list_of_location[7]->get_hero_list(),info),
-            show_all_mosnter(list_of_location[7]->get_monster_list(),info), 
-            show_all_villager(list_of_location[7]->get_villager_list(),info),
+ 
+{"cryptt", 
+{show_all_item(list_of_location[7]->get_item_list(), info),
+show_all_mosnter(list_of_location[7]->get_monster_list(),info), 
+show_all_villager(list_of_location[7]->get_villager_list(),info),
+   show_all_hero(list_of_location[7]->get_hero_list(),info)
           }},
-      {"precinct", 
+ 
+        {"precinct", 
         {show_all_item(list_of_location[14]->get_item_list(), info),
-           show_all_hero(list_of_location[14]->get_hero_list(),info),
             show_all_mosnter(list_of_location[14]->get_monster_list(),info), 
             show_all_villager(list_of_location[14]->get_villager_list(),info),
-          }}};
-          cout<<1<<endl;
+              show_all_hero(list_of_location[14]->get_hero_list(),info)    
+                 }}};
   map<string, string> action_help = {
       {"Move", "Move to another location."},
       {"Guide", "move the villager one step to the hero,or move a villager to the neighbor house base on the hero location"},
@@ -698,7 +715,6 @@ int enter_count=0;
       {"use perk","use the perk wich hero have(from hero panel)"}
     };
    
-      cout<<1<<endl;
     map<string,string > heros_data={
 
 { "hero name ",hero_list[0]->get_hero_name()},
@@ -707,7 +723,6 @@ int enter_count=0;
 {"action left ",to_string( hero_list[0]->get_action())}
                            
 };
-cout<<1<<endl;
 map<string,string>secend_heros_data={
 
 { "hero name ",hero_list[1] ->get_hero_name()},
@@ -719,24 +734,26 @@ map<string,string>secend_heros_data={
   bool show_hero = false;
   bool show_act = false;
   bool show_hero1=false;
+  bool show_map=false;
   int sel_loc = 0, sel_act = 0;
   int sel_hero=0;
   int sel_hero1=0;
-  
+  int sel_map=0;
   vector<string> locations = {"Lab", "church", "grave_yard", "Hospital", "Mansion", "institute","museum","shop","cave","camp","barn","dungeon","tower","inn","docks","theatre","abbey","cryptt","precinct"};
   vector<string> actions = {"Move", "Guide", "Pick Up", "Advance", "Defeat", "special action ",  "Quit","use perk"};
     vector<string>heros={"hero name ","item have ","perk have ","action left "};
     vector<string>heros1={"hero name ","item have ","perk have ","action left "};
-  auto loc_menu = Radiobox(&locations, &sel_loc);
+
+    auto loc_menu = Radiobox(&locations, &sel_loc);
   auto act_menu = Radiobox(&actions, &sel_act);
   auto hero_menu=Radiobox(&heros,&sel_hero);
   auto heros1_menu=Radiobox(&heros1,&sel_hero1);
   Component renderer = Renderer([&]
                                 {
     Elements elements;
-    elements.push_back(paragraph(map_ascii));
-    elements.push_back(separator());
-    elements.push_back(paragraph("Press L:Location, H:Hero,  J: secend Hero ,  A:Action. Use arrows+Enter to navigate."));
+    //elements.push_back(paragraph(map_ascii));
+    //elements.push_back(separator());
+    elements.push_back(paragraph("Press L:Location, H:Hero,  J: secend Hero , M :show map , A:Action. Use arrows+Enter to navigate."));
     elements.push_back(separator());
 
     if (show_loc) {
@@ -782,33 +799,44 @@ map<string,string>secend_heros_data={
       })));
     }
 
+   if (show_map)
+     { 
+     
+      elements.push_back(window(text("Map Detail"),
+                               paragraph(map_ascii)));
+     }
     
-elements.push_back(separator());
     return vbox(std::move(elements)) | border; });
 
 Component app = renderer | CatchEvent([&](Event event) {
     if (event == Event::Character('l') || event == Event::Character('L')) {
       show_loc = !show_loc;
-      show_hero = show_hero1 = show_act = false;
+     show_map= show_hero = show_hero1 = show_act = false;
       return true;
     }
     if (event == Event::Character('h') || event == Event::Character('H')) {
       show_hero = !show_hero;
-      show_loc = show_hero1 = show_act = false;
+     show_map= show_loc = show_hero1 = show_act = false;
       return true;
     }
     if (event == Event::Character('j') || event == Event::Character('J')) {
       show_hero1 = !show_hero1;
-      show_loc = show_hero = show_act = false;
+      show_map=show_loc = show_hero = show_act = false;
       return true;
     }
     if (event == Event::Character('a') || event == Event::Character('A')) {
       show_act = !show_act;
-      show_loc = show_hero = show_hero1 = false;
+     show_map= show_loc = show_hero = show_hero1 = false;
       return true;
     }
 
-
+      if (event==Event::Character('m') || event==Event::Character('M'))
+      {
+        show_map=!show_map;
+        show_act=show_hero1=show_hero=show_loc=false;
+        
+        return true;
+      }      
 
      if (event == Event::Return) {
             string message;
@@ -816,6 +844,12 @@ Component app = renderer | CatchEvent([&](Event event) {
 
        
         
+
+
+if (show_map)
+{
+  return true;
+}
 
 
       if (show_loc)
@@ -858,6 +892,7 @@ void programm::run()
   LocationInfo data_saver;
   string a,b;
 terminal_handler(data_saver,a,b);
+
 
 
 }
