@@ -1,8 +1,8 @@
 #include "monster.hpp"
-#include<stdexcept>
-#include"location.hpp"
+#include <stdexcept>
+#include "location.hpp"
 using namespace std;
-void monster::move_to_place(std::vector<int> & route, int number_route, vector<location *> & locations)
+void monster::move_to_place(std::vector<int> &route, int number_route, vector<location *> &locations)
 {
     if (!locations.empty() || !route.empty())
         throw invalid_argument("invalid input\n");
@@ -35,17 +35,21 @@ bool monster::get_is_frenzy()
 }
 int monster::get_frenzy_order()
 {
-        return freenzy_order;
+    return freenzy_order;
 }
 void monster::set_is_frenzy(bool frenz)
 {
-    is_freenzy=frenz;
+    is_freenzy = frenz;
 }
 void monster::set_frenzy_order(int frenz)
 {
-    freenzy_order=frenz;
+    freenzy_order = frenz;
 }
-    string monster:: get_mons_name()
-    {
-        return name_of_monster;
-    }
+string monster::get_mons_name()
+{
+    return name_of_monster;
+}
+int & monster::get_hidden_item()
+{
+    return totla_hidden_item;
+}

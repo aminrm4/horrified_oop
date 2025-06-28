@@ -11,7 +11,9 @@ class perk;
 class item;
 class monster;
 class Drakula;
+class programm;
 class hero
+
 
 {
     
@@ -25,15 +27,15 @@ class hero
     
     public:
     virtual void special_action(std::vector<std::vector<int>>& map , const std::vector<location*>& loc={}) = 0;
-    void advance(Drakula & D , invisible_man & I);
-    void guide(std::vector<std::vector<int>>&  map);
-    void defeat(Drakula* D , invisible_man* I , std::vector<monster*>& monsters);
-    void move(location* loc , const std::vector <villager*>& villagers={});
+    void advance(vector<monster *> &monsters, programm &bug);
+    void guide(std::vector<std::vector<int>>&  map,programm &);
+    void defeat(vector<monster *> &monsters, programm &bug);
+    void move(location *loc,  programm & bug,const vector<villager *> &villagers={});
     int get_action();
     void set_perks(vector<perk*> perks);
     std:: vector<perk*> get_perks();
     void set_item(vector<item*>  items);
-     std::vector <item*> get_items();
+     std::vector <item*> &get_items(); //refrenced too
     void pickup();
     void set_action(int);
     location* get_loc();

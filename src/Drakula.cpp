@@ -14,23 +14,15 @@ Drakula::Drakula(int coffin, bool is_freenzy,int freenzy_order,location* ptr)
     
     this->is_freenzy = is_freenzy;
     this->freenzy_order = freenzy_order;
-    remain_coffin = coffin;
+    this->totla_hidden_item = coffin;
     this->loc = ptr;
     name_of_monster="Drakula";
 }
-void Drakula::ability(std::vector <int> & route , vector<location*> & locations , hero* h)
+void Drakula::ability(std::vector <int> & route ,programm & bug, vector<location*> & locations , hero* h)
 {
     if(h == nullptr)
     throw logic_error("Cant access the hero \n");
     
     cout << "Drakula used his DarkCharm Ability and teleported you to his location \n";
-    h->move(this->loc);
-}
-int Drakula::get_remaining_coffin()
-{
-    return this->remain_coffin;
-}
-void Drakula::set_remaining_coffin(int c)
-{
-    remain_coffin = c;
+    h->move(this->loc,bug);
 }

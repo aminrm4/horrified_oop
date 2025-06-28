@@ -5,7 +5,7 @@ int monster_card::get_item_count()
 {
     return item_count;
 }
-void monster_card::monster_strike(int dice_attack,int move, monster* monsters , vector<int> & route , vector<location*>&loc , hero* h )
+void monster_card::monster_strike(int dice_attack,int move,  programm & bug,monster* monsters , vector<int> & route , vector<location*>&loc , hero* h )
 {
        programm p;
         monsters->move_to_place( route, move ,loc);
@@ -16,7 +16,7 @@ void monster_card::monster_strike(int dice_attack,int move, monster* monsters , 
         if(*it == 1)  // ability
         {
             cout << "Oh no the monster want to use his ability a player \n";
-            monsters->ability(route , loc, h);
+            monsters->ability(route ,bug, loc, h);
         }
         if(*it == 2) // strike
         {
@@ -56,7 +56,7 @@ void monster_card::monster_strike(int dice_attack,int move, monster* monsters , 
                         
                         cout << "you couldnt save your self but i managed to heal you and bring you to hospital \n";
                         p.set_night_terror(p.get_night_terror() + 1);
-                        pp[0]->move(loc[0]);
+                        pp[0]->move(loc[0],bug);
                     }
 
 
