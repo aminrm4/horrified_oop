@@ -4,13 +4,22 @@
 #include <algorithm>
 #include "Drakula.hpp"
 #include "Invisible_man.hpp"
-#include"programm.hpp"
-#include<iterator>
+#include "programm.hpp"
+#include <iterator>
+#include "location.hpp"
+void remove_hero(programm &, hero *);
+void remove_villager(programm &, villager *);
+void remove_monster(programm &, monster *);
+void remove_item(programm &, monster *);
+
 using namespace std;
 
-void hero::move(location *loc,  const vector<villager *> &villagers)//used to delete the initializer cause of the pass by refrence
+void hero::move(location *loc, programm &bug, const vector<villager *> &villagers) // used to delete the initializer cause of the pass by refrence
 {
+    remove_hero(bug, this);
+    loc->set_hero_list(this);
     this->loc = loc;
+
     if (!villagers.empty())
     {
         cout << "Do you want to move villagers with you ? \n [Y]es \n [N]o \n Enter a character \n";
@@ -25,30 +34,29 @@ void hero::move(location *loc,  const vector<villager *> &villagers)//used to de
                 throw logic_error("invalid Character \n");
 
             if (status == 'y')
-                {
-                    for (auto v : villagers)
-                        v->set_current_location(this->loc);
+            {
+                for (auto v : villagers)
+                    v->set_current_location(this->loc);
 
-                    for (int i = 0; i < villagers.size(); i++)
+                for (int i = 0; i < villagers.size(); i++)
+                {
+                    if (villagers[i]->get_currnet_location() == villagers[i]->get_safe_location())
                     {
-                       if(villagers[i]->get_currnet_location() == villagers[i]->get_safe_location())
-                        {
-                            cout << "thank you hero you bring me to my safe location";
-                            this->perk_have.push_back(villagers[i]->drop_the_perk());
-                        }
+                        cout << "thank you hero you bring me to my safe location";
+                        this->perk_have.push_back(villagers[i]->drop_the_perk());
                     }
-                    
                 }
+            }
         }
         catch (logic_error &e)
         {
             cout << e.what();
             cout << "try again\n";
-            hero::move(loc, villagers);
+            hero::move(loc, bug, villagers);
         }
     }
 }
-void hero::guide(vector<vector<int>>& map)
+void hero::guide(vector<vector<int>> &map, programm &p)
 {
     int thisNumLoc = this->loc->get_loc_relation();
     for (auto related_node : map[thisNumLoc])
@@ -59,29 +67,45 @@ void hero::guide(vector<vector<int>>& map)
         int node_number;
         cin >> node_number;
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-        bool is_connected{};
-
-        for (auto node : map[node_number])
-            if (node == thisNumLoc)
-                is_connected = true;
-
-        if (is_connected)
+        bool is_connected = false;
+        for (auto i : map[thisNumLoc])
         {
+            if (i == node_number)
+            {
+                is_connected = true;
+            }
         }
+
+        if (is_connected == true && !p.list_of_location[node_number]->get_villager_list().empty())
+
+        {
+            p.list_of_location[thisNumLoc]->set_villager(p.list_of_location[node_number]->get_villager_list()[0]); // حونه قهرمان این محلی روی شما اومده  .. این: محلی که در خانه قبلی بوده))کاربر زده(())
+            remove_villager(p, p.list_of_location[node_number]->get_villager_list()[0]);
+            // p.list_of_location[node_number]->get_villager_list()[0]->set_current_location(nullptr);    // خونه قبی محلی  کاربر زده شما کل ویلیچر هاتو بده موقغیت به نال بده . الان دیگه نو این خونه نیست
+        }
+        /*
+          if ((p.list_of_location[node_number]->get_villager_list().empty()))
+          {   cout<<"kir"<<endl;
+               p.list_of_location[thisNumLoc]->get_villager_list().push_back(p.list_of_location[node_number]->get_villager_list()[0]);
+               cout<<"moein"<<endl;
+
+             cout<<"bahrami"<<endl;
+
+          }
+             */
         else
         {
-            throw logic_error("the location that you selected is far away \n");
-            guide(map);
+            throw logic_error("the location that you selected is far away or it doesnt have any villager \n");
+            guide(map, p);
         }
     }
     catch (const std::exception &e)
     {
         std::cerr << e.what() << '\n';
-        guide(map);
+        guide(map, p);
     }
 }
-void hero::advance(Drakula &D, invisible_man &I)
+void hero::advance(vector<monster *> &monsters, programm &bug)
 {
     cout << "pls select a monster \n [D]rakula \n [I]nvisible man \n";
     try
@@ -91,15 +115,29 @@ void hero::advance(Drakula &D, invisible_man &I)
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
         m = tolower(m);
-        if (m != 'd' || m != 'i')
+        if (m != 'd' && m != 'i')
         {
             throw logic_error("Worng character \n");
-            advance(D, I);
+            advance(monsters, bug);
         }
         switch (m)
         {
         case 'i':
         {
+            bool is_invisible_alive = false;
+            for (auto m : monsters)
+            {
+                if (typeid(*m).name() == typeid(invisible_man).name())
+                {
+                    is_invisible_alive = true;
+                }
+            }
+            if (!is_invisible_alive)
+            {
+                cout << "ohhh invisible man is dead " << endl;
+                return;
+            }
+
             cout << "For defeating this monster you must find 5 evidence and put them in precinct\n";
             if (this->get_loc()->get_loc_relation() == 14)
             {
@@ -112,31 +150,30 @@ void hero::advance(Drakula &D, invisible_man &I)
                     switch (temp)
                     {
                     case 13:
-                    
+
                         counter++;
                         break;
-                    
 
                     case 15:
-                
+
                         counter++;
                         break;
-                
+
                     case 3:
-            
+
                         counter++;
                         break;
-            
+
                     case 4:
-                    
+
                         counter++;
                         break;
-                    
+
                     case 9:
-                    
+
                         counter++;
                         break;
-                    
+
                     default:
                         break;
                     }
@@ -144,43 +181,39 @@ void hero::advance(Drakula &D, invisible_man &I)
                 if (counter >= 5)
                 {
                     cout << "all evidence finded now go and defeat the invisible men \n";
+                    return;
                 }
                 cout << "you need " << 5 - counter << " more item\n enter how many item u want to put here\n";
-                try
+                int number;
+                cin >> number;
+                for (int i = 0; i < number; i++)
                 {
-                    vector<int> ind;
-                    int number;
-                    cin >> number;
-                    cout << "Enter the index of your items";
-
-                    for (int i = 0; i < number; i++)
+                    cout << "enter the name of your item" << endl;
+                    string name;
+                    cin >> name;
+                    for (int item=0 ;item<item_have.size();item++)
                     {
-                        int index;
-                        cin >> index;
-                        int it = this->item_have.at(index)->get_loc()->get_loc_relation();
+                        if (item_have[item]->get_name() == name && (item_have[item]->get_loc()->get_loc_relation() == 13 || item_have[item]->get_loc()->get_loc_relation() == 15 || item_have[item]->get_loc()->get_loc_relation() == 3 || item_have[item]->get_loc()->get_loc_relation() == 4 || item_have[item]->get_loc()->get_loc_relation() == 9))
 
-                        if (it == 13 || it == 15 || it == 3 || it == 4 || it == 9)
                         {
-                            counter++;
-                            ind.push_back(index);
+                            cout << "this item has been puted by you " << name << endl;
+                            for (auto m : monsters)
+                            {
+                                if (typeid(*m).name() == typeid(invisible_man).name())
+                                {
+                                    m->get_hidden_item()--;
+                                }
+                            }
+                            delete item_have[item];
+                            item_have.erase(item_have.begin()+item);
                         }
                     }
-                    if (counter >= 5)
-                    {
-                        cout << "now you can defeat invisible men \n";
-                        I.set_remain_hidden_item(0);
-                    }
-                    sort(ind.begin(), ind.end(), greater());
-                    for (int i = 0; i < ind.size(); i++)
-                    {
-                        this->item_have.erase(item_have.begin() + ind[i]);
-                    }
-                    I.set_remain_hidden_item(5 - counter);
+
                 }
-                catch (logic_error &e)
-                {
-                    cerr << e.what();
-                }
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                return;
+
+             
             }
             else
             {
@@ -191,127 +224,135 @@ void hero::advance(Drakula &D, invisible_man &I)
         }
 
         case 'd':
-        {
-            cout << "For deafeting Drakula you must destroy his coffin's \n";
-            int temp = this->get_loc()->get_loc_relation();
-
-            if ((temp == 1 || temp == 16 || temp == 17 || temp == 7))
+            /*
             {
-                if (!this->get_loc()->get_coffin_exist())
+                cout << "For deafeting Drakula you must destroy his coffin's \n";
+                int temp = this->get_loc()->get_loc_relation();
+
+                if ((temp == 1 || temp == 16 || temp == 17 || temp == 7))
                 {
-                    cout << "here is a coffin if you want to destroy it u must remove some item from your inventory\n";
-                    cout << "fo destroying a coffin all the items you remove from your inventory must be yellow and sum of they power must be 6 or higher\n";
-                    cout << "Do you want to destroy it ? [Y]es  , [N]o  ";
-                    try
+                    if (!this->get_loc()->get_coffin_exist())
                     {
-                        char status;
-                        cin >> status;
-                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                        status = tolower(status);
-                        if (status == 'y')
+                        cout << "here is a coffin if you want to destroy it u must remove some item from your inventory\n";
+                        cout << "fo destroying a coffin all the items you remove from your inventory must be yellow and sum of they power must be 6 or higher\n";
+                        cout << "Do you want to destroy it ? [Y]es  , [N]o  ";
+                        try
                         {
-                            cout << "enter how many item you want to put down";
-                            vector<item *> items = this->item_have;
-                            try
+                            char status;
+                            cin >> status;
+                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                            status = tolower(status);
+                            if (status == 'y')
                             {
-                                int item_count;
-                                cin >> item_count;
-
-                                if (item_count > item_have.size())
-                                    throw logic_error("you dont have this much item \n");
-
-                                int sum_power(0);
-                                cout << "enter the index of each item , each item must be yellow\n";
-                                vector<int> indexes;
-                                for (int i = 0; i < item_count; i++)
+                                cout << "enter how many item you want to put down";
+                                vector<item *> items = this->item_have;
+                                try
                                 {
-                                    int index;
-                                    cin >> index;
-                                    indexes.push_back(index);
-                                    if (item_have[index]->get_Color() == rgb::Color::Yellow)
-                                        sum_power += item_have[index]->get_power();
+                                    int item_count;
+                                    cin >> item_count;
+
+                                    if (item_count > item_have.size())
+                                        throw logic_error("you dont have this much item \n");
+
+                                    int sum_power(0);
+                                    cout << "enter the index of each item , each item must be yellow\n";
+                                    vector<int> indexes;
+                                    for (int i = 0; i < item_count; i++)
+                                    {
+                                        int index;
+                                        cin >> index;
+                                        indexes.push_back(index);
+                                        if (item_have[index]->get_Color() == rgb::Color::Yellow)
+                                            sum_power += item_have[index]->get_power();
+                                        else
+                                        {
+                                            throw logic_error("the item you selected must be yellow \n");
+                                        }
+                                    }
+                                    sort(indexes.begin(), indexes.end(), greater());
+                                    if (sum_power >= 6)
+                                    {
+                                        for (auto items : indexes)
+                                        {
+                                            this->item_have.erase(item_have.begin() + items);
+                                        }
+                                        cout << "you destroyed one of drakula coffins \n";
+                                        this->get_loc()->set_coffin_exist(false);
+                                        D.set_loc(D.get_loc() - 1);
+                                    }
                                     else
                                     {
-                                        throw logic_error("the item you selected must be yellow \n");
+                                        throw logic_error("sum of your item power must be 6 or higher\n");
                                     }
                                 }
-                                sort(indexes.begin(), indexes.end(), greater());
-                                if (sum_power >= 6)
+                                catch (const logic_error &e)
                                 {
-                                    for (auto items : indexes)
-                                    {
-                                        this->item_have.erase(item_have.begin() + items);
-                                    }
-                                    cout << "you destroyed one of drakula coffins \n";
-                                    this->get_loc()->set_coffin_exist(false);
-                                    D.set_loc(D.get_loc() - 1);
+                                    std::cerr << e.what() << '\n';
+                                    advance(D, I);
                                 }
-                                else
-                                {
-                                    throw logic_error("sum of your item power must be 6 or higher\n");
-                                }
+
+                                return;
                             }
-                            catch (const logic_error &e)
+                            if (status == 'n')
                             {
-                                std::cerr << e.what() << '\n';
-                                advance(D, I);
+                                return;
                             }
 
-                            return;
+                            throw logic_error("invalid character\n");
                         }
-                        if (status == 'n')
+                        catch (const logic_error &e)
                         {
-                            return;
+                            std::cerr << e.what() << '\n';
                         }
-
-                        throw logic_error("invalid character\n");
                     }
-                    catch (const logic_error &e)
+                    else
                     {
-                        std::cerr << e.what() << '\n';
+                        cout << "here is not any coffin or it destroyed \n";
                     }
                 }
                 else
                 {
-                    cout << "here is not any coffin or it destroyed \n";
+                    cout << "There is not any coffin here \n";
                 }
+                break;
             }
-            else
+                */
+            default:
             {
-                cout << "There is not any coffin here \n";
+                break;
             }
-            break;
+                
         }
-        default:
-        {
-            break;
-        }
-        }
-
+            
     }
 
     catch (const logic_error &e)
     {
         std::cerr << e.what() << '\n';
-        advance(D, I);
+        advance(monsters, bug);
     }
-  
+        
 }
 int hero::get_action()
 {
     return action;
 }
-void hero::defeat(Drakula *D, invisible_man *I, vector<monster *> &monsters)
+void hero::defeat(vector<monster *> &monsters, programm &bug)
 {
-    if (D->get_loc() == this->get_loc())
+
+    for (auto m : monsters)
     {
-        if (D->get_remaining_coffin() <= 0)
+        if (m->get_loc() == this->get_loc())
         {
-            cout << "There is no more coffin left you can defeat him using enter button!!";
-            cin.get();
-            cout << "oh look he left a massage for you \n";
-            cin.get();
-            cout << R"(Foolish mortal...
+            if (typeid(*m).name() == typeid(Drakula).name())
+            {
+                if (m->get_hidden_item() <= 0)
+                {
+                    cout << "There is no more coffin left you can defeat him using enter button!!";
+                    cin.get();
+                    cout << "oh look he left a massage for you \n";
+                    cin.get();
+                    cout << R"(Foolish mortal...
 You have not slain evil...
 You have merely unshackled it.
 
@@ -320,22 +361,26 @@ The darkness you feared was held at bay by me.
 
 Now?
 Now it walks free.
-And it wears your face...)";
+And it wears your face...
+)";
 
-            for (int i = 0; i < monsters.size(); i++)
-            {
-                if (typeid(*monsters[i]).name() == typeid(Drakula).name())
-                {
-                    monsters.erase(monsters.begin() + i);
-                    return;
+                    for (int i = 0; i < monsters.size(); i++)
+                    {
+                        if (typeid(*monsters[i]).name() == typeid(Drakula).name())
+                        {
+                            remove_monster(bug, monsters[i]);
+                            // monsters.erase(monsters.begin() + i);
+                            bug.next_frenzy();
+
+                            return;
+                        }
+                    }
                 }
-            }
-        }
-        else
-        {
-            cout << "Oh noo Drakula is still strong run Away before he capture you !!! \n";
-            cin.get();
-            cout << R"(Four coffins... four hearts...
+                else
+                {
+                    cout << "Oh noo Drakula is still strong run Away before he capture you !!! \n";
+                    cin.get();
+                    cout << R"(Four coffins... four hearts...
 And yet here you are, thinking a blade alone can end me.
 I do not die by steel.
 I die by wisdom... patience... sacrifice.
@@ -349,17 +394,18 @@ Go now, little hero.
 Burn the world to find my weakness—
 And when you return...
 I’ll be waiting.
-Hungrier.)";
-            return;
-        }
-    }
-    if (I->get_loc() == this->get_loc())
-    {
-        if (I->get_remain_hidden_item() <= 0)
-        {
-            cout << "There is no more item that are hidden you can defeat him using enter button!!";
-            cin.get();
-            cout << R"(Clever.
+Hungrier.
+)";
+                    return;
+                }
+            }
+            if (typeid(*m).name() == typeid(invisible_man).name())
+            {
+                if (m->get_hidden_item() <= 0)
+                {
+                    cout << "There is no more item that are hidden you can defeat him using enter button!!";
+                    cin.get();
+                    cout << R"(Clever.
 Painful... but clever.
 
 They’ll sing of you, yes.
@@ -373,19 +419,24 @@ They wait.
 
 So sleep light, hero.
 The next whisper…
-may still be me.)";
-            for (int i = 0; i < monsters.size(); i++)
-            {
-                if (typeid(*monsters[i]).name() == typeid(invisible_man).name())
-                {
-                    monsters.erase(monsters.begin() + i);
-                    return;
+may still be me.
+)";
+                    for (int i = 0; i < monsters.size(); i++)
+                    {
+                        if (typeid(*monsters[i]).name() == typeid(invisible_man).name())
+                        {
+                            remove_monster(bug, monsters[i]);
+
+                            // delete monsters[i];
+                            // monsters.erase(monsters.begin() + i);
+                            bug.next_frenzy();
+                            return;
+                        }
+                    }
                 }
-            }
-        }
-        else
-        {
-            cout << R"(You can’t kill what you can’t see.
+                else
+                {
+                    cout << R"(You can’t kill what you can’t see.
 You swing at shadows… I carve through souls.
 
 I’ve worn your friend’s voice.
@@ -393,70 +444,70 @@ I’ve slept in your camp.
 You prayed last night—and I listened.
 
 You're not hunting me, hero.
-You're hosting me.)";
-            return;
+You're hosting me.
+)";
+                    return;
+                }
+            }
         }
     }
+
     cerr << "There is no monster here \n";
 }
 void hero::pickup()
 {
-    vector<item*> items = this->loc->get_item_list();
+
     cout << "OH look there is something hidden under this big rock move it using enter \n";
     cin.get();
-    if(!items.empty())
+    if (!this->loc->get_item_list().empty())
     {
-        cout << "WOW look what you just found";
-        for (int i = 0; i < items.size(); i++)
+        cout << "WOW look what you just found " << endl;
+        for (int i = 0; i < this->loc->get_item_list().size(); i++)
         {
-            cout << items[i] << endl;
+            cout << this->loc->get_item_list()[i]->get_name() << endl;
         }
-        this->item_have.insert(items.begin() , items.end() , item_have.end());
+        this->item_have.insert(item_have.end(), this->loc->get_item_list().begin(), this->loc->get_item_list().end());
         this->loc->delete_item();
     }
     else
     {
         cout << "may bad it seems noting is under this rock \n";
     }
-    
-
 }
+
 void hero::set_action(int set)
 {
     action = set;
 }
-void hero::set_perks(vector<perk*> perks)
+void hero::set_perks(vector<perk *> perks)
 {
     perk_have = perks;
 }
-vector<perk*> hero::get_perks()
+vector<perk *> hero::get_perks()
 {
     return perk_have;
 }
-void hero::set_item(vector<item*> items)
+void hero::set_item(vector<item *> items)
 {
     item_have = items;
 }
-vector<item*> hero::get_items()
+vector<item *> &hero::get_items() //has been refreced
 {
     return item_have;
 }
-    string  hero::get_hero_name()
-    {
-        return name_of_hero;
-    }
-    location* hero:: get_loc()
-    {
-        return loc;
-    }
-hero:: hero(std::vector<perk *>&perks)
-{   int random;
+string hero::get_hero_name()
+{
+    return name_of_hero;
+}
+location *hero::get_loc()
+{
+    return loc;
+}
+hero::hero(std::vector<perk *> &perks)
+{
+    int random;
     srand(time(0));
-    random= rand()%perks.size();
+    random = rand() % perks.size();
     perk_have.push_back(perks[random]);
-    perks.erase(perks.begin()+random);
-
-
-
-
+    perks.erase(perks.begin() + random);
 }

@@ -4,13 +4,12 @@
 #include "location.hpp"
 #include <vector>
 class hero;
+class programm;
 using namespace std;
 class invisible_man : public monster
 {
-    int remain_hidden_item ;
     public:
-    void ability(std::vector <int>  & route , vector<location*> & locations , hero* h);
+    void ability(std::vector <int>  & route , programm &,vector<location*> & locations , hero* h);
     invisible_man(int remain_hidden_item, bool is_freenzy ,int freenzy_order,location* loc);
     void set_remain_hidden_item(int);
-    int get_remain_hidden_item();
 };

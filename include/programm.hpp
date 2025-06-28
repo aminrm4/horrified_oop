@@ -18,7 +18,6 @@
 #include<Color.hpp>
 using namespace std;
 class monster_card;
-class monster_list;
 class villager;
 struct LocationInfo
 {

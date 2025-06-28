@@ -4,11 +4,11 @@ void Hurried_Assistant::event(perk * p,hero* hero, monster *m,std::vector<std::v
 {
     loc[15]->set_villager(new villager("Fritz" ,loc[3] ,loc[15]  , a));
 }
-void Hurried_Assistant::monster_strike(int dice_attack,int move, vector<monster*> & monsters , vector<int> & route , vector<location*>&loc , hero* h )
+void Hurried_Assistant::monster_strike(int dice_attack,int move,programm & bug, vector<monster*> & monsters , vector<int> & route , vector<location*>&loc , hero* h )
 {
         for (int i = 0; i < monsters.size(); i++)
     {
         if(typeid(*monsters[i]).name() == typeid(Drakula).name())
-            monster_card::monster_strike( dice_attack, move, monsters[i]  , route ,loc ,h );
+            monster_card::monster_strike( dice_attack, move, bug,monsters[i]  , route ,loc ,h );
     }
 }

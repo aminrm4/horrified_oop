@@ -3,6 +3,7 @@
 class location;
 class hero;
 #include<string>
+class programm;
 class monster
 {
     protected:
@@ -10,9 +11,10 @@ class monster
     int freenzy_order;
     location* loc;
     std::string name_of_monster;
+    int totla_hidden_item;
 
     public:
-    virtual void ability(std::vector <int> & route, std::vector<location*> & locations , hero* h) = 0;
+    virtual void ability(std::vector <int> & route,programm &, std::vector<location*> & locations , hero* h) = 0;
     bool get_freenzy_status();
     void move_to_place(std::vector <int> & route , int number_route , std::vector<location*> & locations);
     void set_loc(location* );
@@ -22,5 +24,6 @@ class monster
     void set_is_frenzy(bool);
     void set_frenzy_order(int);
     std::string get_mons_name();
+        int &get_hidden_item();
     
 };

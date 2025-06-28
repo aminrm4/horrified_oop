@@ -268,7 +268,7 @@ list_of_items.push_back(new item(3,"fossil",rgb::Color::Blue,list_of_location[18
     hero_list.push_back(new Archaeologist(4, list_of_location[12], list_of_perks));
 
     monster_list.push_back(new Drakula(4, true, 1, list_of_location[7]));
-    monster_list.push_back(new invisible_man(5, false, 6, list_of_location[13]));
+    monster_list.push_back(new invisible_man(1, false, 6, list_of_location[14]));
 
     monster_card_list.push_back(new form_of_the_bat());
     monster_card_list.push_back(new form_of_the_bat());
@@ -314,7 +314,7 @@ list_of_items.push_back(new item(3,"fossil",rgb::Color::Blue,list_of_location[18
         i->get_loc()->set_hero_list(i);
       }
       
-
+      list_of_location[5]->set_villager(new villager("ass",list_of_location[5],list_of_location[12],*this));
 }
 std::vector<int> programm::bfs(int s, int t)
 {
@@ -892,7 +892,20 @@ void programm::run()
   LocationInfo data_saver;
   string a,b;
 terminal_handler(data_saver,a,b);
+if (a=="Move" && b=="precinct")
+{ hero_list[0]->get_items().push_back(new item(2,"dart",rgb::Color::Red,list_of_location[13]));
+  hero_list[0]->move(list_of_location[14],*this);
+  cout<<"sleep"<<endl;
+  hero_list[0]->advance(monster_list,*this);
+  cout<<"dead"<<endl;
+  hero_list[0]->defeat(monster_list,*this);
 
+cout<<"done completlyuedrfgd"<<endl;
+}
+cout<<"brain error"<<endl;
+cin.get();
+clearScreen();
+terminal_handler(data_saver,a,b);
 
 
 }

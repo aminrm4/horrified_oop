@@ -30,18 +30,18 @@ void hurry::play(hero *he, std::vector<hero *> &he_list, monster *mo, std::vecto
             if (right == 'y')
             {
                 auto it =he_list[i]->get_loc()->get_villager_list();//force to do
-                he_list[i]->move(loc[id],it);
+                he_list[i]->move(loc[id],help_obj1,it);
                 break;
             }
             else
             {
-                he_list[i]->move(loc[id]);
+                he_list[i]->move(loc[id],help_obj1);
                 break;
             }
         }
         else
         {
-                    he_list[i]->move(loc[id]);
+                    he_list[i]->move(loc[id],help_obj1);
 
         }
         
