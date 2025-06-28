@@ -4,7 +4,8 @@
 #include <iostream>
 #include "hero.hpp"
 using namespace std;
-location::location(int relation, bool coffin, villager *vill, item *item_lis, hero *her_list, monster *mon_list)
+location::location(int relation, bool coffin)
+
 {
     try
     {
@@ -16,17 +17,7 @@ location::location(int relation, bool coffin, villager *vill, item *item_lis, he
         cerr << e.what() << endl;
     }
     set_coffin_exist(coffin);
-    try
-    {
-        set_hero_list(her_list);
-        set_monster_list(mon_list);
-        set_villager(vill);
-        set_item_list(item_lis);
-    }
-    catch (bad_alloc &e)
-    {
-        cerr << "erro happend in seting villagers" << endl;
-    }
+
 }
 
 void location::set_coffin_exist(bool num)
