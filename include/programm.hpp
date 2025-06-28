@@ -27,6 +27,7 @@ struct LocationInfo
   std::string villagers;
   std::string hero;
 };
+
 class programm
 {
 public:

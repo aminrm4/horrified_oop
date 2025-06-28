@@ -22,5 +22,6 @@ invisible_man::invisible_man(int remain_hidden_item, bool is_freenzy ,int freenz
     this->freenzy_order = freenzy_order;
     this->is_freenzy = is_freenzy;
     this->loc = loc;
+    name_of_monster="Invisible_man";
 
 }

@@ -16,7 +16,7 @@ Drakula::Drakula(int coffin, bool is_freenzy,int freenzy_order,location* ptr)
     this->freenzy_order = freenzy_order;
     remain_coffin = coffin;
     this->loc = ptr;
-    
+    name_of_monster="Drakula";
 }
 void Drakula::ability(std::vector <int> & route , vector<location*> & locations , hero* h)
 {
