@@ -2,45 +2,45 @@
 using namespace std;
 using namespace ftxui;
 #include <bits/stdc++.h>
-#include"Mayor.hpp"
-#include"Archaeologist.hpp"
+#include "Mayor.hpp"
+#include "Archaeologist.hpp"
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
 #include <iostream>
-#include"Drakula.hpp"
-#include"Invisible_man.hpp"
-#include"monster_card.hpp"
-#include"Egyptian_Expert.hpp"
-#include"form_of_the_bat.hpp"
-#include"Former_Employer.hpp"
-#include"Fortune_Teller.hpp"
-#include"Hurried_Assistant.hpp"
-#include"Hypnotic_Gaze.hpp"
-#include"Sunrise.hpp"
-#include"The_Innocent.hpp"
-#include"Thief.hpp"
-#include"The_Delivery.hpp"
-#include"The_chthyologist.hpp"
-#include"On_the_move.hpp"
-#include"Color.hpp"
+#include "Drakula.hpp"
+#include "Invisible_man.hpp"
+#include "monster_card.hpp"
+#include "Egyptian_Expert.hpp"
+#include "form_of_the_bat.hpp"
+#include "Former_Employer.hpp"
+#include "Fortune_Teller.hpp"
+#include "Hurried_Assistant.hpp"
+#include "Hypnotic_Gaze.hpp"
+#include "Sunrise.hpp"
+#include "The_Innocent.hpp"
+#include "Thief.hpp"
+#include "The_Delivery.hpp"
+#include "The_chthyologist.hpp"
+#include "On_the_move.hpp"
+#include "Color.hpp"
 #include <stdexcept>
-#include<format>
+#include <format>
 int programm::night_terror = 0;
-   void programm::clearScreen()
-   {
-    #ifdef __WIN32 
-        system("cls");
-    #else 
-        system("clear");
-    #endif
-   }
+void programm::clearScreen()
+{
+#ifdef __WIN32
+  system("cls");
+#else
+  system("clear");
+#endif
+}
 
 set<int> programm::random_generator(int start, int end, int count)
 {
   set<int> my_random;
   srand(time(nullptr));
-  if (end- start + 1 < count)
+  if (end - start + 1 < count)
   {
     throw logic_error("cant generate the random numbers \n");
   }
@@ -131,190 +131,190 @@ programm::programm()
   my_map[18].push_back(17);
   my_map[17].push_back(18);
 
+  for (int i = 0; i < 19; ++i)
+  {
+    int x = (i == 1 || i == 7 || i == 16 || i == 17) ? 1 : 0;
+    list_of_location.push_back(new location(i, x));
+  }
 
- for (int i = 0; i < 19; ++i) {
-        int x = ( i == 1 || i == 7 || i == 16 || i == 17) ? 1 : 0;
-        list_of_location.push_back(new location(i, x));
-    }
+  list_of_items.push_back(new item(2, "flower", rgb::Color::Yellow, list_of_location[12]));
+  list_of_items.push_back(new item(2, "flower", rgb::Color::Yellow, list_of_location[12]));
 
-list_of_items.push_back(new item(2,"flower",rgb::Color::Yellow,list_of_location[12]));
-list_of_items.push_back(new item(2,"flower",rgb::Color::Yellow,list_of_location[12]));
+  list_of_items.push_back(new item(3, "tarot deck", rgb::Color::Yellow, list_of_location[18]));
+  list_of_items.push_back(new item(3, "tarot deck", rgb::Color::Yellow, list_of_location[18]));
 
-list_of_items.push_back(new item(3,"tarot deck",rgb::Color::Yellow,list_of_location[18]));
-list_of_items.push_back(new item(3,"tarot deck",rgb::Color::Yellow,list_of_location[18]));
+  list_of_items.push_back(new item(2, "garlic", rgb::Color::Yellow, list_of_location[13]));
+  list_of_items.push_back(new item(2, "garlic", rgb::Color::Yellow, list_of_location[13]));
 
-list_of_items.push_back(new item(2,"garlic",rgb::Color::Yellow,list_of_location[13]));
-list_of_items.push_back(new item(2,"garlic",rgb::Color::Yellow,list_of_location[13]));
+  list_of_items.push_back(new item(3, "mirrored box", rgb::Color::Yellow, list_of_location[9]));
+  list_of_items.push_back(new item(3, "mirrored box", rgb::Color::Yellow, list_of_location[9]));
 
-list_of_items.push_back(new item(3,"mirrored box",rgb::Color::Yellow,list_of_location[9]));
-list_of_items.push_back(new item(3,"mirrored box",rgb::Color::Yellow,list_of_location[9]));
+  list_of_items.push_back(new item(3, "stake", rgb::Color::Yellow, list_of_location[8]));
+  list_of_items.push_back(new item(3, "stake", rgb::Color::Yellow, list_of_location[8]));
 
-list_of_items.push_back(new item(3,"stake",rgb::Color::Yellow,list_of_location[8]));
-list_of_items.push_back(new item(3,"stake",rgb::Color::Yellow,list_of_location[8]));
+  list_of_items.push_back(new item(4, "scroll of thoth", rgb::Color::Yellow, list_of_location[6]));
+  list_of_items.push_back(new item(4, "scroll of thoth", rgb::Color::Yellow, list_of_location[6]));
 
-list_of_items.push_back(new item(4,"scroll of thoth",rgb::Color::Yellow,list_of_location[6]));
-list_of_items.push_back(new item(4,"scroll of thoth",rgb::Color::Yellow,list_of_location[6]));
+  list_of_items.push_back(new item(3, "violin", rgb::Color::Yellow, list_of_location[18]));
+  list_of_items.push_back(new item(3, "violin", rgb::Color::Yellow, list_of_location[18]));
 
-list_of_items.push_back(new item(3,"violin",rgb::Color::Yellow,list_of_location[18]));
-list_of_items.push_back(new item(3,"violin",rgb::Color::Yellow,list_of_location[18]));
+  list_of_items.push_back(new item(3, "tablet", rgb::Color::Yellow, list_of_location[6]));
+  list_of_items.push_back(new item(3, "tablet", rgb::Color::Yellow, list_of_location[6]));
 
-list_of_items.push_back(new item(3,"tablet",rgb::Color::Yellow,list_of_location[6]));
-list_of_items.push_back(new item(3,"tablet",rgb::Color::Yellow,list_of_location[6]));
+  list_of_items.push_back(new item(4, "wolfsbane", rgb::Color::Yellow, list_of_location[18]));
+  list_of_items.push_back(new item(4, "wolfsbane", rgb::Color::Yellow, list_of_location[18]));
 
-list_of_items.push_back(new item(4,"wolfsbane",rgb::Color::Yellow,list_of_location[18]));
-list_of_items.push_back(new item(4,"wolfsbane",rgb::Color::Yellow,list_of_location[18]));
+  list_of_items.push_back(new item(4, "charm", rgb::Color::Yellow, list_of_location[18]));
+  list_of_items.push_back(new item(4, "charm", rgb::Color::Yellow, list_of_location[18]));
 
-list_of_items.push_back(new item(4,"charm",rgb::Color::Yellow,list_of_location[18]));
-list_of_items.push_back(new item(4,"charm",rgb::Color::Yellow,list_of_location[18]));
+  list_of_items.push_back(new item(2, "dart", rgb::Color::Red, list_of_location[13]));
+  list_of_items.push_back(new item(2, "dart", rgb::Color::Red, list_of_location[13]));
 
-list_of_items.push_back(new item(2,"dart",rgb::Color::Red,list_of_location[13]));
-list_of_items.push_back(new item(2,"dart",rgb::Color::Red,list_of_location[13]));
+  list_of_items.push_back(new item(3, "fire poker", rgb::Color::Red, list_of_location[9]));
+  list_of_items.push_back(new item(3, "fire poker", rgb::Color::Red, list_of_location[9]));
 
-list_of_items.push_back(new item(3,"fire poker",rgb::Color::Red,list_of_location[9]));
-list_of_items.push_back(new item(3,"fire poker",rgb::Color::Red,list_of_location[9]));
+  list_of_items.push_back(new item(5, "rapier", rgb::Color::Red, list_of_location[10]));
+  list_of_items.push_back(new item(5, "rapier", rgb::Color::Red, list_of_location[10]));
 
-list_of_items.push_back(new item(5,"rapier",rgb::Color::Red,list_of_location[10]));
-list_of_items.push_back(new item(5,"rapier",rgb::Color::Red,list_of_location[10]));
+  list_of_items.push_back(new item(2, "shovel", rgb::Color::Red, list_of_location[1]));
+  list_of_items.push_back(new item(2, "shovel", rgb::Color::Red, list_of_location[1]));
 
-list_of_items.push_back(new item(2,"shovel",rgb::Color::Red,list_of_location[1]));
-list_of_items.push_back(new item(2,"shovel",rgb::Color::Red,list_of_location[1]));
+  list_of_items.push_back(new item(5, "torch", rgb::Color::Red, list_of_location[15]));
+  list_of_items.push_back(new item(5, "torch", rgb::Color::Red, list_of_location[15]));
 
-list_of_items.push_back(new item(5,"torch",rgb::Color::Red,list_of_location[15]));
-list_of_items.push_back(new item(5,"torch",rgb::Color::Red,list_of_location[15]));
+  list_of_items.push_back(new item(4, "pitch fork", rgb::Color::Red, list_of_location[15]));
+  list_of_items.push_back(new item(4, "pitch fork", rgb::Color::Red, list_of_location[15]));
 
-list_of_items.push_back(new item(4,"pitch fork",rgb::Color::Red,list_of_location[15]));
-list_of_items.push_back(new item(4,"pitch fork",rgb::Color::Red,list_of_location[15]));
+  list_of_items.push_back(new item(6, "rifle", rgb::Color::Red, list_of_location[15]));
+  list_of_items.push_back(new item(6, "rifle", rgb::Color::Red, list_of_location[15]));
 
-list_of_items.push_back(new item(6,"rifle",rgb::Color::Red,list_of_location[15]));
-list_of_items.push_back(new item(6,"rifle",rgb::Color::Red,list_of_location[15]));
+  list_of_items.push_back(new item(6, "silver cane", rgb::Color::Red, list_of_location[5]));
+  list_of_items.push_back(new item(6, "silver cane", rgb::Color::Red, list_of_location[5]));
 
-list_of_items.push_back(new item(6,"silver cane",rgb::Color::Red,list_of_location[5]));
-list_of_items.push_back(new item(6,"silver cane",rgb::Color::Red,list_of_location[5]));
+  list_of_items.push_back(new item(3, "knife", rgb::Color::Red, list_of_location[12]));
+  list_of_items.push_back(new item(3, "knife", rgb::Color::Red, list_of_location[12]));
 
-list_of_items.push_back(new item(3,"knife",rgb::Color::Red,list_of_location[12]));
-list_of_items.push_back(new item(3,"knife",rgb::Color::Red,list_of_location[12]));
+  list_of_items.push_back(new item(6, "pistol", rgb::Color::Red, list_of_location[14]));
+  list_of_items.push_back(new item(6, "pistol", rgb::Color::Red, list_of_location[14]));
 
-list_of_items.push_back(new item(6,"pistol",rgb::Color::Red,list_of_location[14]));
-list_of_items.push_back(new item(6,"pistol",rgb::Color::Red,list_of_location[14]));
+  list_of_items.push_back(new item(4, "bear trap", rgb::Color::Red, list_of_location[5]));
+  list_of_items.push_back(new item(4, "bear trap", rgb::Color::Red, list_of_location[5]));
 
-list_of_items.push_back(new item(4,"bear trap",rgb::Color::Red,list_of_location[5]));
-list_of_items.push_back(new item(4,"bear trap",rgb::Color::Red,list_of_location[5]));
+  list_of_items.push_back(new item(4, "speargun", rgb::Color::Red, list_of_location[3]));
+  list_of_items.push_back(new item(4, "speargun", rgb::Color::Red, list_of_location[3]));
 
-list_of_items.push_back(new item(4,"speargun",rgb::Color::Red,list_of_location[3]));
-list_of_items.push_back(new item(4,"speargun",rgb::Color::Red,list_of_location[3]));
+  list_of_items.push_back(new item(1, "anatomy text", rgb::Color::Blue, list_of_location[3]));
+  list_of_items.push_back(new item(1, "anatomy text", rgb::Color::Blue, list_of_location[3]));
 
-list_of_items.push_back(new item(1,"anatomy text",rgb::Color::Blue,list_of_location[3]));
-list_of_items.push_back(new item(1,"anatomy text",rgb::Color::Blue,list_of_location[3]));
+  list_of_items.push_back(new item(1, "centrifuge", rgb::Color::Blue, list_of_location[4]));
+  list_of_items.push_back(new item(1, "centrifuge", rgb::Color::Blue, list_of_location[4]));
 
-list_of_items.push_back(new item(1,"centrifuge",rgb::Color::Blue,list_of_location[4]));
-list_of_items.push_back(new item(1,"centrifuge",rgb::Color::Blue,list_of_location[4]));
+  list_of_items.push_back(new item(1, "kite", rgb::Color::Blue, list_of_location[11]));
+  list_of_items.push_back(new item(1, "kite", rgb::Color::Blue, list_of_location[11]));
 
-list_of_items.push_back(new item(1,"kite",rgb::Color::Blue,list_of_location[11]));
-list_of_items.push_back(new item(1,"kite",rgb::Color::Blue,list_of_location[11]));
+  list_of_items.push_back(new item(2, "research", rgb::Color::Blue, list_of_location[11]));
+  list_of_items.push_back(new item(2, "research", rgb::Color::Blue, list_of_location[11]));
 
-list_of_items.push_back(new item(2,"research",rgb::Color::Blue,list_of_location[11]));
-list_of_items.push_back(new item(2,"research",rgb::Color::Blue,list_of_location[11]));
+  list_of_items.push_back(new item(2, "telescope", rgb::Color::Blue, list_of_location[9]));
+  list_of_items.push_back(new item(2, "telescope", rgb::Color::Blue, list_of_location[9]));
 
-list_of_items.push_back(new item(2,"telescope",rgb::Color::Blue,list_of_location[9]));
-list_of_items.push_back(new item(2,"telescope",rgb::Color::Blue,list_of_location[9]));
+  list_of_items.push_back(new item(2, "searchlight", rgb::Color::Blue, list_of_location[14]));
+  list_of_items.push_back(new item(2, "searchlight", rgb::Color::Blue, list_of_location[14]));
 
-list_of_items.push_back(new item(2,"searchlight",rgb::Color::Blue,list_of_location[14]));
-list_of_items.push_back(new item(2,"searchlight",rgb::Color::Blue,list_of_location[14]));
+  list_of_items.push_back(new item(2, "experiment", rgb::Color::Blue, list_of_location[4]));
+  list_of_items.push_back(new item(2, "experiment", rgb::Color::Blue, list_of_location[4]));
 
-list_of_items.push_back(new item(2,"experiment",rgb::Color::Blue,list_of_location[4]));
-list_of_items.push_back(new item(2,"experiment",rgb::Color::Blue,list_of_location[4]));
+  list_of_items.push_back(new item(2, "analysis", rgb::Color::Blue, list_of_location[3]));
+  list_of_items.push_back(new item(2, "analysis", rgb::Color::Blue, list_of_location[3]));
 
-list_of_items.push_back(new item(2,"analysis",rgb::Color::Blue,list_of_location[3]));
-list_of_items.push_back(new item(2,"analysis",rgb::Color::Blue,list_of_location[3]));
+  list_of_items.push_back(new item(3, "rotenone", rgb::Color::Blue, list_of_location[3]));
+  list_of_items.push_back(new item(3, "rotenone", rgb::Color::Blue, list_of_location[3]));
 
-list_of_items.push_back(new item(3,"rotenone",rgb::Color::Blue,list_of_location[3]));
-list_of_items.push_back(new item(3,"rotenone",rgb::Color::Blue,list_of_location[3]));
+  list_of_items.push_back(new item(3, "cosmic diffuser", rgb::Color::Blue, list_of_location[11]));
+  list_of_items.push_back(new item(3, "cosmic diffuser", rgb::Color::Blue, list_of_location[11]));
 
-list_of_items.push_back(new item(3,"cosmic diffuser",rgb::Color::Blue,list_of_location[11]));
-list_of_items.push_back(new item(3,"cosmic diffuser",rgb::Color::Blue,list_of_location[11]));
+  list_of_items.push_back(new item(3, "nebularium", rgb::Color::Blue, list_of_location[11]));
+  list_of_items.push_back(new item(3, "nebularium", rgb::Color::Blue, list_of_location[11]));
 
-list_of_items.push_back(new item(3,"nebularium",rgb::Color::Blue,list_of_location[11]));
-list_of_items.push_back(new item(3,"nebularium",rgb::Color::Blue,list_of_location[11]));
+  list_of_items.push_back(new item(3, "monocane mixture", rgb::Color::Blue, list_of_location[13]));
+  list_of_items.push_back(new item(3, "monocane mixture", rgb::Color::Blue, list_of_location[13]));
 
-list_of_items.push_back(new item(3,"monocane mixture",rgb::Color::Blue,list_of_location[13]));
-list_of_items.push_back(new item(3,"monocane mixture",rgb::Color::Blue,list_of_location[13]));
+  list_of_items.push_back(new item(3, "fossil", rgb::Color::Blue, list_of_location[18]));
+  list_of_items.push_back(new item(3, "fossil", rgb::Color::Blue, list_of_location[18]));
 
-list_of_items.push_back(new item(3,"fossil",rgb::Color::Blue,list_of_location[18]));
-list_of_items.push_back(new item(3,"fossil",rgb::Color::Blue,list_of_location[18]));
+  list_of_perks.push_back(new visit_from_detective());
+  list_of_perks.push_back(new visit_from_detective());
+  list_of_perks.push_back(new visit_from_detective());
+  list_of_perks.push_back(new break_of_down());
+  list_of_perks.push_back(new break_of_down());
+  list_of_perks.push_back(new break_of_down());
+  list_of_perks.push_back(new overstock());
+  list_of_perks.push_back(new overstock());
+  list_of_perks.push_back(new overstock());
+  list_of_perks.push_back(new overstock());
+  list_of_perks.push_back(new late_into_night());
+  list_of_perks.push_back(new late_into_night());
+  list_of_perks.push_back(new late_into_night());
+  list_of_perks.push_back(new late_into_night());
+  list_of_perks.push_back(new repel());
+  list_of_perks.push_back(new repel());
+  list_of_perks.push_back(new repel());
+  list_of_perks.push_back(new hurry());
+  list_of_perks.push_back(new hurry());
+  list_of_perks.push_back(new hurry());
 
+  hero_list.push_back(new Mayor(5, list_of_location[10], list_of_perks));
+  hero_list.push_back(new Archaeologist(4, list_of_location[12], list_of_perks));
 
-    list_of_perks.push_back(new visit_from_detective());
-    list_of_perks.push_back(new visit_from_detective());
-    list_of_perks.push_back(new visit_from_detective());
-    list_of_perks.push_back(new break_of_down());
-    list_of_perks.push_back(new break_of_down());
-    list_of_perks.push_back(new break_of_down());
-    list_of_perks.push_back(new overstock());
-    list_of_perks.push_back(new overstock());
-    list_of_perks.push_back(new overstock());
-    list_of_perks.push_back(new overstock());
-    list_of_perks.push_back(new late_into_night());
-    list_of_perks.push_back(new late_into_night());
-    list_of_perks.push_back(new late_into_night());
-    list_of_perks.push_back(new late_into_night());
-    list_of_perks.push_back(new repel());
-    list_of_perks.push_back(new repel());
-    list_of_perks.push_back(new repel());
-    list_of_perks.push_back(new hurry());
-    list_of_perks.push_back(new hurry());
-    list_of_perks.push_back(new hurry());
+  monster_list.push_back(new Drakula(1, true, 1, list_of_location[7]));
+  monster_list.push_back(new invisible_man(1, false, 6, list_of_location[14]));
 
-    hero_list.push_back(new Mayor(5, list_of_location[10], list_of_perks));
-    hero_list.push_back(new Archaeologist(4, list_of_location[12], list_of_perks));
+  monster_card_list.push_back(new form_of_the_bat());
+  monster_card_list.push_back(new form_of_the_bat());
+  monster_card_list.push_back(new form_of_the_bat());
+  monster_card_list.push_back(new Sunrise());
+  monster_card_list.push_back(new Sunrise());
+  monster_card_list.push_back(new Sunrise());
+  monster_card_list.push_back(new Thief());
+  monster_card_list.push_back(new Thief());
+  monster_card_list.push_back(new Thief());
+  monster_card_list.push_back(new Thief());
+  monster_card_list.push_back(new Thief());
+  monster_card_list.push_back(new The_Delivery());
+  monster_card_list.push_back(new Fortune_Teller());
+  monster_card_list.push_back(new Former_Employer());
+  monster_card_list.push_back(new Hurried_Assistant());
+  monster_card_list.push_back(new The_Innocent());
+  monster_card_list.push_back(new Egyptian_Expert());
+  monster_card_list.push_back(new The_chthyologist());
+  monster_card_list.push_back(new Hypnotic_Gaze());
+  monster_card_list.push_back(new Hypnotic_Gaze());
+  monster_card_list.push_back(new On_the_move());
+  monster_card_list.push_back(new On_the_move());
 
-    monster_list.push_back(new Drakula(4, true, 1, list_of_location[7]));
-    monster_list.push_back(new invisible_man(1, false, 6, list_of_location[14]));
+  // Item initialization and random placement
+  // Not rewritten in full to save space, but you would similarly use `new item(...)` and push_back pointer
+  // Then use list_of_items[random]->get_loc()->set_item_list(list_of_items[random])
+  // and erase like in your original
 
-    monster_card_list.push_back(new form_of_the_bat());
-    monster_card_list.push_back(new form_of_the_bat());
-    monster_card_list.push_back(new form_of_the_bat());
-    monster_card_list.push_back(new Sunrise());
-    monster_card_list.push_back(new Sunrise());
-    monster_card_list.push_back(new Sunrise());
-    monster_card_list.push_back(new Thief());
-    monster_card_list.push_back(new Thief());
-    monster_card_list.push_back(new Thief());
-    monster_card_list.push_back(new Thief());
-    monster_card_list.push_back(new Thief());
-    monster_card_list.push_back(new The_Delivery());
-    monster_card_list.push_back(new Fortune_Teller());
-    monster_card_list.push_back(new Former_Employer());
-    monster_card_list.push_back(new Hurried_Assistant());
-    monster_card_list.push_back(new The_Innocent());
-    monster_card_list.push_back(new Egyptian_Expert());
-    monster_card_list.push_back(new The_chthyologist());
-    monster_card_list.push_back(new Hypnotic_Gaze());
-    monster_card_list.push_back(new Hypnotic_Gaze());
-    monster_card_list.push_back(new On_the_move());
-    monster_card_list.push_back(new On_the_move());
+  for (int i = 0; i < 12; i++)
+  {
+    srand(time(0) + i);
+    int random = rand() % list_of_items.size();
+    list_of_items.at(random)->get_loc()->set_item_list(list_of_items.at(random)); // here has a problem
+    // delete list_of_items.at(random);
+    list_of_items.erase(list_of_items.begin() + random);
+  }
+  for (auto i : monster_list)
+  {
+    i->get_loc()->set_monster_list(i);
+  }
+  for (auto i : hero_list)
+  {
+    i->get_loc()->set_hero_list(i);
+  }
 
-    // Item initialization and random placement
-    // Not rewritten in full to save space, but you would similarly use `new item(...)` and push_back pointer
-    // Then use list_of_items[random]->get_loc()->set_item_list(list_of_items[random])
-    // and erase like in your original
-
-    for (int i = 0; i < 12; i++) {
-        srand(time(0) + i);
-        int random = rand() % list_of_items.size();
-        list_of_items.at(random)->get_loc()->set_item_list(list_of_items.at(random)); // here has a problem 
-        //delete list_of_items.at(random);
-        list_of_items.erase(list_of_items.begin() + random);
-    }
-      for (auto i : monster_list)
-      {
-        i->get_loc()->set_monster_list(i);
-      }
-      for (auto i : hero_list)
-      {
-        i->get_loc()->set_hero_list(i);
-      }
-      
-      list_of_location[5]->set_villager(new villager("ass",list_of_location[5],list_of_location[12],*this));
+  list_of_location[5]->set_villager(new villager("ass", list_of_location[5], list_of_location[12], *this));
 }
 std::vector<int> programm::bfs(int s, int t)
 {
@@ -418,31 +418,28 @@ bool programm::check_terro_night()
   {
     return true;
   }
-  
 }
 string programm::show_all_item(const vector<item *> &show, LocationInfo &state)
 {
 
-    state.items = "";
+  state.items = "";
   unordered_map<string, int> same_element;
 
-  if(show.empty())
+  if (show.empty())
     return state.items;
-  
-    
+
   for (auto i : show)
   {
-    if (i!=nullptr)
+    if (i != nullptr)
     {
 
       same_element[i->get_name()]++;
     }
-    
   }
 
   for (const auto &i : same_element)
   {
-    state.items = state.items + ' ' + (i.first + '(' + to_string(i.second) + ')' );
+    state.items = state.items + ' ' + (i.first + '(' + to_string(i.second) + ')');
   }
 
   return state.items;
@@ -455,26 +452,24 @@ perk *programm::set_award(int index)
 string programm::show_all_villager(const vector<villager *> &show, LocationInfo &state)
 {
 
-    state.villagers = "";
+  state.villagers = "";
   unordered_map<string, int> same_element;
 
-  if(show.empty())
+  if (show.empty())
     return state.villagers;
-  
-    
+
   for (auto i : show)
   {
-    if (i!=nullptr)
+    if (i != nullptr)
     {
 
       same_element[i->get_name()]++;
     }
-    
   }
 
   for (const auto &i : same_element)
   {
-    state.villagers = state.villagers + ' ' + (i.first + '(' + to_string(i.second) + ')' );
+    state.villagers = state.villagers + ' ' + (i.first + '(' + to_string(i.second) + ')');
   }
 
   return state.villagers;
@@ -482,26 +477,24 @@ string programm::show_all_villager(const vector<villager *> &show, LocationInfo 
 string programm::show_all_hero(const vector<hero *> &show, LocationInfo &state)
 {
 
-    state.hero = "";
+  state.hero = "";
   unordered_map<string, int> same_element;
 
-  if(show.empty())
+  if (show.empty())
     return state.hero;
-  
-    
+
   for (auto i : show)
   {
-    if (i!=nullptr)
+    if (i != nullptr)
     {
 
       same_element[i->get_hero_name()]++;
     }
-    
   }
 
   for (const auto &i : same_element)
   {
-    state.hero = state.hero + ' ' + (i.first + '(' + to_string(i.second) + ')' );
+    state.hero = state.hero + ' ' + (i.first + '(' + to_string(i.second) + ')');
   }
 
   return state.hero;
@@ -509,53 +502,51 @@ string programm::show_all_hero(const vector<hero *> &show, LocationInfo &state)
 string programm::show_all_mosnter(const vector<monster *> &show, LocationInfo &state)
 {
 
-    state.monsters = "";
+  state.monsters = "";
   unordered_map<string, int> same_element;
 
-  if(show.empty())
+  if (show.empty())
     return state.monsters;
-  
-    
+
   for (auto i : show)
   {
-    if (i!=nullptr)
+    if (i != nullptr)
     {
 
       same_element[i->get_mons_name()]++;
     }
-    
   }
 
   for (const auto &i : same_element)
   {
-    state.monsters = state.monsters + ' ' + (i.first + '(' + to_string(i.second) + ')' );
+    state.monsters = state.monsters + ' ' + (i.first + '(' + to_string(i.second) + ')');
   }
 
   return state.monsters;
 }
 template <typename T>
-  string  programm::show_hero_deatail(T vec)
+string programm::show_hero_deatail(T vec)
+{
+  string temp = "";
+  map<string, int> same_element;
+  for (const auto &i : vec)
   {
-    string temp="";
-    map<string,int>same_element;
-    for ( const auto &i : vec)
-    {
-      ++same_element[i->get_name()];
-    }
-
-      for (const auto &i : same_element)
-      {
-          temp=temp+ " "+ i.first+"("+to_string(i.second)+")";
-      }
-      return temp;
+    ++same_element[i->get_name()];
   }
 
-void programm::terminal_handler(LocationInfo &info,string & first_enter,string &secend_enter)
+  for (const auto &i : same_element)
+  {
+    temp = temp + " " + i.first + "(" + to_string(i.second) + ")";
+  }
+  return temp;
+}
+
+void programm::terminal_handler(LocationInfo &info, string &first_enter, string &secend_enter)
 {
-int enter_count=0;
+  int enter_count = 0;
   auto screen = ScreenInteractive::TerminalOutput();
-    std::string terror_text = "night terror level : " + to_string(get_night_terror());
-    static constexpr const char* map_template = R"MAP(
+  std::string terror_text = "night terror level : " + to_string(get_night_terror());
+  static constexpr const char *map_template = R"MAP(
 |{0:^87}|
 |                                                                                       |
 |                                    institute                                          |
@@ -576,134 +567,108 @@ int enter_count=0;
 |                                │    docks                                             |
 |                                └──── dungeon                                          |
 )MAP";
-    std::string map_ascii = std::format(map_template, terror_text);
+  std::string map_ascii = std::format(map_template, terror_text);
   map<string, LocationInfo> location_data = {
-      {"Lab", {
-    show_all_item(list_of_location[4]->get_item_list(), info),
-    show_all_mosnter(list_of_location[4]->get_monster_list(), info),
-    show_all_villager(list_of_location[4]->get_villager_list(), info),
-    show_all_hero(list_of_location[4]->get_hero_list(), info)           
-   }},
+      {"Lab", {show_all_item(list_of_location[4]->get_item_list(), info), show_all_mosnter(list_of_location[4]->get_monster_list(), info), show_all_villager(list_of_location[4]->get_villager_list(), info), show_all_hero(list_of_location[4]->get_hero_list(), info)}},
 
-      {"church", {
-show_all_item(list_of_location[2]->get_item_list(), info),
-show_all_mosnter(list_of_location[2]->get_monster_list(),info),
-show_all_villager(list_of_location[2]->get_villager_list(),info),
-  show_all_hero(list_of_location[2]->get_hero_list(),info)
-}},
- 
- 
-{"grave_yard",
-{show_all_item(list_of_location[1]->get_item_list(), info),
-show_all_mosnter(list_of_location[1]->get_monster_list(),info), 
-show_all_villager(list_of_location[1]->get_villager_list(),info),
-   show_all_hero(list_of_location[1]->get_hero_list(),info)
-}},
- 
-{"Hospital",
-{show_all_item(list_of_location[0]->get_item_list(), info),
-show_all_mosnter(list_of_location[0]->get_monster_list(),info),
-show_all_villager(list_of_location[0]->get_villager_list(),info),
-show_all_hero(list_of_location[0]->get_hero_list(),info)     
- }},
+      {"church", {show_all_item(list_of_location[2]->get_item_list(), info), show_all_mosnter(list_of_location[2]->get_monster_list(), info), show_all_villager(list_of_location[2]->get_villager_list(), info), show_all_hero(list_of_location[2]->get_hero_list(), info)}},
 
-{"Mansion",
-{show_all_item(list_of_location[9]->get_item_list(), info),
-show_all_mosnter(list_of_location[9]->get_monster_list(),info),
-show_all_villager(list_of_location[9]->get_villager_list(),info),
-show_all_hero(list_of_location[9]->get_hero_list(),info)  
-}},
-{"institute",
-{show_all_item(list_of_location[3]->get_item_list(), info),
-show_all_mosnter(list_of_location[3]->get_monster_list(),info),
-show_all_villager(list_of_location[3]->get_villager_list(),info),
-show_all_hero(list_of_location[3]->get_hero_list(),info)
-}},
- 
-{"museum",
-{show_all_item(list_of_location[6]->get_item_list(), info),
-show_all_mosnter(list_of_location[6]->get_monster_list(),info),
-show_all_villager(list_of_location[6]->get_villager_list(),info),
-show_all_hero(list_of_location[6]->get_hero_list(),info)
-  }},
-{"shop",
-{show_all_item(list_of_location[5]->get_item_list(), info), 
-show_all_mosnter(list_of_location[5]->get_monster_list(),info),
-show_all_villager(list_of_location[5]->get_villager_list(),info),
-show_all_hero(list_of_location[5]->get_hero_list(),info)
+      {"grave_yard",
+       {show_all_item(list_of_location[1]->get_item_list(), info),
+        show_all_mosnter(list_of_location[1]->get_monster_list(), info),
+        show_all_villager(list_of_location[1]->get_villager_list(), info),
+        show_all_hero(list_of_location[1]->get_hero_list(), info)}},
 
-}},
- 
-{"cave",
-{show_all_item(list_of_location[17]->get_item_list(), info),
-show_all_mosnter(list_of_location[17]->get_monster_list(),info),
-show_all_villager(list_of_location[17]->get_villager_list(),info),
-show_all_hero(list_of_location[17]->get_hero_list(),info)
-}},
+      {"Hospital",
+       {show_all_item(list_of_location[0]->get_item_list(), info),
+        show_all_mosnter(list_of_location[0]->get_monster_list(), info),
+        show_all_villager(list_of_location[0]->get_villager_list(), info),
+        show_all_hero(list_of_location[0]->get_hero_list(), info)}},
 
-{"camp",
-{show_all_item(list_of_location[18]->get_item_list(), info),
-show_all_mosnter(list_of_location[18]->get_monster_list(),info),
-show_all_villager(list_of_location[18]->get_villager_list(),info),
-    show_all_hero(list_of_location[18]->get_hero_list(),info) 
+      {"Mansion",
+       {show_all_item(list_of_location[9]->get_item_list(), info),
+        show_all_mosnter(list_of_location[9]->get_monster_list(), info),
+        show_all_villager(list_of_location[9]->get_villager_list(), info),
+        show_all_hero(list_of_location[9]->get_hero_list(), info)}},
+      {"institute",
+       {show_all_item(list_of_location[3]->get_item_list(), info),
+        show_all_mosnter(list_of_location[3]->get_monster_list(), info),
+        show_all_villager(list_of_location[3]->get_villager_list(), info),
+        show_all_hero(list_of_location[3]->get_hero_list(), info)}},
+
+      {"museum",
+       {show_all_item(list_of_location[6]->get_item_list(), info),
+        show_all_mosnter(list_of_location[6]->get_monster_list(), info),
+        show_all_villager(list_of_location[6]->get_villager_list(), info),
+        show_all_hero(list_of_location[6]->get_hero_list(), info)}},
+      {"shop",
+       {show_all_item(list_of_location[5]->get_item_list(), info),
+        show_all_mosnter(list_of_location[5]->get_monster_list(), info),
+        show_all_villager(list_of_location[5]->get_villager_list(), info),
+        show_all_hero(list_of_location[5]->get_hero_list(), info)
+
        }},
-      {"barn",
-         {show_all_item(list_of_location[15]->get_item_list(), info), 
-           show_all_mosnter(list_of_location[15]->get_monster_list(),info), 
-           show_all_villager(list_of_location[15]->get_villager_list(),info),
-             show_all_hero(list_of_location[15]->get_hero_list(),info)   
-                   }},
-      {"dungeon", 
-        {show_all_item(list_of_location[16]->get_item_list(), info), 
-           show_all_mosnter(list_of_location[16]->get_monster_list(),info), 
-           show_all_villager(list_of_location[16]->get_villager_list(),info),
-             show_all_hero(list_of_location[16]->get_hero_list(),info)        
-              }},
-      {"tower",
-         {show_all_item(list_of_location[11]->get_item_list(), info),
-            show_all_mosnter(list_of_location[11]->get_monster_list(),info),
-             show_all_villager(list_of_location[11]->get_villager_list(),info),
-               show_all_hero(list_of_location[11]->get_hero_list(),info)
-            }},
-{"inn",
-{show_all_item(list_of_location[13]->get_item_list(), info),
-show_all_mosnter(list_of_location[13]->get_monster_list(),info),
-show_all_villager(list_of_location[13]->get_villager_list(),info),
-    show_all_hero(list_of_location[13]->get_hero_list(),info)  
-    }},
-      {"docks",
-         {show_all_item(list_of_location[12]->get_item_list(), info),
-            show_all_mosnter(list_of_location[12]->get_monster_list(),info),
-             show_all_villager(list_of_location[12]->get_villager_list(),info),
-               show_all_hero(list_of_location[12]->get_hero_list(),info)
-            }},
-      {"theatre", 
-        {show_all_item(list_of_location[10]->get_item_list(), info),
-            show_all_mosnter(list_of_location[10]->get_monster_list(),info),
-             show_all_villager(list_of_location[10]->get_villager_list(),info),
-               show_all_hero(list_of_location[10]->get_hero_list(),info)
-            }},
-      {"abbey",
-{show_all_item(list_of_location[8]->get_item_list(), info),
-show_all_mosnter(list_of_location[8]->get_monster_list(),info), 
-show_all_villager(list_of_location[8]->get_villager_list(),info),
-show_all_hero(list_of_location[8]->get_hero_list(),info)
 
-          }},
- 
-{"cryptt", 
-{show_all_item(list_of_location[7]->get_item_list(), info),
-show_all_mosnter(list_of_location[7]->get_monster_list(),info), 
-show_all_villager(list_of_location[7]->get_villager_list(),info),
-   show_all_hero(list_of_location[7]->get_hero_list(),info)
-          }},
- 
-        {"precinct", 
-        {show_all_item(list_of_location[14]->get_item_list(), info),
-            show_all_mosnter(list_of_location[14]->get_monster_list(),info), 
-            show_all_villager(list_of_location[14]->get_villager_list(),info),
-              show_all_hero(list_of_location[14]->get_hero_list(),info)    
-                 }}};
+      {"cave",
+       {show_all_item(list_of_location[17]->get_item_list(), info),
+        show_all_mosnter(list_of_location[17]->get_monster_list(), info),
+        show_all_villager(list_of_location[17]->get_villager_list(), info),
+        show_all_hero(list_of_location[17]->get_hero_list(), info)}},
+
+      {"camp",
+       {show_all_item(list_of_location[18]->get_item_list(), info),
+        show_all_mosnter(list_of_location[18]->get_monster_list(), info),
+        show_all_villager(list_of_location[18]->get_villager_list(), info),
+        show_all_hero(list_of_location[18]->get_hero_list(), info)}},
+      {"barn",
+       {show_all_item(list_of_location[15]->get_item_list(), info),
+        show_all_mosnter(list_of_location[15]->get_monster_list(), info),
+        show_all_villager(list_of_location[15]->get_villager_list(), info),
+        show_all_hero(list_of_location[15]->get_hero_list(), info)}},
+      {"dungeon",
+       {show_all_item(list_of_location[16]->get_item_list(), info),
+        show_all_mosnter(list_of_location[16]->get_monster_list(), info),
+        show_all_villager(list_of_location[16]->get_villager_list(), info),
+        show_all_hero(list_of_location[16]->get_hero_list(), info)}},
+      {"tower",
+       {show_all_item(list_of_location[11]->get_item_list(), info),
+        show_all_mosnter(list_of_location[11]->get_monster_list(), info),
+        show_all_villager(list_of_location[11]->get_villager_list(), info),
+        show_all_hero(list_of_location[11]->get_hero_list(), info)}},
+      {"inn",
+       {show_all_item(list_of_location[13]->get_item_list(), info),
+        show_all_mosnter(list_of_location[13]->get_monster_list(), info),
+        show_all_villager(list_of_location[13]->get_villager_list(), info),
+        show_all_hero(list_of_location[13]->get_hero_list(), info)}},
+      {"docks",
+       {show_all_item(list_of_location[12]->get_item_list(), info),
+        show_all_mosnter(list_of_location[12]->get_monster_list(), info),
+        show_all_villager(list_of_location[12]->get_villager_list(), info),
+        show_all_hero(list_of_location[12]->get_hero_list(), info)}},
+      {"theatre",
+       {show_all_item(list_of_location[10]->get_item_list(), info),
+        show_all_mosnter(list_of_location[10]->get_monster_list(), info),
+        show_all_villager(list_of_location[10]->get_villager_list(), info),
+        show_all_hero(list_of_location[10]->get_hero_list(), info)}},
+      {"abbey",
+       {show_all_item(list_of_location[8]->get_item_list(), info),
+        show_all_mosnter(list_of_location[8]->get_monster_list(), info),
+        show_all_villager(list_of_location[8]->get_villager_list(), info),
+        show_all_hero(list_of_location[8]->get_hero_list(), info)
+
+       }},
+
+      {"cryptt",
+       {show_all_item(list_of_location[7]->get_item_list(), info),
+        show_all_mosnter(list_of_location[7]->get_monster_list(), info),
+        show_all_villager(list_of_location[7]->get_villager_list(), info),
+        show_all_hero(list_of_location[7]->get_hero_list(), info)}},
+
+      {"precinct",
+       {show_all_item(list_of_location[14]->get_item_list(), info),
+        show_all_mosnter(list_of_location[14]->get_monster_list(), info),
+        show_all_villager(list_of_location[14]->get_villager_list(), info),
+        show_all_hero(list_of_location[14]->get_hero_list(), info)}}};
   map<string, string> action_help = {
       {"Move", "Move to another location."},
       {"Guide", "move the villager one step to the hero,or move a villager to the neighbor house base on the hero location"},
@@ -712,42 +677,40 @@ show_all_villager(list_of_location[7]->get_villager_list(),info),
       {"Defeat", "kill a monster when all taks has been done(should be in the same place with mosnter)"},
       {"special action", "use it for archzeologist to pick up the items in the  neighbor locations"},
       {"Quit", "Exit the game.(your data will be lost)"},
-      {"use perk","use the perk wich hero have(from hero panel)"}
-    };
-   
-    map<string,string > heros_data={
+      {"use perk", "use the perk wich hero have(from hero panel)"}};
 
-{ "hero name ",hero_list[0]->get_hero_name()},
-{"item have " ,show_hero_deatail(hero_list[0]->get_items())},
-{"perk have ",show_hero_deatail(hero_list[0]->get_perks())},
-{"action left ",to_string( hero_list[0]->get_action())}
-                           
-};
-map<string,string>secend_heros_data={
+  map<string, string> heros_data = {
 
-{ "hero name ",hero_list[1] ->get_hero_name()},
-{"item have " ,show_hero_deatail(hero_list[1]->get_items())},
-{"perk have ",show_hero_deatail(hero_list[1]->get_perks())},
-{"action left ",to_string( hero_list[1]->get_action())}
-};
+      {"hero name ", hero_list[0]->get_hero_name()},
+      {"item have ", show_hero_deatail(hero_list[0]->get_items())},
+      {"perk have ", show_hero_deatail(hero_list[0]->get_perks())},
+      {"action left ", to_string(hero_list[0]->get_action())}
+
+  };
+  map<string, string> secend_heros_data = {
+
+      {"hero name ", hero_list[1]->get_hero_name()},
+      {"item have ", show_hero_deatail(hero_list[1]->get_items())},
+      {"perk have ", show_hero_deatail(hero_list[1]->get_perks())},
+      {"action left ", to_string(hero_list[1]->get_action())}};
   bool show_loc = false;
   bool show_hero = false;
   bool show_act = false;
-  bool show_hero1=false;
-  bool show_map=false;
+  bool show_hero1 = false;
+  bool show_map = false;
   int sel_loc = 0, sel_act = 0;
-  int sel_hero=0;
-  int sel_hero1=0;
-  int sel_map=0;
-  vector<string> locations = {"Lab", "church", "grave_yard", "Hospital", "Mansion", "institute","museum","shop","cave","camp","barn","dungeon","tower","inn","docks","theatre","abbey","cryptt","precinct"};
-  vector<string> actions = {"Move", "Guide", "Pick Up", "Advance", "Defeat", "special action ",  "Quit","use perk"};
-    vector<string>heros={"hero name ","item have ","perk have ","action left "};
-    vector<string>heros1={"hero name ","item have ","perk have ","action left "};
+  int sel_hero = 0;
+  int sel_hero1 = 0;
+  int sel_map = 0;
+  vector<string> locations = {"Lab", "church", "grave_yard", "Hospital", "Mansion", "institute", "museum", "shop", "cave", "camp", "barn", "dungeon", "tower", "inn", "docks", "theatre", "abbey", "cryptt", "precinct"};
+  vector<string> actions = {"Move", "Guide", "Pick Up", "Advance", "Defeat", "special action ", "Quit", "use perk"};
+  vector<string> heros = {"hero name ", "item have ", "perk have ", "action left "};
+  vector<string> heros1 = {"hero name ", "item have ", "perk have ", "action left "};
 
-    auto loc_menu = Radiobox(&locations, &sel_loc);
+  auto loc_menu = Radiobox(&locations, &sel_loc);
   auto act_menu = Radiobox(&actions, &sel_act);
-  auto hero_menu=Radiobox(&heros,&sel_hero);
-  auto heros1_menu=Radiobox(&heros1,&sel_hero1);
+  auto hero_menu = Radiobox(&heros, &sel_hero);
+  auto heros1_menu = Radiobox(&heros1, &sel_hero1);
   Component renderer = Renderer([&]
                                 {
     Elements elements;
@@ -808,7 +771,8 @@ map<string,string>secend_heros_data={
     
     return vbox(std::move(elements)) | border; });
 
-Component app = renderer | CatchEvent([&](Event event) {
+  Component app = renderer | CatchEvent([&](Event event)
+                                        {
     if (event == Event::Character('l') || event == Event::Character('L')) {
       show_loc = !show_loc;
      show_map= show_hero = show_hero1 = show_act = false;
@@ -880,32 +844,32 @@ if (show_map)
     if (show_hero)    return hero_menu->OnEvent(event);
     if (show_act)    return act_menu->OnEvent(event);
     if(show_hero1)   return heros1_menu->OnEvent(event);
-    return false;
-  });
+    return false; });
 
   screen.Loop(app);
 }
 
 void programm::run()
 {
-  cout << "welcome to HORRIFIED  city a place full of mystery"<<endl;
+  cout << "welcome to HORRIFIED  city a place full of mystery" << endl;
   LocationInfo data_saver;
-  string a,b;
-terminal_handler(data_saver,a,b);
-if (a=="Move" && b=="precinct")
-{ hero_list[0]->get_items().push_back(new item(2,"dart",rgb::Color::Red,list_of_location[13]));
-  hero_list[0]->move(list_of_location[14],*this);
-  cout<<"sleep"<<endl;
-  hero_list[0]->advance(monster_list,*this);
-  cout<<"dead"<<endl;
-  hero_list[0]->defeat(monster_list,*this);
+  string a, b;
+  terminal_handler(data_saver, a, b);
+  if (a == "Move" && b == "cryptt")
+  {
+    hero_list[0]->get_items().push_back(new item(10, "dart", rgb::Color::Yellow, list_of_location[13]));
+    hero_list[0]->get_items().push_back(new item(10, "dart2", rgb::Color::Red, list_of_location[13]));
 
-cout<<"done completlyuedrfgd"<<endl;
-}
-cout<<"brain error"<<endl;
-cin.get();
-clearScreen();
-terminal_handler(data_saver,a,b);
-
-
+    hero_list[0]->move(list_of_location[7], *this);
+    cout << "sleep" << endl;
+    hero_list[0]->advance(monster_list, *this);
+    cin.get();
+    hero_list[0]->defeat(monster_list, *this);
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    cout << "done completlyuedrfgd" << endl;
+  }
+  cout << "brain error" << endl;
+  cin.get();
+  clearScreen();
+  terminal_handler(data_saver, a, b);
 }
