@@ -2,52 +2,81 @@
 #include "hurry.hpp"
 #include "programm.hpp"
 #include <iostream>
-#include<string>
+#include <string>
+#include "Drakula.hpp"
+#include "Invisible_man.hpp"
+#include "Mayor.hpp"
+#include "Archaeologist.hpp"
 using namespace std;
-void hurry::play(hero *he, std::vector<hero *> &he_list, monster *mo, std::vector<location *> & loc, std::vector<item *>  &it_list, std::vector<monster *> & mo_list, programm & help_obj1)
+void remove_hero(programm &, hero *);
+void remove_villager(programm &, villager *);
+void remove_monster(programm &, monster *);
+void remove_item(programm &, monster *);
+void message_invisible_man(bool alive);
+void message_drakula(bool alive);
+void hurry::play(hero *he, std::vector<hero *> &he_list, monster *mo, std::vector<location *> &loc, std::vector<item *> &it_list, std::vector<monster *> &mo_list, programm &help_obj1)
 {
-    //fake vill
-   
-    for (size_t i = 0; i < 2; i++)
+    // fake vill
+
+    for (auto her : help_obj1.hero_list)
     {
-        cout << "enter the place wich you want to move the" << i << "hero :" << endl;
-        int id;
-        cin >> id;
-        if (id < 0 || id > 18)
+        if (typeid(*her).name() == typeid(Mayor).name())
         {
-            throw invalid_argument("the location does not exist \n");
+            cout << "this is for Mayor" << endl;
+        }
+        if (typeid(*her).name() == typeid(Archaeologist).name())
+        {
+            cout << "this is for Archeaologist" << endl;
+        }
+        for (auto maper : help_obj1.my_map[her->get_loc()->get_loc_relation()])
+        {
+            cout << maper << " ";
         }
 
-        int direct = he_list[i]->get_loc()->get_loc_relation();
-        help_obj1.bfs(direct, id);
-        if (!(he_list[i]->get_loc()->get_villager_list().empty()))
+        cout << endl;
+        int new_loc;
+        cout << "enter the location " << endl;
+        cin >> new_loc;
+        for (auto maper : help_obj1.my_map[her->get_loc()->get_loc_relation()])
         {
-            cout << " ohhhhhh, there are some villager in your position , would you like to help them \n";
-            char right;
-            cin>>right;
-               cin.ignore();
-               right=tolower(right);
-            if (right == 'y')
+            if (maper == new_loc)
             {
-                auto it =he_list[i]->get_loc()->get_villager_list();//force to do
-                he_list[i]->move(loc[id],help_obj1,it);
-                break;
-            }
-            else
-            {
-                he_list[i]->move(loc[id],help_obj1);
-                break;
+                her->move(help_obj1.list_of_location[new_loc], help_obj1, her->get_villagers());
+                cout <<"you moved succesfully" << endl;
             }
         }
-        else
-        {
-                    he_list[i]->move(loc[id],help_obj1);
+    }
 
+    for (auto her : help_obj1.hero_list)
+    {
+        if (typeid(*her).name() == typeid(Mayor).name())
+        {
+            cout << "this is for Mayor" << endl;
         }
-        
+        if (typeid(*her).name() == typeid(Archaeologist).name())
+        {
+            cout << "this is for Archeaologist" << endl;
+        }
+        for (auto maper : help_obj1.my_map[her->get_loc()->get_loc_relation()])
+        {
+            cout << maper << " ";
+        }
+
+        cout << endl;
+        int new_loc;
+        cout << "enter the location " << endl;
+        cin >> new_loc;
+        for (auto maper : help_obj1.my_map[her->get_loc()->get_loc_relation()])
+        {
+            if (maper == new_loc)
+            {
+                her->move(help_obj1.list_of_location[new_loc], help_obj1, her->get_villagers());
+                cout << " you moved succesfully" << endl;
+            }
+        }
     }
 }
 hurry::hurry()
 {
-    name="hurry";
+    name = "hurry";
 }

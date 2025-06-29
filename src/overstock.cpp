@@ -2,26 +2,40 @@
 #include "programm.hpp"
 #include <iostream>
 #include <iterator>
+#include "hero.hpp"
+#include "Mayor.hpp"
 using namespace std;
-void overstock::play(hero *he, std::vector<hero *>&  he_list, monster *mo, std::vector<location *>&  loc, std::vector<item *> & it_list, std::vector<monster *> & mo_list, programm & help_obj1)
+void overstock::play(hero *he, std::vector<hero *> &he_list, monster *mo, std::vector<location *> &loc, std::vector<item *> &it_list, std::vector<monster *> &mo_list, programm &help_obj1)
 
 {
-     programm help_object;
-          set<int>::iterator accesser;
-          set<int>temp;
-     temp = help_object.random_generator(1, 35, 2);
-     accesser=temp.begin();
-     auto item1 = it_list[*accesser];
-     item1->get_loc()->set_item_list(item1);
-     accesser++;
-     auto item2 = it_list[*accesser]; // monster are players?
-     item2->get_loc()->set_item_list(item2);
-     it_list.erase(it_list.begin()+*accesser);
-     accesser--;
-     it_list.erase(it_list.begin()+*accesser);
-
-}
-     overstock::overstock()
+     for (auto her : help_obj1.hero_list)
      {
-          name="overstock";
+          if (typeid(*her).name() == typeid(Mayor).name())
+          {
+               for (int i = 0; i < 2; i++)
+               {
+                    srand(time(0) + i);
+                    int random = rand() % help_obj1.list_of_items.size();
+                    help_obj1.list_of_items.at(random)->get_loc()->set_item_list(help_obj1.list_of_items.at(random)); // here has a problem
+                    help_obj1.list_of_items.erase(help_obj1.list_of_items.begin() + random);
+               }
+          }
+          else
+          {
+               for (int i = 0; i < 2; i++)
+               {
+                    srand(time(0) + i);
+                    int random = rand() % help_obj1.list_of_items.size();
+                    help_obj1.list_of_items.at(random)->get_loc()->set_item_list(help_obj1.list_of_items.at(random)); // here has a problem
+                    help_obj1.list_of_items.erase(help_obj1.list_of_items.begin() + random);
+               }
+          }
      }
+
+
+     cout << "over stock played succecfully" << endl;
+}
+overstock::overstock()
+{
+     name = "overstock";
+}

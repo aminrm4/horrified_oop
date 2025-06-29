@@ -3,27 +3,76 @@
 #include "Drakula.hpp"
 #include "Invisible_man.hpp"
 #include "programm.hpp"
-#include  "map1.hpp"
+#include "map1.hpp"
+
 using namespace std;
-void repel::play(hero *he, std::vector<hero *> & he_list, monster *mo, std::vector<location *> & loc, std::vector<item *> & it_list, std::vector<monster *> & mo_list, programm & help_obj1)
+void remove_hero(programm &, hero *);
+void remove_villager(programm &, villager *);
+void remove_monster(programm &, monster *);
+void remove_item(programm &, monster *);
+void message_invisible_man(bool alive);
+void message_drakula(bool alive);
+void repel::play(hero *he, std::vector<hero *> &he_list, monster *mo, std::vector<location *> &loc, std::vector<item *> &it_list, std::vector<monster *> &mo_list, programm &help_obj1)
 {
 
-  for (size_t i = 0; i < 2; i++)
+  for (auto mon : help_obj1.monster_list)
   {
-    cout << "enter the place want to move:" << endl;
-    int id;
-    cin>>id;
-    if (id<0 || id>18)
+    if (typeid(*mon).name()==typeid(Drakula).name())
     {
-      throw invalid_argument("the location does not exist\n");
-    }    
-    int direct = mo_list[i]->get_loc()->get_loc_relation();
-    auto path = help_obj1.bfs(direct, id);
-    mo_list[i]->move_to_place(path, 2, loc);    
-  }
-}
-     repel::repel() 
-     {
-        name="repel";
-     }
+      cout<<"this is for Drakula"<<endl;
+    }
+     if (typeid(*mon).name()==typeid(invisible_man).name())
+    {
+      cout<<"this is for Invisible man"<<endl;
+    }
+    for (auto maper : help_obj1.my_map[mon->get_loc()->get_loc_relation()])
+    {
+      cout << maper << " ";
+    }
 
+    cout << endl;
+    int new_loc;
+    cout<<"enter the location "<<endl;
+    cin >> new_loc;
+    for (auto maper : help_obj1.my_map[mon->get_loc()->get_loc_relation()])
+    {
+      if (maper == new_loc)
+      {
+        remove_monster(help_obj1, mon);
+        help_obj1.list_of_location[new_loc]->set_monster_list(mon);
+        mon->set_loc(help_obj1.list_of_location[new_loc]);
+        cout << "first monster moved  get ready for the new one" << endl;
+      }
+    }
+  }
+
+  for (auto mon : help_obj1.monster_list)
+  {
+
+    for (auto maper : help_obj1.my_map[mon->get_loc()->get_loc_relation()])
+    {
+      cout << maper << " ";
+    }
+
+    cout << endl;
+    cout << "enter the location want to move " << endl;
+    int new_loc;
+    cin >> new_loc;
+    for (auto maper : help_obj1.my_map[mon->get_loc()->get_loc_relation()])
+    {
+      if (maper == new_loc)
+      {
+        remove_monster(help_obj1, mon);
+        help_obj1.list_of_location[new_loc]->set_monster_list(mon);
+        mon->set_loc(help_obj1.list_of_location[new_loc]);
+        cout << "first monster moved " << endl;
+      }
+    }
+  }
+
+ 
+}
+ repel::repel()
+  {
+    name = "repel";
+  }
