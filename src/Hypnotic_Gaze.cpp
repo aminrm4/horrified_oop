@@ -1,8 +1,107 @@
 #include "Hypnotic_Gaze.hpp"
+#include<bits/stdc++.h>
+#include"Drakula.hpp"
 using namespace std;
 
 void Hypnotic_Gaze::event(perk *p, hero *hero, monster *m, std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
 {
+/*{   vector<int >hero_closer;
+    int drakula_location=0;
+    fill(hero_closer.begin(),hero_closer.end(),-1);
+    for (auto her:a.hero_list )
+    {   
+      hero_closer.push_back( her->get_loc()->get_loc_relation());
+        
+    }
+    for (auto mon : a.monster_list)
+    {
+        if (typeid(*mon).name()==typeid(Drakula).name())
+        {   
+        
+            drakula_location=mon->get_loc()->get_loc_relation();
+        }
+        
+    }
+
+
+    int finla_min=0;
+for (int  i = 0; i <hero_closer.size(); i++)
+{
+    if (abs(hero_closer[i]-drakula_location < abs(hero_closer[i+1]-drakula_location)))
+    {
+        finla_min=hero_closer[i];
+        break;
+    }
+    else
+    {
+        finla_min=hero_closer[i+1];
+        break;
+    }
+    
+}
+a.bfs()
+
+
+
+ a.list_of_location[finla_min]->get_hero_list()[0]->move(a.list_of_location[finla_min+1])
+*/
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     vector<int> hero_places;
     vector<villager *> option;
     vector<villager *> option1;
@@ -89,4 +188,5 @@ void Hypnotic_Gaze::monster_strike(int dice_attack, int move,programm &bug, vect
         if (typeid(*monsters[i]).name() == typeid(invisible_man).name())
             monster_card::monster_strike(dice_attack, move,bug ,monsters[i], route, loc, h);
     }
+            
 }

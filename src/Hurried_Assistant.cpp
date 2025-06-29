@@ -3,7 +3,7 @@
 void Hurried_Assistant::event(perk *p, hero *hero, monster *m, std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
 {
 
-    a.list_of_location[15]->set_villager((new villager("Fritz", loc[3], loc[15], a)));
+    a.list_of_location[11]->set_villager((new villager("Fritz", loc[3], loc[11], a)));
 
     cout << "Fritz sommend  go and help him \n";
 }

@@ -20,20 +20,21 @@ villager::villager(std::string name, location *safe, location *curr,programm & h
     try
     {
         set_current_location(curr);
+        //curr->set_villager(this);
     }
     catch (invalid_argument &e)
     {
         cerr << "erro happend in seting villager locations" << endl;
     }
-   auto it= help_object1.random_generator(0,20,1);
+   auto it= help_object1.random_generator(0,help_object1.list_of_perks.size(),1);
    award=help_object1.set_award(*it.begin());
-
+    help_object1.list_of_perks.erase(help_object1.list_of_perks.begin()+*it.begin());
 }
 villager::~villager()
 {
 
 }
-location *  villager::get_currnet_location()
+location *   villager::get_currnet_location()
 {
     return current_location;
 }

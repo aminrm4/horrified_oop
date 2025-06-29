@@ -19,52 +19,63 @@ using namespace std;
 
 void hero::move(location *loc, programm &bug, const vector<villager *> &villagers) // used to delete the initializer cause of the pass by refrence
 {
-    remove_hero(bug, this);
-    loc->set_hero_list(this);
-    this->loc = loc;
 
-    if (!villagers.empty())
+    cout << "Do you want to move villagers with you ? \n [Y]es \n [N]o \n Enter a character \n";
+    try
     {
-        cout << "Do you want to move villagers with you ? \n [Y]es \n [N]o \n Enter a character \n";
-        try
+
+        char status;
+        cin >> status;
+        status = tolower(status);
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        if (status != 'y' && status != 'n')
+            throw logic_error("invalid Character \n");
+
+        if (status == 'y')
         {
-            char status;
-            cin >> status;
-            status = tolower(status);
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-            if (status != 'y' && status != 'n')
-                throw logic_error("invalid Character \n");
-
-            if (status == 'y')
+            for (auto v : villagers)
             {
-                for (auto v : villagers)
-                {
-                    remove_villager(bug, v);
-                    loc->set_villager(v);
-                    v->set_current_location(loc);
-                }
+                remove_villager(bug, v);
+                loc->set_villager(v);
+                v->set_current_location(loc);
+            }
 
-                for (int i = 0; i < villagers.size(); i++)
+            for (int i = 0; i < villagers.size(); i++)
+            {
+                if (villagers[i]->get_currnet_location() == villagers[i]->get_safe_location())
                 {
-                    if (villagers[i]->get_currnet_location() == villagers[i]->get_safe_location())
-                    {
-                        cout << "thank you hero you bring me to my safe location";
-                        this->perk_have.push_back(villagers[i]->drop_the_perk());
-                        remove_villager(bug, villagers[i]);
-                        delete villagers[i];
-                    }
+                    cout << "thank you hero you bring me to my safe location";
+                    this->perk_have.push_back(villagers[i]->drop_the_perk());
+                    remove_villager(bug, villagers[i]);
+                    delete villagers[i];
                 }
             }
+            remove_hero(bug, this);
+            loc->set_hero_list(this);
+            this->loc = loc;
         }
-        catch (logic_error &e)
+
+        if (status == 'n')
         {
-            cout << e.what();
-            cout << "try again\n";
-            hero::move(loc, bug, villagers);
+            this->get_loc()->get_villager_list().insert(
+                this->get_loc()->get_villager_list().end(),
+                this->get_villagers().begin(),
+                this->get_villagers().end());
+            this->get_villagers().clear();
+            remove_hero(bug, this);
+            loc->set_hero_list(this);
+            this->loc = loc;
         }
     }
+    catch (logic_error &e)
+    {
+        cout << e.what();
+        cout << "try again\n";
+        hero::move(loc, bug, villagers);
+    }
 }
+
 void hero::guide(vector<vector<int>> &map, programm &p)
 {
     int thisNumLoc = this->loc->get_loc_relation();
@@ -681,5 +692,35 @@ So sleep light, hero.
 The next whisper…
 may still be me.
 )";
+    }
+}
+std::vector<villager *> &hero::get_villagers()
+{
+    return villagers;
+}
+
+void hero::use_perk(programm &object1)
+{
+    cout << "you have this perk" << endl;
+    for (auto p : this->perk_have)
+    {
+        cout << p->get_name() << " ";
+    }
+
+    cout << "wich perk want you use enter belwo : " << endl;
+    string temp;
+    cin >> temp;
+    for (int i = 0; i < perk_have.size(); i++)
+    {
+        if (perk_have[i]->get_name() == temp)
+        {
+            vector<hero *> shit;
+            vector<location *> shit2;
+            vector<item *> shit3;
+            vector<monster *> shi4;
+            perk_have[i]->play(nullptr, shit, nullptr, shit2, shit3, shi4, object1);
+            delete perk_have[i];
+            this->perk_have.erase(perk_have.begin() + i);
+        }
     }
 }

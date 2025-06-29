@@ -39,9 +39,10 @@ class hero
     void pickup();
     void set_action(int);
     location* get_loc();
-     std::vector<villager> get_villagers();
+     std::vector<villager*>  & get_villagers();
     string get_hero_name();
     hero(std::vector<perk *> &);
+    void use_perk(programm &);
 
 
 };

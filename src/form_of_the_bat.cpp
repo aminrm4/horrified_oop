@@ -10,11 +10,11 @@ void form_of_the_bat::event(perk *p, hero *hero, monster *m, std::vector<std::ve
     {
         if (typeid(*mo).name() == typeid(Drakula).name())
         {
-            remove_monster(a, mo);
             for (auto her : a.hero_list)
             {
                 if (her->get_action() == 0)
                 {
+                    remove_monster(a, mo);
                     mo->set_loc(her->get_loc());
                     her->get_loc()->set_monster_list(mo);
                     cout << "the form_of_the_bat monster card played and Drakula teleported to a player \n";
@@ -23,7 +23,6 @@ void form_of_the_bat::event(perk *p, hero *hero, monster *m, std::vector<std::ve
             }
         }
     }
-    
 }
 
 void form_of_the_bat::monster_strike(int dice_attack, int move, programm &bug, vector<monster *> &monsters, vector<int> &route, vector<location *> &loc, hero *h)
