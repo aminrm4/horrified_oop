@@ -263,8 +263,8 @@ programm::programm()
   list_of_perks.push_back(new hurry());
   list_of_perks.push_back(new hurry());
 
-  hero_list.push_back(new Mayor(5, list_of_location[10], list_of_perks));
   hero_list.push_back(new Archaeologist(4, list_of_location[12], list_of_perks));
+  hero_list.push_back(new Mayor(5, list_of_location[10], list_of_perks));
 
   monster_list.push_back(new Drakula(1, true, 1, list_of_location[7]));
   monster_list.push_back(new invisible_man(1, false, 6, list_of_location[14]));
@@ -854,22 +854,5 @@ void programm::run()
   cout << "welcome to HORRIFIED  city a place full of mystery" << endl;
   LocationInfo data_saver;
   string a, b;
-  terminal_handler(data_saver, a, b);
-  if (a == "Move" && b == "cryptt")
-  {
-    hero_list[0]->get_items().push_back(new item(10, "dart", rgb::Color::Yellow, list_of_location[13]));
-    hero_list[0]->get_items().push_back(new item(10, "dart2", rgb::Color::Red, list_of_location[13]));
-
-    hero_list[0]->move(list_of_location[7], *this);
-    cout << "sleep" << endl;
-    hero_list[0]->advance(monster_list, *this);
-    cin.get();
-    hero_list[0]->defeat(monster_list, *this);
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    cout << "done completlyuedrfgd" << endl;
-  }
-  cout << "brain error" << endl;
-  cin.get();
-  clearScreen();
   terminal_handler(data_saver, a, b);
 }

@@ -39,7 +39,11 @@ void hero::move(location *loc, programm &bug, const vector<villager *> &villager
             if (status == 'y')
             {
                 for (auto v : villagers)
-                    v->set_current_location(this->loc);
+                {
+                    remove_villager(bug, v);
+                    loc->set_villager(v);
+                    v->set_current_location(loc);
+                }
 
                 for (int i = 0; i < villagers.size(); i++)
                 {
@@ -47,6 +51,8 @@ void hero::move(location *loc, programm &bug, const vector<villager *> &villager
                     {
                         cout << "thank you hero you bring me to my safe location";
                         this->perk_have.push_back(villagers[i]->drop_the_perk());
+                        remove_villager(bug, villagers[i]);
+                        delete villagers[i];
                     }
                 }
             }
@@ -84,6 +90,18 @@ void hero::guide(vector<vector<int>> &map, programm &p)
         {
             p.list_of_location[thisNumLoc]->set_villager(p.list_of_location[node_number]->get_villager_list()[0]); // حونه قهرمان این محلی روی شما اومده  .. این: محلی که در خانه قبلی بوده))کاربر زده(())
             remove_villager(p, p.list_of_location[node_number]->get_villager_list()[0]);
+
+            for (int i = 0; i < villagers.size(); i++)
+            {
+                if (villagers[i]->get_currnet_location() == villagers[i]->get_safe_location())
+                {
+                    cout << "thank you hero you bring me to my safe location";
+                    this->perk_have.push_back(villagers[i]->drop_the_perk());
+                    remove_villager(p, villagers[i]);
+                    delete villagers[i];
+                }
+            }
+
             // p.list_of_location[node_number]->get_villager_list()[0]->set_current_location(nullptr);    // خونه قبی محلی  کاربر زده شما کل ویلیچر هاتو بده موقغیت به نال بده . الان دیگه نو این خونه نیست
         }
         /*
@@ -376,10 +394,10 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
 {
     cout << "my lord wich monster gunna be kill" << endl;
     cout << "D [Drakula] / I [Invisible_man]" << endl;
-    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    // cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     char detect;
-    cin>>detect;
+    cin >> detect;
     detect = tolower(detect);
     if (detect == 'd')
     {
