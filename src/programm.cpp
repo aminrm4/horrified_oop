@@ -902,14 +902,11 @@ void programm::run()
   terminal_handler(data_saver, a, b);
 
 vector<int> a2;
-  monster_card_list[5]->event(nullptr , nullptr , nullptr , my_map , list_of_location , *this);
-  cin.clear();
-  cin.ignore(numeric_limits<streamsize>::max(), '\n');
-  monster_card_list[5]->monster_strike(3 , 3 , *this , monster_list, a2, list_of_location , nullptr);
+ // monster_card_list[5]->event(nullptr , nullptr , nullptr , my_map , list_of_location , *this);
+  monster_card_list[2]->monster_strike(3 , monster_card_list[2]->get_item_count() , *this , monster_list, a2, list_of_location , nullptr);
   cout << "sag" << endl;
   cin.get();
   clearScreen();
-
   terminal_handler(data_saver, a, b);
   this->set_night_terror(5);
 }

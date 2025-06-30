@@ -20,7 +20,6 @@ void monster::move_to_place(std::vector<int> &route, int number_route, vector<lo
         }
         if(route.size() == 1)
         {
-            cout << "kkpppppk \n";
             return ;
         }
     for (auto locationIndex : locations)

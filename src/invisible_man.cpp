@@ -4,7 +4,6 @@ using namespace std;
 
 void invisible_man::ability(std::vector <int> & p ,programm & bug, vector<location*> & locations , hero* h)
 {
-    cout << "akbar \n";
         vector<vector<int>> routes;
     for(int i =0; i < bug.list_of_location.size();i++)
     {

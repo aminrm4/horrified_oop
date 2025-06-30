@@ -30,7 +30,7 @@ void hero::move(location *loc, programm &bug, const vector<villager *> &villager
 
     }
     if(villagers.size() == 0)
-    status == 'n';
+    status = 'n';
     try
     {
 

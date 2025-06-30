@@ -23,7 +23,6 @@ Drakula::Drakula(int coffin, bool is_freenzy, int freenzy_order, location *ptr)
 }
 void Drakula::ability(std::vector<int> &route, programm &bug, vector<location *> &locations, hero *h)
 {
-        cout << "akbar \n";
 
 
     for (auto her : bug.hero_list)
