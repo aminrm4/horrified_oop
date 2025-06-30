@@ -19,20 +19,26 @@ using namespace std;
 
 void hero::move(location *loc, programm &bug, const vector<villager *> &villagers) // used to delete the initializer cause of the pass by refrence
 {
+    char status = 'p';
 
-    cout << "Do you want to move villagers with you ? \n [Y]es \n [N]o \n Enter a character \n";
-    try
+    if(villagers.size() != 0)
     {
-
-        char status;
+        cout << "Do you want to move villagers with you ? \n [Y]es \n [N]o \n Enter a character \n";
         cin >> status;
         status = tolower(status);
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
+    }
+    if(villagers.size() == 0)
+    status == 'n';
+    try
+    {
+
+        
         if (status != 'y' && status != 'n')
             throw logic_error("invalid Character \n");
 
-        if (status == 'y')
+        if (status == 'y' )
         {
             for (auto v : villagers)
             {
@@ -464,6 +470,14 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                                 if (typeid(*monsters[i]).name() == typeid(Drakula).name())
                                 {
                                     remove_monster(bug, monsters[i]);
+                                    if(bug.monster_list.size() == 0)
+                                    {
+                                        cout << "Heros succesfuly killed all the monsters \n";
+                                        cin.get();
+                                        bug.clearScreen();
+                                        cout << "Victory !\n";
+                                        exit(0);
+                                    }
                                     // monsters.erase(monsters.begin() + i);
                                     bug.next_frenzy();
 
@@ -537,6 +551,14 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                                 if (typeid(*monsters[i]).name() == typeid(Drakula).name())
                                 {
                                     remove_monster(bug, monsters[i]);
+                                    if(bug.monster_list.size() == 0)
+                                    {
+                                        cout << "Heros succesfuly killed all the monsters \n";
+                                        cin.get();
+                                        bug.clearScreen();
+                                        cout << "Victory !\n";
+                                        exit(0);
+                                    }
                                     // monsters.erase(monsters.begin() + i);
                                     bug.next_frenzy();
 
@@ -723,4 +745,21 @@ void hero::use_perk(programm &object1)
             this->perk_have.erase(perk_have.begin() + i);
         }
     }
+}
+hero::~hero()
+{
+    for (auto items : item_have)
+    {
+        delete items;
+    }
+    for (auto perks : perk_have)
+    {
+        delete perks;
+    }
+    
+    villagers.clear();
+    item_have.clear();
+    perk_have.clear();
+    loc = nullptr;
+    
 }

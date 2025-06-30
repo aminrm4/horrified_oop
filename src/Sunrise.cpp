@@ -25,11 +25,19 @@ void Sunrise::monster_strike(int dice_attack, int move, programm &bug, vector<mo
     for (int i = 0; i < monsters.size(); i++)
     {
         if (monsters[i]->get_freenzy_status())
-            monster_card::monster_strike(dice_attack, move, bug, monsters[i], route, loc, h);
+            monster_card::_strike(dice_attack, move, bug, monsters[i]);
     }
     for (int i = 0; i < monsters.size(); i++)
     {
         if (typeid(*monsters[i]).name() == typeid(invisible_man).name())
-            monster_card::monster_strike(dice_attack, move, bug, monsters[i], route, loc, h);
+            monster_card::_strike(dice_attack, move, bug, monsters[i]);
     }
+}
+void Sunrise::set_item(int item_count)
+{
+    this->item_count = item_count;
+}
+int Sunrise::get_item()
+{
+    return item_count;
 }

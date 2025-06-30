@@ -31,7 +31,7 @@ class programm
 {
 public:
   static constexpr int maxn = 19;
-  static int night_terror;
+  int night_terror = 0;
   std::vector<location *> list_of_location;
   std::vector<item *> list_of_items;
   std::vector<perk *> list_of_perks;
@@ -44,8 +44,8 @@ public:
   void next_frenzy();
   std::set<int> random_generator(int start, int end, int count);
   std::vector<int> bfs(int s, int t);
-  static int get_night_terror();
-  static void set_night_terror(int);
+  int get_night_terror();
+  void set_night_terror(int);
   bool check_terro_night();
   void run();
   programm();
@@ -57,4 +57,5 @@ public:
   template <typename T>
   string show_hero_deatail(T);
   void clearScreen();
+  ~programm();
 };

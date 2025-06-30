@@ -43,6 +43,6 @@ class hero
     string get_hero_name();
     hero(std::vector<perk *> &);
     void use_perk(programm &);
-
+    ~hero();
 
 };

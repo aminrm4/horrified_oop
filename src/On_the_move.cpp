@@ -28,7 +28,18 @@ void On_the_move::monster_strike(int dice_attack, int move, programm & bug ,vect
     for (int i = 0; i < monsters.size(); i++)
     {
         if (monsters[i]->get_freenzy_status())
+            {
+                cout << "kkkk \n";
+                monster_card::_strike(dice_attack, move,bug, monsters[i]);
+            }
     
-            monster_card::monster_strike(dice_attack, move,bug, monsters[i], route, loc, h);
     }
+}
+void On_the_move::set_item(int item_count)
+{
+    this->item_count = item_count;
+}
+int On_the_move::get_item()
+{
+    return item_count;
 }

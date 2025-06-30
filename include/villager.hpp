@@ -9,7 +9,7 @@ class villager
 {
 private:
     std::string name;
-    location *const safe_location;
+    location * safe_location;
     location *current_location;
     perk * award;
 

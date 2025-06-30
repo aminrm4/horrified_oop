@@ -26,7 +26,6 @@ using namespace ftxui;
 #include "Color.hpp"
 #include <stdexcept>
 #include <format>
-int programm::night_terror = 0;
 void programm::clearScreen()
 {
 #ifdef __WIN32
@@ -371,6 +370,14 @@ int programm::get_night_terror()
 void programm::set_night_terror(int value)
 {
   night_terror = value;
+  if(night_terror == 5)
+  {
+    cout << "the night terror level reached 5 \n";
+    cin.get();
+    this->clearScreen();
+    cout << "Game over ";
+    exit(0);
+  }
 }
 void programm::next_frenzy()
 {
@@ -852,19 +859,57 @@ if (show_map)
 
   screen.Loop(app);
 }
-
+programm::~programm()
+{
+  for (auto item : list_of_items)
+  {
+    delete item;
+  }
+  for (auto location : list_of_location)
+  {
+    delete location;
+  }
+  for (auto perk : list_of_perks)
+  {
+    delete perk;
+  }
+  for (auto hero : hero_list)
+  {
+    delete hero;
+  }
+  for (auto monster : monster_list)
+  {
+    delete monster;
+  }
+  for (auto monster_card : monster_card_list)
+  {
+    delete monster_card;
+  }
+  
+  monster_card_list.clear();
+  monster_list.clear();
+  hero_list.clear();
+  list_of_perks.clear();
+  list_of_location.clear();
+  list_of_items.clear();
+  
+}
 void programm::run()
 {
   cout << "welcome to HORRIFIED  city a place full of mystery" << endl;
   LocationInfo data_saver;
   string a, b;
   terminal_handler(data_saver, a, b);
-  cin.get();
-  
-  hero_list[0]->use_perk(*this);
 
+vector<int> a2;
+  monster_card_list[5]->event(nullptr , nullptr , nullptr , my_map , list_of_location , *this);
+  cin.clear();
+  cin.ignore(numeric_limits<streamsize>::max(), '\n');
+  monster_card_list[5]->monster_strike(3 , 3 , *this , monster_list, a2, list_of_location , nullptr);
   cout << "sag" << endl;
   cin.get();
   clearScreen();
+
   terminal_handler(data_saver, a, b);
+  this->set_night_terror(5);
 }
