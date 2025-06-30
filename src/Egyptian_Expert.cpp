@@ -23,3 +23,11 @@ void Egyptian_Expert::monster_strike(int dice_attack, int move, programm &bug, v
             monster_card::monster_strike(dice_attack, move, bug, monsters[i], route, loc, h);
     }
 }
+void Egyptian_Expert::set_item(int item_count)
+{
+    this->item_count = item_count;
+}
+int Egyptian_Expert::get_item()
+{
+    return item_count;
+}

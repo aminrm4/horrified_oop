@@ -371,6 +371,14 @@ int programm::get_night_terror()
 void programm::set_night_terror(int value)
 {
   night_terror = value;
+  if(night_terror == 5)
+  {
+    cout << "the night terror level reached 5 \n";
+    cin.get();
+    this->clearScreen();
+    cout << "Game over ";
+    exit(0);
+  }
 }
 void programm::next_frenzy()
 {

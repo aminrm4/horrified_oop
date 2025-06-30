@@ -1,14 +1,21 @@
 #include "monster.hpp"
 #include <stdexcept>
 #include "location.hpp"
+#include "Drakula.hpp"
+#include "programm.hpp"
 using namespace std;
-void monster::move_to_place(std::vector<int> &route, int number_route, vector<location *> &locations)
+void monster::move_to_place(std::vector<int> &route, int number_route, vector<location *> &locations , programm &bug)
 {
     if (!locations.empty() || !route.empty())
         throw invalid_argument("invalid input\n");
     if (number_route >= route.size())
-        number_route = route.size() - 1;
-
+        {
+         number_route = route.size() - 1;
+            if(typeid(*this).name() == typeid(Drakula).name())
+                {
+                    bug.set_night_terror(bug.get_night_terror()+1);
+                }
+        }
     for (auto locationIndex : locations)
         if (route[number_route] == locationIndex->get_loc_relation())
             this->loc = locationIndex;
@@ -52,4 +59,12 @@ string monster::get_mons_name()
 int & monster::get_hidden_item()
 {
     return totla_hidden_item;
+}
+bool monster::get_did_attack()
+{
+    return did_attack;
+}
+void monster::set_did_attack(int did_attack)
+{
+    this->did_attack = did_attack;
 }

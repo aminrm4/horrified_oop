@@ -190,3 +190,11 @@ void Hypnotic_Gaze::monster_strike(int dice_attack, int move,programm &bug, vect
     }
             
 }
+void Hypnotic_Gaze::set_item(int item_count)
+{
+    this->item_count = item_count;
+}
+int Hypnotic_Gaze::get_item()
+{
+    return item_count;
+}

@@ -24,3 +24,11 @@ void The_Innocent::monster_strike(int dice_attack, int move, programm &bug, vect
             monster_card::monster_strike(dice_attack, move, bug, monsters[i], route, loc, h);
     }
 }
+void The_Innocent::set_item(int item_count)
+{
+    this->item_count = item_count;
+}
+int The_Innocent::get_item()
+{
+    return item_count;
+}

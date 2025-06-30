@@ -33,3 +33,11 @@ void Sunrise::monster_strike(int dice_attack, int move, programm &bug, vector<mo
             monster_card::monster_strike(dice_attack, move, bug, monsters[i], route, loc, h);
     }
 }
+void Sunrise::set_item(int item_count)
+{
+    this->item_count = item_count;
+}
+int Sunrise::get_item()
+{
+    return item_count;
+}

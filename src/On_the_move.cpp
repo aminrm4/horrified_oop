@@ -32,3 +32,11 @@ void On_the_move::monster_strike(int dice_attack, int move, programm & bug ,vect
             monster_card::monster_strike(dice_attack, move,bug, monsters[i], route, loc, h);
     }
 }
+void On_the_move::set_item(int item_count)
+{
+    this->item_count = item_count;
+}
+int On_the_move::get_item()
+{
+    return item_count;
+}

@@ -15,3 +15,11 @@ void Fortune_Teller::monster_strike(int dice_attack, int move, programm &bug, ve
             monster_card::monster_strike(dice_attack, move, bug, monsters[i], route, loc, h);
     }
 }
+void Fortune_Teller::set_item(int item_count)
+{
+    this->item_count = item_count;
+}
+int Fortune_Teller::get_item()
+{
+    return item_count;
+}
