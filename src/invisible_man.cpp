@@ -1,10 +1,32 @@
 #include "Invisible_man.hpp"
+#include "programm.hpp"
 using namespace std;
 
-void invisible_man::ability(std::vector <int> & route ,programm & bug, vector<location*> & locations , hero* h)
+void invisible_man::ability(std::vector <int> & p ,programm & bug, vector<location*> & locations , hero* h)
 {
+    cout << "akbar \n";
+        vector<vector<int>> routes;
+    for(int i =0; i < bug.list_of_location.size();i++)
+    {
+        for (auto vill : bug.list_of_location.at(i)->get_villager_list())
+        {
+            routes.push_back(bug.bfs(this->get_loc()->get_loc_relation() , vill->get_currnet_location()->get_loc_relation()));
+        }
+        
+    }
+
+    vector<int> route = *min_element(routes.begin() , routes.end() ,[](vector<int>& a , vector<int>& b){
+        return a.size() < b.size();
+    });
+
+    if(routes.size() != 0)
+    this->move_to_place( route, 2 , bug.list_of_location , bug);
+    else
+    {
+        cerr << "error in monster strike when finding min move to place \n";
+    }
     cout << "invisible man used his ability and moved 2 place \n";
-    this->move_to_place(route , 2 , locations);
+
 }
 invisible_man::invisible_man(int remain_hidden_item, bool is_freenzy ,int freenzy_order,location* loc)
 {

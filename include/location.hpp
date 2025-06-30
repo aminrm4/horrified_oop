@@ -31,11 +31,10 @@ public:
     std::vector<monster*> &get_monster_list();
     location(int relation, bool coffin);
     location() = delete;
-    ~location();
     void delete_item();
     void delete_villager_list();
     void delete_monster_list();
-    
+    ~location();
 };
 
 #endif

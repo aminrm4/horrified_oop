@@ -12,7 +12,7 @@ void Fortune_Teller::monster_strike(int dice_attack, int move, programm &bug, ve
     for (int i = 0; i < monsters.size(); i++)
     {
         if (monsters[i]->get_freenzy_status())
-            monster_card::monster_strike(dice_attack, move, bug, monsters[i], route, loc, h);
+            monster_card::_strike(dice_attack, move, bug, monsters[i]);
     }
 }
 void Fortune_Teller::set_item(int item_count)

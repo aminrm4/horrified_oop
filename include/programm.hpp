@@ -31,7 +31,7 @@ class programm
 {
 public:
   static constexpr int maxn = 19;
-  int night_terror;
+  int night_terror = 0;
   std::vector<location *> list_of_location;
   std::vector<item *> list_of_items;
   std::vector<perk *> list_of_perks;
@@ -57,4 +57,5 @@ public:
   template <typename T>
   string show_hero_deatail(T);
   void clearScreen();
+  ~programm();
 };

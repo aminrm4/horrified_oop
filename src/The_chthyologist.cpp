@@ -10,7 +10,7 @@ void The_chthyologist::monster_strike(int dice_attack, int move, programm &bug, 
     for (int i = 0; i < monsters.size(); i++)
     {
         if (monsters[i]->get_freenzy_status())
-            monster_card::monster_strike(dice_attack, move, bug, monsters[i], route, loc, h);
+            monster_card::_strike(dice_attack, move, bug, monsters[i]);
     }
 }
 void The_chthyologist::set_item(int item_count)

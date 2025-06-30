@@ -30,7 +30,7 @@ void form_of_the_bat::monster_strike(int dice_attack, int move, programm &bug, v
     for (int i = 0; i < monsters.size(); i++)
     {
         if (typeid(*monsters[i]).name() == typeid(invisible_man).name())
-            monster_card::monster_strike(dice_attack, move, bug, monsters[i], route, loc, h);
+            monster_card::_strike(dice_attack, move, bug, monsters[i]);
     }
 }
 void form_of_the_bat::set_item(int item_count)

@@ -13,7 +13,9 @@ class monster_card
 {
     public:
     virtual void event(perk * p,hero* hero, monster *m,std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a) =0;
-    void monster_strike(int dice_attack,int move,programm & , monster* monsters , std::vector<int> & route , std::vector<location*>&loc , hero* h );//logic error maybe
+    void _strike(int dice_attack,int move,  programm & bug,monster* monsters);
+    virtual void monster_strike(int dice_attack, int move, programm &bug, vector<monster *> &monsters, vector<int> &route, vector<location *> &loc, hero *h) = 0;
+
     int get_item_count();
     virtual ~monster_card(){}
     protected:

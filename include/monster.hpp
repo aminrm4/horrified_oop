@@ -27,5 +27,5 @@ class monster
     int &get_hidden_item();
     bool get_did_attack();
     void set_did_attack(int did_attack);
-    
+    ~monster();
 };

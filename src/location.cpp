@@ -53,9 +53,7 @@ vector<villager *> & location  ::get_villager_list()
 {
     return villager_list;
 }
-location::~location()
-{
-}
+
 vector<item *> &location::get_item_list()
 {
     return item_list;
@@ -150,4 +148,21 @@ void remove_item(programm &obj, item*v)
             return;
         }
     }
+}
+location::~location()
+{
+    for (auto items : item_list)
+    {
+        delete items;
+    }
+    for (auto villagers : villager_list)
+    {
+        delete villagers;
+    }
+    
+    
+    villager_list.clear();
+    item_list.clear();
+    hero_list.clear();
+    monster_list.clear();
 }
