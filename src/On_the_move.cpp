@@ -1,7 +1,8 @@
 #include "On_the_move.hpp"
 #include"programm.hpp"
-void On_the_move::event(perk *p, hero *hero, monster *m, std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
+void On_the_move::event(std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a)
 {
+  
     a.next_frenzy();
 
     for (size_t i = 0; i < loc.size(); i++)
@@ -23,22 +24,25 @@ void On_the_move::event(perk *p, hero *hero, monster *m, std::vector<std::vector
     }
 
 }
-void On_the_move::monster_strike(int dice_attack, int move, programm & bug ,vector<monster *>&  monsters, vector<int> & route, vector<location *> &loc, hero *h)
+void On_the_move::monster_strike(programm &bug, vector<monster *> &monsters)
 {
     for (int i = 0; i < monsters.size(); i++)
     {
         if (monsters[i]->get_freenzy_status())
             {
-                monster_card::_strike(dice_attack, move,bug, monsters[i]);
+                monster_card::_strike(dice_play, move_left,bug, monsters[i]);
             }
     
     }
 }
+    
 void On_the_move::set_item(int item_count)
 {
     this->item_count = item_count;
 }
-    On_the_move::On_the_move(int dic,int my_item,int mover)
+   
+
+ On_the_move::On_the_move(int dic,int my_item,int mover)
     {
         dice_play=dic;
         item_count=my_item;

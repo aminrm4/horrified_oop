@@ -2,7 +2,7 @@
 #include "programm.hpp"
 using namespace std;
 
-void invisible_man::ability(std::vector <int> & p ,programm & bug, vector<location*> & locations , hero* h)
+void invisible_man::ability(programm & bug)
 {
         vector<vector<int>> routes;
     for(int i =0; i < bug.list_of_location.size();i++)
@@ -19,7 +19,7 @@ void invisible_man::ability(std::vector <int> & p ,programm & bug, vector<locati
     });
 
     if(routes.size() != 0)
-    this->move_to_place( route, 2 , bug.list_of_location , bug);
+    this->move_to_place( route, 2, bug);
     else
     {
         cerr << "error in monster strike when finding min move to place \n";

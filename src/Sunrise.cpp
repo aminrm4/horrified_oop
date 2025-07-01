@@ -3,7 +3,7 @@
 #include "Drakula.hpp"
 void remove_monster(programm &obj, monster *m);
 
-void Sunrise::event(perk *p, hero *hero, monster *m, std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
+void Sunrise::event(std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a)
 {
 
     for (auto mo : a.monster_list)
@@ -19,19 +19,19 @@ void Sunrise::event(perk *p, hero *hero, monster *m, std::vector<std::vector<int
     }
 }
 
-void Sunrise::monster_strike(int dice_attack, int move, programm &bug, vector<monster *> &monsters, vector<int> &route, vector<location *> &loc, hero *h)
+void Sunrise::monster_strike(programm &bug, vector<monster *> &monsters)
 {
 
     for (int i = 0; i < monsters.size(); i++)
     {
         if (typeid(*monsters[i]).name() == typeid(invisible_man).name())
-            monster_card::_strike(dice_attack, move, bug, monsters[i]);
+            monster_card::_strike(dice_play, move_left, bug, monsters[i]);
     }
 
     for (int i = 0; i < monsters.size(); i++)
     {
         if (monsters[i]->get_freenzy_status())
-            monster_card::_strike(dice_attack, move, bug, monsters[i]);
+            monster_card::_strike(dice_play, move_left, bug, monsters[i]);
     }
 }
 void Sunrise::set_item(int item_count)

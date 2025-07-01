@@ -287,10 +287,10 @@ programm::programm()
   monster_card_list.push_back(new The_Innocent(3, 3, 1));
   monster_card_list.push_back(new Egyptian_Expert(2, 3, 2));
   monster_card_list.push_back(new The_chthyologist(2, 3, 1));
-  monster_card_list.push_back(new Hypnotic_Gaze(2, 2, 1));
-  monster_card_list.push_back(new Hypnotic_Gaze(2, 2, 1));
-  monster_card_list.push_back(new On_the_move(2, 3, 3));
-  monster_card_list.push_back(new On_the_move(2, 3, 3));
+  //monster_card_list.push_back(new Hypnotic_Gaze(2, 2, 1));
+  //monster_card_list.push_back(new Hypnotic_Gaze(2, 2, 1));
+  //monster_card_list.push_back(new On_the_move(2, 3, 3));
+  //monster_card_list.push_back(new On_the_move(2, 3, 3));
 
   // Item initialization and random placement
   // Not rewritten in full to save space, but you would similarly use `new item(...)` and push_back pointer

@@ -3,7 +3,7 @@
 #include "map1.hpp"
 
 void remove_monster(programm &obj, monster *m);
-void Thief::event(perk *p, hero *hero, monster *m, std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
+void Thief::event(std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a)
 {
     int max_item = 0;
     for (int i = 0; i < loc.size(); i++)
@@ -31,19 +31,19 @@ void Thief::event(perk *p, hero *hero, monster *m, std::vector<std::vector<int>>
         }
     }
 }
-void Thief::monster_strike(int dice_attack, int move, programm &bug, vector<monster *> &monsters, vector<int> &route, vector<location *> &loc, hero *h)
+void Thief::monster_strike(programm &bug, vector<monster *> &monsters)
 {
 
     for (int i = 0; i < monsters.size(); i++)
     {
         if (typeid(*monsters[i]).name() == typeid(invisible_man).name())
-            monster_card::_strike(dice_attack, move, bug, monsters[i]);
+            monster_card::_strike(dice_play, move_left, bug, monsters[i]);
     }
 
     for (int i = 0; i < monsters.size(); i++)
     {
         if (typeid(*monsters[i]).name() == typeid(Drakula).name())
-            monster_card::_strike(dice_attack, move, bug, monsters[i]);
+            monster_card::_strike(dice_play, move_left, bug, monsters[i]);
     }
 }
 Thief::Thief(int dic, int my_item, int mover)

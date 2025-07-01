@@ -33,7 +33,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                                      { return a.size() < b.size(); });
 
     if (routes.size() != 0)
-        monsters->move_to_place(route, move, bug.list_of_location, bug);
+        monsters->move_to_place(route, move,bug);
     else
     {
         cerr << "error in monster strike when finding min move to place \n";
@@ -49,7 +49,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
         if (rand == 1) // power dice aval
         {
             vector<int> s;
-            monsters->ability(s, bug, bug.list_of_location, nullptr);
+            monsters->ability(bug);
         }
 
         rand = distib(gen);
@@ -58,7 +58,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
         if (rand == 3) // power dice 2
         {
             vector<int> s;
-            monsters->ability(s, bug, bug.list_of_location, nullptr);
+            monsters->ability(bug);
         }
 
         rand = distib(gen);

@@ -6,7 +6,7 @@
 using namespace std;
 void remove_monster(programm &obj, monster *m);
 
-void monster::move_to_place(std::vector<int> &route, int number_route, vector<location *> &locations, programm &bug)
+void monster::move_to_place(std::vector<int> &route, int number_route, programm &bug)
 {
 
     // if (!locations.empty() )
@@ -23,7 +23,7 @@ void monster::move_to_place(std::vector<int> &route, int number_route, vector<lo
     {
         return;
     }
-    for (auto locationIndex : locations)
+    for (auto locationIndex : bug.list_of_location)
         if (route[number_route] == locationIndex->get_loc_relation())
         {
             remove_monster(bug, this);
@@ -75,7 +75,7 @@ bool monster::get_did_attack()
 {
     return did_attack;
 }
-void monster::set_did_attack(int did_attack)
+void monster::set_did_attack(bool did_attack)
 {
     this->did_attack = did_attack;
 }
