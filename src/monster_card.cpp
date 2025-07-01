@@ -3,6 +3,7 @@
 #include "monster.hpp"
 #include "item.hpp"
 #include <algorithm>
+#include <random>
 void remove_villager(programm &obj, villager *v);
 
 int monster_card::get_item_count()
@@ -27,58 +28,42 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
             routes.push_back(bug.bfs(monsters->get_loc()->get_loc_relation(), hero->get_loc()->get_loc_relation()));
         }
     }
-    cout << "kkpppppk \n";
 
     vector<int> route = *min_element(routes.begin(), routes.end(), [](vector<int> &a, vector<int> &b)
                                      { return a.size() < b.size(); });
 
-    cout << "kkpppppk \n";
     if (routes.size() != 0)
-        monsters->move_to_place(route, move, bug.list_of_location, bug);
+        monsters->move_to_place(route, move,bug);
     else
     {
         cerr << "error in monster strike when finding min move to place \n";
     }
-    cout << "kkkk \n";
-  
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> distib(1, 6);
+
     for (int i = 0; i < dice_attack && !monsters->get_did_attack(); i++)
     {
-        auto now = std::chrono::system_clock::now();
-        auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
-      
-
-        srand(millis);
-        int rand = random() % 6;
-        cin.get();
-        cout << rand;
+        int rand = distib(gen);
+        cout << rand << endl;
         if (rand == 1) // power dice aval
         {
             vector<int> s;
-            monsters->ability(s, bug, bug.list_of_location, nullptr);
+            monsters->ability(bug);
         }
-   
 
-        now = std::chrono::system_clock::now();
-        millis = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
-   
-        srand(millis);
-        rand = random() % 6;
-           cin.get();
-        cout << rand;
+        rand = distib(gen);
+        cout << rand << endl;
+
         if (rand == 3) // power dice 2
         {
             vector<int> s;
-            monsters->ability(s, bug, bug.list_of_location, nullptr);
+            monsters->ability(bug);
         }
-   
 
-        now = std::chrono::system_clock::now();
-        millis = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
+        rand = distib(gen);
+        cout << rand << endl;
 
-        srand(millis);
-        rand = random() % 6;
-        cin.get();
-        cout << rand;
         if (rand == 5) // attack dice
         {
             if (!monsters->get_loc()->get_hero_list().empty())
@@ -86,13 +71,9 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                 cout << "oh no a monster want to attack you Do you want to Defend your self ? [Y]es , [N]o \n";
                 try
                 {
-                    cin.clear();
-                    //cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
                     char state;
                     cin >> state;
-                    cin.clear();
-                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     state = tolower(state);
                     if (state == 'y')
                     {
@@ -112,12 +93,10 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                                 return;
                             }
                         }
-                        cin.get();
                         cout << "im sorry i couldnt find your item and monster attacked you and night terror level increasd \n";
                         monsters->get_loc()->get_hero_list()[0]->move(bug.list_of_location[0], bug);
                         bug.set_night_terror(bug.get_night_terror() + 1);
                         monsters->set_did_attack(true);
-                        cin.get();
 
                         return;
                     }
@@ -126,7 +105,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                         monsters->get_loc()->get_hero_list()[0]->move(bug.list_of_location[0], bug);
                         bug.set_night_terror(bug.get_night_terror() + 1);
                         monsters->set_did_attack(true);
-                        cout<< "the monster attakced you and i saved "<< monsters->get_loc()->get_hero_list()[0]->get_hero_name() <<"now you are in hospital \n";
+                        cout << "the monster attakced you and i saved " << monsters->get_loc()->get_hero_list()[0]->get_hero_name() << "now you are in hospital \n";
                         return;
                     }
 
@@ -134,11 +113,9 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                 }
                 catch (const std::exception &e)
                 {
-
-                    std::cerr << "nigga" << '\n';
+                    cout << e.what();
                 }
 
-                // bug.set_night_terror(bug.get_night_terror()+1);
                 return;
             }
 
@@ -154,67 +131,12 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
             }
         }
     }
-    //    programm p;
-    //     monsters->move_to_place( route, move ,loc , bug);
-    //     cout << "look a monster moved his place be careful \n";
-    //     set<int> a = p.random_generator(1 , 36 , 1);
-    //     set<int>::iterator it = a.begin();
-    //     it++;
-
-    // if(*it == 1)  // ability
-    // {
-    //     cout << "Oh no the monster want to use his ability a player \n";
-    //     monsters->ability(route ,bug, loc, h);
-    // }
-    // if(*it == 2) // strike
-    // {
-    //     cout << "Oh no the monster want to strike !!! \n";
-    //     vector<villager*> v = monsters->get_loc()->get_villager_list();
-    //     if(!v.empty())
-    //     {
-    //         cout << "Oh noooooo all the villagers died ";
-    //         cout << "RIP villager's \n";
-    //         p.set_night_terror(p.get_night_terror() + v.size());
-    //         monsters->get_loc()->delete_villager_list();
-    //         return ;
-    //     }
-    //     vector<hero*> pp = monsters->get_loc()->get_hero_list();
-    //     if(!pp.empty())
-    //     {
-    //         cout << "Oh no the monster reached you u must drop item u escape from monster strike \n";
-    //         cout << "Do you want to do it ? [Y]es , [N]o";
-    //         try
-    //         {
-    //             char status;
-    //             cin >> status;
-    //             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    //             status = tolower(status);
-    //             if(status == 'y')
-    //             {
-    //                 int index;
-    //                 cout << "enter the index of your item  " << typeid(*pp[0]).name() << endl;
-    //                 cin >> index;
-    //                 vector <item*> invo = pp[0]->get_items();
-    //                 invo.erase(invo.begin());
-    //                 pp[0]->set_item(invo);
-    //                 return;
-    //             }
-    //             else
-    //             {
-
-    //                 cout << "you couldnt save your self but i managed to heal you and bring you to hospital \n";
-    //                 p.set_night_terror(p.get_night_terror() + 1);
-    //                 pp[0]->move(loc[0],bug);
-    //             }
-
-    //         }
-    //         catch(const logic_error& e)
-    //         {
-    //             std::cerr << e.what() << '\n';
-
-    //         }
-
-    //     }
-    //     cout << "tanks god he is far away \n";
-    // }
+}
+int monster_card::get_dice_play()
+{
+    return dice_play;
+}
+int monster_card::get_move_count()
+{
+    return move_left;
 }

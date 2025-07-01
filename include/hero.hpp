@@ -33,7 +33,7 @@ class hero
     void move(location *loc,  programm & bug,const vector<villager *> &villagers={});
     int get_action();
     void set_perks(vector<perk*> perks);
-    std:: vector<perk*> get_perks();
+    std:: vector<perk*> &get_perks();
     void set_item(vector<item*>  items);
      std::vector <item*> &get_items(); //refrenced too
     void pickup();

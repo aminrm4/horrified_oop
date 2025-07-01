@@ -6,6 +6,6 @@ class Drakula : public monster
 {
 
     public:
-    void ability(std::vector <int> & route ,programm &, std::vector<location*>  & locations , hero* h);
+    void ability(programm & bug);
     Drakula(int coffin, bool is_freenzy,int freenzy_order,location* ptr);
 };

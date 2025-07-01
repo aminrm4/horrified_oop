@@ -26,6 +26,7 @@ using namespace ftxui;
 #include "Color.hpp"
 #include <stdexcept>
 #include <format>
+#include <ftxui/dom/elements.hpp>
 void programm::clearScreen()
 {
 #ifdef __WIN32
@@ -265,31 +266,31 @@ programm::programm()
   hero_list.push_back(new Archaeologist(1, list_of_location[12], list_of_perks));
   hero_list.push_back(new Mayor(0, list_of_location[10], list_of_perks));
 
-  monster_list.push_back(new Drakula(1, true, 1, list_of_location[0]));
-  monster_list.push_back(new invisible_man(1, false, 6, list_of_location[14]));
+  monster_list.push_back(new Drakula(5, true, 1, list_of_location[0]));
+  monster_list.push_back(new invisible_man(10, false, 6, list_of_location[14]));
 
-  monster_card_list.push_back(new form_of_the_bat());
-  monster_card_list.push_back(new form_of_the_bat());
-  monster_card_list.push_back(new form_of_the_bat());
-  monster_card_list.push_back(new Sunrise());
-  monster_card_list.push_back(new Sunrise());
-  monster_card_list.push_back(new Sunrise());
-  monster_card_list.push_back(new Thief());
-  monster_card_list.push_back(new Thief());
-  monster_card_list.push_back(new Thief());
-  monster_card_list.push_back(new Thief());
-  monster_card_list.push_back(new Thief());
-  monster_card_list.push_back(new The_Delivery());
-  monster_card_list.push_back(new Fortune_Teller());
-  monster_card_list.push_back(new Former_Employer());
-  monster_card_list.push_back(new Hurried_Assistant());
-  monster_card_list.push_back(new The_Innocent());
-  monster_card_list.push_back(new Egyptian_Expert());
-  monster_card_list.push_back(new The_chthyologist());
-  monster_card_list.push_back(new Hypnotic_Gaze());
-  monster_card_list.push_back(new Hypnotic_Gaze());
-  monster_card_list.push_back(new On_the_move());
-  monster_card_list.push_back(new On_the_move());
+  monster_card_list.push_back(new form_of_the_bat(2, 2, 1));
+  monster_card_list.push_back(new form_of_the_bat(2, 2, 1));
+  monster_card_list.push_back(new form_of_the_bat(2, 2, 1));
+  monster_card_list.push_back(new Sunrise(2, 0, 1));
+  monster_card_list.push_back(new Sunrise(2, 0, 1));
+  monster_card_list.push_back(new Sunrise(2, 0, 1));
+  monster_card_list.push_back(new Thief(3, 2, 1));
+  monster_card_list.push_back(new Thief(3, 2, 1));
+  monster_card_list.push_back(new Thief(3, 2, 1));
+  monster_card_list.push_back(new Thief(3, 2, 1));
+  monster_card_list.push_back(new Thief(3, 2, 1));
+  monster_card_list.push_back(new The_Delivery(3, 3, 1));
+  monster_card_list.push_back(new Fortune_Teller(2, 3, 1));
+  monster_card_list.push_back(new Former_Employer(2, 3, 1));
+  monster_card_list.push_back(new Hurried_Assistant(3, 3, 2));
+  monster_card_list.push_back(new The_Innocent(3, 3, 1));
+  monster_card_list.push_back(new Egyptian_Expert(2, 3, 2));
+  monster_card_list.push_back(new The_chthyologist(2, 3, 1));
+  //monster_card_list.push_back(new Hypnotic_Gaze(2, 2, 1));
+  //monster_card_list.push_back(new Hypnotic_Gaze(2, 2, 1));
+  //monster_card_list.push_back(new On_the_move(2, 3, 3));
+  //monster_card_list.push_back(new On_the_move(2, 3, 3));
 
   // Item initialization and random placement
   // Not rewritten in full to save space, but you would similarly use `new item(...)` and push_back pointer
@@ -313,7 +314,7 @@ programm::programm()
     i->get_loc()->set_hero_list(i);
   }
 
-  list_of_location[5]->set_villager(new villager("ass", list_of_location[5], list_of_location[12], *this));
+  list_of_location[5]->set_villager(new villager("ass", list_of_location[12], list_of_location[5], *this));
 }
 std::vector<int> programm::bfs(int s, int t)
 {
@@ -370,7 +371,7 @@ int programm::get_night_terror()
 void programm::set_night_terror(int value)
 {
   night_terror = value;
-  if(night_terror == 5)
+  if (night_terror == 5)
   {
     cout << "the night terror level reached 5 \n";
     cin.get();
@@ -531,6 +532,106 @@ string programm::show_all_mosnter(const vector<monster *> &show, LocationInfo &s
 
   return state.monsters;
 }
+/*
+string programm::show_hero_item(const vector<item *> &show, heroinfo &state)
+{
+  state.item_have = "";
+  unordered_map<string, int> same_element;
+
+  if (show.empty())
+    return state.item_have;
+
+  for (auto i : show)
+  {
+    if (i != nullptr)
+    {
+
+      same_element[i->get_name()]++;
+    }
+  }
+
+  for (const auto &i : same_element)
+  {
+    state.item_have = state.item_have + ' ' + (i.first + '(' + to_string(i.second) + ')');
+  }
+
+  return state.item_have;
+}
+
+string programm::show_hero_perk(const vector<perk *> &show, heroinfo &state)
+{
+  state.perk_have = "";
+  unordered_map<string, int> same_element;
+
+  if (show.empty())
+    return state.perk_have;
+
+  for (auto i : show)
+  {
+    if (i != nullptr)
+    {
+
+      same_element[i->get_name()]++;
+    }
+  }
+
+  for (const auto &i : same_element)
+  {
+    state.perk_have = state.perk_have + ' ' + (i.first + '(' + to_string(i.second) + ')');
+  }
+
+  return state.perk_have;
+}
+
+string programm::show_hero_name(const vector<hero *> &show, heroinfo &state)
+{
+  state.name = "";
+  unordered_map<string, int> same_element;
+
+  if (show.empty())
+    return state.perk_have;
+
+  for (auto i : show)
+  {
+    if (i != nullptr)
+    {
+
+      same_element[i->get_hero_name()]++;
+    }
+  }
+
+  for (const auto &i : same_element)
+  {
+    state.name = state.name + ' ' + (i.first + '(' + to_string(i.second) + ')');
+  }
+
+  return state.name;
+}
+string programm::show_hero_action(const vector<hero *> &show, heroinfo &state)
+{
+  state.action = "";
+  unordered_map<string, int> same_element;
+
+  if (show.empty())
+    return state.perk_have;
+
+  for (auto i : show)
+  {
+    if (i != nullptr)
+    {
+
+      same_element[to_string(i->get_action())]++;
+    }
+  }
+
+  for (const auto &i : same_element)
+  {
+    state.action = state.action + ' ' + (i.first + '(' + to_string(i.second) + ')');
+  }
+
+  return state.action;
+}
+*/
 template <typename T>
 string programm::show_hero_deatail(T vec)
 {
@@ -542,15 +643,13 @@ string programm::show_hero_deatail(T vec)
     ++same_element[i->get_name()];
   }
 
-
   for (const auto &i : same_element)
   {
     temp = temp + " " + i.first + "(" + to_string(i.second) + ")";
   }
   return temp;
 }
-
-void programm::terminal_handler(LocationInfo &info, string &first_enter, string &secend_enter)
+void programm::terminal_handler(LocationInfo &info, heroinfo &inf, string &first_enter, string &secend_enter)
 {
   int enter_count = 0;
   auto screen = ScreenInteractive::TerminalOutput();
@@ -698,36 +797,44 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
   };
 
   map<string, string> secend_heros_data = {
-
       {"hero name ", hero_list[1]->get_hero_name()},
       {"item have ", show_hero_deatail(hero_list[1]->get_items())},
       {"perk have ", show_hero_deatail(hero_list[1]->get_perks())},
-      {"action left ", to_string(hero_list[1]->get_action())}};
+      {"action left ", to_string(hero_list[1]->get_action())}
+
+  };
+map<string,string>monster_data={
+  {monster_list[0]->get_mons_name(),"task remain :"+to_string(monster_list[0]->get_hidden_item())},
+  {monster_list[1]->get_mons_name(),"task remain :"+ to_string(monster_list[1]->get_hidden_item())}
+};
 
   bool show_loc = false;
   bool show_hero = false;
   bool show_act = false;
   bool show_hero1 = false;
   bool show_map = false;
+  bool show_task=false;
   int sel_loc = 0, sel_act = 0;
   int sel_hero = 0;
   int sel_hero1 = 0;
   int sel_map = 0;
+  int sel_taks=0;
   vector<string> locations = {"Lab", "church", "grave_yard", "Hospital", "Mansion", "institute", "museum", "shop", "cave", "camp", "barn", "dungeon", "tower", "inn", "docks", "theatre", "abbey", "cryptt", "precinct"};
   vector<string> actions = {"Move", "Guide", "Pick Up", "Advance", "Defeat", "special action ", "Quit", "use perk"};
   vector<string> heros = {"hero name ", "item have ", "perk have ", "action left "};
   vector<string> heros1 = {"hero name ", "item have ", "perk have ", "action left "};
+  vector<string>monster_task={monster_list[0]->get_mons_name(),monster_list[1]->get_mons_name()};
 
   auto loc_menu = Radiobox(&locations, &sel_loc);
   auto act_menu = Radiobox(&actions, &sel_act);
   auto hero_menu = Radiobox(&heros, &sel_hero);
   auto heros1_menu = Radiobox(&heros1, &sel_hero1);
+  auto taks_menu=Radiobox(&monster_task,&sel_taks);
   Component renderer = Renderer([&]
                                 {
     Elements elements;
-    //elements.push_back(paragraph(map_ascii));
-    //elements.push_back(separator());
-    elements.push_back(paragraph("Press L:Location, H:Hero,  J: secend Hero , M :show map , A:Action. Use arrows+Enter to navigate."));
+    
+    elements.push_back(paragraph("Press L:Location, H:Hero,  J: secend Hero , M :show map , A:Action , T:monster_taks, Use arrows+Enter to navigate."));
     elements.push_back(separator());
 
     if (show_loc) {
@@ -743,28 +850,26 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
       })));
     }
     if (show_hero) {
-      elements.push_back(hero_menu->Render() | border);
-
+     // elements.push_back(hero_menu->Render() | border);
       elements.push_back(window(text( " first hero info :"), vbox({
-        text("hero  name :" + heros_data[heros[sel_hero]]),
-        text("action left : " + heros_data[heros[sel_hero]]),
-        text("item have :" + heros_data[heros[sel_hero]]),
-        text("perk have :" + heros_data[heros[sel_hero]])
+        text("hero  name :" + heros_data["hero name "]),
+        text("action left : " +heros_data["action left "]),
+        text("item have :" + heros_data["item have "]),
+        text("perk have :" + heros_data["perk have "])
       })));
     }
 
     if (show_hero1)
     {
-      elements.push_back(heros1_menu->Render() | border);
-
+     // elements.push_back(heros1_menu->Render() | border);
       elements.push_back(window(text( " secend hero info :"), vbox({
-        text("hero  name :" + secend_heros_data[heros1[sel_hero1]]),
-        text("action left : " +  secend_heros_data[heros1[sel_hero1]]),
-        text("item have :" +  secend_heros_data[heros1[sel_hero1]]),
-        text("perk have :" + secend_heros_data [heros1[sel_hero1]])
+    text("hero  name :" + secend_heros_data["hero name "]),
+        text("action left : " +secend_heros_data["action left "]),
+        text("item have :" + secend_heros_data["item have "]),
+        text("perk have :" + secend_heros_data["perk have "])
       })));
     }
-    
+
     if (show_act) {
       elements.push_back(act_menu->Render() | border);
       elements.push_back(window(text("Action Info"), vbox({
@@ -772,6 +877,14 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
         paragraph(action_help[actions[sel_act]])
       })));
     }
+
+if(show_task)
+{
+  elements.push_back(window(text( "monsters taks info"), vbox({
+        text(monster_list[0]->get_mons_name() + monster_data[monster_list[0]->get_mons_name()]),
+         text(monster_list[1]->get_mons_name() + monster_data[monster_list[1]->get_mons_name()])
+  })));
+}
 
    if (show_map)
      { 
@@ -812,7 +925,12 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
         
         return true;
       }      
-
+        if (event==Event::Character('t')|| event==Event::Character('T'))
+        {
+          show_task=!show_task;
+               show_map= show_loc = show_hero = show_hero1 = false;
+        }
+        
      if (event == Event::Return) {
             string message;
 
@@ -821,7 +939,7 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
         
 
 
-if (show_map)
+if (show_map || show_hero ||show_hero1 ||show_task)
 {
   return true;
 }
@@ -829,10 +947,7 @@ if (show_map)
 
       if (show_loc)
        message = locations[sel_loc];
-      else if (show_hero)
-        message = heros_data[heros[sel_hero]];
-      else if (show_hero1)
-        message =  secend_heros_data[heros1[sel_hero1]];
+     
       else if (show_act)
         message =actions[sel_act];
       else
@@ -855,6 +970,11 @@ if (show_map)
     if (show_hero)    return hero_menu->OnEvent(event);
     if (show_act)    return act_menu->OnEvent(event);
     if(show_hero1)   return heros1_menu->OnEvent(event);
+    if (show_task)
+    {
+    return taks_menu->OnEvent(event);
+    }
+    
     return false; });
 
   screen.Loop(app);
@@ -885,31 +1005,26 @@ programm::~programm()
   {
     delete monster_card;
   }
-  
+
   monster_card_list.clear();
   monster_list.clear();
   hero_list.clear();
   list_of_perks.clear();
   list_of_location.clear();
   list_of_items.clear();
-  
 }
 void programm::run()
 {
-  cout << "welcome to HORRIFIED  city a place full of mystery" << endl;
-  LocationInfo data_saver;
   string a, b;
-  terminal_handler(data_saver, a, b);
-
-vector<int> a2;
-  monster_card_list[5]->event(nullptr , nullptr , nullptr , my_map , list_of_location , *this);
-  cin.clear();
-  cin.ignore(numeric_limits<streamsize>::max(), '\n');
-  monster_card_list[5]->monster_strike(3 , 3 , *this , monster_list, a2, list_of_location , nullptr);
-  cout << "sag" << endl;
+  LocationInfo c;
+  heroinfo d;
+  terminal_handler(c, d, a, b);
+  cin.get();
+  cout << a << " " << b << endl;
+  hero_list[0]->move(list_of_location[4], *this);
+  list_of_location[4]->set_item_list(new item(3,"kir",rgb::Color::Red,list_of_location[4]));
+  hero_list[0]->pickup();
   cin.get();
   clearScreen();
-
-  terminal_handler(data_saver, a, b);
-  this->set_night_terror(5);
+  terminal_handler(c, d, a, b);
 }

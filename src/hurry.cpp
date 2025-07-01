@@ -14,7 +14,7 @@ void remove_monster(programm &, monster *);
 void remove_item(programm &, monster *);
 void message_invisible_man(bool alive);
 void message_drakula(bool alive);
-void hurry::play(hero *he, std::vector<hero *> &he_list, monster *mo, std::vector<location *> &loc, std::vector<item *> &it_list, std::vector<monster *> &mo_list, programm &help_obj1)
+void hurry::play(programm &help_obj1)
 {
     // fake vill
 

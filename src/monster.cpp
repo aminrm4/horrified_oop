@@ -6,30 +6,31 @@
 using namespace std;
 void remove_monster(programm &obj, monster *m);
 
-void monster::move_to_place(std::vector<int> &route, int number_route, vector<location *> &locations , programm &bug)
+void monster::move_to_place(std::vector<int> &route, int number_route, programm &bug)
 {
+
     // if (!locations.empty() )
     //     throw invalid_argument("invalid input\n");
-    if (number_route >= route.size() -1)
+    if (number_route >= route.size() - 1)
+    {
+        number_route = route.size() - 1;
+        if (typeid(*this).name() == typeid(Drakula).name() && route.size() > 1)
         {
-         number_route = route.size() -1;
-            if(typeid(*this).name() == typeid(Drakula).name() && route.size() > 1)
-                {
-                    bug.set_night_terror(bug.get_night_terror()+1);
-                }
+            bug.set_night_terror(bug.get_night_terror() + 1);
         }
-        if(route.size() == 1)
-        {
-            cout << "kkpppppk \n";
-            return ;
-        }
-    for (auto locationIndex : locations)
+    }
+    if (route.size() == 1)
+    {
+        return;
+    }
+    for (auto locationIndex : bug.list_of_location)
         if (route[number_route] == locationIndex->get_loc_relation())
-            {
-                remove_monster(bug , this);
-                this->loc = locationIndex;
-                locationIndex->set_monster_list(this);
-            }
+        {
+            remove_monster(bug, this);
+            this->loc = locationIndex;
+            locationIndex->set_monster_list(this);
+        }
+      
     cout << "monster moved to location number " << route[number_route] << endl;
 }
 void monster::set_loc(location *loc)
@@ -66,7 +67,7 @@ string monster::get_mons_name()
 {
     return name_of_monster;
 }
-int & monster::get_hidden_item()
+int &monster::get_hidden_item()
 {
     return totla_hidden_item;
 }
@@ -74,7 +75,7 @@ bool monster::get_did_attack()
 {
     return did_attack;
 }
-void monster::set_did_attack(int did_attack)
+void monster::set_did_attack(bool did_attack)
 {
     this->did_attack = did_attack;
 }

@@ -9,7 +9,7 @@ using namespace std;
 class invisible_man : public monster
 {
     public:
-    void ability(std::vector <int>  & route , programm &,vector<location*> & locations , hero* h);
+    void ability(programm & bug);
     invisible_man(int remain_hidden_item, bool is_freenzy ,int freenzy_order,location* loc);
     void set_remain_hidden_item(int);
 };

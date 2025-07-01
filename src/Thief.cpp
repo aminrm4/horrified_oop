@@ -1,9 +1,9 @@
 #include "Thief.hpp"
 #include "Invisible_man.hpp"
-#include"map1.hpp"
+#include "map1.hpp"
 
 void remove_monster(programm &obj, monster *m);
-void Thief::event(perk *p, hero *hero, monster *m, std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
+void Thief::event(std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a)
 {
     int max_item = 0;
     for (int i = 0; i < loc.size(); i++)
@@ -21,28 +21,34 @@ void Thief::event(perk *p, hero *hero, monster *m, std::vector<std::vector<int>>
             {
                 if (typeid(*mons).name() == typeid(invisible_man).name())
                 {
-                    remove_monster(a,mons);
+                    remove_monster(a, mons);
                     mons->set_loc(a.list_of_location[i]);
                     a.list_of_location[i]->set_monster_list(mons);
                     a.list_of_location[i]->delete_item();
-                    cout<<"Invisible man  teleported to"  << (a.list_of_location[i]->get_loc_relation()) << " and  destoyed all the items"<<endl;
+                    cout << "Invisible man  teleported to" << (a.list_of_location[i]->get_loc_relation()) << " and  destoyed all the items" << endl;
                 }
             }
-
-           
         }
     }
 }
-void Thief::monster_strike(int dice_attack, int move, programm &bug, vector<monster *> &monsters, vector<int> &route, vector<location *> &loc, hero *h)
+void Thief::monster_strike(programm &bug, vector<monster *> &monsters)
 {
-    for (int i = 0; i < monsters.size(); i++)
-    {
-        if (typeid(*monsters[i]).name() == typeid(Drakula).name())
-            monster_card::_strike(dice_attack, move, bug, monsters[i]);
-    }
+
     for (int i = 0; i < monsters.size(); i++)
     {
         if (typeid(*monsters[i]).name() == typeid(invisible_man).name())
-            monster_card::_strike(dice_attack, move, bug, monsters[i]);
+            monster_card::_strike(dice_play, move_left, bug, monsters[i]);
     }
+
+    for (int i = 0; i < monsters.size(); i++)
+    {
+        if (typeid(*monsters[i]).name() == typeid(Drakula).name())
+            monster_card::_strike(dice_play, move_left, bug, monsters[i]);
+    }
+}
+Thief::Thief(int dic, int my_item, int mover)
+{
+    dice_play = dic;
+    item_count = my_item;
+    move_left = mover;
 }

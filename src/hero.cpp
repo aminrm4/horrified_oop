@@ -30,7 +30,7 @@ void hero::move(location *loc, programm &bug, const vector<villager *> &villager
 
     }
     if(villagers.size() == 0)
-    status == 'n';
+    status = 'n';
     try
     {
 
@@ -616,7 +616,7 @@ void hero::set_perks(vector<perk *> perks)
 {
     perk_have = perks;
 }
-vector<perk *> hero::get_perks()
+vector<perk *> &hero::get_perks()
 {
     return perk_have;
 }
@@ -740,7 +740,7 @@ void hero::use_perk(programm &object1)
             vector<location *> shit2;
             vector<item *> shit3;
             vector<monster *> shi4;
-            perk_have[i]->play(nullptr, shit, nullptr, shit2, shit3, shi4, object1);
+            perk_have[i]->play(object1);
             delete perk_have[i];
             this->perk_have.erase(perk_have.begin() + i);
         }
