@@ -19,7 +19,9 @@ void Hurried_Assistant::set_item(int item_count)
 {
     this->item_count = item_count;
 }
-int Hurried_Assistant::get_item()
-{
-    return item_count;
-}
+  Hurried_Assistant:: Hurried_Assistant(int dic,int my_item,int mover)
+   {
+        item_count=my_item;
+        dice_play=dic;
+        move_left=mover;
+   }    

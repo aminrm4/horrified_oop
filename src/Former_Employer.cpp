@@ -25,7 +25,9 @@ void Former_Employer::set_item(int item_count)
 {
     this->item_count = item_count;
 }
-int Former_Employer::get_item()
-{
-    return item_count;
-}
+   Former_Employer:: Former_Employer(int dic,int my_item,int mover)
+   {
+    item_count=my_item;
+    dice_play=dic;
+    move_left=mover;
+   }

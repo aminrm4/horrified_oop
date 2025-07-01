@@ -19,7 +19,10 @@ void Fortune_Teller::set_item(int item_count)
 {
     this->item_count = item_count;
 }
-int Fortune_Teller::get_item()
+   
+Fortune_Teller:: Fortune_Teller(int dic,int my_item,int mover)
 {
-    return item_count;
+    item_count=my_item;
+    dice_play=dic;
+    move_left=mover;
 }

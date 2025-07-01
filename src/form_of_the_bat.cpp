@@ -41,3 +41,9 @@ int form_of_the_bat::get_item()
 {
     return item_count;
 }
+    form_of_the_bat::form_of_the_bat(int dic,int my_item,int mover)
+    {
+        dice_play=dic;
+        item_count=my_item;
+        move_left=mover;
+    }

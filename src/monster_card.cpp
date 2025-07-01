@@ -3,6 +3,7 @@
 #include "monster.hpp"
 #include "item.hpp"
 #include <algorithm>
+#include <random>
 void remove_villager(programm &obj, villager *v);
 
 int monster_card::get_item_count()
@@ -37,39 +38,32 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
     {
         cerr << "error in monster strike when finding min move to place \n";
     }
-  
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> distib(1, 6);
+
     for (int i = 0; i < dice_attack && !monsters->get_did_attack(); i++)
     {
-        auto now = std::chrono::system_clock::now();
-        auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
-      
-
-        srand(millis);
-        int rand = random() % 6;
+        int rand = distib(gen);
+        cout << rand << endl;
         if (rand == 1) // power dice aval
         {
             vector<int> s;
             monsters->ability(s, bug, bug.list_of_location, nullptr);
         }
-   
 
-        now = std::chrono::system_clock::now();
-        millis = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
-   
-        srand(millis);
-        rand = random() % 6;
+        rand = distib(gen);
+        cout << rand << endl;
+
         if (rand == 3) // power dice 2
         {
             vector<int> s;
             monsters->ability(s, bug, bug.list_of_location, nullptr);
         }
-   
 
-        now = std::chrono::system_clock::now();
-        millis = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
+        rand = distib(gen);
+        cout << rand << endl;
 
-        srand(millis);
-        rand = random() % 6;
         if (rand == 5) // attack dice
         {
             if (!monsters->get_loc()->get_hero_list().empty())
@@ -77,7 +71,6 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                 cout << "oh no a monster want to attack you Do you want to Defend your self ? [Y]es , [N]o \n";
                 try
                 {
-                   
 
                     char state;
                     cin >> state;
@@ -112,7 +105,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                         monsters->get_loc()->get_hero_list()[0]->move(bug.list_of_location[0], bug);
                         bug.set_night_terror(bug.get_night_terror() + 1);
                         monsters->set_did_attack(true);
-                        cout<< "the monster attakced you and i saved "<< monsters->get_loc()->get_hero_list()[0]->get_hero_name() <<"now you are in hospital \n";
+                        cout << "the monster attakced you and i saved " << monsters->get_loc()->get_hero_list()[0]->get_hero_name() << "now you are in hospital \n";
                         return;
                     }
 
@@ -120,7 +113,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                 }
                 catch (const std::exception &e)
                 {
-                    cout<<e.what();
+                    cout << e.what();
                 }
 
                 return;
@@ -138,5 +131,12 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
             }
         }
     }
-    
+}
+int monster_card::get_dice_play()
+{
+    return dice_play;
+}
+int monster_card::get_move_count()
+{
+    return move_left;
 }

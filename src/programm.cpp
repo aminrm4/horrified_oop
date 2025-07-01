@@ -268,28 +268,28 @@ programm::programm()
   monster_list.push_back(new Drakula(1, true, 1, list_of_location[0]));
   monster_list.push_back(new invisible_man(1, false, 6, list_of_location[14]));
 
-  monster_card_list.push_back(new form_of_the_bat());
-  monster_card_list.push_back(new form_of_the_bat());
-  monster_card_list.push_back(new form_of_the_bat());
-  monster_card_list.push_back(new Sunrise());
-  monster_card_list.push_back(new Sunrise());
-  monster_card_list.push_back(new Sunrise());
-  monster_card_list.push_back(new Thief());
-  monster_card_list.push_back(new Thief());
-  monster_card_list.push_back(new Thief());
-  monster_card_list.push_back(new Thief());
-  monster_card_list.push_back(new Thief());
-  monster_card_list.push_back(new The_Delivery());
-  monster_card_list.push_back(new Fortune_Teller());
-  monster_card_list.push_back(new Former_Employer());
-  monster_card_list.push_back(new Hurried_Assistant());
-  monster_card_list.push_back(new The_Innocent());
-  monster_card_list.push_back(new Egyptian_Expert());
-  monster_card_list.push_back(new The_chthyologist());
-  monster_card_list.push_back(new Hypnotic_Gaze());
-  monster_card_list.push_back(new Hypnotic_Gaze());
-  monster_card_list.push_back(new On_the_move());
-  monster_card_list.push_back(new On_the_move());
+  monster_card_list.push_back(new form_of_the_bat(2,2,1));
+  monster_card_list.push_back(new form_of_the_bat(2,2,1));
+  monster_card_list.push_back(new form_of_the_bat(2,2,1));
+  monster_card_list.push_back(new Sunrise(2,0,1));
+  monster_card_list.push_back(new Sunrise(2,0,1));
+  monster_card_list.push_back(new Sunrise(2,0,1));
+  monster_card_list.push_back(new Thief(3,2,1));
+  monster_card_list.push_back(new Thief(3,2,1));
+  monster_card_list.push_back(new Thief(3,2,1));
+  monster_card_list.push_back(new Thief(3,2,1));
+  monster_card_list.push_back(new Thief(3,2,1));
+  monster_card_list.push_back(new The_Delivery(3,3,1));
+  monster_card_list.push_back(new Fortune_Teller(2,3,1));
+  monster_card_list.push_back(new Former_Employer(2,3,1));
+  monster_card_list.push_back(new Hurried_Assistant(3,3,2));
+  monster_card_list.push_back(new The_Innocent(3,3,1));
+  monster_card_list.push_back(new Egyptian_Expert(2,3,2));
+  monster_card_list.push_back(new The_chthyologist(2,3,1));
+  monster_card_list.push_back(new Hypnotic_Gaze(2,2,1));
+  monster_card_list.push_back(new Hypnotic_Gaze(2,2,1));
+  monster_card_list.push_back(new On_the_move(2,3,3));
+  monster_card_list.push_back(new On_the_move(2,3,3));
 
   // Item initialization and random placement
   // Not rewritten in full to save space, but you would similarly use `new item(...)` and push_back pointer
@@ -313,7 +313,7 @@ programm::programm()
     i->get_loc()->set_hero_list(i);
   }
 
-  list_of_location[5]->set_villager(new villager("ass", list_of_location[5], list_of_location[12], *this));
+  list_of_location[5]->set_villager(new villager("ass", list_of_location[12], list_of_location[5], *this));
 }
 std::vector<int> programm::bfs(int s, int t)
 {
@@ -896,17 +896,4 @@ programm::~programm()
 }
 void programm::run()
 {
-  cout << "welcome to HORRIFIED  city a place full of mystery" << endl;
-  LocationInfo data_saver;
-  string a, b;
-  terminal_handler(data_saver, a, b);
-
-vector<int> a2;
- // monster_card_list[5]->event(nullptr , nullptr , nullptr , my_map , list_of_location , *this);
-  monster_card_list[2]->monster_strike(3 , monster_card_list[2]->get_item_count() , *this , monster_list, a2, list_of_location , nullptr);
-  cout << "sag" << endl;
-  cin.get();
-  clearScreen();
-  terminal_handler(data_saver, a, b);
-  this->set_night_terror(5);
 }

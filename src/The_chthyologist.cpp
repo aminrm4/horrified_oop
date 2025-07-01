@@ -17,7 +17,9 @@ void The_chthyologist::set_item(int item_count)
 {
     this->item_count = item_count;
 }
-int The_chthyologist::get_item()
-{
-    return item_count;
-}
+   The_chthyologist:: The_chthyologist(int dic,int my_item,int mover)
+    {
+        dice_play=dic;
+        item_count=my_item;
+        move_left=mover;
+    }

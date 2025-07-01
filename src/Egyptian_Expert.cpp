@@ -27,7 +27,9 @@ void Egyptian_Expert::set_item(int item_count)
 {
     this->item_count = item_count;
 }
-int Egyptian_Expert::get_item()
-{
-    return item_count;
-}
+    Egyptian_Expert::Egyptian_Expert(int dic,int my_item,int mover)
+    {
+        dice_play=dic;
+        item_count=my_item; 
+        move_left=mover;
+    }

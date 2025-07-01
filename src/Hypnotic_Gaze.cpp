@@ -194,7 +194,9 @@ void Hypnotic_Gaze::set_item(int item_count)
 {
     this->item_count = item_count;
 }
-int Hypnotic_Gaze::get_item()
+Hypnotic_Gaze::Hypnotic_Gaze( int dic,int my_item,int mover)
 {
-    return item_count;
+    item_count=my_item;
+    dice_play=dic;
+    move_left=mover;
 }

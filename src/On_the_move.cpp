@@ -29,7 +29,6 @@ void On_the_move::monster_strike(int dice_attack, int move, programm & bug ,vect
     {
         if (monsters[i]->get_freenzy_status())
             {
-                cout << "kkkk \n";
                 monster_card::_strike(dice_attack, move,bug, monsters[i]);
             }
     
@@ -39,7 +38,9 @@ void On_the_move::set_item(int item_count)
 {
     this->item_count = item_count;
 }
-int On_the_move::get_item()
-{
-    return item_count;
-}
+    On_the_move::On_the_move(int dic,int my_item,int mover)
+    {
+        dice_play=dic;
+        item_count=my_item;
+        move_left=mover;
+    }
