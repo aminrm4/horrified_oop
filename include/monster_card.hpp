@@ -15,7 +15,7 @@ class monster_card
     virtual void event(std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a) =0;
     void _strike(int dice_attack,int move,  programm & bug,monster* monsters);
     virtual void monster_strike(programm &bug, vector<monster *> &monsters) = 0;
-    
+    void item_handler(programm &help_object);
       int get_item_count();
       int get_dice_play();
       int get_move_count();

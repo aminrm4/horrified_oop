@@ -734,12 +734,18 @@ void hero::use_perk(programm &object1)
     cin >> temp;
     for (int i = 0; i < perk_have.size(); i++)
     {
+        if (typeid(perk_have[i]).name()==typeid(late_into_night).name())
+        {
+            this->set_action(this->get_action()+2);
+            continue;
+        }
+        
+
+
         if (perk_have[i]->get_name() == temp)
         {
-            vector<hero *> shit;
-            vector<location *> shit2;
-            vector<item *> shit3;
-            vector<monster *> shi4;
+          
+           
             perk_have[i]->play(object1);
             delete perk_have[i];
             this->perk_have.erase(perk_have.begin() + i);

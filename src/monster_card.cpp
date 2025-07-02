@@ -45,7 +45,6 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
     for (int i = 0; i < dice_attack && !monsters->get_did_attack(); i++)
     {
         int rand = distib(gen);
-        cout << rand << endl;
         if (rand == 1) // power dice aval
         {
             vector<int> s;
@@ -53,7 +52,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
         }
 
         rand = distib(gen);
-        cout << rand << endl;
+        
 
         if (rand == 3) // power dice 2
         {
@@ -62,7 +61,6 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
         }
 
         rand = distib(gen);
-        cout << rand << endl;
 
         if (rand == 5) // attack dice
         {
@@ -140,3 +138,14 @@ int monster_card::get_move_count()
 {
     return move_left;
 }
+    void  monster_card::item_handler(programm &help_object)
+    {
+          for (int i = 0; i < item_count; i++)
+  {
+    srand(time(0) + i);
+    int random = rand() % help_object.list_of_items.size();
+    help_object.list_of_items.at(random)->get_loc()->set_item_list(help_object.list_of_items.at(random)); // here has a problem
+    // delete list_of_items.at(random);
+    help_object.list_of_items.erase(help_object.list_of_items.begin() + random);
+  }
+    }

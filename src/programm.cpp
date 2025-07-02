@@ -27,6 +27,35 @@ using namespace ftxui;
 #include <stdexcept>
 #include <format>
 #include <ftxui/dom/elements.hpp>
+void input_validation(string sampel)
+{
+  for (unsigned char i : sampel)
+  {
+    if (isdigit(i))
+    {
+      throw invalid_argument("be bcareful in your input\n");
+    }
+    if (!isalpha(i))
+    {
+      throw invalid_argument("be bcareful in your input\n");
+    }
+  }
+}
+
+void to_lowercase(std::string &s)
+{
+  for (char &c : s)
+  {
+    c = static_cast<char>(
+        std::tolower(static_cast<unsigned char>(c)));
+  }
+}
+int random_number(int min, int max) {
+    static random_device rd;
+    static mt19937 gen(rd());
+    uniform_int_distribution<> distib(min, max);
+    return distib(gen);
+}
 void programm::clearScreen()
 {
 #ifdef __WIN32
@@ -263,8 +292,8 @@ programm::programm()
   list_of_perks.push_back(new hurry());
   list_of_perks.push_back(new hurry());
 
-  hero_list.push_back(new Archaeologist(1, list_of_location[12], list_of_perks));
   hero_list.push_back(new Mayor(0, list_of_location[10], list_of_perks));
+  hero_list.push_back(new Archaeologist(1, list_of_location[12], list_of_perks));
 
   monster_list.push_back(new Drakula(5, true, 1, list_of_location[0]));
   monster_list.push_back(new invisible_man(10, false, 6, list_of_location[14]));
@@ -287,10 +316,10 @@ programm::programm()
   monster_card_list.push_back(new The_Innocent(3, 3, 1));
   monster_card_list.push_back(new Egyptian_Expert(2, 3, 2));
   monster_card_list.push_back(new The_chthyologist(2, 3, 1));
-  //monster_card_list.push_back(new Hypnotic_Gaze(2, 2, 1));
-  //monster_card_list.push_back(new Hypnotic_Gaze(2, 2, 1));
-  //monster_card_list.push_back(new On_the_move(2, 3, 3));
-  //monster_card_list.push_back(new On_the_move(2, 3, 3));
+  // monster_card_list.push_back(new Hypnotic_Gaze(2, 2, 1));
+  // monster_card_list.push_back(new Hypnotic_Gaze(2, 2, 1));
+  // monster_card_list.push_back(new On_the_move(2, 3, 3));
+  // monster_card_list.push_back(new On_the_move(2, 3, 3));
 
   // Item initialization and random placement
   // Not rewritten in full to save space, but you would similarly use `new item(...)` and push_back pointer
@@ -649,7 +678,7 @@ string programm::show_hero_deatail(T vec)
   }
   return temp;
 }
-void programm::terminal_handler(LocationInfo &info, heroinfo &inf, string &first_enter, string &secend_enter)
+void programm::terminal_handler(LocationInfo &info, string &first_enter, string &secend_enter)
 {
   int enter_count = 0;
   auto screen = ScreenInteractive::TerminalOutput();
@@ -803,33 +832,32 @@ void programm::terminal_handler(LocationInfo &info, heroinfo &inf, string &first
       {"action left ", to_string(hero_list[1]->get_action())}
 
   };
-map<string,string>monster_data={
-  {monster_list[0]->get_mons_name(),"task remain :"+to_string(monster_list[0]->get_hidden_item())},
-  {monster_list[1]->get_mons_name(),"task remain :"+ to_string(monster_list[1]->get_hidden_item())}
-};
+  map<string, string> monster_data = {
+      {monster_list[0]->get_mons_name(), "task remain :" + to_string(monster_list[0]->get_hidden_item())},
+      {monster_list[1]->get_mons_name(), "task remain :" + to_string(monster_list[1]->get_hidden_item())}};
 
   bool show_loc = false;
   bool show_hero = false;
   bool show_act = false;
   bool show_hero1 = false;
   bool show_map = false;
-  bool show_task=false;
+  bool show_task = false;
   int sel_loc = 0, sel_act = 0;
   int sel_hero = 0;
   int sel_hero1 = 0;
   int sel_map = 0;
-  int sel_taks=0;
+  int sel_taks = 0;
   vector<string> locations = {"Lab", "church", "grave_yard", "Hospital", "Mansion", "institute", "museum", "shop", "cave", "camp", "barn", "dungeon", "tower", "inn", "docks", "theatre", "abbey", "cryptt", "precinct"};
   vector<string> actions = {"Move", "Guide", "Pick Up", "Advance", "Defeat", "special action ", "Quit", "use perk"};
   vector<string> heros = {"hero name ", "item have ", "perk have ", "action left "};
   vector<string> heros1 = {"hero name ", "item have ", "perk have ", "action left "};
-  vector<string>monster_task={monster_list[0]->get_mons_name(),monster_list[1]->get_mons_name()};
+  vector<string> monster_task = {monster_list[0]->get_mons_name(), monster_list[1]->get_mons_name()};
 
   auto loc_menu = Radiobox(&locations, &sel_loc);
   auto act_menu = Radiobox(&actions, &sel_act);
   auto hero_menu = Radiobox(&heros, &sel_hero);
   auto heros1_menu = Radiobox(&heros1, &sel_hero1);
-  auto taks_menu=Radiobox(&monster_task,&sel_taks);
+  auto taks_menu = Radiobox(&monster_task, &sel_taks);
   Component renderer = Renderer([&]
                                 {
     Elements elements;
@@ -1015,16 +1043,96 @@ programm::~programm()
 }
 void programm::run()
 {
-  string a, b;
-  LocationInfo c;
-  heroinfo d;
-  terminal_handler(c, d, a, b);
+  bool p1, p2;
+  int gar_one, gar_two;
+  string first_enter, secend_enter, player_one, player_two;
+  LocationInfo data_updater;
+  cout << "welcome to the HORRIFIED a city full of mistry" << endl;
+  cout << "Master please enter your name" << endl;
+  cin >> player_one;
+  input_validation(player_one);
+  cout << "Dear lord please enter your name" << endl;
+  cin >> player_two;
+  input_validation(player_two);
+  cout << "get ready for the game  The player who last ate garlic the longest time ago will start the game" << endl;
+  cout << player_one << " enter the last time you ate the garlic" << endl;
+  cin >> gar_one;
+  cout << player_two << " enter the last time you ate the garlic" << endl;
+  if (player_one <= player_two)
+  {
+    p1 = true;
+    cout << " smart! lets start with the" << player_one << endl;
+    cout << "enter the name of the hero" << endl;
+    cin >> player_one;
+    to_lowercase(player_one);
+    input_validation(player_one);
+    if (player_one == "mayor")
+    {
+      cout << player_two << "start with " << "archaeologist" << endl;
+      player_two = "archaeologist";
+    }
+    else
+    {
+      cout << player_two << "start with" << "mayor" << endl;
+      player_two = "mayor";
+    }
+  }
+  else
+  {
+    p2=true;
+    cout << " smart! lets start with the" << player_two << endl;
+    cout << "enter the name of the hero" << endl;
+    cin >> player_two;
+    to_lowercase(player_two);
+    input_validation(player_two);
+    if (player_two == "mayor")
+    {
+      cout << player_one << "start with " << "archaeologist" << endl;
+      player_one = "archaeologist";
+    }
+    else
+    {
+      cout << player_one << "start with" << "mayor" << endl;
+      player_one = "mayor";
+    }
+  }
   cin.get();
-  cout << a << " " << b << endl;
-  hero_list[0]->move(list_of_location[4], *this);
-  list_of_location[4]->set_item_list(new item(3,"kir",rgb::Color::Red,list_of_location[4]));
-  hero_list[0]->pickup();
+  cout << "note" << "History is written by the victor. History is full of liars. If he survives and we perish, his truth will be recorded and ours will be lost." << endl;
   cin.get();
-  clearScreen();
-  terminal_handler(c, d, a, b);
+  terminal_handler(data_updater, first_enter, secend_enter);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  while (!monster_card_list.empty())
+  {
+    int rand=0;
+    rand=random_number(0,monster_card_list.size());
+    monster_card_list[rand]->item_handler(*this);
+    monster_card_list[rand]->event(my_map,list_of_location,*this);
+    monster_card_list[rand]->monster_strike(*this,monster_list);
+    monster_card_list.erase(monster_card_list.begin()+rand);
+     delete monster_card_list[rand];
+
+  }
+  
+  
 }
