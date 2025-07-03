@@ -487,17 +487,58 @@ string programm::show_all_item(const vector<item *> &show, LocationInfo &state)
   {
     if (i != nullptr)
     {
-
-      same_element[i->get_name()]++;
+      if (i->get_Color() == rgb::Color::Red)
+      {
+        same_element[to_string(i->get_power()) + ' ' + "red" + ' ' + i->get_name()]++;
+      }
+      if (i->get_Color() == rgb::Color::Yellow)
+      {
+        same_element[to_string(i->get_power()) + ' ' + "yellow" + ' ' + i->get_name()]++;
+      }
+      if (i->get_Color() == rgb::Color::Blue)
+      {
+        same_element[to_string(i->get_power()) + ' ' + "blue" + ' ' + i->get_name()]++;
+      }
     }
   }
 
   for (const auto &i : same_element)
   {
+    cout << i.first << endl;
     state.items = state.items + ' ' + (i.first + '(' + to_string(i.second) + ')');
   }
 
   return state.items;
+}
+
+string programm::show_all_item_of_hero(const vector<item *>show)
+{
+  string temp = "";
+  map<string, int> same_element;
+  for (auto i : show)
+  {
+    if (i != nullptr)
+    {
+      if (i->get_Color() == rgb::Color::Red)
+      {
+        same_element[to_string(i->get_power()) + ' ' + "red" + ' ' + i->get_name()]++;
+      }
+      if (i->get_Color() == rgb::Color::Yellow)
+      {
+        same_element[to_string(i->get_power()) + ' ' + "yellow" + ' ' + i->get_name()]++;
+      }
+      if (i->get_Color() == rgb::Color::Blue)
+      {
+        same_element[to_string(i->get_power()) + ' ' + "blue" + ' ' + i->get_name()]++;
+      }
+    }
+  }
+
+  for (const auto &i : same_element)
+  {
+    temp = temp + " " + i.first + "(" + to_string(i.second) + ")";
+  }
+  return temp;
 }
 
 perk *programm::set_award(int index)
@@ -838,7 +879,7 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
   map<string, string> heros_data = {
 
       {"hero name ", hero_list[0]->get_hero_name()},
-      {"item have ", show_hero_deatail(hero_list[0]->get_items())},
+      {"item have ", show_all_item_of_hero(hero_list[0]->get_items())},
       {"perk have ", show_hero_deatail(hero_list[0]->get_perks())},
       {"action left ", to_string(hero_list[0]->get_action())}
 
@@ -846,7 +887,7 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
 
   map<string, string> secend_heros_data = {
       {"hero name ", hero_list[1]->get_hero_name()},
-      {"item have ", show_hero_deatail(hero_list[1]->get_items())},
+      {"item have ", show_all_item_of_hero(hero_list[1]->get_items())},
       {"perk have ", show_hero_deatail(hero_list[1]->get_perks())},
       {"action left ", to_string(hero_list[1]->get_action())}
 
@@ -1327,10 +1368,10 @@ void programm::run()
         break;
       }
     }
-     for (auto mons1 : monster_list)
-     {
-       mons1->set_did_attack(false);
-     }
+    for (auto mons1 : monster_list)
+    {
+      mons1->set_did_attack(false);
+    }
     for (auto hero : hero_list)
     {
       if (typeid(*hero).name() == typeid(Mayor).name())
@@ -1544,7 +1585,7 @@ void programm::run()
         monster_card_list[rand]->event(my_map, list_of_location, *this);
         monster_card_list[rand]->monster_strike(*this, monster_list);
         delete monster_card_list[rand];
-        monster_card_list.erase(monster_card_list.begin() + rand);  
+        monster_card_list.erase(monster_card_list.begin() + rand);
         if (monster_card_list.empty())
         {
           cout << "you lose the game " << endl;
@@ -1553,10 +1594,10 @@ void programm::run()
         break;
       }
     }
-     for (auto mons1 : monster_list)
-     {
-       mons1->set_did_attack(false);
-     }
+    for (auto mons1 : monster_list)
+    {
+      mons1->set_did_attack(false);
+    }
     for (auto hero : hero_list)
     {
       if (typeid(*hero).name() == typeid(Mayor).name())

@@ -130,15 +130,14 @@ void hero::guide(vector<vector<int>> &map, programm &p)
           }
              */
         else
-        {
+        {   
             throw logic_error("the location that you selected is far away or it doesnt have any villager \n");
-            guide(map, p);
         }
     }
     catch (const std::exception &e)
     {
         std::cerr << e.what() << '\n';
-        guide(map, p);
+        
     }
 }
 void hero::advance(vector<monster *> &monsters, programm &bug)
