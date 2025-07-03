@@ -310,11 +310,11 @@ programm::programm()
   list_of_perks.push_back(new hurry());
   list_of_perks.push_back(new hurry());
 
-  hero_list.push_back(new Mayor(1, list_of_location[10], list_of_perks));
-  hero_list.push_back(new Archaeologist(1, list_of_location[12], list_of_perks));
+  hero_list.push_back(new Mayor(5, list_of_location[10], list_of_perks));
+  hero_list.push_back(new Archaeologist(4, list_of_location[12], list_of_perks));
   hero_list[0]->get_perks().push_back(new break_of_down());
   hero_list[0]->get_perks().push_back(new overstock());
-list_of_location[10]->set_villager(new villager("kir to reza",list_of_location[3],list_of_location[10],*this));
+list_of_location[10]->set_villager(new villager("kirtoreza",list_of_location[3],list_of_location[10],*this));
 
   monster_list.push_back(new Drakula(4, true, 1, list_of_location[0]));
   monster_list.push_back(new invisible_man(5, false, 6, list_of_location[14]));
@@ -349,8 +349,8 @@ list_of_location[10]->set_villager(new villager("kir to reza",list_of_location[3
 
   for (int i = 0; i < 12; i++)
   {
-    srand(time(0) + i);
-    int random = rand() % list_of_items.size();
+   
+    int random = random_number(0,list_of_items.size()-1);
     list_of_items.at(random)->get_loc()->set_item_list(list_of_items.at(random)); // here has a problem
     // delete list_of_items.at(random);
     list_of_items.erase(list_of_items.begin() + random);
@@ -505,7 +505,6 @@ string programm::show_all_item(const vector<item *> &show, LocationInfo &state)
 
   for (const auto &i : same_element)
   {
-    cout << i.first << endl;
     state.items = state.items + ' ' + (i.first + '(' + to_string(i.second) + ')');
   }
 

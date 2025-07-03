@@ -51,7 +51,7 @@ void hero::guide(vector<vector<int>> &map, programm &p)
             cout << "wich villager you want to guide" << endl;
             for (auto vill : p.list_of_location[thisNumLoc]->get_villager_list())
             {
-                cout << vill->get_name() << " ";
+                cout << vill->get_name() << endl;
             }
             string name;
             cin >> name;
@@ -72,6 +72,7 @@ void hero::guide(vector<vector<int>> &map, programm &p)
                     }
                     if (is_connected)
                     {
+                        vill->set_current_location(p.list_of_location[no]);
                         remove_villager(p, vill);
                         p.list_of_location[no]->set_villager(vill); // حونه قهرمان این محلی روی شما اومده  .. این: محلی که در خانه قبلی بوده))کاربر زده(())
                         cout << vill->get_name() << " moved away" << endl;
@@ -99,6 +100,11 @@ void hero::guide(vector<vector<int>> &map, programm &p)
         if (is_connected == true && !p.list_of_location[node_number]->get_villager_list().empty())
 
         {
+            for (auto v : p.list_of_location[node_number]->get_villager_list())
+            {
+                cout << v->get_name() << endl;
+            }
+
             cout << "wich villager you want to guide" << endl;
             string name1;
             cin >> name1;
@@ -106,8 +112,9 @@ void hero::guide(vector<vector<int>> &map, programm &p)
             {
                 if (name1 == villl->get_name())
                 {
-                    p.list_of_location[thisNumLoc]->set_villager(p.list_of_location[node_number]->get_villager_list()[0]); // حونه قهرمان این محلی روی شما اومده  .. این: محلی که در خانه قبلی بوده))کاربر زده(())
-                    remove_villager(p, p.list_of_location[node_number]->get_villager_list()[0]);
+                    remove_villager(p, villl);
+                    p.list_of_location[thisNumLoc]->set_villager(villl); // حونه قهرمان این محلی روی شما اومده  .. این: محلی که در خانه قبلی بوده))کاربر زده(())
+                    villl->set_current_location(p.list_of_location[thisNumLoc]);
                     cout << villl->get_name() << " moved to " << this->get_hero_name() << endl;
                     if (villl->get_currnet_location() == villl->get_safe_location())
                     {

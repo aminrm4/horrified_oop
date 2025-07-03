@@ -39,7 +39,7 @@ void Archaeologist::special_action(vector<vector<int>> &map, const vector<locati
                     cout << endl;
                     this->item_have.insert(item_have.end(), items.begin(), items.end());
 
-                    locations->set_item_list({});
+                    locations->get_item_list().clear();
                 }
         }
         else
