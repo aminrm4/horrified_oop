@@ -39,7 +39,7 @@ void Archaeologist::special_action(vector<vector<int>> &map, const vector<locati
                     cout << endl;
                     this->item_have.insert(item_have.end(), items.begin(), items.end());
 
-                    locations->set_item_list({});
+                    locations->get_item_list().clear();
                 }
         }
         else
@@ -60,5 +60,5 @@ Archaeologist::Archaeologist(int actions, location *starting_loc, std::vector<pe
         throw logic_error("invalid actions \n");
     action = actions;
     swap(loc, starting_loc);
-    name_of_hero = "Archaeologist";
+    name_of_hero = "archaeologist";
 }

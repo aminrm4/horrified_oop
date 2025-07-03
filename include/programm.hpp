@@ -26,10 +26,7 @@ struct LocationInfo
   std::string villagers;
   std::string hero;
 };
-struct heroinfo {
-  std::string name;
 
-};
 class programm
 {
 public:
@@ -52,15 +49,13 @@ public:
   bool check_terro_night();
   void run();
   programm();
-  void terminal_handler(LocationInfo &info, heroinfo &inf, string &, string &);
+  void terminal_handler(LocationInfo &info, string &, string &);
   string show_all_item(const vector<item *> &show, LocationInfo &);
   string show_all_villager(const vector<villager *> &, LocationInfo &);
   string show_all_hero(const vector<hero *> &, LocationInfo &);
   string show_all_mosnter(const vector<monster *> &, LocationInfo &);
-   string show_hero_item(const vector<item *> &show, heroinfo &);
-  string show_hero_perk(const vector<perk*> &, heroinfo &);
-  string show_hero_action(const vector<hero *> &, heroinfo &);
-  string show_hero_name(const vector<hero*> &, heroinfo &);
+  bool is_node_connected(int her,int node); 
+  string show_all_item_of_hero(const vector<item *>);
   void clearScreen();
   ~programm();
   template <typename T>

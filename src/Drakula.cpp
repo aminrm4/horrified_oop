@@ -21,18 +21,16 @@ Drakula::Drakula(int coffin, bool is_freenzy, int freenzy_order, location *ptr)
     this->loc = ptr;
     name_of_monster = "Drakula";
 }
-void Drakula::ability(programm & bug)
+void Drakula::ability(programm &bug)
 {
-
 
     for (auto her : bug.hero_list)
     {
         if (her->get_action() == 0)
-        {    
-            her->get_loc()->get_villager_list().insert(her->get_loc()->get_villager_list().end(),her->get_villagers().begin(),her->get_villagers().end());
-            her->get_villagers().clear();
-            her->move(this->get_loc(),bug);
-            cout << "Drakula used his DarkCharm Ability and teleported "<<her->get_hero_name() <<" to his location \n";
+        {
+
+            her->move(this->get_loc(), bug);
+            cout << "Drakula used his DarkCharm Ability and teleported " << her->get_hero_name() << " to his location \n";
             return;
         }
     }

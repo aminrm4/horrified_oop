@@ -3,7 +3,7 @@
 #include "map1.hpp"
 
 void remove_monster(programm &obj, monster *m);
-void Thief::event(std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a)
+void Thief::event(std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
 {
     int max_item = 0;
     for (int i = 0; i < loc.size(); i++)
@@ -39,8 +39,16 @@ void Thief::monster_strike(programm &bug, vector<monster *> &monsters)
         if (typeid(*monsters[i]).name() == typeid(invisible_man).name())
             monster_card::_strike(dice_play, move_left, bug, monsters[i]);
     }
+    bool check = false;
+    for (auto mon : monsters)
+    {
+        if (mon->get_did_attack())
+        {
+            check = true;
+        }
+    }
 
-    for (int i = 0; i < monsters.size(); i++)
+    for (int i = 0; i < monsters.size() &&!check; i++)
     {
         if (typeid(*monsters[i]).name() == typeid(Drakula).name())
             monster_card::_strike(dice_play, move_left, bug, monsters[i]);

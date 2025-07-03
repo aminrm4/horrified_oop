@@ -14,6 +14,11 @@ void invisible_man::ability(programm & bug)
         
     }
 
+    if (routes.empty())
+    {
+        return;
+    }
+    
     vector<int> route = *min_element(routes.begin() , routes.end() ,[](vector<int>& a , vector<int>& b){
         return a.size() < b.size();
     });

@@ -17,6 +17,8 @@ void monster::move_to_place(std::vector<int> &route, int number_route, programm 
         if (typeid(*this).name() == typeid(Drakula).name() && route.size() > 1)
         {
             bug.set_night_terror(bug.get_night_terror() + 1);
+            cout<<"night terror has been increade"<<endl;
+            
         }
     }
     if (route.size() == 1)
@@ -31,7 +33,7 @@ void monster::move_to_place(std::vector<int> &route, int number_route, programm 
             locationIndex->set_monster_list(this);
         }
       
-    cout << "monster moved to location number " << route[number_route] << endl;
+    cout << this->get_mons_name()<< " moved to location number " << route[number_route] << endl;
 }
 void monster::set_loc(location *loc)
 {

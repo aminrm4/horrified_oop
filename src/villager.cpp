@@ -3,6 +3,8 @@
 #include <iostream>
 #include "programm.hpp"
 using namespace std;
+int random_number(int min, int max);
+
 void villager::set_name(std::string nam)
 {
     name = nam;
@@ -24,9 +26,9 @@ villager::villager(std::string name, location *safe, location *curr, programm &h
     {
         cerr << "erro happend in seting villager locations" << endl;
     }
-    auto it = help_object1.random_generator(0, help_object1.list_of_perks.size(), 1);
-    award = help_object1.set_award(*it.begin());
-    help_object1.list_of_perks.erase(help_object1.list_of_perks.begin() + *it.begin());
+    int it = random_number(0,help_object1.list_of_perks.size()-1);
+    award = help_object1.set_award(it);
+    help_object1.list_of_perks.erase(help_object1.list_of_perks.begin() +it);
 }
 location *villager::get_currnet_location()
 {

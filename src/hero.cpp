@@ -17,74 +17,26 @@ void message_drakula(bool alive);
 
 using namespace std;
 
-void hero::move(location *loc, programm &bug, const vector<villager *> &villagers) // used to delete the initializer cause of the pass by refrence
+void hero::move(location *loc, programm &bug) // used to delete the initializer cause of the pass by refrence
 {
-    char status = 'p';
-
-    if(villagers.size() != 0)
-    {
-        cout << "Do you want to move villagers with you ? \n [Y]es \n [N]o \n Enter a character \n";
-        cin >> status;
-        status = tolower(status);
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-    }
-    if(villagers.size() == 0)
-    status = 'n';
     try
     {
 
-        
-        if (status != 'y' && status != 'n')
-            throw logic_error("invalid Character \n");
-
-        if (status == 'y' )
-        {
-            for (auto v : villagers)
-            {
-                remove_villager(bug, v);
-                loc->set_villager(v);
-                v->set_current_location(loc);
-            }
-
-            for (int i = 0; i < villagers.size(); i++)
-            {
-                if (villagers[i]->get_currnet_location() == villagers[i]->get_safe_location())
-                {
-                    cout << "thank you hero you bring me to my safe location";
-                    this->perk_have.push_back(villagers[i]->drop_the_perk());
-                    remove_villager(bug, villagers[i]);
-                    delete villagers[i];
-                }
-            }
-            remove_hero(bug, this);
-            loc->set_hero_list(this);
-            this->loc = loc;
-        }
-
-        if (status == 'n')
-        {
-            this->get_loc()->get_villager_list().insert(
-                this->get_loc()->get_villager_list().end(),
-                this->get_villagers().begin(),
-                this->get_villagers().end());
-            this->get_villagers().clear();
-            remove_hero(bug, this);
-            loc->set_hero_list(this);
-            this->loc = loc;
-        }
+        remove_hero(bug, this);
+        loc->set_hero_list(this);
+        this->loc = loc;
     }
     catch (logic_error &e)
     {
         cout << e.what();
         cout << "try again\n";
-        hero::move(loc, bug, villagers);
     }
 }
 
 void hero::guide(vector<vector<int>> &map, programm &p)
 {
     int thisNumLoc = this->loc->get_loc_relation();
+    cout << thisNumLoc << ' ';
     for (auto related_node : map[thisNumLoc])
         cout << related_node << ' ';
     cout << "\n select the location to see witch villagers are there and you want to guide them\n";
@@ -94,6 +46,49 @@ void hero::guide(vector<vector<int>> &map, programm &p)
         cin >> node_number;
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         bool is_connected = false;
+        if (thisNumLoc == node_number)
+        {
+            cout << "wich villager you want to guide" << endl;
+            for (auto vill : p.list_of_location[thisNumLoc]->get_villager_list())
+            {
+                cout << vill->get_name() << endl;
+            }
+            string name;
+            cin >> name;
+            for (auto vill : p.list_of_location[thisNumLoc]->get_villager_list())
+            {
+                if (name == vill->get_name())
+                {
+                    cout << "select a node to move" << vill->get_name() << endl;
+                    int no;
+                    cin >> no;
+
+                    for (auto i : map[thisNumLoc])
+                    {
+                        if (i == no)
+                        {
+                            is_connected = true;
+                        }
+                    }
+                    if (is_connected)
+                    {
+                        vill->set_current_location(p.list_of_location[no]);
+                        remove_villager(p, vill);
+                        p.list_of_location[no]->set_villager(vill); // حونه قهرمان این محلی روی شما اومده  .. این: محلی که در خانه قبلی بوده))کاربر زده(())
+                        cout << vill->get_name() << " moved away" << endl;
+                        if (vill->get_currnet_location() == vill->get_safe_location())
+                        {
+                            cout << "thank you hero you bring me to my safe location";
+                            this->perk_have.push_back(vill->drop_the_perk());
+                            remove_villager(p, vill);
+                            delete vill;
+                        }
+                        return;
+                    }
+                }
+            }
+        }
+
         for (auto i : map[thisNumLoc])
         {
             if (i == node_number)
@@ -105,42 +100,41 @@ void hero::guide(vector<vector<int>> &map, programm &p)
         if (is_connected == true && !p.list_of_location[node_number]->get_villager_list().empty())
 
         {
-            p.list_of_location[thisNumLoc]->set_villager(p.list_of_location[node_number]->get_villager_list()[0]); // حونه قهرمان این محلی روی شما اومده  .. این: محلی که در خانه قبلی بوده))کاربر زده(())
-            remove_villager(p, p.list_of_location[node_number]->get_villager_list()[0]);
-
-            for (int i = 0; i < villagers.size(); i++)
+            for (auto v : p.list_of_location[node_number]->get_villager_list())
             {
-                if (villagers[i]->get_currnet_location() == villagers[i]->get_safe_location())
-                {
-                    cout << "thank you hero you bring me to my safe location";
-                    this->perk_have.push_back(villagers[i]->drop_the_perk());
-                    remove_villager(p, villagers[i]);
-                    delete villagers[i];
-                }
+                cout << v->get_name() << endl;
             }
 
-            // p.list_of_location[node_number]->get_villager_list()[0]->set_current_location(nullptr);    // خونه قبی محلی  کاربر زده شما کل ویلیچر هاتو بده موقغیت به نال بده . الان دیگه نو این خونه نیست
+            cout << "wich villager you want to guide" << endl;
+            string name1;
+            cin >> name1;
+            for (auto villl : p.list_of_location[node_number]->get_villager_list())
+            {
+                if (name1 == villl->get_name())
+                {
+                    remove_villager(p, villl);
+                    p.list_of_location[thisNumLoc]->set_villager(villl); // حونه قهرمان این محلی روی شما اومده  .. این: محلی که در خانه قبلی بوده))کاربر زده(())
+                    villl->set_current_location(p.list_of_location[thisNumLoc]);
+                    cout << villl->get_name() << " moved to " << this->get_hero_name() << endl;
+                    if (villl->get_currnet_location() == villl->get_safe_location())
+                    {
+                        cout << "thank you hero you bring me to my safe location";
+                        this->perk_have.push_back(villl->drop_the_perk());
+                        remove_villager(p, villl);
+                        delete villl;
+                    }
+                }
+            }
         }
-        /*
-          if ((p.list_of_location[node_number]->get_villager_list().empty()))
-          {   cout<<"kir"<<endl;
-               p.list_of_location[thisNumLoc]->get_villager_list().push_back(p.list_of_location[node_number]->get_villager_list()[0]);
-               cout<<"moein"<<endl;
 
-             cout<<"bahrami"<<endl;
-
-          }
-             */
         else
         {
             throw logic_error("the location that you selected is far away or it doesnt have any villager \n");
-            guide(map, p);
         }
     }
     catch (const std::exception &e)
     {
         std::cerr << e.what() << '\n';
-        guide(map, p);
     }
 }
 void hero::advance(vector<monster *> &monsters, programm &bug)
@@ -470,7 +464,7 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                                 if (typeid(*monsters[i]).name() == typeid(Drakula).name())
                                 {
                                     remove_monster(bug, monsters[i]);
-                                    if(bug.monster_list.size() == 0)
+                                    if (bug.monster_list.size() == 0)
                                     {
                                         cout << "Heros succesfuly killed all the monsters \n";
                                         cin.get();
@@ -551,7 +545,7 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                                 if (typeid(*monsters[i]).name() == typeid(Drakula).name())
                                 {
                                     remove_monster(bug, monsters[i]);
-                                    if(bug.monster_list.size() == 0)
+                                    if (bug.monster_list.size() == 0)
                                     {
                                         cout << "Heros succesfuly killed all the monsters \n";
                                         cin.get();
@@ -716,10 +710,6 @@ may still be me.
 )";
     }
 }
-std::vector<villager *> &hero::get_villagers()
-{
-    return villagers;
-}
 
 void hero::use_perk(programm &object1)
 {
@@ -728,18 +718,21 @@ void hero::use_perk(programm &object1)
     {
         cout << p->get_name() << " ";
     }
-
+    cout << endl;
     cout << "wich perk want you use enter belwo : " << endl;
     string temp;
     cin >> temp;
     for (int i = 0; i < perk_have.size(); i++)
     {
+
         if (perk_have[i]->get_name() == temp)
         {
-            vector<hero *> shit;
-            vector<location *> shit2;
-            vector<item *> shit3;
-            vector<monster *> shi4;
+
+            if (typeid(*perk_have[i]).name() == typeid(late_into_night).name())
+            {
+                this->set_action(this->get_action() + 2);
+            }
+            cout << this->get_action() << endl;
             perk_have[i]->play(object1);
             delete perk_have[i];
             this->perk_have.erase(perk_have.begin() + i);
@@ -756,10 +749,8 @@ hero::~hero()
     {
         delete perks;
     }
-    
-    villagers.clear();
+
     item_have.clear();
     perk_have.clear();
     loc = nullptr;
-    
 }

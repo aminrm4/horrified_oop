@@ -4,7 +4,9 @@
 #include "item.hpp"
 #include <algorithm>
 #include <random>
-void remove_villager(programm &obj, villager *v);
+int random_number(int min, int max);
+
+    void remove_villager(programm &obj, villager *v);
 
 int monster_card::get_item_count()
 {
@@ -33,7 +35,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                                      { return a.size() < b.size(); });
 
     if (routes.size() != 0)
-        monsters->move_to_place(route, move,bug);
+        monsters->move_to_place(route, move, bug);
     else
     {
         cerr << "error in monster strike when finding min move to place \n";
@@ -45,7 +47,6 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
     for (int i = 0; i < dice_attack && !monsters->get_did_attack(); i++)
     {
         int rand = distib(gen);
-        cout << rand << endl;
         if (rand == 1) // power dice aval
         {
             vector<int> s;
@@ -53,7 +54,6 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
         }
 
         rand = distib(gen);
-        cout << rand << endl;
 
         if (rand == 3) // power dice 2
         {
@@ -62,7 +62,6 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
         }
 
         rand = distib(gen);
-        cout << rand << endl;
 
         if (rand == 5) // attack dice
         {
@@ -139,4 +138,15 @@ int monster_card::get_dice_play()
 int monster_card::get_move_count()
 {
     return move_left;
+}
+void monster_card::item_handler(programm &help_object)
+{
+    for (int i = 0; i < item_count; i++)
+    {
+
+        int random = random_number(0, help_object.list_of_items.size() - 1);
+        help_object.list_of_items.at(random)->get_loc()->set_item_list(help_object.list_of_items.at(random)); // here has a problem
+        delete help_object.list_of_items[random];
+        help_object.list_of_items.erase(help_object.list_of_items.begin() + random);
+    }
 }
