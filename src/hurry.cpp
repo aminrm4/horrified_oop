@@ -41,7 +41,7 @@ void hurry::play(programm &help_obj1)
         {
             if (maper == new_loc)
             {
-                her->move(help_obj1.list_of_location[new_loc], help_obj1, her->get_villagers());
+                her->move(help_obj1.list_of_location[new_loc], help_obj1);
                 cout <<"you moved succesfully" << endl;
             }
         }
@@ -70,7 +70,7 @@ void hurry::play(programm &help_obj1)
         {
             if (maper == new_loc)
             {
-                her->move(help_obj1.list_of_location[new_loc], help_obj1, her->get_villagers());
+                her->move(help_obj1.list_of_location[new_loc], help_obj1);
                 cout << " you moved succesfully" << endl;
             }
         }

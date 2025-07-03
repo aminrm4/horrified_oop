@@ -314,6 +314,7 @@ programm::programm()
   hero_list.push_back(new Archaeologist(1, list_of_location[12], list_of_perks));
   hero_list[0]->get_perks().push_back(new break_of_down());
   hero_list[0]->get_perks().push_back(new overstock());
+list_of_location[10]->set_villager(new villager("kir to reza",list_of_location[3],list_of_location[10],*this));
 
   monster_list.push_back(new Drakula(4, true, 1, list_of_location[0]));
   monster_list.push_back(new invisible_man(5, false, 6, list_of_location[14]));
@@ -1192,7 +1193,7 @@ void programm::run()
                   auto iterat = find(locations.begin(), locations.end(), secend_enter);
                   place_go = iterat - locations.begin();
                 }
-                hero->move(list_of_location[place_go], *this, list_of_location[place_go]->get_villager_list());
+                hero->move(list_of_location[place_go], *this);
                 hero->set_action(hero->get_action() - 1);
                 cin.get();
                 clearScreen();
@@ -1416,7 +1417,7 @@ void programm::run()
                   auto iterat = find(locations.begin(), locations.end(), secend_enter);
                   place_go = iterat - locations.begin();
                 }
-                hero->move(list_of_location[place_go], *this, list_of_location[place_go]->get_villager_list());
+                hero->move(list_of_location[place_go], *this);
                 hero->set_action(hero->get_action() - 1);
                 cin.get();
                 clearScreen();
