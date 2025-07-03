@@ -21,24 +21,22 @@ void hero::move(location *loc, programm &bug, const vector<villager *> &villager
 {
     char status = 'p';
 
-    if(villagers.size() != 0)
+    if (villagers.size() != 0)
     {
         cout << "Do you want to move villagers with you ? \n [Y]es \n [N]o \n Enter a character \n";
         cin >> status;
         status = tolower(status);
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
     }
-    if(villagers.size() == 0)
-    status = 'n';
+    if (villagers.size() == 0)
+        status = 'n';
     try
     {
 
-        
         if (status != 'y' && status != 'n')
             throw logic_error("invalid Character \n");
 
-        if (status == 'y' )
+        if (status == 'y')
         {
             for (auto v : villagers)
             {
@@ -470,7 +468,7 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                                 if (typeid(*monsters[i]).name() == typeid(Drakula).name())
                                 {
                                     remove_monster(bug, monsters[i]);
-                                    if(bug.monster_list.size() == 0)
+                                    if (bug.monster_list.size() == 0)
                                     {
                                         cout << "Heros succesfuly killed all the monsters \n";
                                         cin.get();
@@ -551,7 +549,7 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                                 if (typeid(*monsters[i]).name() == typeid(Drakula).name())
                                 {
                                     remove_monster(bug, monsters[i]);
-                                    if(bug.monster_list.size() == 0)
+                                    if (bug.monster_list.size() == 0)
                                     {
                                         cout << "Heros succesfuly killed all the monsters \n";
                                         cin.get();
@@ -728,24 +726,21 @@ void hero::use_perk(programm &object1)
     {
         cout << p->get_name() << " ";
     }
-
+    cout << endl;
     cout << "wich perk want you use enter belwo : " << endl;
     string temp;
     cin >> temp;
     for (int i = 0; i < perk_have.size(); i++)
     {
-        if (typeid(perk_have[i]).name()==typeid(late_into_night).name())
-        {
-            this->set_action(this->get_action()+2);
-            continue;
-        }
-        
-
 
         if (perk_have[i]->get_name() == temp)
         {
-          
-           
+
+            if (typeid(*perk_have[i]).name() == typeid(late_into_night).name())
+            {
+                this->set_action(this->get_action() + 2);
+            }
+            cout << this->get_action() << endl;
             perk_have[i]->play(object1);
             delete perk_have[i];
             this->perk_have.erase(perk_have.begin() + i);
@@ -762,10 +757,9 @@ hero::~hero()
     {
         delete perks;
     }
-    
+
     villagers.clear();
     item_have.clear();
     perk_have.clear();
     loc = nullptr;
-    
 }

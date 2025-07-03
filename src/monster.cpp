@@ -17,6 +17,7 @@ void monster::move_to_place(std::vector<int> &route, int number_route, programm 
         if (typeid(*this).name() == typeid(Drakula).name() && route.size() > 1)
         {
             bug.set_night_terror(bug.get_night_terror() + 1);
+            
         }
     }
     if (route.size() == 1)

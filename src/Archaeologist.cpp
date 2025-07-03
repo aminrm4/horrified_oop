@@ -60,5 +60,5 @@ Archaeologist::Archaeologist(int actions, location *starting_loc, std::vector<pe
         throw logic_error("invalid actions \n");
     action = actions;
     swap(loc, starting_loc);
-    name_of_hero = "Archaeologist";
+    name_of_hero = "archaeologist";
 }

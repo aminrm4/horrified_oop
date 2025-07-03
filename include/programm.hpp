@@ -54,7 +54,8 @@ public:
   string show_all_villager(const vector<villager *> &, LocationInfo &);
   string show_all_hero(const vector<hero *> &, LocationInfo &);
   string show_all_mosnter(const vector<monster *> &, LocationInfo &);
-
+  bool is_node_connected(int her,int node); 
+   
   void clearScreen();
   ~programm();
   template <typename T>
