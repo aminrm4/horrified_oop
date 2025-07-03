@@ -1327,10 +1327,10 @@ void programm::run()
         break;
       }
     }
-    // for (auto mons1 : monster_list)
-    // {
-    //   mons1->set_did_attack(true);
-    // }
+     for (auto mons1 : monster_list)
+     {
+       mons1->set_did_attack(false);
+     }
     for (auto hero : hero_list)
     {
       if (typeid(*hero).name() == typeid(Mayor).name())
@@ -1544,9 +1544,7 @@ void programm::run()
         monster_card_list[rand]->event(my_map, list_of_location, *this);
         monster_card_list[rand]->monster_strike(*this, monster_list);
         delete monster_card_list[rand];
-        monster_card_list.erase(monster_card_list.begin() + rand);
-        cout << "no fuckinb delete" << endl;
-
+        monster_card_list.erase(monster_card_list.begin() + rand);  
         if (monster_card_list.empty())
         {
           cout << "you lose the game " << endl;
@@ -1555,10 +1553,10 @@ void programm::run()
         break;
       }
     }
-    // for (auto mons1 : monster_list)
-    // // {
-    // //   mons1->set_did_attack(true);
-    // // }
+     for (auto mons1 : monster_list)
+     {
+       mons1->set_did_attack(false);
+     }
     for (auto hero : hero_list)
     {
       if (typeid(*hero).name() == typeid(Mayor).name())
