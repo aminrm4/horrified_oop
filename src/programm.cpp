@@ -676,43 +676,61 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
 
   std::string map_ascii = std::format(map_template, terror_text);
   map<string, LocationInfo> location_data = {
-      {"0 ) Hospital", {show_all_item(list_of_location[0]->get_item_list(), info), show_all_mosnter(list_of_location[0]->get_monster_list(), info), show_all_villager(list_of_location[0]->get_villager_list(), info), show_all_hero(list_of_location[0]->get_hero_list(), info)}},
+      {"0 ) Hospital", {show_all_item(list_of_location[0]->get_item_list(), info), show_all_mosnter(list_of_location[0]->get_monster_list(), info), show_all_villager(list_of_location[0]->get_villager_list(), info), show_all_hero(list_of_location[0]->get_hero_list(), info), to_string(list_of_location[0]->get_coffin_exist())
 
-      {"1 ) grave_yard", {show_all_item(list_of_location[1]->get_item_list(), info), show_all_mosnter(list_of_location[1]->get_monster_list(), info), show_all_villager(list_of_location[1]->get_villager_list(), info), show_all_hero(list_of_location[1]->get_hero_list(), info)}},
+                       }},
+
+      {"1 ) grave_yard", {show_all_item(list_of_location[1]->get_item_list(), info), show_all_mosnter(list_of_location[1]->get_monster_list(), info), show_all_villager(list_of_location[1]->get_villager_list(), info), show_all_hero(list_of_location[1]->get_hero_list(), info), to_string(list_of_location[1]->get_coffin_exist())
+
+                         }},
 
       {"2 ) church",
        {show_all_item(list_of_location[2]->get_item_list(), info),
         show_all_mosnter(list_of_location[2]->get_monster_list(), info),
         show_all_villager(list_of_location[2]->get_villager_list(), info),
-        show_all_hero(list_of_location[2]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[2]->get_hero_list(), info),
+        to_string(list_of_location[2]->get_coffin_exist())}},
 
       {"3 ) institute",
        {show_all_item(list_of_location[3]->get_item_list(), info),
         show_all_mosnter(list_of_location[3]->get_monster_list(), info),
         show_all_villager(list_of_location[3]->get_villager_list(), info),
-        show_all_hero(list_of_location[3]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[3]->get_hero_list(), info),
+        to_string(list_of_location[3]->get_coffin_exist())
+
+       }},
 
       {"4 ) Lab",
        {show_all_item(list_of_location[4]->get_item_list(), info),
         show_all_mosnter(list_of_location[4]->get_monster_list(), info),
         show_all_villager(list_of_location[4]->get_villager_list(), info),
-        show_all_hero(list_of_location[4]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[4]->get_hero_list(), info),
+        to_string(list_of_location[4]->get_coffin_exist())
+
+       }},
       {"5 ) shop",
        {show_all_item(list_of_location[5]->get_item_list(), info),
         show_all_mosnter(list_of_location[5]->get_monster_list(), info),
         show_all_villager(list_of_location[5]->get_villager_list(), info),
-        show_all_hero(list_of_location[5]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[5]->get_hero_list(), info),
+        to_string(list_of_location[5]->get_coffin_exist())
+
+       }},
 
       {"6 ) museum",
        {show_all_item(list_of_location[6]->get_item_list(), info),
         show_all_mosnter(list_of_location[6]->get_monster_list(), info),
         show_all_villager(list_of_location[6]->get_villager_list(), info),
-        show_all_hero(list_of_location[6]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[6]->get_hero_list(), info),
+        to_string(list_of_location[6]->get_coffin_exist())
+
+       }},
       {"7 ) cryptt",
        {show_all_item(list_of_location[7]->get_item_list(), info),
         show_all_mosnter(list_of_location[7]->get_monster_list(), info),
         show_all_villager(list_of_location[7]->get_villager_list(), info),
-        show_all_hero(list_of_location[7]->get_hero_list(), info)
+        show_all_hero(list_of_location[7]->get_hero_list(), info),
+        to_string(list_of_location[7]->get_coffin_exist())
 
        }},
 
@@ -720,48 +738,73 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
        {show_all_item(list_of_location[8]->get_item_list(), info),
         show_all_mosnter(list_of_location[8]->get_monster_list(), info),
         show_all_villager(list_of_location[8]->get_villager_list(), info),
-        show_all_hero(list_of_location[8]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[8]->get_hero_list(), info),
+        to_string(list_of_location[8]->get_coffin_exist())
+
+       }},
 
       {"9 ) Mansion",
        {show_all_item(list_of_location[9]->get_item_list(), info),
         show_all_mosnter(list_of_location[9]->get_monster_list(), info),
         show_all_villager(list_of_location[9]->get_villager_list(), info),
-        show_all_hero(list_of_location[9]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[9]->get_hero_list(), info),
+        to_string(list_of_location[9]->get_coffin_exist())
+
+       }},
       {"10 ) theatre",
        {show_all_item(list_of_location[10]->get_item_list(), info),
         show_all_mosnter(list_of_location[10]->get_monster_list(), info),
         show_all_villager(list_of_location[10]->get_villager_list(), info),
-        show_all_hero(list_of_location[10]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[10]->get_hero_list(), info),
+        to_string(list_of_location[10]->get_coffin_exist())
+
+       }},
       {"11 ) tower",
        {show_all_item(list_of_location[11]->get_item_list(), info),
         show_all_mosnter(list_of_location[11]->get_monster_list(), info),
         show_all_villager(list_of_location[11]->get_villager_list(), info),
-        show_all_hero(list_of_location[11]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[11]->get_hero_list(), info),
+        to_string(list_of_location[11]->get_coffin_exist())
+
+       }},
       {"12 ) docks",
        {show_all_item(list_of_location[12]->get_item_list(), info),
         show_all_mosnter(list_of_location[12]->get_monster_list(), info),
         show_all_villager(list_of_location[12]->get_villager_list(), info),
-        show_all_hero(list_of_location[12]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[12]->get_hero_list(), info),
+        to_string(list_of_location[12]->get_coffin_exist())
+
+       }},
       {"13 ) inn",
        {show_all_item(list_of_location[13]->get_item_list(), info),
         show_all_mosnter(list_of_location[13]->get_monster_list(), info),
         show_all_villager(list_of_location[13]->get_villager_list(), info),
-        show_all_hero(list_of_location[13]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[13]->get_hero_list(), info),
+        to_string(list_of_location[13]->get_coffin_exist())
+
+       }},
       {"14 ) precinct",
        {show_all_item(list_of_location[14]->get_item_list(), info),
         show_all_mosnter(list_of_location[14]->get_monster_list(), info),
         show_all_villager(list_of_location[14]->get_villager_list(), info),
-        show_all_hero(list_of_location[14]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[14]->get_hero_list(), info),
+        to_string(list_of_location[14]->get_coffin_exist())
+
+       }},
       {"15 ) barn",
        {show_all_item(list_of_location[15]->get_item_list(), info),
         show_all_mosnter(list_of_location[15]->get_monster_list(), info),
         show_all_villager(list_of_location[15]->get_villager_list(), info),
-        show_all_hero(list_of_location[15]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[15]->get_hero_list(), info),
+        to_string(list_of_location[15]->get_coffin_exist())
+
+       }},
       {"16 ) dungeon",
        {show_all_item(list_of_location[16]->get_item_list(), info),
         show_all_mosnter(list_of_location[16]->get_monster_list(), info),
         show_all_villager(list_of_location[16]->get_villager_list(), info),
-        show_all_hero(list_of_location[16]->get_hero_list(), info)
+        show_all_hero(list_of_location[16]->get_hero_list(), info),
+        to_string(list_of_location[16]->get_coffin_exist())
 
        }},
 
@@ -769,13 +812,19 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
        {show_all_item(list_of_location[17]->get_item_list(), info),
         show_all_mosnter(list_of_location[17]->get_monster_list(), info),
         show_all_villager(list_of_location[17]->get_villager_list(), info),
-        show_all_hero(list_of_location[17]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[17]->get_hero_list(), info),
+        to_string(list_of_location[17]->get_coffin_exist())
+
+       }},
 
       {"18 ) camp",
        {show_all_item(list_of_location[18]->get_item_list(), info),
         show_all_mosnter(list_of_location[18]->get_monster_list(), info),
         show_all_villager(list_of_location[18]->get_villager_list(), info),
-        show_all_hero(list_of_location[18]->get_hero_list(), info)}}};
+        show_all_hero(list_of_location[18]->get_hero_list(), info),
+        to_string(list_of_location[18]->get_coffin_exist())
+
+       }}};
   map<string, string> action_help = {
       {"Move", "Move to another location."},
       {"Guide", "move the villager one step to the hero,or move a villager to the neighbor house base on the hero location"},
@@ -844,6 +893,7 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
         text("Items: " + info.items),
         text("Monsters: " + info.monsters),
         text("Villagers: " + info.villagers),
+        text("coffin status : "+ info.coffin),
         text("heros :" + info.hero)
       })));
     }
@@ -1128,6 +1178,11 @@ void programm::run()
               cin.get();
               clearScreen();
               terminal_handler(data_updater, first_enter, secend_enter);
+              if (hero->get_action() <= 0)
+              {
+                hero_phase = false;
+                cout << "hero phase is over get ready for monster phase" << endl;
+              }
             }
 
             catch (exception &e)
@@ -1151,6 +1206,11 @@ void programm::run()
               cin.get();
               clearScreen();
               terminal_handler(data_updater, first_enter, secend_enter);
+              if (hero->get_action() <= 0)
+              {
+                hero_phase = false;
+                cout << "hero phase is over get ready for monster phase" << endl;
+              }
             }
             catch (exception &e)
             {
@@ -1173,6 +1233,11 @@ void programm::run()
               cin.get();
               clearScreen();
               terminal_handler(data_updater, first_enter, secend_enter);
+              if (hero->get_action() <= 0)
+              {
+                hero_phase = false;
+                cout << "hero phase is over get ready for monster phase" << endl;
+              }
             }
             catch (exception &e)
             {
@@ -1194,6 +1259,11 @@ void programm::run()
               cin.get();
               clearScreen();
               terminal_handler(data_updater, first_enter, secend_enter);
+              if (hero->get_action() <= 0)
+              {
+                hero_phase = false;
+                cout << "hero phase is over get ready for monster phase" << endl;
+              }
             }
             catch (exception &e)
             {
@@ -1216,6 +1286,11 @@ void programm::run()
               cin.get();
               clearScreen();
               terminal_handler(data_updater, first_enter, secend_enter);
+              if (hero->get_action() <= 0)
+              {
+                hero_phase = false;
+                cout << "hero phase is over get ready for monster phase" << endl;
+              }
             }
             catch (exception &e)
             {
@@ -1238,6 +1313,11 @@ void programm::run()
               cin.get();
               clearScreen();
               terminal_handler(data_updater, first_enter, secend_enter);
+              if (hero->get_action() <= 0)
+              {
+                hero_phase = false;
+                cout << "hero phase is over get ready for monster phase" << endl;
+              }
             }
             catch (exception &e)
             {
@@ -1258,6 +1338,11 @@ void programm::run()
               cin.get();
               clearScreen();
               terminal_handler(data_updater, first_enter, secend_enter);
+              if (hero->get_action() <= 0)
+              {
+                hero_phase = false;
+                cout << "hero phase is over get ready for monster phase" << endl;
+              }
             }
             catch (exception &e)
             {
@@ -1382,6 +1467,11 @@ void programm::run()
                 cin.get();
                 clearScreen();
                 terminal_handler(data_updater, first_enter, secend_enter);
+                if (hero->get_action() <= 0)
+                {
+                  hero_phase = false;
+                  cout << "hero phase is over get ready for monster phase" << endl;
+                }
               }
 
               catch (exception &e)
@@ -1405,6 +1495,11 @@ void programm::run()
                 cin.get();
                 clearScreen();
                 terminal_handler(data_updater, first_enter, secend_enter);
+                if (hero->get_action() <= 0)
+                {
+                  hero_phase = false;
+                  cout << "hero phase is over get ready for monster phase" << endl;
+                }
               }
               catch (exception &e)
               {
@@ -1427,6 +1522,11 @@ void programm::run()
                 cin.get();
                 clearScreen();
                 terminal_handler(data_updater, first_enter, secend_enter);
+                if (hero->get_action() <= 0)
+                {
+                  hero_phase = false;
+                  cout << "hero phase is over get ready for monster phase" << endl;
+                }
               }
               catch (exception &e)
               {
@@ -1449,6 +1549,11 @@ void programm::run()
                 cin.get();
                 clearScreen();
                 terminal_handler(data_updater, first_enter, secend_enter);
+                if (hero->get_action() <= 0)
+                {
+                  hero_phase = false;
+                  cout << "hero phase is over get ready for monster phase" << endl;
+                }
               }
               catch (exception &e)
               {
@@ -1471,6 +1576,11 @@ void programm::run()
                 cin.get();
                 clearScreen();
                 terminal_handler(data_updater, first_enter, secend_enter);
+                if (hero->get_action() <= 0)
+                {
+                  hero_phase = false;
+                  cout << "hero phase is over get ready for monster phase" << endl;
+                }
               }
               catch (exception &e)
               {
@@ -1493,6 +1603,11 @@ void programm::run()
                 cin.get();
                 clearScreen();
                 terminal_handler(data_updater, first_enter, secend_enter);
+                if (hero->get_action() <= 0)
+                {
+                  hero_phase = false;
+                  cout << "hero phase is over get ready for monster phase" << endl;
+                }
               }
               catch (exception &e)
               {
@@ -1514,6 +1629,11 @@ void programm::run()
                 cin.get();
                 clearScreen();
                 terminal_handler(data_updater, first_enter, secend_enter);
+                if (hero->get_action() <= 0)
+                {
+                  hero_phase = false;
+                  cout << "hero phase is over get ready for monster phase" << endl;
+                }
               }
               catch (exception &e)
               {

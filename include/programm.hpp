@@ -25,6 +25,7 @@ struct LocationInfo
   std::string monsters;
   std::string villagers;
   std::string hero;
+  std::string coffin;
 };
 
 class programm
