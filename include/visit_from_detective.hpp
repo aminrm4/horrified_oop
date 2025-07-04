@@ -7,15 +7,13 @@
 #include <bits/stdc++.h>
 #include "perk.hpp"
 class programm;
-class visit_from_detective:public perk
+class visit_from_detective : public perk
 {
 public:
     void play(programm &help_obj1) override final;
 
     visit_from_detective();
-    ~visit_from_detective()=default;
-
+    ~visit_from_detective() = default;
 };
-
 
 #endif

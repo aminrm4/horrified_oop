@@ -25,13 +25,13 @@ void Archaeologist::special_action(vector<vector<int>> &map, const vector<locati
                 if (locations->get_loc_relation() == node)
                 {
                     vector<item *> items(locations->get_item_list());
-                       
+
                     if (items.empty())
                     {
-                        cout<<"ohhhhh my bad there was nothing"<<endl;
+                        cout << "ohhhhh my bad there was nothing" << endl;
                         return;
                     }
-                    
+
                     cout << "you picked these items :\n";
                     for (auto it : items)
                         cout << it->get_name() << endl;

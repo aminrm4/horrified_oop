@@ -3,7 +3,7 @@
 using namespace std;
 void remove_monster(programm &obj, monster *m);
 
-void form_of_the_bat::event(std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a)
+void form_of_the_bat::event(std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
 {
 
     for (auto mo : a.monster_list)
@@ -41,9 +41,9 @@ int form_of_the_bat::get_item()
 {
     return item_count;
 }
-    form_of_the_bat::form_of_the_bat(int dic,int my_item,int mover)
-    {
-        dice_play=dic;
-        item_count=my_item;
-        move_left=mover;
-    }
+form_of_the_bat::form_of_the_bat(int dic, int my_item, int mover)
+{
+    dice_play = dic;
+    item_count = my_item;
+    move_left = mover;
+}

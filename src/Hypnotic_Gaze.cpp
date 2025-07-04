@@ -38,9 +38,8 @@ void Hypnotic_Gaze::event(std::vector<std::vector<int>> &map, std::vector<locati
     if (routes.size() != 0)
         for (auto heros : bug.hero_list)
         {
-            
-                heros->move(bug.list_of_location[route[1]],bug);
-            
+
+            heros->move(bug.list_of_location[route[1]], bug);
         }
 
     else

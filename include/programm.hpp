@@ -9,13 +9,13 @@
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/screen_interactive.hpp>
 #include <ftxui/dom/elements.hpp>
-#include"visit_from_detective.hpp"
-#include"repel.hpp"
-#include"hurry.hpp"
-#include"late_into_night.hpp"
-#include"break_of_down.hpp"
-#include"overstock.hpp"
-#include<Color.hpp>
+#include "visit_from_detective.hpp"
+#include "repel.hpp"
+#include "hurry.hpp"
+#include "late_into_night.hpp"
+#include "break_of_down.hpp"
+#include "overstock.hpp"
+#include <Color.hpp>
 using namespace std;
 class monster_card;
 class villager;
@@ -39,6 +39,7 @@ public:
   std::vector<monster *> monster_list;
   std::vector<monster_card *> monster_card_list;
   vector<hero *> hero_list;
+
 public:
   perk *set_award(int); // make the data member private and have to add this function
   void next_frenzy();
@@ -54,10 +55,10 @@ public:
   string show_all_villager(const vector<villager *> &, LocationInfo &);
   string show_all_hero(const vector<hero *> &, LocationInfo &);
   string show_all_mosnter(const vector<monster *> &, LocationInfo &);
-  bool is_node_connected(int her,int node); 
+  bool is_node_connected(int her, int node);
   string show_all_item_of_hero(const vector<item *>);
   void clearScreen();
   ~programm();
   template <typename T>
-string show_hero_deatail(T vec);
+  string show_hero_deatail(T vec);
 };

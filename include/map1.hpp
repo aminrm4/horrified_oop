@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 enum class map1 : int
 {
 
@@ -12,7 +12,7 @@ enum class map1 : int
     shop = 5,
     museum = 6,
     cryptt = 7,
-    abbey=8,
+    abbey = 8,
     mansion = 9,
     theatre = 10,
     tower = 11,

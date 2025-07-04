@@ -8,6 +8,7 @@
 #include <iterator>
 #include "location.hpp"
 #include "Color.hpp"
+#include"terminal_color.hpp"
 void remove_hero(programm &, hero *);
 void remove_villager(programm &, villager *);
 void remove_monster(programm &, monster *);
@@ -17,7 +18,7 @@ void message_drakula(bool alive);
 
 using namespace std;
 
-void hero::move(location *loc, programm &bug) // used to delete the initializer cause of the pass by refrence
+void hero::move(location *loc, programm &bug)
 {
     try
     {
@@ -74,7 +75,7 @@ void hero::guide(vector<vector<int>> &map, programm &p)
                     {
                         vill->set_current_location(p.list_of_location[no]);
                         remove_villager(p, vill);
-                        p.list_of_location[no]->set_villager(vill); // حونه قهرمان این محلی روی شما اومده  .. این: محلی که در خانه قبلی بوده))کاربر زده(())
+                        p.list_of_location[no]->set_villager(vill);
                         cout << vill->get_name() << " moved away" << endl;
                         if (vill->get_currnet_location() == vill->get_safe_location())
                         {
@@ -113,7 +114,7 @@ void hero::guide(vector<vector<int>> &map, programm &p)
                 if (name1 == villl->get_name())
                 {
                     remove_villager(p, villl);
-                    p.list_of_location[thisNumLoc]->set_villager(villl); // حونه قهرمان این محلی روی شما اومده  .. این: محلی که در خانه قبلی بوده))کاربر زده(())
+                    p.list_of_location[thisNumLoc]->set_villager(villl);
                     villl->set_current_location(p.list_of_location[thisNumLoc]);
                     cout << villl->get_name() << " moved to " << this->get_hero_name() << endl;
                     if (villl->get_currnet_location() == villl->get_safe_location())
@@ -200,7 +201,7 @@ void hero::advance(vector<monster *> &monsters, programm &bug)
                                     }
                                     delete item_have[item];
                                     item_have.erase(item_have.begin() + item);
-                                    break; // ← بسیار مهم!
+                                    break;
                                 }
                             }
                         }
@@ -232,7 +233,7 @@ void hero::advance(vector<monster *> &monsters, programm &bug)
                 {
                     is_drakula_alive = true;
 
-                    cout << "you need do destroy" << mon->get_hidden_item() << "more coffin to defeat Drakula" << endl;
+                    cout << "you need do destroy " << mon->get_hidden_item() << " more coffin to defeat Drakula" << endl;
                     if (this->get_loc()->get_loc_relation() == 1 || this->get_loc()->get_loc_relation() == 16 || this->get_loc()->get_loc_relation() == 17 || this->get_loc()->get_loc_relation() == 7)
                     {
                         if (bug.list_of_location[this->get_loc()->get_loc_relation()]->get_coffin_exist() == false)
@@ -240,8 +241,25 @@ void hero::advance(vector<monster *> &monsters, programm &bug)
                             cout << "coffin has been destroyed by who? find him/her" << endl;
                             return;
                         }
+                        cout<<"those are your item "<<endl;
+                        cin.get();
+                        for (auto ite : this->get_items())
+                        {
+                            if (ite->get_Color() == rgb::Color::Red)
+                            {
+                                cout << " the item name is :" << ite->get_name() << " item color is"<<RED<< "red :" << RESET<< " item power is : " << to_string(ite->get_power()) << endl;
+                            }
+                            if (ite->get_Color() == rgb::Color::Yellow)
+                            {
+                                cout << " the item name is :" << ite->get_name() << " item color is " << YELLOW<<"yellow :"<<RESET << " item power is : " << to_string(ite->get_power()) << endl;
+                            }
+                            if (ite->get_Color() == rgb::Color::Blue)
+                            {
+                                cout << " the item name is :" << ite->get_name() << " item color is " << BLUE<< " blue : "<<RESET << " item power is : " << to_string(ite->get_power()) << endl;
+                            }
+                        }
 
-                        cout << "who many item want  to drop ? " << endl;
+                        cout << "how many item want  to drop ? " << endl;
                         int number;
                         int powe_counter = 0;
                         cin >> number;
@@ -282,6 +300,11 @@ void hero::advance(vector<monster *> &monsters, programm &bug)
                             mon->get_hidden_item()--;
                             return;
                         }
+                        else
+                        {
+                            cout << "the power is under 6 " << endl;
+                            return;
+                        }
                     }
                     else
                     {
@@ -295,99 +318,6 @@ void hero::advance(vector<monster *> &monsters, programm &bug)
                     return;
                 }
             }
-
-            /*
-            {
-                int temp = this->get_loc()->get_loc_relation();
-
-                if ((temp == 1 || temp == 16 || temp == 17 || temp == 7))
-                {
-                    if (!this->get_loc()->get_coffin_exist())
-                    {
-                        cout << "here is a coffin if you want to destroy it u must remove some item from your inventory\n";
-                        cout << "fo destroying a coffin all the items you remove from your inventory must be yellow and sum of they power must be 6 or higher\n";
-                        cout << "Do you want to destroy it ? [Y]es  , [N]o  ";
-                        try
-                        {
-                            char status;
-                            cin >> status;
-                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                            status = tolower(status);
-                            if (status == 'y')
-                            {
-                                cout << "enter how many item you want to put down";
-                                vector<item *> items = this->item_have;
-                                try
-                                {
-                                    int item_count;
-                                    cin >> item_count;
-
-                                    if (item_count > item_have.size())
-                                        throw logic_error("you dont have this much item \n");
-
-                                    int sum_power(0);
-                                    cout << "enter the index of each item , each item must be yellow\n";
-                                    vector<int> indexes;
-                                    for (int i = 0; i < item_count; i++)
-                                    {
-                                        int index;
-                                        cin >> index;
-                                        indexes.push_back(index);
-                                        if (item_have[index]->get_Color() == rgb::Color::Yellow)
-                                            sum_power += item_have[index]->get_power();
-                                        else
-                                        {
-                                            throw logic_error("the item you selected must be yellow \n");
-                                        }
-                                    }
-                                    sort(indexes.begin(), indexes.end(), greater());
-                                    if (sum_power >= 6)
-                                    {
-                                        for (auto items : indexes)
-                                        {
-                                            this->item_have.erase(item_have.begin() + items);
-                                        }
-                                        cout << "you destroyed one of drakula coffins \n";
-                                        this->get_loc()->set_coffin_exist(false);
-                                        D.set_loc(D.get_loc() - 1);
-                                    }
-                                    else
-                                    {
-                                        throw logic_error("sum of your item power must be 6 or higher\n");
-                                    }
-                                }
-                                catch (const logic_error &e)
-                                {
-                                    std::cerr << e.what() << '\n';
-                                    advance(D, I);
-                                }
-
-                                return;
-                            }
-                            if (status == 'n')
-                            {
-                                return;
-                            }
-
-                            throw logic_error("invalid character\n");
-                        }
-                        catch (const logic_error &e)
-                        {
-                            std::cerr << e.what() << '\n';
-                        }
-                    }
-                    else
-                    {
-                        cout << "here is not any coffin or it destroyed \n";
-                    }
-                }
-                else
-                {
-                    cout << "There is not any coffin here \n";
-                }
-                break;
-            }
-                */
         }
     }
 
@@ -405,103 +335,103 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
 {
     cout << "my lord wich monster gunna be kill" << endl;
     cout << "D [Drakula] / I [Invisible_man]" << endl;
-    // cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     char detect;
     cin >> detect;
     detect = tolower(detect);
     if (detect == 'd')
     {
-
         for (auto m : monsters)
         {
-            if (m->get_loc() == this->get_loc())
+            if (m->get_loc() == this->get_loc() && typeid(*m).name() == typeid(Drakula).name())
             {
-                if (typeid(*m).name() == typeid(Drakula).name())
+
+                if (m->get_hidden_item() <= 0)
                 {
-                    if (m->get_hidden_item() <= 0)
+                    cout << "for killing drakulla you need to put dowm yellow card wich them have overal  power of 6 " << endl;
+                    cin.get();
+                    cout << "who many item want  to drop ? " << endl;
+                    int number;
+                    int powe_counter = 0;
+                    cin >> number;
+                    vector<item *> temp;
+                    for (int l = 0; l < number; l++)
                     {
-                        cout << "for killing drakulla you need to put dowm yellow card wich them have overal  power of 6 " << endl;
-                        cin.get();
-                        cout << "who many item want  to drop ? " << endl;
-                        int number;
-                        int powe_counter = 0;
-                        cin >> number;
-                        vector<item *> temp;
-                        for (int l = 0; l < number; l++)
-                        {
-                            cout << " enter the name of the item " << endl;
+                        cout << " enter the name of the item " << endl;
 
-                            string namer;
-                            cin >> namer;
-                            for (auto item : this->item_have)
+                        string namer;
+                        cin >> namer;
+                        for (auto item : this->item_have)
+                        {
+                            if (item->get_name() == namer && item->get_Color() == rgb::Color::Yellow)
                             {
-                                if (item->get_name() == namer && item->get_Color() == rgb::Color::Yellow)
+                                temp.push_back(item);
+                                powe_counter += item->get_power();
+                            }
+                        }
+                    }
+                    if (powe_counter >= 6)
+                    {
+                        message_drakula(false);
+                        for (int p = item_have.size() - 1; p >= 0; --p)
+                        {
+                            for (int b = temp.size() - 1; b >= 0; --b)
+                            {
+                                if (item_have[p]->get_name() == temp[b]->get_name())
                                 {
-                                    temp.push_back(item);
-                                    powe_counter += item->get_power();
+                                    delete item_have[p];
+                                    item_have.erase(item_have.begin() + p);
+                                    temp.erase(temp.begin() + b);
+                                    break;
                                 }
                             }
                         }
-                        if (powe_counter >= 6)
+                        for (int i = 0; i < monsters.size(); i++)
                         {
-                            message_drakula(false);
-                            for (int p = item_have.size() - 1; p >= 0; --p)
+                            if (typeid(*monsters[i]).name() == typeid(Drakula).name())
                             {
-                                for (int b = temp.size() - 1; b >= 0; --b)
+                                remove_monster(bug, monsters[i]);
+                                if (bug.monster_list.size() == 0)
                                 {
-                                    if (item_have[p]->get_name() == temp[b]->get_name())
-                                    {
-                                        delete item_have[p];
-                                        item_have.erase(item_have.begin() + p);
-                                        temp.erase(temp.begin() + b);
-                                        break;
-                                    }
+                                    cout << "Heros succesfuly killed all the monsters \n";
+                                    cin.get();
+                                    bug.clearScreen();
+                                    cout << "Victory !\n";
+                                    exit(0);
                                 }
-                            }
-                            for (int i = 0; i < monsters.size(); i++)
-                            {
-                                if (typeid(*monsters[i]).name() == typeid(Drakula).name())
-                                {
-                                    remove_monster(bug, monsters[i]);
-                                    if (bug.monster_list.size() == 0)
-                                    {
-                                        cout << "Heros succesfuly killed all the monsters \n";
-                                        cin.get();
-                                        bug.clearScreen();
-                                        cout << "Victory !\n";
-                                        exit(0);
-                                    }
-                                    // monsters.erase(monsters.begin() + i);
-                                    bug.next_frenzy();
+                                bug.next_frenzy();
 
-                                    return;
-                                }
+                                return;
                             }
-                        }
-                        else
-                        {
-                            cout << " ohhhhhhhhhh! the power is low  you made Drakula happy  " << endl;
-                            message_drakula(true);
-                            return;
                         }
                     }
                     else
                     {
-                        cout << "Oh noo Drakula is still strong run Away before he capture you !!! \n";
+                        cout << " ohhhhhhhhhh! the power is low  you made Drakula happy  " << endl;
                         message_drakula(true);
                         return;
                     }
                 }
+                else
+                {
+                    cout << "Oh noo Drakula is still strong run Away before he capture you !!! \n";
+                    message_drakula(true);
+                    return;
+                }
             }
-            else
+            cerr << "There is no monster here \n";
+        }
+    }
+    if (detect == 'i')
+    {
+        for (auto m : monsters)
+        {
+            if (m->get_loc() == this->get_loc() && typeid(*m).name() == typeid(invisible_man).name())
             {
-
-                if (typeid(*m).name() == typeid(invisible_man).name())
                 {
                     if (m->get_hidden_item() <= 0)
                     {
-                        cout << "for killing Invisible_man you need to put dowm Red card wich them have overal  power of 9 " << endl;
+                        cout << "for killing Invisible_man you need to put dowm Red card wichthem have overal  power of 9 " << endl;
                         cin.get();
                         cout << "who many item want  to drop ? " << endl;
                         int number;
@@ -542,7 +472,7 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
 
                             for (int i = 0; i < monsters.size(); i++)
                             {
-                                if (typeid(*monsters[i]).name() == typeid(Drakula).name())
+                                if (typeid(*monsters[i]).name() == typeid(invisible_man).name())
                                 {
                                     remove_monster(bug, monsters[i]);
                                     if (bug.monster_list.size() == 0)
@@ -553,9 +483,6 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                                         cout << "Victory !\n";
                                         exit(0);
                                     }
-                                    // monsters.erase(monsters.begin() + i);
-                                    bug.next_frenzy();
-
                                     return;
                                 }
                             }
@@ -576,11 +503,12 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                     }
                 }
             }
-        }
 
-        cerr << "There is no monster here \n";
+            cerr << "There is no monster here \n";
+        }
     }
 }
+
 void hero::pickup()
 {
 
@@ -618,7 +546,7 @@ void hero::set_item(vector<item *> items)
 {
     item_have = items;
 }
-vector<item *> &hero::get_items() // has been refreced
+vector<item *> &hero::get_items()
 {
     return item_have;
 }

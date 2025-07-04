@@ -2,10 +2,12 @@
 #include <iostream>
 namespace rgb
 {
-enum  class Color
-{
-    Red , Blue , Yellow
-};
+    enum class Color
+    {
+        Red,
+        Blue,
+        Yellow
+    };
 
-std::ostream& operator<<(std::ostream& output , rgb::Color color);
+    std::ostream &operator<<(std::ostream &output, rgb::Color color);
 }
