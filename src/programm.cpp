@@ -326,9 +326,6 @@ programm::programm()
 
   hero_list.push_back(new Mayor(5, list_of_location[10], list_of_perks));
   hero_list.push_back(new Archaeologist(4, list_of_location[12], list_of_perks));
-  hero_list[0]->get_perks().push_back(new break_of_down());
-  hero_list[0]->get_perks().push_back(new overstock());
-
   monster_list.push_back(new Drakula(4, true, 1, list_of_location[0]));
   monster_list.push_back(new invisible_man(5, false, 6, list_of_location[14]));
 
@@ -1281,7 +1278,6 @@ void programm::run()
             {
               hero->defeat(monster_list, *this);
               hero->set_action(hero->get_action() - 1);
-              cout << hero->get_action() << "kit" << endl;
               std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
               cin.get();
               clearScreen();
