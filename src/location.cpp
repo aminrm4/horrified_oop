@@ -49,7 +49,7 @@ bool location::get_coffin_exist() const
 {
     return coffin_exist;
 }
-vector<villager *> & location  ::get_villager_list()
+vector<villager *> &location ::get_villager_list()
 {
     return villager_list;
 }
@@ -136,7 +136,7 @@ void remove_villager(programm &obj, villager *v)
     }
 }
 
-void remove_item(programm &obj, item*v)
+void remove_item(programm &obj, item *v)
 {
     for (int i = 0; i < obj.list_of_location.size(); i++)
     {
@@ -159,8 +159,7 @@ location::~location()
     {
         delete villagers;
     }
-    
-    
+
     villager_list.clear();
     item_list.clear();
     hero_list.clear();

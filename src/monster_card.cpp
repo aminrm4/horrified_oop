@@ -6,7 +6,7 @@
 #include <random>
 int random_number(int min, int max);
 
-    void remove_villager(programm &obj, villager *v);
+void remove_villager(programm &obj, villager *v);
 
 int monster_card::get_item_count()
 {
@@ -49,24 +49,18 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
         int rand = distib(gen);
         if (rand == 1) // power dice aval
         {
+            cout << "dice rolled a power" << endl;
             vector<int> s;
             monsters->ability(bug);
         }
 
         rand = distib(gen);
-
-        if (rand == 3) // power dice 2
-        {
-            vector<int> s;
-            monsters->ability(bug);
-        }
-
-        rand = distib(gen);
-
-        if (rand == 5) // attack dice
+        if (rand == 5 || rand == 5) // attack dice
         {
             if (!monsters->get_loc()->get_hero_list().empty())
             {
+                cout << "dice rolled a attack" << endl;
+
                 cout << "oh no a monster want to attack you Do you want to Defend your self ? [Y]es , [N]o \n";
                 try
                 {
@@ -85,7 +79,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                         cin >> name;
                         for (int i = 0; i < monsters->get_loc()->get_hero_list()[0]->get_items().size(); i++)
                         {
-                            if (monsters->get_loc()->get_hero_list()[0]->get_items()[i]->get_name() == name) // here has a problem
+                            if (monsters->get_loc()->get_hero_list()[0]->get_items()[i]->get_name() == name)
                             {
                                 delete monsters->get_loc()->get_hero_list()[0]->get_items()[i];
                                 monsters->get_loc()->get_hero_list()[0]->get_items().erase(monsters->get_loc()->get_hero_list()[0]->get_items().begin(), monsters->get_loc()->get_hero_list()[0]->get_items().end());
@@ -145,8 +139,7 @@ void monster_card::item_handler(programm &help_object)
     {
 
         int random = random_number(0, help_object.list_of_items.size() - 1);
-        help_object.list_of_items.at(random)->get_loc()->set_item_list(help_object.list_of_items.at(random)); // here has a problem
-        delete help_object.list_of_items[random];
+        help_object.list_of_items.at(random)->get_loc()->set_item_list(help_object.list_of_items.at(random));
         help_object.list_of_items.erase(help_object.list_of_items.begin() + random);
     }
 }

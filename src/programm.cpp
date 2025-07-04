@@ -6,6 +6,8 @@ using namespace ftxui;
 #include "Archaeologist.hpp"
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/component/component_options.hpp>
+#include <ftxui/screen/color_info.hpp>
 #include <ftxui/dom/elements.hpp>
 #include <iostream>
 #include "Drakula.hpp"
@@ -26,8 +28,6 @@ using namespace ftxui;
 #include "Color.hpp"
 #include <stdexcept>
 #include <format>
-#include <ftxui/dom/elements.hpp>
-vector<string> locations = {"0 ) Hospital", "1 ) grave_yard", "2 ) church", "3 ) institute", "4 ) Lab", "5 ) shop", "6 ) museum", "7 ) cryptt", "8 ) abbey", "9 ) Mansion", "10 ) theatre", "11 ) tower", "12 ) docks", "13 ) inn", "14 ) precinct", "15 ) barn", "16 ) dungeon", "17 ) cave", "18 ) camp"};
 
 bool programm::is_node_connected(int her, int node)
 {
@@ -45,19 +45,41 @@ bool programm::is_node_connected(int her, int node)
 
 void input_validation(string sampel)
 {
-  for (unsigned char i : sampel)
+  try
   {
-    if (isdigit(i))
+    for (unsigned char i : sampel)
     {
-      throw invalid_argument("be bcareful in your input\n");
-    }
-    if (!isalpha(i))
-    {
-      throw invalid_argument("be bcareful in your input\n");
+      if (isdigit(i))
+      {
+        throw invalid_argument("be bcareful in your input\n");
+      }
+      if (!isalpha(i))
+      {
+        throw invalid_argument("be bcareful in your input\n");
+      }
     }
   }
+  catch (exception &e)
+  {
+    cerr << e.what() << endl;
+    exit(0);
+  }
 }
-
+void charecter_exist(string name)
+{
+  try
+  {
+    if (name != "mayor" && name != "archaeologist")
+    {
+      throw invalid_argument("charecter does not exist try again\n");
+    }
+  }
+  catch (exception &e)
+  {
+    cerr << e.what();
+    exit(0);
+  }
+}
 void to_lowercase(std::string &s)
 {
   for (char &c : s)
@@ -81,23 +103,6 @@ void programm::clearScreen()
 #else
   system("clear");
 #endif
-}
-
-set<int> programm::random_generator(int start, int end, int count)
-{
-  set<int> my_random;
-  srand(time(nullptr));
-  if (end - start + 1 < count)
-  {
-    throw logic_error("cant generate the random numbers \n");
-  }
-
-  while (count != my_random.size())
-  {
-    int random1 = start + rand() % (end - start + 1);
-    my_random.insert(random1);
-  }
-  return my_random;
 }
 
 programm::programm()
@@ -177,6 +182,15 @@ programm::programm()
 
   my_map[18].push_back(17);
   my_map[17].push_back(18);
+
+  my_map[18].push_back(14);
+  my_map[14].push_back(18);
+
+  my_map[18].push_back(13);
+  my_map[13].push_back(18);
+
+  my_map[13].push_back(14);
+  my_map[14].push_back(13);
 
   for (int i = 0; i < 19; ++i)
   {
@@ -314,7 +328,6 @@ programm::programm()
   hero_list.push_back(new Archaeologist(4, list_of_location[12], list_of_perks));
   hero_list[0]->get_perks().push_back(new break_of_down());
   hero_list[0]->get_perks().push_back(new overstock());
-list_of_location[10]->set_villager(new villager("kirtoreza",list_of_location[3],list_of_location[10],*this));
 
   monster_list.push_back(new Drakula(4, true, 1, list_of_location[0]));
   monster_list.push_back(new invisible_man(5, false, 6, list_of_location[14]));
@@ -339,20 +352,14 @@ list_of_location[10]->set_villager(new villager("kirtoreza",list_of_location[3],
   monster_card_list.push_back(new The_chthyologist(2, 3, 1));
   // monster_card_list.push_back(new Hypnotic_Gaze(2, 2, 1));
   // monster_card_list.push_back(new Hypnotic_Gaze(2, 2, 1));
-  // monster_card_list.push_back(new On_the_move(2, 3, 3));
-  // monster_card_list.push_back(new On_the_move(2, 3, 3));
-
-  // Item initialization and random placement
-  // Not rewritten in full to save space, but you would similarly use `new item(...)` and push_back pointer
-  // Then use list_of_items[random]->get_loc()->set_item_list(list_of_items[random])
-  // and erase like in your original
+  monster_card_list.push_back(new On_the_move(2, 3, 3));
+  monster_card_list.push_back(new On_the_move(2, 3, 3));
 
   for (int i = 0; i < 12; i++)
   {
-   
-    int random = random_number(0,list_of_items.size()-1);
-    list_of_items.at(random)->get_loc()->set_item_list(list_of_items.at(random)); // here has a problem
-    // delete list_of_items.at(random);
+
+    int random = random_number(0, list_of_items.size() - 1);
+    list_of_items.at(random)->get_loc()->set_item_list(list_of_items.at(random));
     list_of_items.erase(list_of_items.begin() + random);
   }
   for (auto i : monster_list)
@@ -511,7 +518,7 @@ string programm::show_all_item(const vector<item *> &show, LocationInfo &state)
   return state.items;
 }
 
-string programm::show_all_item_of_hero(const vector<item *>show)
+string programm::show_all_item_of_hero(const vector<item *> show)
 {
   string temp = "";
   map<string, int> same_element;
@@ -581,6 +588,7 @@ string programm::show_all_hero(const vector<hero *> &show, LocationInfo &state)
 
   for (auto i : show)
   {
+
     if (i != nullptr)
     {
 
@@ -620,106 +628,7 @@ string programm::show_all_mosnter(const vector<monster *> &show, LocationInfo &s
 
   return state.monsters;
 }
-/*
-string programm::show_hero_item(const vector<item *> &show, heroinfo &state)
-{
-  state.item_have = "";
-  unordered_map<string, int> same_element;
 
-  if (show.empty())
-    return state.item_have;
-
-  for (auto i : show)
-  {
-    if (i != nullptr)
-    {
-
-      same_element[i->get_name()]++;
-    }
-  }
-
-  for (const auto &i : same_element)
-  {
-    state.item_have = state.item_have + ' ' + (i.first + '(' + to_string(i.second) + ')');
-  }
-
-  return state.item_have;
-}
-
-string programm::show_hero_perk(const vector<perk *> &show, heroinfo &state)
-{
-  state.perk_have = "";
-  unordered_map<string, int> same_element;
-
-  if (show.empty())
-    return state.perk_have;
-
-  for (auto i : show)
-  {
-    if (i != nullptr)
-    {
-
-      same_element[i->get_name()]++;
-    }
-  }
-
-  for (const auto &i : same_element)
-  {
-    state.perk_have = state.perk_have + ' ' + (i.first + '(' + to_string(i.second) + ')');
-  }
-
-  return state.perk_have;
-}
-
-string programm::show_hero_name(const vector<hero *> &show, heroinfo &state)
-{
-  state.name = "";
-  unordered_map<string, int> same_element;
-
-  if (show.empty())
-    return state.perk_have;
-
-  for (auto i : show)
-  {
-    if (i != nullptr)
-    {
-
-      same_element[i->get_hero_name()]++;
-    }
-  }
-
-  for (const auto &i : same_element)
-  {
-    state.name = state.name + ' ' + (i.first + '(' + to_string(i.second) + ')');
-  }
-
-  return state.name;
-}
-string programm::show_hero_action(const vector<hero *> &show, heroinfo &state)
-{
-  state.action = "";
-  unordered_map<string, int> same_element;
-
-  if (show.empty())
-    return state.perk_have;
-
-  for (auto i : show)
-  {
-    if (i != nullptr)
-    {
-
-      same_element[to_string(i->get_action())]++;
-    }
-  }
-
-  for (const auto &i : same_element)
-  {
-    state.action = state.action + ' ' + (i.first + '(' + to_string(i.second) + ')');
-  }
-
-  return state.action;
-}
-*/
 template <typename T>
 string programm::show_hero_deatail(T vec)
 {
@@ -745,64 +654,83 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
   static constexpr const char *map_template = R"MAP(
 |{0:^87}|
 |                                                                                       |
-|                                    institute(3)                                       |
-|                                       │                                               |
-|                                   laboratory(4)                                       |
-|                             |---------                                                |
-|        hospital(0)             |   grave_yard(1)               museum(6)              |
-|           \                 |     │    |----------------------                        |                          
-|            \         |----- | ---------  |                                            |
-|              \       |      |     │      |                                            |
-|                   church(2)────shop(5)────mansion(9)────abbey(8)────cryptt(7)         |
-|                              │    \    \       \                                      |
-|                              │  ---------------------|                                |
+|                      hospital(0)     grave_yard(1)                                    |
+|                                \      /                                               |
+|                               church(2)___________                                    |
+|                                  |    \           \                                   |
+|                                  |     museum(6)  |                                   |
+|                                  |    /     |     |                                   |
+|                                  |   /      |     |                                   |
+|                                  |  /       |     |                                   |
+|               laboratory(4)────shop(5)─────mansion(9)────abbey(8)────cryptt(7)        |
+|                    /            │             |                                       |
+|                   /             |   ________|_______________________                  |
+|           institute(3)          │  /          |          \          \                 |
 |                           theatre(10)--precinct(14)  inn(13)    camp(18)────cave(17)  |
-|                            /  |  \                                                    |
-|                          barn(15)  tower(11)                                          |
-|                                │   \                                                  |
-|                                │    docks(12)                                         |
-|                                └──── dungeon(16)                                      |
+|                            /       \                                                  |
+|                     barn(15)    __tower(11)                                           |
+|                                |       \                                              |
+|                                │      docks(12)                                       |
+|                           dungeon(16)                                                 |
 )MAP";
 
   std::string map_ascii = std::format(map_template, terror_text);
   map<string, LocationInfo> location_data = {
-      {"0 ) Hospital", {show_all_item(list_of_location[0]->get_item_list(), info), show_all_mosnter(list_of_location[0]->get_monster_list(), info), show_all_villager(list_of_location[0]->get_villager_list(), info), show_all_hero(list_of_location[0]->get_hero_list(), info)}},
+      {"0 ) Hospital", {show_all_item(list_of_location[0]->get_item_list(), info), show_all_mosnter(list_of_location[0]->get_monster_list(), info), show_all_villager(list_of_location[0]->get_villager_list(), info), show_all_hero(list_of_location[0]->get_hero_list(), info), to_string(list_of_location[0]->get_coffin_exist())
 
-      {"1 ) grave_yard", {show_all_item(list_of_location[1]->get_item_list(), info), show_all_mosnter(list_of_location[1]->get_monster_list(), info), show_all_villager(list_of_location[1]->get_villager_list(), info), show_all_hero(list_of_location[1]->get_hero_list(), info)}},
+                       }},
+
+      {"1 ) grave_yard", {show_all_item(list_of_location[1]->get_item_list(), info), show_all_mosnter(list_of_location[1]->get_monster_list(), info), show_all_villager(list_of_location[1]->get_villager_list(), info), show_all_hero(list_of_location[1]->get_hero_list(), info), to_string(list_of_location[1]->get_coffin_exist())
+
+                         }},
 
       {"2 ) church",
        {show_all_item(list_of_location[2]->get_item_list(), info),
         show_all_mosnter(list_of_location[2]->get_monster_list(), info),
         show_all_villager(list_of_location[2]->get_villager_list(), info),
-        show_all_hero(list_of_location[2]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[2]->get_hero_list(), info),
+        to_string(list_of_location[2]->get_coffin_exist())}},
 
       {"3 ) institute",
        {show_all_item(list_of_location[3]->get_item_list(), info),
         show_all_mosnter(list_of_location[3]->get_monster_list(), info),
         show_all_villager(list_of_location[3]->get_villager_list(), info),
-        show_all_hero(list_of_location[3]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[3]->get_hero_list(), info),
+        to_string(list_of_location[3]->get_coffin_exist())
+
+       }},
 
       {"4 ) Lab",
        {show_all_item(list_of_location[4]->get_item_list(), info),
         show_all_mosnter(list_of_location[4]->get_monster_list(), info),
         show_all_villager(list_of_location[4]->get_villager_list(), info),
-        show_all_hero(list_of_location[4]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[4]->get_hero_list(), info),
+        to_string(list_of_location[4]->get_coffin_exist())
+
+       }},
       {"5 ) shop",
        {show_all_item(list_of_location[5]->get_item_list(), info),
         show_all_mosnter(list_of_location[5]->get_monster_list(), info),
         show_all_villager(list_of_location[5]->get_villager_list(), info),
-        show_all_hero(list_of_location[5]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[5]->get_hero_list(), info),
+        to_string(list_of_location[5]->get_coffin_exist())
+
+       }},
 
       {"6 ) museum",
        {show_all_item(list_of_location[6]->get_item_list(), info),
         show_all_mosnter(list_of_location[6]->get_monster_list(), info),
         show_all_villager(list_of_location[6]->get_villager_list(), info),
-        show_all_hero(list_of_location[6]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[6]->get_hero_list(), info),
+        to_string(list_of_location[6]->get_coffin_exist())
+
+       }},
       {"7 ) cryptt",
        {show_all_item(list_of_location[7]->get_item_list(), info),
         show_all_mosnter(list_of_location[7]->get_monster_list(), info),
         show_all_villager(list_of_location[7]->get_villager_list(), info),
-        show_all_hero(list_of_location[7]->get_hero_list(), info)
+        show_all_hero(list_of_location[7]->get_hero_list(), info),
+        to_string(list_of_location[7]->get_coffin_exist())
 
        }},
 
@@ -810,48 +738,73 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
        {show_all_item(list_of_location[8]->get_item_list(), info),
         show_all_mosnter(list_of_location[8]->get_monster_list(), info),
         show_all_villager(list_of_location[8]->get_villager_list(), info),
-        show_all_hero(list_of_location[8]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[8]->get_hero_list(), info),
+        to_string(list_of_location[8]->get_coffin_exist())
+
+       }},
 
       {"9 ) Mansion",
        {show_all_item(list_of_location[9]->get_item_list(), info),
         show_all_mosnter(list_of_location[9]->get_monster_list(), info),
         show_all_villager(list_of_location[9]->get_villager_list(), info),
-        show_all_hero(list_of_location[9]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[9]->get_hero_list(), info),
+        to_string(list_of_location[9]->get_coffin_exist())
+
+       }},
       {"10 ) theatre",
        {show_all_item(list_of_location[10]->get_item_list(), info),
         show_all_mosnter(list_of_location[10]->get_monster_list(), info),
         show_all_villager(list_of_location[10]->get_villager_list(), info),
-        show_all_hero(list_of_location[10]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[10]->get_hero_list(), info),
+        to_string(list_of_location[10]->get_coffin_exist())
+
+       }},
       {"11 ) tower",
        {show_all_item(list_of_location[11]->get_item_list(), info),
         show_all_mosnter(list_of_location[11]->get_monster_list(), info),
         show_all_villager(list_of_location[11]->get_villager_list(), info),
-        show_all_hero(list_of_location[11]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[11]->get_hero_list(), info),
+        to_string(list_of_location[11]->get_coffin_exist())
+
+       }},
       {"12 ) docks",
        {show_all_item(list_of_location[12]->get_item_list(), info),
         show_all_mosnter(list_of_location[12]->get_monster_list(), info),
         show_all_villager(list_of_location[12]->get_villager_list(), info),
-        show_all_hero(list_of_location[12]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[12]->get_hero_list(), info),
+        to_string(list_of_location[12]->get_coffin_exist())
+
+       }},
       {"13 ) inn",
        {show_all_item(list_of_location[13]->get_item_list(), info),
         show_all_mosnter(list_of_location[13]->get_monster_list(), info),
         show_all_villager(list_of_location[13]->get_villager_list(), info),
-        show_all_hero(list_of_location[13]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[13]->get_hero_list(), info),
+        to_string(list_of_location[13]->get_coffin_exist())
+
+       }},
       {"14 ) precinct",
        {show_all_item(list_of_location[14]->get_item_list(), info),
         show_all_mosnter(list_of_location[14]->get_monster_list(), info),
         show_all_villager(list_of_location[14]->get_villager_list(), info),
-        show_all_hero(list_of_location[14]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[14]->get_hero_list(), info),
+        to_string(list_of_location[14]->get_coffin_exist())
+
+       }},
       {"15 ) barn",
        {show_all_item(list_of_location[15]->get_item_list(), info),
         show_all_mosnter(list_of_location[15]->get_monster_list(), info),
         show_all_villager(list_of_location[15]->get_villager_list(), info),
-        show_all_hero(list_of_location[15]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[15]->get_hero_list(), info),
+        to_string(list_of_location[15]->get_coffin_exist())
+
+       }},
       {"16 ) dungeon",
        {show_all_item(list_of_location[16]->get_item_list(), info),
         show_all_mosnter(list_of_location[16]->get_monster_list(), info),
         show_all_villager(list_of_location[16]->get_villager_list(), info),
-        show_all_hero(list_of_location[16]->get_hero_list(), info)
+        show_all_hero(list_of_location[16]->get_hero_list(), info),
+        to_string(list_of_location[16]->get_coffin_exist())
 
        }},
 
@@ -859,13 +812,19 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
        {show_all_item(list_of_location[17]->get_item_list(), info),
         show_all_mosnter(list_of_location[17]->get_monster_list(), info),
         show_all_villager(list_of_location[17]->get_villager_list(), info),
-        show_all_hero(list_of_location[17]->get_hero_list(), info)}},
+        show_all_hero(list_of_location[17]->get_hero_list(), info),
+        to_string(list_of_location[17]->get_coffin_exist())
+
+       }},
 
       {"18 ) camp",
        {show_all_item(list_of_location[18]->get_item_list(), info),
         show_all_mosnter(list_of_location[18]->get_monster_list(), info),
         show_all_villager(list_of_location[18]->get_villager_list(), info),
-        show_all_hero(list_of_location[18]->get_hero_list(), info)}}};
+        show_all_hero(list_of_location[18]->get_hero_list(), info),
+        to_string(list_of_location[18]->get_coffin_exist())
+
+       }}};
   map<string, string> action_help = {
       {"Move", "Move to another location."},
       {"Guide", "move the villager one step to the hero,or move a villager to the neighbor house base on the hero location"},
@@ -911,6 +870,7 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
   vector<string> heros = {"hero name ", "item have ", "perk have ", "action left "};
   vector<string> heros1 = {"hero name ", "item have ", "perk have ", "action left "};
   vector<string> monster_task = {monster_list[0]->get_mons_name(), monster_list[1]->get_mons_name()};
+  vector<string> locations = {"0 ) Hospital", "1 ) grave_yard", "2 ) church", "3 ) institute", "4 ) Lab", "5 ) shop", "6 ) museum", "7 ) cryptt", "8 ) abbey", "9 ) Mansion", "10 ) theatre", "11 ) tower", "12 ) docks", "13 ) inn", "14 ) precinct", "15 ) barn", "16 ) dungeon", "17 ) cave", "18 ) camp"};
 
   auto loc_menu = Radiobox(&locations, &sel_loc);
   auto act_menu = Radiobox(&actions, &sel_act);
@@ -925,7 +885,7 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
     elements.push_back(separator());
 
     if (show_loc) {
-      elements.push_back(loc_menu->Render() | border);
+      elements.push_back(loc_menu->Render()|borderStyled(ftxui::Color(ftxui::Color::Orange1)));
       auto info = location_data[locations[sel_loc]];
       
       elements.push_back(window(text("Location Info"), vbox({
@@ -933,11 +893,11 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
         text("Items: " + info.items),
         text("Monsters: " + info.monsters),
         text("Villagers: " + info.villagers),
+        text("coffin status : "+ info.coffin),
         text("heros :" + info.hero)
       })));
     }
     if (show_hero) {
-     // elements.push_back(hero_menu->Render() | border);
       elements.push_back(window(text( " first hero info :"), vbox({
         text("hero  name :" + heros_data["hero name "]),
         text("action left : " +heros_data["action left "]),
@@ -948,7 +908,6 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
 
     if (show_hero1)
     {
-     // elements.push_back(heros1_menu->Render() | border);
       elements.push_back(window(text( " secend hero info :"), vbox({
     text("hero  name :" + secend_heros_data["hero name "]),
         text("action left : " +secend_heros_data["action left "]),
@@ -958,7 +917,7 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
     }
 
     if (show_act) {
-      elements.push_back(act_menu->Render() | border);
+      elements.push_back(act_menu->Render() |borderStyled(ftxui::Color(ftxui::Color::Red1)));
       elements.push_back(window(text("Action Info"), vbox({
         text("Action: " + actions[sel_act]),
         paragraph(action_help[actions[sel_act]])
@@ -1102,6 +1061,7 @@ programm::~programm()
 }
 void programm::run()
 {
+  vector<string> locations = {"0 ) Hospital", "1 ) grave_yard", "2 ) church", "3 ) institute", "4 ) Lab", "5 ) shop", "6 ) museum", "7 ) cryptt", "8 ) abbey", "9 ) Mansion", "10 ) theatre", "11 ) tower", "12 ) docks", "13 ) inn", "14 ) precinct", "15 ) barn", "16 ) dungeon", "17 ) cave", "18 ) camp"};
   int gar_one, gar_two, place_go;
   string first_enter, secend_enter, player_one, player_two;
   LocationInfo data_updater;
@@ -1117,6 +1077,18 @@ void programm::run()
   cin >> gar_one;
   cout << player_two << " enter the last time you ate the garlic base on days " << endl;
   cin >> gar_two;
+  try
+  {
+    if (gar_one == 0 || gar_two == 0)
+    {
+      throw invalid_argument("not acceptable\n");
+    }
+  }
+  catch (exception &e)
+  {
+    cerr << e.what();
+    exit(0);
+  }
   if (gar_one <= gar_two)
   {
     cout << "smart! lets start with the " << player_one << endl;
@@ -1124,6 +1096,7 @@ void programm::run()
     cin >> player_one;
     to_lowercase(player_one);
     input_validation(player_one);
+    charecter_exist(player_one);
     if (player_one == "mayor")
     {
       cout << player_two << " start with " << "archaeologist" << endl;
@@ -1142,6 +1115,7 @@ void programm::run()
     cin >> player_two;
     to_lowercase(player_two);
     input_validation(player_two);
+    charecter_exist(player_two);
     if (player_two == "mayor")
     {
       cout << player_one << " start with" << " archaeologist" << endl;
@@ -1161,11 +1135,19 @@ void programm::run()
   bool hero_phase = true;
   while (true)
   {
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     cin.get();
     clearScreen();
     terminal_handler(data_updater, first_enter, secend_enter);
     while (hero_phase)
     {
+
+      if (hero_list[0]->get_action() <= 0 || hero_list[1]->get_action() <= 0)
+      {
+        hero_phase = false;
+        cout << "hero phase is over get ready for monster phase " << endl;
+        break;
+      }
 
       for (auto hero : hero_list)
       {
@@ -1173,172 +1155,215 @@ void programm::run()
         if (hero->get_hero_name() == player_one)
         {
 
-          if (hero->get_action())
+          if (first_enter == "Move")
           {
-
-            if (first_enter == "Move")
+            try
             {
-              try
-              {
 
+              auto iterat = find(locations.begin(), locations.end(), secend_enter);
+              place_go = iterat - locations.begin();
+              while (!is_node_connected(hero->get_loc()->get_loc_relation(), place_go))
+              {
+                cout << "thats far away enter the place again" << endl;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                cin.get();
+                clearScreen();
+                terminal_handler(data_updater, first_enter, secend_enter);
                 auto iterat = find(locations.begin(), locations.end(), secend_enter);
                 place_go = iterat - locations.begin();
-                while (!is_node_connected(hero->get_loc()->get_loc_relation(), place_go))
-                {
-                  cout << "thats far away enter the place again" << endl;
-                  cin.get();
-                  clearScreen();
-                  terminal_handler(data_updater, first_enter, secend_enter);
-                  auto iterat = find(locations.begin(), locations.end(), secend_enter);
-                  place_go = iterat - locations.begin();
-                }
-                hero->move(list_of_location[place_go], *this);
-                hero->set_action(hero->get_action() - 1);
-                cin.get();
-                clearScreen();
-                terminal_handler(data_updater, first_enter, secend_enter);
               }
-
-              catch (exception &e)
-              {
-                cout << e.what();
-                cin.get();
-                clearScreen();
-                terminal_handler(data_updater, first_enter, secend_enter);
-
-                break;
-              }
-            }
-            if (first_enter == "Guide")
-            {
-              try
-              {
-                hero->guide(my_map, *this);
-                hero->set_action(hero->get_action() - 1);
-                cin.get();
-                clearScreen();
-                terminal_handler(data_updater, first_enter, secend_enter);
-              }
-              catch (exception &e)
-              {
-                cout << e.what();
-                cin.get();
-                clearScreen();
-                terminal_handler(data_updater, first_enter, secend_enter);
-
-                break;
-              }
-            }
-            if (first_enter == "Pick Up")
-            {
-              try
-              {
-                hero->pickup();
-                hero->set_action(hero->get_action() - 1);
-                cin.get();
-                clearScreen();
-                terminal_handler(data_updater, first_enter, secend_enter);
-              }
-              catch (exception &e)
-              {
-                cout << e.what();
-                cin.get();
-                clearScreen();
-                terminal_handler(data_updater, first_enter, secend_enter);
-                break;
-              }
-            }
-            if (first_enter == "Advance")
-            {
-              try
-              {
-                hero->advance(monster_list, *this);
-                hero->set_action(hero->get_action() - 1);
-                cin.get();
-                clearScreen();
-                terminal_handler(data_updater, first_enter, secend_enter);
-              }
-              catch (exception &e)
-              {
-                cout << e.what();
-                cin.get();
-                clearScreen();
-                terminal_handler(data_updater, first_enter, secend_enter);
-                break;
-              }
-            }
-            if (first_enter == "Defeat")
-            {
-              try
-              {
-                hero->defeat(monster_list, *this);
-                hero->set_action(hero->get_action() - 1);
-                cin.get();
-                clearScreen();
-                terminal_handler(data_updater, first_enter, secend_enter);
-              }
-              catch (exception &e)
-              {
-                cout << e.what();
-                cin.get();
-                clearScreen();
-                terminal_handler(data_updater, first_enter, secend_enter);
-
-                break;
-              }
-            }
-            if (first_enter == "special action ")
-            {
-              try
-              {
-                hero->special_action(my_map, list_of_location); // why deafult?
-                hero->set_action(hero->get_action() - 1);
-                cin.get();
-                clearScreen();
-                terminal_handler(data_updater, first_enter, secend_enter);
-              }
-              catch (exception &e)
-              {
-                cout << e.what();
-                cin.get();
-                clearScreen();
-                terminal_handler(data_updater, first_enter, secend_enter);
-                break;
-              }
-            }
-            if (first_enter == "use perk")
-            {
-              try
-              {
-                hero->use_perk(*this);
-                cin.get();
-                clearScreen();
-                terminal_handler(data_updater, first_enter, secend_enter);
-              }
-              catch (exception &e)
-              {
-                cout << e.what();
-                cin.get();
-                clearScreen();
-                terminal_handler(data_updater, first_enter, secend_enter);
-                break;
-              }
-            }
-
-            if (first_enter == "Quit")
-            {
+              hero->move(list_of_location[place_go], *this);
+              hero->set_action(hero->get_action() - 1);
+              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
               cin.get();
-              cout << "there is a message for you" << endl;
               clearScreen();
-              cout << "Sacrifice is a choice you make. Loss is a choice made for you." << endl;
-              return;
+              terminal_handler(data_updater, first_enter, secend_enter);
+              if (hero->get_action() <= 0)
+              {
+                hero_phase = false;
+                cout << "hero phase is over get ready for monster phase" << endl;
+              }
+            }
+
+            catch (exception &e)
+            {
+              cout << e.what() << endl;
+              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+              cin.get();
+              clearScreen();
+              terminal_handler(data_updater, first_enter, secend_enter);
+
+              break;
             }
           }
-        }
-        if (hero->get_action() == 0)
-        {
-          cout << "hero phase is over" << endl;
-          hero_phase = false;
+          if (first_enter == "Guide")
+          {
+            try
+            {
+              hero->guide(my_map, *this);
+              hero->set_action(hero->get_action() - 1);
+              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+              cin.get();
+              clearScreen();
+              terminal_handler(data_updater, first_enter, secend_enter);
+              if (hero->get_action() <= 0)
+              {
+                hero_phase = false;
+                cout << "hero phase is over get ready for monster phase" << endl;
+              }
+            }
+            catch (exception &e)
+            {
+              cout << e.what() << endl;
+              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+              cin.get();
+              clearScreen();
+              terminal_handler(data_updater, first_enter, secend_enter);
+
+              break;
+            }
+          }
+          if (first_enter == "Pick Up")
+          {
+            try
+            {
+              hero->pickup();
+              hero->set_action(hero->get_action() - 1);
+              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+              cin.get();
+              clearScreen();
+              terminal_handler(data_updater, first_enter, secend_enter);
+              if (hero->get_action() <= 0)
+              {
+                hero_phase = false;
+                cout << "hero phase is over get ready for monster phase" << endl;
+              }
+            }
+            catch (exception &e)
+            {
+              cout << e.what() << endl;
+              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+              cin.get();
+              clearScreen();
+              terminal_handler(data_updater, first_enter, secend_enter);
+              break;
+            }
+          }
+          if (first_enter == "Advance")
+          {
+            try
+            {
+              hero->advance(monster_list, *this);
+              hero->set_action(hero->get_action() - 1);
+              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+              cin.get();
+              clearScreen();
+              terminal_handler(data_updater, first_enter, secend_enter);
+              if (hero->get_action() <= 0)
+              {
+                hero_phase = false;
+                cout << "hero phase is over get ready for monster phase" << endl;
+              }
+            }
+            catch (exception &e)
+            {
+              cout << e.what() << endl;
+              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+              cin.get();
+              clearScreen();
+              terminal_handler(data_updater, first_enter, secend_enter);
+              break;
+            }
+          }
+          if (first_enter == "Defeat")
+          {
+            try
+            {
+              hero->defeat(monster_list, *this);
+              hero->set_action(hero->get_action() - 1);
+              cout << hero->get_action() << "kit" << endl;
+              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+              cin.get();
+              clearScreen();
+              terminal_handler(data_updater, first_enter, secend_enter);
+              if (hero->get_action() <= 0)
+              {
+                hero_phase = false;
+                cout << "hero phase is over get ready for monster phase" << endl;
+              }
+            }
+            catch (exception &e)
+            {
+              cout << e.what() << endl;
+              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+              cin.get();
+              clearScreen();
+              terminal_handler(data_updater, first_enter, secend_enter);
+
+              break;
+            }
+          }
+          if (first_enter == "special action ")
+          {
+            try
+            {
+              hero->special_action(my_map, list_of_location);
+              hero->set_action(hero->get_action() - 1);
+              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+              cin.get();
+              clearScreen();
+              terminal_handler(data_updater, first_enter, secend_enter);
+              if (hero->get_action() <= 0)
+              {
+                hero_phase = false;
+                cout << "hero phase is over get ready for monster phase" << endl;
+              }
+            }
+            catch (exception &e)
+            {
+              cout << e.what() << endl;
+              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+              cin.get();
+              clearScreen();
+              terminal_handler(data_updater, first_enter, secend_enter);
+              break;
+            }
+          }
+          if (first_enter == "use perk")
+          {
+            try
+            {
+              hero->use_perk(*this);
+              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+              cin.get();
+              clearScreen();
+              terminal_handler(data_updater, first_enter, secend_enter);
+              if (hero->get_action() <= 0)
+              {
+                hero_phase = false;
+                cout << "hero phase is over get ready for monster phase" << endl;
+              }
+            }
+            catch (exception &e)
+            {
+              cout << e.what() << endl;
+              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+              cin.get();
+              clearScreen();
+              terminal_handler(data_updater, first_enter, secend_enter);
+              break;
+            }
+          }
+
+          if (first_enter == "Quit")
+          {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            cin.get();
+            cout << "there is a message for you" << endl;
+            clearScreen();
+            cout << "Sacrifice is a choice you make. Loss is a choice made for you." << endl;
+            return;
+          }
         }
       }
     }
@@ -1351,23 +1376,36 @@ void programm::run()
       }
       else
       {
-        int rand = 0;
-        rand = random_number(0, static_cast<int>(monster_card_list.size()) - 1);
-        cout << rand << endl;
-        monster_card_list[rand]->item_handler(*this);
-        monster_card_list[rand]->event(my_map, list_of_location, *this);
-        monster_card_list[rand]->monster_strike(*this, monster_list);
-        delete monster_card_list[rand];
-        monster_card_list.erase(monster_card_list.begin() + rand);
-
-        if (monster_card_list.empty())
+        try
         {
-          cout << "you lose the game " << endl;
-          exit(0);
+          int rand = 0;
+          rand = random_number(0, static_cast<int>(monster_card_list.size()) - 1);
+          monster_card_list[rand]->item_handler(*this);
+          monster_card_list[rand]->event(my_map, list_of_location, *this);
+          monster_card_list[rand]->monster_strike(*this, monster_list);
+          delete monster_card_list[rand];
+          monster_card_list.erase(monster_card_list.begin() + rand);
+
+          if (monster_card_list.empty())
+          {
+            cout << "you lose the game " << endl;
+            exit(0);
+          }
+          break;
         }
-        break;
+        catch (exception &e)
+        {
+          cerr << e.what() << endl;
+          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+          cin.get();
+          clearScreen();
+          terminal_handler(data_updater, first_enter, secend_enter);
+          break;
+        }
       }
     }
+
+    cout << "monster_phase is over" << endl;
     for (auto mons1 : monster_list)
     {
       mons1->set_did_attack(false);
@@ -1383,7 +1421,7 @@ void programm::run()
         hero->set_action(4);
       }
     }
-    cout << "monster_phase is over" << endl;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     cin.get();
     clearScreen();
     terminal_handler(data_updater, first_enter, secend_enter);
@@ -1391,6 +1429,12 @@ void programm::run()
 
     while (hero_phase)
     {
+      if (hero_list[0]->get_action() <= 0 || hero_list[1]->get_action() <= 0)
+      {
+        hero_phase = false;
+        cout << "hero phase is over get ready for monster phase " << endl;
+        break;
+      }
       for (auto hero : hero_list)
       {
 
@@ -1410,6 +1454,7 @@ void programm::run()
                 while (!is_node_connected(hero->get_loc()->get_loc_relation(), place_go))
                 {
                   cout << "thats far away enter the place again" << endl;
+                  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                   cin.get();
                   clearScreen();
                   terminal_handler(data_updater, first_enter, secend_enter);
@@ -1418,14 +1463,21 @@ void programm::run()
                 }
                 hero->move(list_of_location[place_go], *this);
                 hero->set_action(hero->get_action() - 1);
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 cin.get();
                 clearScreen();
                 terminal_handler(data_updater, first_enter, secend_enter);
+                if (hero->get_action() <= 0)
+                {
+                  hero_phase = false;
+                  cout << "hero phase is over get ready for monster phase" << endl;
+                }
               }
 
               catch (exception &e)
               {
-                cout << e.what();
+                cout << e.what() << endl;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 cin.get();
                 clearScreen();
                 terminal_handler(data_updater, first_enter, secend_enter);
@@ -1439,13 +1491,20 @@ void programm::run()
               {
                 hero->guide(my_map, *this);
                 hero->set_action(hero->get_action() - 1);
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 cin.get();
                 clearScreen();
                 terminal_handler(data_updater, first_enter, secend_enter);
+                if (hero->get_action() <= 0)
+                {
+                  hero_phase = false;
+                  cout << "hero phase is over get ready for monster phase" << endl;
+                }
               }
               catch (exception &e)
               {
-                cout << e.what();
+                cout << e.what() << endl;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 cin.get();
                 clearScreen();
                 terminal_handler(data_updater, first_enter, secend_enter);
@@ -1459,13 +1518,20 @@ void programm::run()
               {
                 hero->pickup();
                 hero->set_action(hero->get_action() - 1);
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 cin.get();
                 clearScreen();
                 terminal_handler(data_updater, first_enter, secend_enter);
+                if (hero->get_action() <= 0)
+                {
+                  hero_phase = false;
+                  cout << "hero phase is over get ready for monster phase" << endl;
+                }
               }
               catch (exception &e)
               {
-                cout << e.what();
+                cout << e.what() << endl;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 cin.get();
                 clearScreen();
                 terminal_handler(data_updater, first_enter, secend_enter);
@@ -1479,13 +1545,20 @@ void programm::run()
               {
                 hero->advance(monster_list, *this);
                 hero->set_action(hero->get_action() - 1);
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 cin.get();
                 clearScreen();
                 terminal_handler(data_updater, first_enter, secend_enter);
+                if (hero->get_action() <= 0)
+                {
+                  hero_phase = false;
+                  cout << "hero phase is over get ready for monster phase" << endl;
+                }
               }
               catch (exception &e)
               {
-                cout << e.what();
+                cout << e.what() << endl;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 cin.get();
                 clearScreen();
                 terminal_handler(data_updater, first_enter, secend_enter);
@@ -1499,13 +1572,20 @@ void programm::run()
               {
                 hero->defeat(monster_list, *this);
                 hero->set_action(hero->get_action() - 1);
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 cin.get();
                 clearScreen();
                 terminal_handler(data_updater, first_enter, secend_enter);
+                if (hero->get_action() <= 0)
+                {
+                  hero_phase = false;
+                  cout << "hero phase is over get ready for monster phase" << endl;
+                }
               }
               catch (exception &e)
               {
-                cout << e.what();
+                cout << e.what() << endl;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 cin.get();
                 clearScreen();
                 terminal_handler(data_updater, first_enter, secend_enter);
@@ -1517,15 +1597,22 @@ void programm::run()
             {
               try
               {
-                hero->special_action(my_map, list_of_location); // why deafult?
+                hero->special_action(my_map, list_of_location);
                 hero->set_action(hero->get_action() - 1);
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 cin.get();
                 clearScreen();
                 terminal_handler(data_updater, first_enter, secend_enter);
+                if (hero->get_action() <= 0)
+                {
+                  hero_phase = false;
+                  cout << "hero phase is over get ready for monster phase" << endl;
+                }
               }
               catch (exception &e)
               {
-                cout << e.what();
+                cout << e.what() << endl;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 cin.get();
                 clearScreen();
                 terminal_handler(data_updater, first_enter, secend_enter);
@@ -1538,13 +1625,20 @@ void programm::run()
               try
               {
                 hero->use_perk(*this);
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 cin.get();
                 clearScreen();
                 terminal_handler(data_updater, first_enter, secend_enter);
+                if (hero->get_action() <= 0)
+                {
+                  hero_phase = false;
+                  cout << "hero phase is over get ready for monster phase" << endl;
+                }
               }
               catch (exception &e)
               {
-                cout << e.what();
+                cout << e.what() << endl;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 cin.get();
                 clearScreen();
                 terminal_handler(data_updater, first_enter, secend_enter);
@@ -1553,6 +1647,7 @@ void programm::run()
             }
             if (first_enter == "Quit")
             {
+              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
               cin.get();
               cout << "there is a message for you" << endl;
               clearScreen();
@@ -1561,7 +1656,7 @@ void programm::run()
             }
           }
         }
-        if (hero->get_action() == 0)
+        if (hero->get_action() <= 0)
         {
           cout << "hero phase is over" << endl;
           hero_phase = false;
@@ -1578,20 +1673,32 @@ void programm::run()
       }
       else
       {
-        int rand = 0;
-        rand = random_number(0, static_cast<int>(monster_card_list.size()) - 1);
-        cout << rand << endl;
-        monster_card_list[rand]->item_handler(*this);
-        monster_card_list[rand]->event(my_map, list_of_location, *this);
-        monster_card_list[rand]->monster_strike(*this, monster_list);
-        delete monster_card_list[rand];
-        monster_card_list.erase(monster_card_list.begin() + rand);
-        if (monster_card_list.empty())
+        try
         {
-          cout << "you lose the game " << endl;
-          exit(0);
+          int rand = 0;
+          rand = random_number(0, static_cast<int>(monster_card_list.size()) - 1);
+          cout << rand << endl;
+          monster_card_list[rand]->item_handler(*this);
+          monster_card_list[rand]->event(my_map, list_of_location, *this);
+          monster_card_list[rand]->monster_strike(*this, monster_list);
+          delete monster_card_list[rand];
+          monster_card_list.erase(monster_card_list.begin() + rand);
+          if (monster_card_list.empty())
+          {
+            cout << "you lose the game " << endl;
+            exit(0);
+          }
+          break;
         }
-        break;
+        catch (exception &e)
+        {
+          cerr << e.what() << endl;
+          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+          cin.get();
+          clearScreen();
+          terminal_handler(data_updater, first_enter, secend_enter);
+          break;
+        }
       }
     }
     for (auto mons1 : monster_list)
@@ -1610,6 +1717,7 @@ void programm::run()
       }
     }
     cout << "monster_phase is over" << endl;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     cin.get();
     clearScreen();
     terminal_handler(data_updater, first_enter, secend_enter);

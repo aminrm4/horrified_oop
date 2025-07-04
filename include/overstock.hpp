@@ -5,12 +5,11 @@
 #include "location.hpp"
 #include <bits/stdc++.h>
 #include "perk.hpp"
-#include"programm.hpp"
-class overstock:public perk
+#include "programm.hpp"
+class overstock : public perk
 {
 public:
      void play(programm &help_obj1) override final;
      overstock();
-     ~overstock()=default;
-     
+     ~overstock() = default;
 };

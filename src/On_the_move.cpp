@@ -1,50 +1,47 @@
 #include "On_the_move.hpp"
-#include"programm.hpp"
-void On_the_move::event(std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a)
+#include "programm.hpp"
+void remove_villager(programm &, villager *);
+void On_the_move::event(std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
 {
-  
+    vector<int> route;
     a.next_frenzy();
-
-    for (size_t i = 0; i < loc.size(); i++)
+    for (int i = 0; i < a.list_of_location.size(); i++)
     {
-        if (loc[i]->get_villager_list().empty())
+        for (auto vill : a.list_of_location.at(i)->get_villager_list())
         {
-            continue;
-        }
-        else
-        {
-            auto it = loc[i]->get_villager_list();
-            for (size_t j = 0; j < it.size(); j++)
+            route = (a.bfs(vill->get_currnet_location()->get_loc_relation(), vill->get_safe_location()->get_loc_relation()));
+            if (route.empty())
             {
-                auto pa = a.bfs(it[j]->get_currnet_location()->get_loc_relation(), it[j]->get_safe_location()->get_loc_relation());
-
-                it[j]->set_current_location(loc[pa[1]]);
+                throw invalid_argument("no villager exist to move in their safe location\n");
+            }
+            else
+            {
+                remove_villager(a, vill);
+                a.list_of_location[i]->set_villager(vill);
+                vill->set_current_location(a.list_of_location[route[1]]);
             }
         }
     }
-
 }
 void On_the_move::monster_strike(programm &bug, vector<monster *> &monsters)
 {
     for (int i = 0; i < monsters.size(); i++)
     {
         if (monsters[i]->get_freenzy_status())
-            {
-                monster_card::_strike(dice_play, move_left,bug, monsters[i]);
-            }
-    
+        {
+            monster_card::_strike(dice_play, move_left, bug, monsters[i]);
+        }
     }
 }
-    
+
 void On_the_move::set_item(int item_count)
 {
     this->item_count = item_count;
 }
-   
 
- On_the_move::On_the_move(int dic,int my_item,int mover)
-    {
-        dice_play=dic;
-        item_count=my_item;
-        move_left=mover;
-    }
+On_the_move::On_the_move(int dic, int my_item, int mover)
+{
+    dice_play = dic;
+    item_count = my_item;
+    move_left = mover;
+}

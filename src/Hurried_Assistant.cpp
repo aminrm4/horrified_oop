@@ -1,6 +1,6 @@
 #include "Hurried_Assistant.hpp"
 
-void Hurried_Assistant::event(std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a)
+void Hurried_Assistant::event(std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
 {
 
     a.list_of_location[11]->set_villager((new villager("Fritz", loc[3], loc[11], a)));
@@ -19,9 +19,9 @@ void Hurried_Assistant::set_item(int item_count)
 {
     this->item_count = item_count;
 }
-  Hurried_Assistant:: Hurried_Assistant(int dic,int my_item,int mover)
-   {
-        item_count=my_item;
-        dice_play=dic;
-        move_left=mover;
-   }    
+Hurried_Assistant::Hurried_Assistant(int dic, int my_item, int mover)
+{
+    item_count = my_item;
+    dice_play = dic;
+    move_left = mover;
+}

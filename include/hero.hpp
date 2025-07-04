@@ -4,7 +4,7 @@
 #include "vector"
 #include "villager.hpp"
 #include "perk.hpp"
-#include"Invisible_man.hpp"
+#include "Invisible_man.hpp"
 class villager;
 class location;
 class perk;
@@ -14,33 +14,31 @@ class Drakula;
 class programm;
 class hero
 
-
 {
-    
-    protected:
-    location* loc;
+
+protected:
+    location *loc;
     int action;
-    std::vector<item*> item_have;
-    std::vector<perk*> perk_have;
+    std::vector<item *> item_have;
+    std::vector<perk *> perk_have;
     string name_of_hero;
-    
-    public:
-    virtual void special_action(std::vector<std::vector<int>>& map , const std::vector<location*>& loc) = 0;
+
+public:
+    virtual void special_action(std::vector<std::vector<int>> &map, const std::vector<location *> &loc) = 0;
     void advance(vector<monster *> &monsters, programm &bug);
-    void guide(std::vector<std::vector<int>>&  map,programm &);
+    void guide(std::vector<std::vector<int>> &map, programm &);
     void defeat(vector<monster *> &monsters, programm &bug);
-    void move(location *loc,  programm & bug);
+    void move(location *loc, programm &bug);
     int get_action();
-    void set_perks(vector<perk*> perks);
-    std:: vector<perk*> &get_perks();
-    void set_item(vector<item*>  items);
-     std::vector <item*> &get_items(); //refrenced too
+    void set_perks(vector<perk *> perks);
+    std::vector<perk *> &get_perks();
+    void set_item(vector<item *> items);
+    std::vector<item *> &get_items(); // refrenced too
     void pickup();
     void set_action(int);
-    location* get_loc();
+    location *get_loc();
     string get_hero_name();
     hero(std::vector<perk *> &);
     void use_perk(programm &);
     ~hero();
-
 };

@@ -10,6 +10,6 @@ class repel : public perk
 public:
      void play(programm &help_obj1) override final;
 
-     repel() ;
+     repel();
      ~repel() = default;
-};   
+};

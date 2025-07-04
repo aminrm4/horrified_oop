@@ -16,7 +16,6 @@ void message_invisible_man(bool alive);
 void message_drakula(bool alive);
 void hurry::play(programm &help_obj1)
 {
-    // fake vill
 
     for (auto her : help_obj1.hero_list)
     {
@@ -42,7 +41,7 @@ void hurry::play(programm &help_obj1)
             if (maper == new_loc)
             {
                 her->move(help_obj1.list_of_location[new_loc], help_obj1);
-                cout <<"you moved succesfully" << endl;
+                cout << "you moved succesfully" << endl;
             }
         }
     }

@@ -5,12 +5,12 @@ void Mayor::special_action(vector<vector<int>> &map, const vector<location *> &l
 {
     cout << "you fooled you dont have any special action hahaha \n";
 }
-Mayor::Mayor(int actions, location *starting_loc,std::vector<perk *>& perks):hero(perks)
+Mayor::Mayor(int actions, location *starting_loc, std::vector<perk *> &perks) : hero(perks)
 {
-        name_of_hero="mayor";
+    name_of_hero = "mayor";
     if (actions < 0)
         throw logic_error("invalid actions \n");
-        action=actions;
-      
+    action = actions;
+
     loc = starting_loc;
 }

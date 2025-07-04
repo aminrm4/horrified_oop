@@ -9,8 +9,7 @@ void remove_monster(programm &obj, monster *m);
 void monster::move_to_place(std::vector<int> &route, int number_route, programm &bug)
 {
 
-    // if (!locations.empty() )
-    //     throw invalid_argument("invalid input\n");
+  
     if (number_route >= route.size() - 1)
     {
         number_route = route.size() - 1;

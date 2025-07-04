@@ -9,9 +9,9 @@
 class hurry : public perk
 {
 public:
-    void play (programm &help_obj1) override final;
+    void play(programm &help_obj1) override final;
     hurry();
-    ~hurry()=default;
+    ~hurry() = default;
 };
 
 #endif
