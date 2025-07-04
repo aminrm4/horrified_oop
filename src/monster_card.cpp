@@ -6,7 +6,7 @@
 #include <random>
 int random_number(int min, int max);
 
-    void remove_villager(programm &obj, villager *v);
+void remove_villager(programm &obj, villager *v);
 
 int monster_card::get_item_count()
 {
@@ -49,8 +49,10 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
         int rand = distib(gen);
         if (rand == 1) // power dice aval
         {
+
             vector<int> s;
             monsters->ability(bug);
+            cout << "dice rolled a power" << endl;
         }
 
         rand = distib(gen);
@@ -59,6 +61,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
         {
             vector<int> s;
             monsters->ability(bug);
+            cout << "dice rolled a power" << endl;
         }
 
         rand = distib(gen);
@@ -67,6 +70,8 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
         {
             if (!monsters->get_loc()->get_hero_list().empty())
             {
+                cout << "dice rolled a attack" << endl;
+
                 cout << "oh no a monster want to attack you Do you want to Defend your self ? [Y]es , [N]o \n";
                 try
                 {

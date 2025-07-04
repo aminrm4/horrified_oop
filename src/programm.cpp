@@ -6,6 +6,8 @@ using namespace ftxui;
 #include "Archaeologist.hpp"
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/component/component_options.hpp>
+#include <ftxui/screen/color_info.hpp>
 #include <ftxui/dom/elements.hpp>
 #include <iostream>
 #include "Drakula.hpp"
@@ -26,7 +28,7 @@ using namespace ftxui;
 #include "Color.hpp"
 #include <stdexcept>
 #include <format>
-#include <ftxui/dom/elements.hpp>
+
 vector<string> locations = {"0 ) Hospital", "1 ) grave_yard", "2 ) church", "3 ) institute", "4 ) Lab", "5 ) shop", "6 ) museum", "7 ) cryptt", "8 ) abbey", "9 ) Mansion", "10 ) theatre", "11 ) tower", "12 ) docks", "13 ) inn", "14 ) precinct", "15 ) barn", "16 ) dungeon", "17 ) cave", "18 ) camp"};
 
 bool programm::is_node_connected(int her, int node)
@@ -314,7 +316,6 @@ programm::programm()
   hero_list.push_back(new Archaeologist(4, list_of_location[12], list_of_perks));
   hero_list[0]->get_perks().push_back(new break_of_down());
   hero_list[0]->get_perks().push_back(new overstock());
-list_of_location[10]->set_villager(new villager("kirtoreza",list_of_location[3],list_of_location[10],*this));
 
   monster_list.push_back(new Drakula(4, true, 1, list_of_location[0]));
   monster_list.push_back(new invisible_man(5, false, 6, list_of_location[14]));
@@ -339,20 +340,14 @@ list_of_location[10]->set_villager(new villager("kirtoreza",list_of_location[3],
   monster_card_list.push_back(new The_chthyologist(2, 3, 1));
   // monster_card_list.push_back(new Hypnotic_Gaze(2, 2, 1));
   // monster_card_list.push_back(new Hypnotic_Gaze(2, 2, 1));
-  // monster_card_list.push_back(new On_the_move(2, 3, 3));
-  // monster_card_list.push_back(new On_the_move(2, 3, 3));
-
-  // Item initialization and random placement
-  // Not rewritten in full to save space, but you would similarly use `new item(...)` and push_back pointer
-  // Then use list_of_items[random]->get_loc()->set_item_list(list_of_items[random])
-  // and erase like in your original
+  monster_card_list.push_back(new On_the_move(2, 3, 3));
+  monster_card_list.push_back(new On_the_move(2, 3, 3));
 
   for (int i = 0; i < 12; i++)
   {
-   
-    int random = random_number(0,list_of_items.size()-1);
+
+    int random = random_number(0, list_of_items.size() - 1);
     list_of_items.at(random)->get_loc()->set_item_list(list_of_items.at(random)); // here has a problem
-    // delete list_of_items.at(random);
     list_of_items.erase(list_of_items.begin() + random);
   }
   for (auto i : monster_list)
@@ -511,7 +506,7 @@ string programm::show_all_item(const vector<item *> &show, LocationInfo &state)
   return state.items;
 }
 
-string programm::show_all_item_of_hero(const vector<item *>show)
+string programm::show_all_item_of_hero(const vector<item *> show)
 {
   string temp = "";
   map<string, int> same_element;
@@ -581,6 +576,7 @@ string programm::show_all_hero(const vector<hero *> &show, LocationInfo &state)
 
   for (auto i : show)
   {
+
     if (i != nullptr)
     {
 
@@ -620,106 +616,7 @@ string programm::show_all_mosnter(const vector<monster *> &show, LocationInfo &s
 
   return state.monsters;
 }
-/*
-string programm::show_hero_item(const vector<item *> &show, heroinfo &state)
-{
-  state.item_have = "";
-  unordered_map<string, int> same_element;
 
-  if (show.empty())
-    return state.item_have;
-
-  for (auto i : show)
-  {
-    if (i != nullptr)
-    {
-
-      same_element[i->get_name()]++;
-    }
-  }
-
-  for (const auto &i : same_element)
-  {
-    state.item_have = state.item_have + ' ' + (i.first + '(' + to_string(i.second) + ')');
-  }
-
-  return state.item_have;
-}
-
-string programm::show_hero_perk(const vector<perk *> &show, heroinfo &state)
-{
-  state.perk_have = "";
-  unordered_map<string, int> same_element;
-
-  if (show.empty())
-    return state.perk_have;
-
-  for (auto i : show)
-  {
-    if (i != nullptr)
-    {
-
-      same_element[i->get_name()]++;
-    }
-  }
-
-  for (const auto &i : same_element)
-  {
-    state.perk_have = state.perk_have + ' ' + (i.first + '(' + to_string(i.second) + ')');
-  }
-
-  return state.perk_have;
-}
-
-string programm::show_hero_name(const vector<hero *> &show, heroinfo &state)
-{
-  state.name = "";
-  unordered_map<string, int> same_element;
-
-  if (show.empty())
-    return state.perk_have;
-
-  for (auto i : show)
-  {
-    if (i != nullptr)
-    {
-
-      same_element[i->get_hero_name()]++;
-    }
-  }
-
-  for (const auto &i : same_element)
-  {
-    state.name = state.name + ' ' + (i.first + '(' + to_string(i.second) + ')');
-  }
-
-  return state.name;
-}
-string programm::show_hero_action(const vector<hero *> &show, heroinfo &state)
-{
-  state.action = "";
-  unordered_map<string, int> same_element;
-
-  if (show.empty())
-    return state.perk_have;
-
-  for (auto i : show)
-  {
-    if (i != nullptr)
-    {
-
-      same_element[to_string(i->get_action())]++;
-    }
-  }
-
-  for (const auto &i : same_element)
-  {
-    state.action = state.action + ' ' + (i.first + '(' + to_string(i.second) + ')');
-  }
-
-  return state.action;
-}
-*/
 template <typename T>
 string programm::show_hero_deatail(T vec)
 {
@@ -745,23 +642,24 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
   static constexpr const char *map_template = R"MAP(
 |{0:^87}|
 |                                                                                       |
-|                                    institute(3)                                       |
-|                                       │                                               |
-|                                   laboratory(4)                                       |
-|                             |---------                                                |
-|        hospital(0)             |   grave_yard(1)               museum(6)              |
-|           \                 |     │    |----------------------                        |                          
-|            \         |----- | ---------  |                                            |
-|              \       |      |     │      |                                            |
-|                   church(2)────shop(5)────mansion(9)────abbey(8)────cryptt(7)         |
-|                              │    \    \       \                                      |
-|                              │  ---------------------|                                |
+|                      hospital(0)     grave_yard(1)                                    |
+|                                \      /                                               |
+|                               church(2)___________                                    |
+|                                  |    \           \                                   |
+|                                  |     museum(6)  |                                   |
+|                                  |    /     |     |                                   |
+|                                  |   /      |     |                                   |
+|                                  |  /       |     |                                   |
+|               laboratory(4)────shop(5)─────mansion(9)────abbey(8)────cryptt(7)        |
+|                    /            │             |                                       |
+|                   /             |   ________|_______________________                  |
+|           institute(3)          │  /          |          \          \                 |
 |                           theatre(10)--precinct(14)  inn(13)    camp(18)────cave(17)  |
-|                            /  |  \                                                    |
-|                          barn(15)  tower(11)                                          |
-|                                │   \                                                  |
-|                                │    docks(12)                                         |
-|                                └──── dungeon(16)                                      |
+|                            /       \                                                  |
+|                     barn(15)    __tower(11)                                           |
+|                                |       \                                              |
+|                                │      docks(12)                                       |
+|                           dungeon(16)                                                 |
 )MAP";
 
   std::string map_ascii = std::format(map_template, terror_text);
@@ -925,7 +823,7 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
     elements.push_back(separator());
 
     if (show_loc) {
-      elements.push_back(loc_menu->Render() | border);
+      elements.push_back(loc_menu->Render()|borderStyled(ftxui::Color(ftxui::Color::Orange1)));
       auto info = location_data[locations[sel_loc]];
       
       elements.push_back(window(text("Location Info"), vbox({
@@ -937,7 +835,6 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
       })));
     }
     if (show_hero) {
-     // elements.push_back(hero_menu->Render() | border);
       elements.push_back(window(text( " first hero info :"), vbox({
         text("hero  name :" + heros_data["hero name "]),
         text("action left : " +heros_data["action left "]),
@@ -948,7 +845,6 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
 
     if (show_hero1)
     {
-     // elements.push_back(heros1_menu->Render() | border);
       elements.push_back(window(text( " secend hero info :"), vbox({
     text("hero  name :" + secend_heros_data["hero name "]),
         text("action left : " +secend_heros_data["action left "]),
@@ -958,7 +854,7 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
     }
 
     if (show_act) {
-      elements.push_back(act_menu->Render() | border);
+      elements.push_back(act_menu->Render() |borderStyled(ftxui::Color(ftxui::Color::Red1)));
       elements.push_back(window(text("Action Info"), vbox({
         text("Action: " + actions[sel_act]),
         paragraph(action_help[actions[sel_act]])
@@ -1162,14 +1058,14 @@ void programm::run()
   while (true)
   {
     cin.get();
-    clearScreen();
+   clearScreen();
     terminal_handler(data_updater, first_enter, secend_enter);
     while (hero_phase)
     {
 
       for (auto hero : hero_list)
       {
-
+        
         if (hero->get_hero_name() == player_one)
         {
 
@@ -1351,21 +1247,24 @@ void programm::run()
       }
       else
       {
-        int rand = 0;
-        rand = random_number(0, static_cast<int>(monster_card_list.size()) - 1);
-        cout << rand << endl;
-        monster_card_list[rand]->item_handler(*this);
-        monster_card_list[rand]->event(my_map, list_of_location, *this);
-        monster_card_list[rand]->monster_strike(*this, monster_list);
-        delete monster_card_list[rand];
-        monster_card_list.erase(monster_card_list.begin() + rand);
+       
+          int rand = 0;
+          rand = random_number(0, static_cast<int>(monster_card_list.size()) - 1);
+          cout << rand << endl;
+          monster_card_list[rand]->item_handler(*this);
+          monster_card_list[rand]->event(my_map, list_of_location, *this);
+          monster_card_list[rand]->monster_strike(*this, monster_list);
+          delete monster_card_list[rand];
+          monster_card_list.erase(monster_card_list.begin() + rand);
 
-        if (monster_card_list.empty())
-        {
-          cout << "you lose the game " << endl;
-          exit(0);
-        }
-        break;
+          if (monster_card_list.empty())
+          {
+            cout << "you lose the game " << endl;
+            exit(0);
+          }
+          break;
+        
+    
       }
     }
     for (auto mons1 : monster_list)
@@ -1578,20 +1477,23 @@ void programm::run()
       }
       else
       {
-        int rand = 0;
-        rand = random_number(0, static_cast<int>(monster_card_list.size()) - 1);
-        cout << rand << endl;
-        monster_card_list[rand]->item_handler(*this);
-        monster_card_list[rand]->event(my_map, list_of_location, *this);
-        monster_card_list[rand]->monster_strike(*this, monster_list);
-        delete monster_card_list[rand];
-        monster_card_list.erase(monster_card_list.begin() + rand);
-        if (monster_card_list.empty())
-        {
-          cout << "you lose the game " << endl;
-          exit(0);
-        }
-        break;
+      
+          int rand = 0;
+          rand = random_number(0, static_cast<int>(monster_card_list.size()) - 1);
+          cout << rand << endl;
+          monster_card_list[rand]->item_handler(*this);
+          monster_card_list[rand]->event(my_map, list_of_location, *this);
+          monster_card_list[rand]->monster_strike(*this, monster_list);
+          delete monster_card_list[rand];
+          monster_card_list.erase(monster_card_list.begin() + rand);
+          if (monster_card_list.empty())
+          {
+            cout << "you lose the game " << endl;
+            exit(0);
+          }
+          break;
+        
+   
       }
     }
     for (auto mons1 : monster_list)
