@@ -440,6 +440,7 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                         vector<item *> temp;
                         for (int l = 0; l < number; l++)
                         {
+                        
                             cout << " enter the name of the item " << endl;
 
                             string namer;
@@ -660,7 +661,6 @@ void hero::use_perk(programm &object1)
             {
                 this->set_action(this->get_action() + 2);
             }
-            cout << this->get_action() << endl;
             perk_have[i]->play(object1);
             delete perk_have[i];
             this->perk_have.erase(perk_have.begin() + i);
