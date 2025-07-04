@@ -26,7 +26,7 @@ void Drakula::ability(programm &bug)
 
     for (auto her : bug.hero_list)
     {
-        cout<<"this is "<<her->get_action()<<endl;
+       
         if (her->get_action() == 0)
         {
 

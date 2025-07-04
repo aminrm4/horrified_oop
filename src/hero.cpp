@@ -8,7 +8,7 @@
 #include <iterator>
 #include "location.hpp"
 #include "Color.hpp"
-#include"terminal_color.hpp"
+#include "terminal_color.hpp"
 void remove_hero(programm &, hero *);
 void remove_villager(programm &, villager *);
 void remove_monster(programm &, monster *);
@@ -241,21 +241,21 @@ void hero::advance(vector<monster *> &monsters, programm &bug)
                             cout << "coffin has been destroyed by who? find him/her" << endl;
                             return;
                         }
-                        cout<<"those are your item "<<endl;
+                        cout << "those are your item " << endl;
                         cin.get();
                         for (auto ite : this->get_items())
                         {
                             if (ite->get_Color() == rgb::Color::Red)
                             {
-                                cout << " the item name is :" << ite->get_name() << " item color is"<<RED<< "red :" << RESET<< " item power is : " << to_string(ite->get_power()) << endl;
+                                cout << " the item name is :" << ite->get_name() << " item color is" << RED << "red :" << RESET << " item power is : " << to_string(ite->get_power()) << endl;
                             }
                             if (ite->get_Color() == rgb::Color::Yellow)
                             {
-                                cout << " the item name is :" << ite->get_name() << " item color is " << YELLOW<<"yellow :"<<RESET << " item power is : " << to_string(ite->get_power()) << endl;
+                                cout << " the item name is :" << ite->get_name() << " item color is " << YELLOW << "yellow :" << RESET << " item power is : " << to_string(ite->get_power()) << endl;
                             }
                             if (ite->get_Color() == rgb::Color::Blue)
                             {
-                                cout << " the item name is :" << ite->get_name() << " item color is " << BLUE<< " blue : "<<RESET << " item power is : " << to_string(ite->get_power()) << endl;
+                                cout << " the item name is :" << ite->get_name() << " item color is " << BLUE << " blue : " << RESET << " item power is : " << to_string(ite->get_power()) << endl;
                             }
                         }
 
@@ -391,6 +391,8 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                             if (typeid(*monsters[i]).name() == typeid(Drakula).name())
                             {
                                 remove_monster(bug, monsters[i]);
+                                delete monsters[i];
+                                bug.monster_list.erase(bug.monster_list.begin() + i);
                                 if (bug.monster_list.size() == 0)
                                 {
                                     cout << "Heros succesfuly killed all the monsters \n";
@@ -419,7 +421,7 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                     return;
                 }
             }
-            cerr << "There is no monster here \n";
+           // cerr << "There is no monster here \n";
         }
     }
     if (detect == 'i')
@@ -440,7 +442,7 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                         vector<item *> temp;
                         for (int l = 0; l < number; l++)
                         {
-                        
+
                             cout << " enter the name of the item " << endl;
 
                             string namer;
@@ -476,6 +478,8 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                                 if (typeid(*monsters[i]).name() == typeid(invisible_man).name())
                                 {
                                     remove_monster(bug, monsters[i]);
+                                    delete monsters[i];
+                                    bug.monster_list.erase(bug.monster_list.begin() + i);
                                     if (bug.monster_list.size() == 0)
                                     {
                                         cout << "Heros succesfuly killed all the monsters \n";
@@ -484,6 +488,9 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                                         cout << "Victory !\n";
                                         exit(0);
                                     }
+
+                                    bug.next_frenzy();
+
                                     return;
                                 }
                             }

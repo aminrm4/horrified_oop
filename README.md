@@ -1,25 +1,10 @@
-# 🎲 Horrified 👻
+# 🎲 Horrified \_Board_Game👻
 
-> A thrilling C++ terminal board game adventure! 
+> an interesting terminal based game!
 
 <p align="center">
   <img src="https://img.shields.io/badge/C%2B%2B-17-blue.svg" alt="C++17"/>
-  <img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="GPLv3"/>
-
 </p>
-
----
-
-## Contents
-
-1. [✨ Features](#-features)
-2. [⚡ Installation](#-installation)
-3. [🕹️ Usage](#-usage)
-4. [📦 Dependencies](#-dependencies)
-5. [📝 License](#-license)
-6. [🤝 Collaborators](#-collaborators)
-7. [🚀 Contributing](#-contributing)
-8. [🙏 Acknowledgements](#-acknowledgements)
 
 ---
 
@@ -33,20 +18,18 @@
 - **Hero Abilities & Upgrades:** Choose from a roster of heroic characters, each with distinct strengths and special powers. As the game progresses, you can collect items and power‑ups that enhance your skills — from holy water to silver bullets.
 - **Tension & Theme:** With a creeping sense of dread built into every turn, Horrified captures the spirit of classic monster movies. Will you manage to seal away the evil forces in time, or will the horrors overwhelm the town?
 
-Whether you’re a fan of cooperative challenges, classic horror, or strategic board games, **Horrified** delivers an immersive, high-stakes experience you can enjoy right in your terminal. Rally your friends, sharpen your wits, and prepare for a night of monstrous mayhem!  
+Whether you’re a fan of cooperative challenges, classic horror, or strategic board games, **Horrified** delivers an immersive, high-stakes experience you can enjoy right in your terminal. Rally your friends, sharpen your wits, and prepare for a night of monstrous mayhem!
 
 ---
 
-# Prerequisites
+# # ⚡ Prerequisites
 
--  C++ compiler (C++20  at least needed)
--  CMake as a recomended build system
--  [ftxui library](https://github.com/ArthurSonzogni/FTXUI) (installation guide on the link)
--  recommended os (linux)
+- C++ compiler (C++20 at least needed)
+- CMake as a recomended build system
+- [ftxui library](https://github.com/ArthurSonzogni/FTXUI) (installation guide on the link)
+- recommended os (linux)
 
-# Installation guide:
-
-
+# 💫Installation guide:
 
 1. **Clone the repository:**
    ```sh
@@ -57,9 +40,17 @@ Whether you’re a fan of cooperative challenges, classic horror, or strategic b
    cmake ..
    make
    .app
+   ```
 
+## 📌UML Diagram
 
-## 🕹️ Usage
+**use the likn below to see the diagram**
+
+[link](//www.plantuml.com/plantuml/png/bLTTSzIy5RxVNw616Uga2KE0yE6132b92XTCEmtJMuyidrshAqiUITxWqFxtIhBsH5fitZTSx72Uy_XywqZvP2pLTkZ4ocovxAcc7M626aD-hWZv9sqQBZVax8KJlb6zuPASdRl_NsgjxcwKjBVy7iZPImSzIA-TT6j1Wx9Z3pdhRvHjDreDilciXDBawStLpPlhLrwZT0CwekVlti3RyzN_3gEwj5RpUh3mbIaPhBwO3VoBqlpUEQRYjgVCft3kK_WtQCjP2ZeNgx-GZuV_oBKSElChlWA7auxsPy4D8QqoFNTko4SNYGSsckwW6gbk77GM8DOEchLEV1b4BetbrkNWa5S14RHMcbgbHmUz3f1fLU-4yo1qWu6XS-ARoPuUUskT-3Q8jAx1V_Xkub9fk99EVXzasmAr6dmmKu1MtO7suXHSezZMU74VdFJ255UlmPM9MOzCOTLK1_qKLpF83QW0nCXSxbvw6wMkzzAxfI9_zls2kJBJsbXDcOqjRK6hMF2dH2XM-XzgNPx74QJCIwMBtqQ4M-YgrWLKaXqmg_G7ZnnVH7KFUfkhFO9gIJkerBhodalYWd7ZiWgwlnBJ0-DKL9FFegCzsjXxalRYuiG7YHeC-E8ecg7DZae6HQUaiQ0DKYDmx2pKmwOalLORJRjk_-5cu0qikvt_g84rKFjuPvtQGP6NV2aiiFkI764ZVBaSxcjhYl1xK6_y6bb71undYHtVGbE4twojYHra7UKCjDDpjXtwuWZDOjZ94ANcNEBU6EQVgFnuL7vMF25EYHlsW_7rUP2VyJFFHYvQEZGIGnLqB5eGVQNg_wGLTpucqpwrQFgKzFveFvJ-DFCL8QQ4SXozgSioBDk8vosEenxC5mzcJpAB9xyQEpcmatNNcy7HM4mS5TwuusUnBZS5Iu8GbiK1bGP1iRbOYlMQomf-S6DBKYibecB7XQ0Rq9Nm6Zna4OqxuZGK9wTu1DL-DdArHr0T3rxEYA0Z9TEPnbdig1XWYZQTu7rmnQua66XAI8iGZU2SHmhcK_0o99SPm7IAjWovPTeqcw8hzzbb0v25S3W7UPP7KuQ9Ekc9ryzqvHcoqrGMjW2UtaEMnt8MffOJ8-ovE7eX68wJDtV-35r3jH_HT7xZJ0vQWxI_OT0xgfkIXDs8Kx8_Hwd3j3s7Pek5Opf7NLXzcCWIgT6ghsmBOQqxGWmPBVpntembnfkVcsgjGTwFE1qUdQ1AwGQNt-8x0U_rQ1gTJrghB1LLovi6P9YXr5x3cufQIzaske-fq9eBRiTYyVgihAfwGHaKMWtMzIUvhf-vbJfqDUxNtCYVkuImB3F79YqEdhb7Tw1Y_ZtxCtrPCJL8cvU7WKzpJC6Gle1rP4RNi0Df7_rkEl5rcIjnZD4diOMy3ITUE_FOURX1aOeNjB7E8ICT_I5zrE7r-pxg9D-qjd8cjD9fCVrky6ErZtOc_0Fct1lcW3BtNDhdF5OBvKF6xwyN965xSsQgGVhYZHRrUd2BOEcn_rKwChTKCfXvy7j3vCD_Jq_9fMOj1INKnZbAy6zqL7hbgp39jGQwzMLgr9rCy7RGUanaGIrKN5fLXUOb6hK3RQnYsmJJq8D8v1qtt9yYrLKDM62Mxs0LYpCnhZJT3eBc89V-mrg0QvDSfSMSzDURiRUSokhwX_DbPnXhfJkVdL-WDPrZt3Y60wwxNgWHz3p33XAgxo34BE7Be3M7fheqXXjBfPtZZBrKbhFgx_GUPlJ_a276JktcjBU3rDpCQRwxZrXhsp6sUe5o1SALN8yBwgzIAWPo_ciEw_bP_5TyXPYMzsPf6fMpWM_9i7aH3olGOVWtveCcZCvqrqsQ5TeupZyC9odJullXuGqtGmgkfYVOZ7O_XcMs0LOudZDPhN057kVAmws6n3ILRA6b3An5jizondoqEIVhR9c9ENk-Ecu0hg07sO1a78m_MAG3swh6J5rx_lo2F9bPf4-yCzgJdZhZO44_qD5ZYQRIi1vXClyiDnskoTKd5_hGYVy3)
+
+---
+
+## 📝 Usage
 
 ```sh
 use the Arrow keys to navigate the menu and double enter on selected part
@@ -70,34 +61,47 @@ use the Arrow keys to navigate the menu and double enter on selected part
 ## 📦 Note:
 
 Recommended to intall the **ftxui** library as the owner described  
-after the installation of the library 
+after the installation of the library this .json file might be needed  
+also cntr+shift+p and The IntelliSense database reset is recommended.
 
+```sh
+{
+  "configurations": [
+    {
+      "name": "Linux",
+      "compileCommands": "${workspaceFolder}/build/compile_commands.json",
+      "includePath": [
+        "${workspaceFolder}/include",
+        "${workspaceFolder}/src",
+        "${workspaceFolder}/build/_deps/ftxui-src/include"
+      ],
+      "defines": [],
+      "compilerPath": "/usr/bin/g++",
+      "cStandard": "c11",
+      "cppStandard": "c++20",
+      "intelliSenseMode": "linux-gcc-x64"
+    }
+  ],
+  "version": 4
+}
+
+
+```
 
 ## 📝 License
 
-This project is licensed under the [GNU General Public License v3.0 (GPLv3)](LICENSE).
+This project is licensed under the basu_univercity computer enginering depatmet as a advance programming project  
+ (https://codeberg.org/SSCES)
 
 ---
 
 ## 🤝 Collaborators
 
-- 👤 [**Taha Sadeghi**](https://codeberg.org/Taha_Sadeghi) -> 40312358025
-- 👤 [**Shahriar Kolivand**](https://codeberg.org/imShahriar-klvd) ->40312358035
+- 👤 [**Ali kermani**](https://codeberg.org/Ali_kermani) -40312358032
+- 👤 [**Amin rahimi mehrnia**](https://codeberg.org/aminrm4) -40312358013
 
 ---
 
-## 🚀 Contributing
+## ✨Acknowledgements
 
-Contributions are welcome! Please open issues or pull requests for bug fixes, improvements, or new features.
-
----
-
-## 🙏 Acknowledgements
-
-- 🎲 Inspired by the "Horrified" board game.
-- 🧑‍💻 Uses [fmt](https://github.com/fmtlib/fmt) for formatting.
-- 📊 Table rendering and some utility code based on [tabulate](https://github.com/p-ranav/tabulate) (MIT License).
-
----
-
-> **Enjoy the game! But be careful monsters are around us 👾**
+uses FTXUI for formating the UI
