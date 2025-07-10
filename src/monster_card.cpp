@@ -55,7 +55,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
         }
 
         rand = distib(gen);
-        if (rand == 5 || rand == 5) // attack dice
+        if (rand == 5 || rand == 3) // attack dice
         {
             if (!monsters->get_loc()->get_hero_list().empty())
             {
@@ -82,7 +82,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                             if (monsters->get_loc()->get_hero_list()[0]->get_items()[i]->get_name() == name)
                             {
                                 delete monsters->get_loc()->get_hero_list()[0]->get_items()[i];
-                                monsters->get_loc()->get_hero_list()[0]->get_items().erase(monsters->get_loc()->get_hero_list()[0]->get_items().begin(), monsters->get_loc()->get_hero_list()[0]->get_items().end());
+                                monsters->get_loc()->get_hero_list()[0]->get_items().erase(monsters->get_loc()->get_hero_list()[0]->get_items().begin() + i);
                                 return;
                             }
                         }
@@ -95,10 +95,10 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                     }
                     if (state == 'n')
                     {
+                        cout << "the monster attakced you and i saved " << monsters->get_loc()->get_hero_list()[0]->get_hero_name() << "now you are in hospital \n";
                         monsters->get_loc()->get_hero_list()[0]->move(bug.list_of_location[0], bug);
                         bug.set_night_terror(bug.get_night_terror() + 1);
                         monsters->set_did_attack(true);
-                        cout << "the monster attakced you and i saved " << monsters->get_loc()->get_hero_list()[0]->get_hero_name() << "now you are in hospital \n";
                         return;
                     }
 

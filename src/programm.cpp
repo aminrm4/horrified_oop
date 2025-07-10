@@ -848,9 +848,11 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
       {"action left ", to_string(hero_list[1]->get_action())}
 
   };
-  map<string, string> monster_data = {
-      {monster_list[0]->get_mons_name(), " task remain :" + to_string(monster_list[0]->get_hidden_item())},
-      {monster_list[1]->get_mons_name(), " task remain :" + to_string(monster_list[1]->get_hidden_item())}};
+map<string, string> monster_data;
+  for (auto mon : monster_list)
+  {
+    monster_data[mon->get_mons_name()] = " task remain :" + to_string(mon->get_hidden_item());
+  }
 
   bool show_loc = false;
   bool show_hero = false;
@@ -866,14 +868,14 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
   vector<string> actions = {"Move", "Guide", "Pick Up", "Advance", "Defeat", "special action ", "Quit", "use perk"};
   vector<string> heros = {"hero name ", "item have ", "perk have ", "action left "};
   vector<string> heros1 = {"hero name ", "item have ", "perk have ", "action left "};
-  vector<string> monster_task = {monster_list[0]->get_mons_name(), monster_list[1]->get_mons_name()};
+  //vector<string> monster_task = {monster_list[0]->get_mons_name(), monster_list[1]->get_mons_name()};
   vector<string> locations = {"0 ) Hospital", "1 ) grave_yard", "2 ) church", "3 ) institute", "4 ) Lab", "5 ) shop", "6 ) museum", "7 ) cryptt", "8 ) abbey", "9 ) Mansion", "10 ) theatre", "11 ) tower", "12 ) docks", "13 ) inn", "14 ) precinct", "15 ) barn", "16 ) dungeon", "17 ) cave", "18 ) camp"};
 
   auto loc_menu = Radiobox(&locations, &sel_loc);
   auto act_menu = Radiobox(&actions, &sel_act);
   auto hero_menu = Radiobox(&heros, &sel_hero);
   auto heros1_menu = Radiobox(&heros1, &sel_hero1);
-  auto taks_menu = Radiobox(&monster_task, &sel_taks);
+  //auto taks_menu = Radiobox(&monster_task, &sel_taks);
   Component renderer = Renderer([&]
                                 {
     Elements elements;
@@ -923,10 +925,12 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
 
 if(show_task)
 {
-  elements.push_back(window(text( "monsters taks info"), vbox({
-        text(monster_list[0]->get_mons_name() + monster_data[monster_list[0]->get_mons_name()]),
-         text(monster_list[1]->get_mons_name() + monster_data[monster_list[1]->get_mons_name()])
-  })));
+string re;
+for (auto i1 : monster_list)
+{
+  re+=i1->get_mons_name()+" has "+to_string(i1->get_hidden_item()) +" task to do \n";
+}
+elements.push_back(window(text("task Detail"),paragraph(re)));
 }
 
    if (show_map)
@@ -1013,10 +1017,10 @@ if (show_map || show_hero ||show_hero1 ||show_task)
     if (show_hero)    return hero_menu->OnEvent(event);
     if (show_act)    return act_menu->OnEvent(event);
     if(show_hero1)   return heros1_menu->OnEvent(event);
-    if (show_task)
-    {
-    return taks_menu->OnEvent(event);
-    }
+    // if (show_task)
+    // {
+    // return taks_menu->OnEvent(event);
+    // }
     
     return false; });
 
@@ -1143,9 +1147,9 @@ void programm::run()
       {
         while (hero->get_action() > 0)
         {
-                cin.get();
-                clearScreen();
-                terminal_handler(data_updater, first_enter, secend_enter);
+          cin.get();
+          clearScreen();
+          terminal_handler(data_updater, first_enter, secend_enter);
           if (first_enter == "Move")
           {
             try
@@ -1157,9 +1161,9 @@ void programm::run()
               {
                 cout << "thats far away enter the place again" << endl;
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                // cin.get();
-                // clearScreen();
-                // terminal_handler(data_updater, first_enter, secend_enter);
+                cin.get();
+                clearScreen();
+                terminal_handler(data_updater, first_enter, secend_enter);
                 auto iterat = find(locations.begin(), locations.end(), secend_enter);
                 place_go = iterat - locations.begin();
               }
@@ -1169,7 +1173,6 @@ void programm::run()
               // cin.get();
               // clearScreen();
               // terminal_handler(data_updater, first_enter, secend_enter);
-
             }
             catch (exception &e)
             {
@@ -1256,7 +1259,6 @@ void programm::run()
               // cin.get();
               // clearScreen();
               // terminal_handler(data_updater, first_enter, secend_enter);
-
             }
             catch (exception &e)
             {
@@ -1279,7 +1281,6 @@ void programm::run()
               // cin.get();
               // clearScreen();
               // terminal_handler(data_updater, first_enter, secend_enter);
-
             }
             catch (exception &e)
             {
@@ -1379,9 +1380,9 @@ void programm::run()
       }
     }
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    cin.get();
-    clearScreen();
-    terminal_handler(data_updater, first_enter, secend_enter);
+    // cin.get();
+    // clearScreen();
+    // terminal_handler(data_updater, first_enter, secend_enter);
     hero_phase = true;
 
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -1395,9 +1396,9 @@ void programm::run()
       {
         while (hero->get_action() > 0)
         {
-                cin.get();
-                clearScreen();
-                terminal_handler(data_updater, first_enter, secend_enter);
+          cin.get();
+          clearScreen();
+          terminal_handler(data_updater, first_enter, secend_enter);
           if (first_enter == "Move")
           {
             try
@@ -1409,9 +1410,9 @@ void programm::run()
               {
                 cout << "thats far away enter the place again" << endl;
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                // cin.get();
-                // clearScreen();
-                // terminal_handler(data_updater, first_enter, secend_enter);
+                cin.get();
+                clearScreen();
+                terminal_handler(data_updater, first_enter, secend_enter);
                 auto iterat = find(locations.begin(), locations.end(), secend_enter);
                 place_go = iterat - locations.begin();
               }
@@ -1421,7 +1422,6 @@ void programm::run()
               // cin.get();
               // clearScreen();
               // terminal_handler(data_updater, first_enter, secend_enter);
-
             }
             catch (exception &e)
             {
@@ -1508,7 +1508,6 @@ void programm::run()
               // cin.get();
               // clearScreen();
               // terminal_handler(data_updater, first_enter, secend_enter);
-
             }
             catch (exception &e)
             {
@@ -1531,7 +1530,6 @@ void programm::run()
               // cin.get();
               // clearScreen();
               // terminal_handler(data_updater, first_enter, secend_enter);
-
             }
             catch (exception &e)
             {
@@ -1631,9 +1629,9 @@ void programm::run()
     }
     cout << "monster_phase is over" << endl;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    cin.get();
-    clearScreen();
-    terminal_handler(data_updater, first_enter, secend_enter);
+    // cin.get();
+    // clearScreen();
+    // terminal_handler(data_updater, first_enter, secend_enter);
     hero_phase = true;
   }
 }

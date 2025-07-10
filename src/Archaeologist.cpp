@@ -50,7 +50,7 @@ void Archaeologist::special_action(vector<vector<int>> &map, const vector<locati
     catch (logic_error &e)
     {
         cout << e.what();
-        special_action(map, loc);
+      //  special_action(map, loc);
         return;
     }
 }

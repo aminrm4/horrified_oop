@@ -3,6 +3,7 @@
 void remove_villager(programm &, villager *);
 void On_the_move::event(std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
 {
+    cout << "on the move monster card is done" << endl;
     vector<int> route;
     a.next_frenzy();
     for (int i = 0; i < a.list_of_location.size(); i++)
@@ -15,12 +16,10 @@ void On_the_move::event(std::vector<std::vector<int>> &map, std::vector<location
                 throw invalid_argument("no villager exist to move in their safe location\n");
             }
             else
-            { 
+            {
                 remove_villager(a, vill);
                 a.list_of_location[route[1]]->set_villager(vill);
                 vill->set_current_location(a.list_of_location[route[1]]);
-                cout<<"on the move monster card is done"<<endl;
-                return;
             }
         }
     }

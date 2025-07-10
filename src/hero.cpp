@@ -276,6 +276,7 @@ void hero::advance(vector<monster *> &monsters, programm &bug)
                                 {
                                     temp.push_back(item);
                                     powe_counter += item->get_power();
+                                    break;
                                 }
                             }
                         }
@@ -367,6 +368,7 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                             {
                                 temp.push_back(item);
                                 powe_counter += item->get_power();
+                                break;
                             }
                         }
                     }
@@ -453,6 +455,7 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                                 {
                                     temp.push_back(item);
                                     powe_counter += item->get_power();
+                                    break;
                                 }
                             }
                         }
