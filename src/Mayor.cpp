@@ -1,7 +1,7 @@
 #include "Mayor.hpp"
 using namespace std;
 
-void Mayor::special_action(vector<vector<int>> &map, const vector<location *> &loc)
+void Mayor::special_action(std::vector<std::vector<int>> &map,programm & bug)
 {
     cout << "you fooled you dont have any special action hahaha \n";
 }

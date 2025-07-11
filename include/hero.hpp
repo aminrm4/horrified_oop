@@ -24,7 +24,7 @@ protected:
     string name_of_hero;
 
 public:
-    virtual void special_action(std::vector<std::vector<int>> &map, const std::vector<location *> &loc) = 0;
+    virtual void special_action(std::vector<std::vector<int>> &map,programm & bug) = 0;
     void advance(vector<monster *> &monsters, programm &bug);
     void guide(std::vector<std::vector<int>> &map, programm &);
     void defeat(vector<monster *> &monsters, programm &bug);

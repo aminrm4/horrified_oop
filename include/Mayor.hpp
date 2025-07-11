@@ -4,6 +4,6 @@
 class Mayor : public hero
 {
 public:
-   void special_action(vector<vector<int>> &map, const vector<location *> &loc);
+   void special_action(std::vector<std::vector<int>> &map,programm & bug);
    Mayor(int, location *, std::vector<perk *> &);
 };

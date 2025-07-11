@@ -1,6 +1,7 @@
 #include "Archaeologist.hpp"
+#include"programm.hpp"
 using namespace std;
-void Archaeologist::special_action(vector<vector<int>> &map, const vector<location *> &loc)
+void Archaeologist::special_action(std::vector<std::vector<int>> &map,programm & bug)
 {
     int node_number = this->get_loc()->get_loc_relation();
 
@@ -21,7 +22,7 @@ void Archaeologist::special_action(vector<vector<int>> &map, const vector<locati
 
         if (is_connected)
         {
-            for (auto locations : loc)
+            for (auto locations : bug.list_of_location)
                 if (locations->get_loc_relation() == node)
                 {
                     vector<item *> items(locations->get_item_list());

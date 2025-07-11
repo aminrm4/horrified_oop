@@ -1275,7 +1275,7 @@ void programm::run()
           {
             try
             {
-              hero->special_action(my_map, list_of_location);
+              hero->special_action(my_map, *this);
               hero->set_action(hero->get_action() - 1);
               std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
               // cin.get();
@@ -1524,7 +1524,7 @@ void programm::run()
           {
             try
             {
-              hero->special_action(my_map, list_of_location);
+              hero->special_action(my_map, *this);
               hero->set_action(hero->get_action() - 1);
               std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
               // cin.get();
