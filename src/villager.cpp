@@ -20,7 +20,6 @@ villager::villager(std::string name, location *safe, location *curr, programm &h
     try
     {
         set_current_location(curr);
-
     }
     catch (invalid_argument &e)
     {
@@ -50,4 +49,17 @@ villager::~villager()
 {
     current_location = safe_location = nullptr;
     award = nullptr;
+}
+void villager::save_game(string file_name)
+{
+
+    ofstream data_saver(file_name, ios::app);
+    if (!data_saver)
+    {
+        cerr << "villager file can not be opend" << endl;
+    }
+    data_saver<<name<<endl;
+    data_saver<<safe_location->get_loc_relation()<<endl;
+    data_saver<<current_location->get_loc_relation()<<endl;
+    data_saver<<award->get_name()<<endl;
 }

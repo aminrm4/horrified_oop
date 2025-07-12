@@ -14,6 +14,7 @@ public:
     virtual void play(programm &help_obj1) = 0;
     perk() = default;
     virtual ~perk() = default;
+    void save_game(const std::string);
 };
 
 #endif

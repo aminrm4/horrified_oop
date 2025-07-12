@@ -23,6 +23,7 @@ public:
     location *const get_safe_location();
     perk *drop_the_perk();
     std::string get_name();
+    void save_game(const std::string);
 };
 
 #endif

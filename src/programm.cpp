@@ -28,7 +28,56 @@ using namespace ftxui;
 #include "Color.hpp"
 #include <stdexcept>
 #include <format>
+namespace fs = std::filesystem;
 
+void programm::save_game(string file_name)
+{
+  fs::path dir = file_name;
+  if (!fs::is_empty(dir))
+  {
+    for (auto const &entry : fs::directory_iterator(dir))
+    {
+      fs::remove_all(entry.path());
+    }
+  }
+
+  fs::path full_path = dir / "items.txt";
+  for (auto it : list_of_items)
+  {
+    it->save_game(full_path.string());
+  }
+  full_path = dir / "perks.txt";
+
+  for (auto pe : list_of_perks)
+  {
+    pe->save_game(full_path.string());
+  }
+  full_path = dir / "monster.txt";
+  for (auto mo : monster_list)
+  {
+    mo->save_game(full_path.string());
+  }
+  full_path = dir / "hero.txt";
+
+  for (auto he : hero_list)
+  {
+    he->save_game(full_path.string());
+  }
+  full_path = dir / "monster_card.txt";
+  for (auto ca : monster_card_list)
+  {
+    ca->save_game(full_path.string());
+  }
+  full_path = dir / "villager.txt";
+
+  for (auto lo : list_of_location)
+  {
+    for (auto vi : lo->get_villager_list())
+    {
+      vi->save_game(full_path.string());
+    }
+  }
+}
 bool programm::is_node_connected(int her, int node)
 {
   vector<int> temp;
@@ -848,7 +897,7 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
       {"action left ", to_string(hero_list[1]->get_action())}
 
   };
-map<string, string> monster_data;
+  map<string, string> monster_data;
   for (auto mon : monster_list)
   {
     monster_data[mon->get_mons_name()] = " task remain :" + to_string(mon->get_hidden_item());
@@ -868,14 +917,14 @@ map<string, string> monster_data;
   vector<string> actions = {"Move", "Guide", "Pick Up", "Advance", "Defeat", "special action ", "Quit", "use perk"};
   vector<string> heros = {"hero name ", "item have ", "perk have ", "action left "};
   vector<string> heros1 = {"hero name ", "item have ", "perk have ", "action left "};
-  //vector<string> monster_task = {monster_list[0]->get_mons_name(), monster_list[1]->get_mons_name()};
+  // vector<string> monster_task = {monster_list[0]->get_mons_name(), monster_list[1]->get_mons_name()};
   vector<string> locations = {"0 ) Hospital", "1 ) grave_yard", "2 ) church", "3 ) institute", "4 ) Lab", "5 ) shop", "6 ) museum", "7 ) cryptt", "8 ) abbey", "9 ) Mansion", "10 ) theatre", "11 ) tower", "12 ) docks", "13 ) inn", "14 ) precinct", "15 ) barn", "16 ) dungeon", "17 ) cave", "18 ) camp"};
 
   auto loc_menu = Radiobox(&locations, &sel_loc);
   auto act_menu = Radiobox(&actions, &sel_act);
   auto hero_menu = Radiobox(&heros, &sel_hero);
   auto heros1_menu = Radiobox(&heros1, &sel_hero1);
-  //auto taks_menu = Radiobox(&monster_task, &sel_taks);
+  // auto taks_menu = Radiobox(&monster_task, &sel_taks);
   Component renderer = Renderer([&]
                                 {
     Elements elements;
@@ -1152,6 +1201,8 @@ void programm::run()
           terminal_handler(data_updater, first_enter, secend_enter);
           if (first_enter == "Move")
           {
+            this->save_game("/home/amin/Desktop/horrified_board_game/save1");
+            cin.get();
             try
             {
 

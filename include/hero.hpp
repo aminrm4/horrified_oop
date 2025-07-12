@@ -40,5 +40,6 @@ public:
     string get_hero_name();
     hero(std::vector<perk *> &);
     void use_perk(programm &);
+    void save_game(const std::string);
     ~hero();
 };

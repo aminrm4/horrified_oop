@@ -62,4 +62,5 @@ public:
   ~programm();
   template <typename T>
   string show_hero_deatail(T vec);
+  void save_game(const std::string file_name);
 };

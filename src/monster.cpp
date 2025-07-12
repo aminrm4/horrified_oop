@@ -84,3 +84,17 @@ monster::~monster()
 {
     loc = nullptr;
 }
+void monster::save_game(string file_name)
+{
+      ofstream data_saver(file_name, ios::app);
+    if (!data_saver)
+    {
+        cerr << "monster file can not be opend" << endl;
+    }
+
+    data_saver<<name_of_monster<<endl;
+    data_saver<<loc->get_loc_relation()<<endl;
+    data_saver<<totla_hidden_item<<endl;
+    data_saver<<is_freenzy<<endl;
+    data_saver<<did_attack<<endl;
+}

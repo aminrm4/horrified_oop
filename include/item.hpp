@@ -17,4 +17,5 @@ public:
     rgb::Color get_Color();
     location *get_loc();
     ~item();
+    void save_game(const std::string);
 };

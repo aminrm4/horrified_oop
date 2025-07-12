@@ -9,6 +9,7 @@
 #include "location.hpp"
 #include "Color.hpp"
 #include "terminal_color.hpp"
+#include <filesystem>
 void remove_hero(programm &, hero *);
 void remove_villager(programm &, villager *);
 void remove_monster(programm &, monster *);
@@ -17,6 +18,7 @@ void message_invisible_man(bool alive);
 void message_drakula(bool alive);
 
 using namespace std;
+namespace fs = std::filesystem;
 
 void hero::move(location *loc, programm &bug)
 {
@@ -423,7 +425,7 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                     return;
                 }
             }
-           // cerr << "There is no monster here \n";
+            // cerr << "There is no monster here \n";
         }
     }
     if (detect == 'i')
@@ -691,4 +693,26 @@ hero::~hero()
     item_have.clear();
     perk_have.clear();
     loc = nullptr;
+}
+void hero::save_game(const string file_name)
+{
+    
+    ofstream data_saver(file_name, ios::app);
+    if (!data_saver)
+    {
+        cerr << "hero file can not be opend" << endl;
+    }
+
+    data_saver << name_of_hero << endl;
+    data_saver << loc->get_loc_relation() << endl;
+    data_saver << action << endl;
+    for (auto ite : item_have)
+    {
+        data_saver << ite->get_name() << " " << ite->get_power() << " " << endl;
+    }
+
+    for (auto pe : perk_have)
+    {
+        data_saver << pe->get_name() << " " << endl;
+    }
 }

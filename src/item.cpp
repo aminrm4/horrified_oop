@@ -1,5 +1,7 @@
 #include "item.hpp"
 #include <exception>
+#include<fstream>
+#include"location.hpp"
 using namespace std;
 
 item::item(int power, std::string name, rgb::Color color, location *loc)
@@ -37,4 +39,14 @@ ostream &operator<<(ostream &output, item &i)
 item::~item()
 {
     loc = nullptr;
+}
+void item::save_game(const string file_name)
+{
+    ofstream data_saver(file_name, ios::app);
+    if (!data_saver)
+    {
+        cerr << "item file can not be opend" << endl;
+    }
+
+    data_saver<<name<<" "<<power<<" "<<loc->get_loc_relation()<<endl;
 }

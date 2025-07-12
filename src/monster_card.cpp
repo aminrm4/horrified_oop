@@ -143,3 +143,13 @@ void monster_card::item_handler(programm &help_object)
         help_object.list_of_items.erase(help_object.list_of_items.begin() + random);
     }
 }
+void monster_card::save_game(const string file_name)
+{
+    ofstream data_saver(file_name, ios::app);
+    if (!data_saver)
+    {
+        cerr << "monster_card file can not be opend" << endl;
+    }
+    data_saver<<name_of_card<<endl;
+
+}
