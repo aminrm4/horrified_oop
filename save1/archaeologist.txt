@@ -1,0 +1,7 @@
+archaeologist
+12
+4
+no_item 
+end_of_item 
+break_of_down 
+end_of_perk 

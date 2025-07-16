@@ -24,6 +24,7 @@ public:
     perk *drop_the_perk();
     std::string get_name();
     void save_game(const std::string);
+    void load_game(std::string,programm &);
 };
 
 #endif

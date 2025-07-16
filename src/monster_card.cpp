@@ -4,6 +4,7 @@
 #include "item.hpp"
 #include <algorithm>
 #include <random>
+namespace fs=std::filesystem;
 int random_number(int min, int max);
 
 void remove_villager(programm &obj, villager *v);
@@ -153,3 +154,32 @@ void monster_card::save_game(const string file_name)
     data_saver<<name_of_card<<endl;
 
 }
+  void  monster_card::load_game(std::string file_name,programm& bug)
+  {
+    int counter=0;
+    fs::path dir=file_name;
+    file_name=dir /"monster_card.txt";
+    ifstream loader(file_name);
+    if (!loader)
+    {
+        cerr<<"monster_card file could not load"<<endl;
+    }
+    string name_card;
+    while (loader>>name_card)
+    {
+        counter++;
+        for (int i = 0; i < bug.monster_card_list.size(); i++)
+        {
+            if (bug.monster_card_list[i]->name_of_card==name_card)
+            {
+                rotate(bug.monster_card_list.begin(),bug.monster_card_list.begin()+i,bug.monster_card_list.begin()+i+1);
+                break;
+            }
+            
+        }
+        
+
+    }
+    bug.monster_card_list.erase(bug.monster_card_list.begin()+counter,bug.monster_card_list.end());
+    loader.close();
+  }

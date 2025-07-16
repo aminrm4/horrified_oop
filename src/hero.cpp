@@ -10,6 +10,7 @@
 #include "Color.hpp"
 #include "terminal_color.hpp"
 #include <filesystem>
+#include "item.hpp"
 void remove_hero(programm &, hero *);
 void remove_villager(programm &, villager *);
 void remove_monster(programm &, monster *);
@@ -696,7 +697,7 @@ hero::~hero()
 }
 void hero::save_game(const string file_name)
 {
-    
+
     ofstream data_saver(file_name, ios::app);
     if (!data_saver)
     {
@@ -706,13 +707,123 @@ void hero::save_game(const string file_name)
     data_saver << name_of_hero << endl;
     data_saver << loc->get_loc_relation() << endl;
     data_saver << action << endl;
+    if (item_have.empty())
+    {
+        data_saver << "no_item" << " " << endl;
+    }
+
     for (auto ite : item_have)
     {
+
         data_saver << ite->get_name() << " " << ite->get_power() << " " << endl;
+    }
+    data_saver << "end_of_item" << " " << endl;
+
+    if (this->perk_have.empty())
+    {
+        data_saver << "no_perk" << " " << endl;
     }
 
     for (auto pe : perk_have)
     {
         data_saver << pe->get_name() << " " << endl;
     }
+    data_saver << "end_of_perk" << " " << endl;
+}
+void hero::load_game(std::string file_name, programm &bug)
+{
+    for (auto l : bug.list_of_location)
+    {
+        if (!l->get_item_list().empty())
+        {
+            for (int i = 0; i < l->get_item_list().size(); i++)
+            {
+                bug.list_of_items.push_back(l->get_item_list()[i]);
+            }
+            l->delete_item();
+        }
+    }
+
+    for (auto pe : this->perk_have)
+    {
+        bug.list_of_perks.push_back(pe);
+    }
+    this->perk_have.clear();
+    fs::path dir = file_name;
+    if (this->name_of_hero == "mayor")
+    {
+        file_name = dir / "mayor.txt";
+    }
+    else
+    {
+        file_name = dir / "archaeologist.txt";
+    }
+
+    ifstream loader(file_name);
+    if (!loader)
+    {
+        cerr << "hero file can not opend" << endl;
+    }
+
+    int loc_num;
+    int act;
+    string item_have;
+    string perk_have;
+    loader >> this->name_of_hero;
+    loader >> loc_num;
+    this->move(bug.list_of_location[loc_num], bug);
+    loader >> act;
+    this->set_action(act);
+    while (loader >> item_have)
+    {
+        if (item_have != "no_item")
+        {
+
+            if (item_have == "end_of_item")
+            {
+                break;
+            }
+            for (int i = 0; i < bug.list_of_items.size(); i++)
+            {
+                if (item_have == bug.list_of_items[i]->get_name())
+                {
+                    this->item_have.push_back(bug.list_of_items[i]);
+                    bug.list_of_items.erase(bug.list_of_items.begin() + i);
+                    break;
+                }
+            }
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    while (loader >> perk_have)
+    {
+        if (perk_have != "no_perk")
+        {
+            if (perk_have == "end_of_perk")
+            {
+                break;
+            }
+
+            for (int i = 0; i < bug.list_of_perks.size(); i++)
+            {
+
+                if (bug.list_of_perks[i]->get_name() == perk_have)
+                {
+                    this->perk_have.push_back(bug.list_of_perks[i]);
+                    bug.list_of_perks.erase(bug.list_of_perks.begin() + i);
+
+                    break;
+                }
+            }
+        }
+        else
+        {
+            break;
+        }
+    }
+    loader.close();
 }

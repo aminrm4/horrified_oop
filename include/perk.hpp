@@ -15,6 +15,7 @@ public:
     perk() = default;
     virtual ~perk() = default;
     void save_game(const std::string);
+    void load_game(std::string,programm &);
 };
 
 #endif

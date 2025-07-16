@@ -1,9 +1,10 @@
 #include "item.hpp"
 #include <exception>
-#include<fstream>
-#include"location.hpp"
+#include <fstream>
+#include "location.hpp"
+#include"programm.hpp"
 using namespace std;
-
+namespace fs = filesystem;
 item::item(int power, std::string name, rgb::Color color, location *loc)
 {
     if (power <= 0)
@@ -48,5 +49,38 @@ void item::save_game(const string file_name)
         cerr << "item file can not be opend" << endl;
     }
 
-    data_saver<<name<<" "<<power<<" "<<loc->get_loc_relation()<<endl;
+    data_saver << name << " " <<endl;
+}
+void item::load_game(std::string file_name, programm &bug)
+{
+    fs::path dir = file_name;
+    file_name = dir / "items.txt";
+    ifstream loader(file_name);
+    if (!loader)
+    {
+        cerr << "item file can not load" << endl;
+    }
+    int counter=0;
+    string nam;
+    while (loader>>nam)
+    {
+        cout<<"item in "<<nam<<endl;
+        counter++;
+        for (int i = 0; i < bug.list_of_items.size(); i++)
+        {
+            if (bug.list_of_items[i]->get_name()==nam)
+            {
+                rotate(bug.list_of_items.begin(),bug.list_of_items.begin()+i,bug.list_of_items.begin()+i+1);
+                break;
+            }
+            
+        }
+     
+        bug.list_of_items.erase(bug.list_of_items.begin()+counter,bug.list_of_items.end());
+                cout<<"item in "<<bug.list_of_items.size()<<endl;
+
+    }
+    loader.close();
+
+
 }

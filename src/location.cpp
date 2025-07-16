@@ -5,6 +5,7 @@
 #include "hero.hpp"
 #include "programm.hpp"
 using namespace std;
+namespace fs = filesystem;
 location::location(int relation, bool coffin)
 
 {
@@ -164,4 +165,46 @@ location::~location()
     item_list.clear();
     hero_list.clear();
     monster_list.clear();
+}
+void location::save_game(std::string file_name)
+{
+    ofstream saver(file_name, ios::app);
+    if (!saver)
+    {
+        cerr << "location file can not be opend" << endl;
+    }
+    for (auto it : this->get_item_list())
+    {
+        saver << this->get_loc_relation() << " ";
+
+        saver << it->get_name() << endl;
+    }
+    saver.close();
+}
+void location::load_game(std::string file_name, programm &bug)
+{
+    fs::path dir = file_name;
+    file_name = dir / "location.txt";
+    ifstream loader(file_name);
+    if (!loader)
+    {
+        cerr << "locations file could not load" << endl;
+    }
+
+    int lo;
+    string nam;
+    while (loader >> lo >> nam)
+    {
+
+        for (int i = 0; i < bug.list_of_items.size(); i++)
+        {
+            if (bug.list_of_items[i]->get_name() == nam)
+            {
+                bug.list_of_location[lo]->set_item_list(bug.list_of_items[i]);
+                bug.list_of_items.erase(bug.list_of_items.begin() + i);
+                break;
+            }
+        }
+    }
+    loader.close();
 }

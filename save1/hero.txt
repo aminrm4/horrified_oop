@@ -1,9 +1,0 @@
-mayor
-13
-1
-dart 2 
-late_into_night 
-archaeologist
-12
-4
-overstock 

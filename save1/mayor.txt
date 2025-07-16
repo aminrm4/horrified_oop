@@ -1,0 +1,8 @@
+mayor
+13
+3
+garlic 2 
+monocane_mixture 3 
+end_of_item 
+no_perk 
+end_of_perk 

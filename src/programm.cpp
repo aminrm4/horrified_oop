@@ -55,13 +55,29 @@ void programm::save_game(string file_name)
   full_path = dir / "monster.txt";
   for (auto mo : monster_list)
   {
-    mo->save_game(full_path.string());
+    if (typeid(*mo).name() == typeid(Drakula).name())
+    {
+      full_path = dir / "Drakula.txt";
+      mo->save_game(full_path.string());
+    }
+    else
+    {
+      full_path = dir / "Invisible_man.txt";
+      mo->save_game(full_path.string());
+    }
   }
-  full_path = dir / "hero.txt";
-
   for (auto he : hero_list)
   {
-    he->save_game(full_path.string());
+    if (typeid(*he).name() == typeid(Mayor).name())
+    {
+      full_path = dir / "mayor.txt";
+      he->save_game(full_path.string());
+    }
+    else
+    {
+      full_path = dir / "archaeologist.txt";
+      he->save_game(full_path.string());
+    }
   }
   full_path = dir / "monster_card.txt";
   for (auto ca : monster_card_list)
@@ -77,7 +93,55 @@ void programm::save_game(string file_name)
       vi->save_game(full_path.string());
     }
   }
+  full_path = dir / "location.txt";
+  for (auto loc : list_of_location)
+  {
+    loc->save_game(full_path.string());
+  }
 }
+
+void programm::load_game(string file_name)
+{
+
+  for (auto he : hero_list)
+  {
+    he->load_game(file_name, *this);
+  }
+  for (auto ca : monster_card_list)
+  {
+    ca->load_game(file_name, *this);
+  }
+  for (auto mo : monster_list)
+  {
+    mo->load_game(file_name, *this);
+  }
+  for (auto l : list_of_location)
+  {
+    if (!l->get_villager_list().empty())
+    {
+
+      l->get_villager_list()[0]->load_game(file_name, *this);
+      break;
+    }
+  }
+  for (auto lo : list_of_location)
+  {
+    lo->load_game(file_name, *this);
+    break;
+  }
+  for (auto ite : list_of_items)
+  {
+    ite->load_game(file_name, *this);
+    break;
+  }
+
+  for (auto pe : list_of_perks)
+  {
+    pe->load_game(file_name, *this);
+  
+  }
+}
+
 bool programm::is_node_connected(int her, int node)
 {
   vector<int> temp;
@@ -400,7 +464,6 @@ programm::programm()
   // monster_card_list.push_back(new Hypnotic_Gaze(2, 2, 1));
   monster_card_list.push_back(new On_the_move(2, 3, 3));
   monster_card_list.push_back(new On_the_move(2, 3, 3));
-
   for (int i = 0; i < 12; i++)
   {
 
@@ -1240,6 +1303,23 @@ void programm::run()
           {
             try
             {
+              this->load_game("/home/amin/Desktop/horrified_board_game/save1");
+              cin.get();
+              for (auto pe : list_of_perks)
+              {
+                cout << pe->get_name() << endl;
+              }
+
+              for (auto pe : list_of_items)
+              {
+                cout << pe->get_name() << endl;
+              }
+
+              // for (auto pe : list_of_location)
+              // {
+              //   cout << pe->get_villager_list()[0]->drop_the_perk()->get_name() << endl;
+              // }
+              cin.get();
               hero->guide(my_map, *this);
               hero->set_action(hero->get_action() - 1);
               std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');

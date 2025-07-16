@@ -21,6 +21,7 @@ public:
   int get_move_count();
   virtual ~monster_card() {}
   void save_game(const std::string);
+ void load_game(std::string,programm&);
 
 protected:
   int item_count;
