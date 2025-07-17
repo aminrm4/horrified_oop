@@ -182,7 +182,8 @@ void location::save_game(std::string file_name)
     saver.close();
 }
 void location::load_game(std::string file_name, programm &bug)
-{
+{       string vill_file_name=file_name;
+
     fs::path dir = file_name;
     file_name = dir / "location.txt";
     ifstream loader(file_name);
@@ -198,6 +199,7 @@ void location::load_game(std::string file_name, programm &bug)
 
         for (int i = 0; i < bug.list_of_items.size(); i++)
         {
+
             if (bug.list_of_items[i]->get_name() == nam)
             {
                 bug.list_of_location[lo]->set_item_list(bug.list_of_items[i]);
@@ -207,4 +209,32 @@ void location::load_game(std::string file_name, programm &bug)
         }
     }
     loader.close();
+
+    fs::path dir_v = vill_file_name;
+    vill_file_name = dir_v / "villager.txt";
+    ifstream loader_vil(vill_file_name);
+    if (!loader_vil)
+    {
+        cerr << "villager file can not be load" << endl;
+    }
+    string vil_name, perk_hav;
+    int saf, final;
+    int count = 0;
+    while (loader_vil >> vil_name >> saf >> final >> perk_hav)
+    {
+        programm temp;
+
+        bug.list_of_location[final]->set_villager(new villager(vil_name, bug.list_of_location[saf], bug.list_of_location[final], temp));
+        for (int i = 0; i < bug.list_of_perks.size(); i++)
+        {
+            if (bug.list_of_perks[i]->get_name() == perk_hav)
+            {
+                count=bug.list_of_location.size();
+                bug.list_of_location[final]->get_villager_list()[count]->set_award(bug.list_of_perks[i]); // danger index
+                bug.list_of_perks.erase(bug.list_of_perks.begin() + i);
+                break;
+            }
+        }
+    }
+    loader_vil.close();
 }

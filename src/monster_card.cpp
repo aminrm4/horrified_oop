@@ -78,6 +78,16 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                         cout << "emter the name of your item \n";
                         string name;
                         cin >> name;
+                          for (auto he : monsters->get_loc()->get_hero_list())
+                          {
+                            if (he->get_hero_name()=="scientist")
+                            {
+                                he->ability(name);
+                                break;
+                            }
+                            
+                          }
+                          
                         for (int i = 0; i < monsters->get_loc()->get_hero_list()[0]->get_items().size(); i++)
                         {
                             if (monsters->get_loc()->get_hero_list()[0]->get_items()[i]->get_name() == name)

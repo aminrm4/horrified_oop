@@ -80,6 +80,8 @@ void villager::load_game(std::string file_name, programm &bug)
     while (loader >> nam >> saf >> final >> perk_hav)
     {
         programm temp;
+        cout<<"im in vill"<<nam;
+        cin.get();
 
         bug.list_of_location[final]->set_villager(new villager(nam, bug.list_of_location[saf], bug.list_of_location[final], temp));
         for (int i = 0; i < bug.list_of_perks.size(); i++)
@@ -93,3 +95,7 @@ void villager::load_game(std::string file_name, programm &bug)
         }
     }
 }
+    void  villager::set_award(perk * aw)
+    {
+        this->award=aw;
+    }

@@ -12,6 +12,8 @@ using namespace ftxui;
 #include <iostream>
 #include "Drakula.hpp"
 #include "Invisible_man.hpp"
+#include"scientist.hpp"
+#include"courier.hpp"
 #include "monster_card.hpp"
 #include "Egyptian_Expert.hpp"
 #include "form_of_the_bat.hpp"
@@ -73,9 +75,19 @@ void programm::save_game(string file_name)
       full_path = dir / "mayor.txt";
       he->save_game(full_path.string());
     }
-    else
+    else if(typeid(*he).name()==typeid(Archaeologist).name())
     {
       full_path = dir / "archaeologist.txt";
+      he->save_game(full_path.string());
+    }
+    else if(typeid(*he).name()==typeid(scientist).name())
+    {
+      full_path=dir/"scientist";
+      he->save_game(full_path.string());
+    }
+    else if(typeid(*he).name()==typeid(courier).name())
+    {
+      full_path=dir/"courier";
       he->save_game(full_path.string());
     }
   }
@@ -102,33 +114,29 @@ void programm::save_game(string file_name)
 
 void programm::load_game(string file_name)
 {
-
+  
   for (auto he : hero_list)
   {
     he->load_game(file_name, *this);
   }
+
   for (auto ca : monster_card_list)
   {
     ca->load_game(file_name, *this);
   }
+
   for (auto mo : monster_list)
   {
     mo->load_game(file_name, *this);
   }
-  for (auto l : list_of_location)
-  {
-    if (!l->get_villager_list().empty())
-    {
 
-      l->get_villager_list()[0]->load_game(file_name, *this);
-      break;
-    }
-  }
+
   for (auto lo : list_of_location)
   {
     lo->load_game(file_name, *this);
     break;
   }
+
   for (auto ite : list_of_items)
   {
     ite->load_game(file_name, *this);
@@ -138,7 +146,7 @@ void programm::load_game(string file_name)
   for (auto pe : list_of_perks)
   {
     pe->load_game(file_name, *this);
-  
+    break;
   }
 }
 
@@ -439,6 +447,9 @@ programm::programm()
 
   hero_list.push_back(new Mayor(5, list_of_location[10], list_of_perks));
   hero_list.push_back(new Archaeologist(4, list_of_location[12], list_of_perks));
+  hero_list.push_back(new scientist(4 ,list_of_location[3],list_of_perks));
+hero_list.push_back(new courier(4,list_of_location[5],list_of_perks));
+
   monster_list.push_back(new Drakula(4, true, 1, list_of_location[0]));
   monster_list.push_back(new invisible_man(5, false, 6, list_of_location[14]));
 
@@ -1315,10 +1326,6 @@ void programm::run()
                 cout << pe->get_name() << endl;
               }
 
-              // for (auto pe : list_of_location)
-              // {
-              //   cout << pe->get_villager_list()[0]->drop_the_perk()->get_name() << endl;
-              // }
               cin.get();
               hero->guide(my_map, *this);
               hero->set_action(hero->get_action() - 1);

@@ -42,5 +42,7 @@ public:
     void use_perk(programm &);
     void save_game(const std::string);
     void load_game( std::string,programm &bug);
+    void ability(std::string);
+
     ~hero();
 };

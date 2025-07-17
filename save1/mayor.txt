@@ -1,8 +1,7 @@
 mayor
-13
-3
-garlic 2 
-monocane_mixture 3 
+10
+5
+no_item 
 end_of_item 
-no_perk 
+late_into_night 
 end_of_perk 

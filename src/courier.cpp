@@ -4,7 +4,16 @@
 
 void courier::special_action(std::vector<std::vector<int>> &map,programm & bug)
 {
-   this->move(bug.list_of_location[2],bug);
+   for (auto lo : bug.list_of_location)
+   {
+        if (!lo->get_hero_list().empty())
+        {
+            this->move(lo,bug);
+            return;
+        }
+        
+   }
+   
 }
 courier ::courier(int actions, location *starting_loc, std::vector<perk *> &perks) : hero(perks)
 {

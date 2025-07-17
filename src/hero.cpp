@@ -184,6 +184,10 @@ void hero::advance(vector<monster *> &monsters, programm &bug)
                             cout << "enter the name of your item" << endl;
                             string name;
                             cin >> name;
+                            if (this->name_of_hero == "scientist")
+                            {
+                                this->ability(name);
+                            }
 
                             for (int item = 0; item < item_have.size(); item++)
                             {
@@ -273,6 +277,11 @@ void hero::advance(vector<monster *> &monsters, programm &bug)
 
                             string namer;
                             cin >> namer;
+                            if (this->name_of_hero=="scientist")
+                            {
+                                this->ability(namer);
+                            }
+                            
                             for (auto item : this->item_have)
                             {
                                 if (item->get_name() == namer && item->get_Color() == rgb::Color::Red)
@@ -365,6 +374,10 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
 
                         string namer;
                         cin >> namer;
+                            if (this->name_of_hero=="scientist")
+                            {
+                                this->ability(namer);
+                            }
                         for (auto item : this->item_have)
                         {
                             if (item->get_name() == namer && item->get_Color() == rgb::Color::Yellow)
@@ -452,6 +465,10 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
 
                             string namer;
                             cin >> namer;
+                                if (this->name_of_hero=="scientist")
+                            {
+                                this->ability(namer);
+                            }
                             for (auto item : this->item_have)
                             {
                                 if (item->get_name() == namer && item->get_Color() == rgb::Color::Red)
@@ -740,7 +757,7 @@ void hero::load_game(std::string file_name, programm &bug)
             {
                 bug.list_of_items.push_back(l->get_item_list()[i]);
             }
-            l->delete_item();
+            l->get_item_list().clear();
         }
     }
 
@@ -754,11 +771,18 @@ void hero::load_game(std::string file_name, programm &bug)
     {
         file_name = dir / "mayor.txt";
     }
-    else
+    else if (this->name_of_hero == "archaeologist.txt")
     {
         file_name = dir / "archaeologist.txt";
     }
-
+    else if (this->name_of_hero == "scientist")
+    {
+        file_name = dir / "scientist";
+    }
+    else if (this->name_of_hero == "courier")
+    {
+        file_name = dir / "courier";
+    }
     ifstream loader(file_name);
     if (!loader)
     {
@@ -826,4 +850,24 @@ void hero::load_game(std::string file_name, programm &bug)
         }
     }
     loader.close();
+}
+void hero::ability(std::string name_of_item)
+{
+    cout << "do you want to use your ability" << endl;
+    char a;
+    cin >> a;
+    if (a == 'y')
+    {
+        for (auto it : this->item_have)
+        {
+            if (it->get_name() == name_of_item)
+            {
+                it->set_power(it->get_power() + 1); // call this function every where you use item
+            }
+        }
+    }
+    else
+    {
+        return;
+    }
 }

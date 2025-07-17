@@ -13,7 +13,7 @@ using namespace std;
    {
      if (actions < 0)
         throw logic_error("invalid actions \n");
-    action = actions;
+    this->action = actions;
     swap(loc, starting_loc);
     name_of_hero = "scientist";
    }

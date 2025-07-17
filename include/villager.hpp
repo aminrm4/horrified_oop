@@ -25,6 +25,7 @@ public:
     std::string get_name();
     void save_game(const std::string);
     void load_game(std::string,programm &);
+    void set_award(perk *);
 };
 
 #endif
