@@ -20,8 +20,8 @@ add_executable(app ${GAME_SOURCES})
 # 6) Include directories
 target_include_directories(app PRIVATE
   ${CMAKE_SOURCE_DIR}/include
-  
- 
+
+
 )
 
 # 7) Link libraries
@@ -30,4 +30,5 @@ target_link_libraries(app PRIVATE
   sfml-graphics
   sfml-window
   sfml-system
+  sfml-audio
 )

@@ -975,6 +975,7 @@ void programm::run()
     sf::Event event;
     while (window.pollEvent(event))
     {
+
       if (state == initstate::playmenu)
       {
         if (hero_list[heroNo]->get_action() <= 0)

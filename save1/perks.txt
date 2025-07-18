@@ -2,15 +2,13 @@ visit_from_detective
 visit_from_detective
 visit_from_detective
 break_of_down
-break_of_down
-break_of_down
 overstock
 overstock
 overstock
 late_into_night
 late_into_night
 late_into_night
-repel
+late_into_night
 repel
 repel
 hurry
