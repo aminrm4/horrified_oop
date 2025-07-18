@@ -6,9 +6,6 @@
 #include "location.hpp"
 #include "map1.hpp"
 #include "monster.hpp"
-#include <ftxui/component/component.hpp>
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/dom/elements.hpp>
 #include "visit_from_detective.hpp"
 #include "repel.hpp"
 #include "hurry.hpp"

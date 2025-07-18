@@ -8,7 +8,6 @@
 #include <iterator>
 #include "location.hpp"
 #include "Color.hpp"
-#include "terminal_color.hpp"
 #include <filesystem>
 #include "item.hpp"
 void remove_hero(programm &, hero *);
@@ -254,15 +253,15 @@ void hero::advance(vector<monster *> &monsters, programm &bug)
                         {
                             if (ite->get_Color() == rgb::Color::Red)
                             {
-                                cout << " the item name is :" << ite->get_name() << " item color is" << RED << "red :" << RESET << " item power is : " << to_string(ite->get_power()) << endl;
+                                cout << " the item name is :" << ite->get_name() << " item color is" << "red :"  << " item power is : " << to_string(ite->get_power()) << endl;
                             }
                             if (ite->get_Color() == rgb::Color::Yellow)
                             {
-                                cout << " the item name is :" << ite->get_name() << " item color is " << YELLOW << "yellow :" << RESET << " item power is : " << to_string(ite->get_power()) << endl;
+                                cout << " the item name is :" << ite->get_name() << " item color is " << "yellow :"  << " item power is : " << to_string(ite->get_power()) << endl;
                             }
                             if (ite->get_Color() == rgb::Color::Blue)
                             {
-                                cout << " the item name is :" << ite->get_name() << " item color is " << BLUE << " blue : " << RESET << " item power is : " << to_string(ite->get_power()) << endl;
+                                cout << " the item name is :" << ite->get_name() << " item color is " << " blue : "  << " item power is : " << to_string(ite->get_power()) << endl;
                             }
                         }
 
