@@ -1,0 +1,7 @@
+mayor
+10
+5
+no_item 
+end_of_item 
+late_into_night 
+end_of_perk 

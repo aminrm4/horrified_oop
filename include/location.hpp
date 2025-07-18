@@ -5,7 +5,7 @@
 #include "item.hpp"
 class hero;
 class monster;
-
+class item;
 class location
 {
 private:
@@ -35,6 +35,8 @@ public:
     void delete_villager_list();
     void delete_monster_list();
     ~location();
+    void save_game(std::string);
+    void load_game(std::string,programm &);
 };
 
 #endif

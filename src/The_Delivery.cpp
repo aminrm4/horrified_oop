@@ -2,9 +2,9 @@
 
 void The_Delivery::event(std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a)
 {
-    a.list_of_location[12]->set_villager((new villager("Chick & Wilbur", loc[16], loc[12], a)));
+    a.list_of_location[12]->set_villager((new villager("Chick_&_Wilbur", loc[16], loc[12], a)));
 
-    cout << "Chick & Wilbur sommend in docks go and help him \n";
+    cout << "Chick_&_Wilbur sommend in docks go and help him \n";
 }
 void The_Delivery::monster_strike(programm &bug, vector<monster *> &monsters)
 {
@@ -23,4 +23,5 @@ void The_Delivery::set_item(int item_count)
         dice_play=dic;
         item_count=my_item;
         move_left=mover;
+        this->name_of_card="The_Delivery";
     }

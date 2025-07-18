@@ -4,6 +4,7 @@
 #include "item.hpp"
 #include <algorithm>
 #include <random>
+namespace fs=std::filesystem;
 int random_number(int min, int max);
 
 void remove_villager(programm &obj, villager *v);
@@ -55,7 +56,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
         }
 
         rand = distib(gen);
-        if (rand == 5 || rand == 5) // attack dice
+        if (rand == 5 || rand == 3) // attack dice
         {
             if (!monsters->get_loc()->get_hero_list().empty())
             {
@@ -77,12 +78,22 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                         cout << "emter the name of your item \n";
                         string name;
                         cin >> name;
+                          for (auto he : monsters->get_loc()->get_hero_list())
+                          {
+                            if (he->get_hero_name()=="scientist")
+                            {
+                                he->ability(name);
+                                break;
+                            }
+                            
+                          }
+                          
                         for (int i = 0; i < monsters->get_loc()->get_hero_list()[0]->get_items().size(); i++)
                         {
                             if (monsters->get_loc()->get_hero_list()[0]->get_items()[i]->get_name() == name)
                             {
                                 delete monsters->get_loc()->get_hero_list()[0]->get_items()[i];
-                                monsters->get_loc()->get_hero_list()[0]->get_items().erase(monsters->get_loc()->get_hero_list()[0]->get_items().begin(), monsters->get_loc()->get_hero_list()[0]->get_items().end());
+                                monsters->get_loc()->get_hero_list()[0]->get_items().erase(monsters->get_loc()->get_hero_list()[0]->get_items().begin() + i);
                                 return;
                             }
                         }
@@ -95,10 +106,10 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                     }
                     if (state == 'n')
                     {
+                        cout << "the monster attakced you and i saved " << monsters->get_loc()->get_hero_list()[0]->get_hero_name() << "now you are in hospital \n";
                         monsters->get_loc()->get_hero_list()[0]->move(bug.list_of_location[0], bug);
                         bug.set_night_terror(bug.get_night_terror() + 1);
                         monsters->set_did_attack(true);
-                        cout << "the monster attakced you and i saved " << monsters->get_loc()->get_hero_list()[0]->get_hero_name() << "now you are in hospital \n";
                         return;
                     }
 
@@ -143,3 +154,42 @@ void monster_card::item_handler(programm &help_object)
         help_object.list_of_items.erase(help_object.list_of_items.begin() + random);
     }
 }
+void monster_card::save_game(const string file_name)
+{
+    ofstream data_saver(file_name, ios::app);
+    if (!data_saver)
+    {
+        cerr << "monster_card file can not be opend" << endl;
+    }
+    data_saver<<name_of_card<<endl;
+
+}
+  void  monster_card::load_game(std::string file_name,programm& bug)
+  {
+    int counter=0;
+    fs::path dir=file_name;
+    file_name=dir /"monster_card.txt";
+    ifstream loader(file_name);
+    if (!loader)
+    {
+        cerr<<"monster_card file could not load"<<endl;
+    }
+    string name_card;
+    while (loader>>name_card)
+    {
+        counter++;
+        for (int i = 0; i < bug.monster_card_list.size(); i++)
+        {
+            if (bug.monster_card_list[i]->name_of_card==name_card)
+            {
+                rotate(bug.monster_card_list.begin(),bug.monster_card_list.begin()+i,bug.monster_card_list.begin()+i+1);
+                break;
+            }
+            
+        }
+        
+
+    }
+    bug.monster_card_list.erase(bug.monster_card_list.begin()+counter,bug.monster_card_list.end());
+    loader.close();
+  }

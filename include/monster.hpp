@@ -28,5 +28,8 @@ public:
     int &get_hidden_item();
     bool get_did_attack();
     void set_did_attack(bool did_attack);
+    void save_game(const std::string);
+    void load_game(std::string, programm &);
+
     ~monster();
 };

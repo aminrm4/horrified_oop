@@ -5,7 +5,7 @@ void Fortune_Teller::event(std::vector<std::vector<int>> &map, std::vector<locat
 
     a.list_of_location[18]->set_villager((new villager("maleva", loc[5], loc[18], a)));
 
-    cout << "maleva sommend in docks go and help him \n";
+    cout << "maleva sommend in camp go and help him \n";
 }
 void Fortune_Teller::monster_strike(programm &bug, vector<monster *> &monsters)
 {
@@ -25,4 +25,5 @@ Fortune_Teller::Fortune_Teller(int dic, int my_item, int mover)
     item_count = my_item;
     dice_play = dic;
     move_left = mover;
+    this->name_of_card="Fortune_Teller";
 }

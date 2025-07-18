@@ -12,6 +12,8 @@ using namespace ftxui;
 #include <iostream>
 #include "Drakula.hpp"
 #include "Invisible_man.hpp"
+#include"scientist.hpp"
+#include"courier.hpp"
 #include "monster_card.hpp"
 #include "Egyptian_Expert.hpp"
 #include "form_of_the_bat.hpp"
@@ -28,6 +30,125 @@ using namespace ftxui;
 #include "Color.hpp"
 #include <stdexcept>
 #include <format>
+namespace fs = std::filesystem;
+
+void programm::save_game(string file_name)
+{
+  fs::path dir = file_name;
+  if (!fs::is_empty(dir))
+  {
+    for (auto const &entry : fs::directory_iterator(dir))
+    {
+      fs::remove_all(entry.path());
+    }
+  }
+
+  fs::path full_path = dir / "items.txt";
+  for (auto it : list_of_items)
+  {
+    it->save_game(full_path.string());
+  }
+  full_path = dir / "perks.txt";
+
+  for (auto pe : list_of_perks)
+  {
+    pe->save_game(full_path.string());
+  }
+  full_path = dir / "monster.txt";
+  for (auto mo : monster_list)
+  {
+    if (typeid(*mo).name() == typeid(Drakula).name())
+    {
+      full_path = dir / "Drakula.txt";
+      mo->save_game(full_path.string());
+    }
+    else
+    {
+      full_path = dir / "Invisible_man.txt";
+      mo->save_game(full_path.string());
+    }
+  }
+  for (auto he : hero_list)
+  {
+    if (typeid(*he).name() == typeid(Mayor).name())
+    {
+      full_path = dir / "mayor.txt";
+      he->save_game(full_path.string());
+    }
+    else if(typeid(*he).name()==typeid(Archaeologist).name())
+    {
+      full_path = dir / "archaeologist.txt";
+      he->save_game(full_path.string());
+    }
+    else if(typeid(*he).name()==typeid(scientist).name())
+    {
+      full_path=dir/"scientist";
+      he->save_game(full_path.string());
+    }
+    else if(typeid(*he).name()==typeid(courier).name())
+    {
+      full_path=dir/"courier";
+      he->save_game(full_path.string());
+    }
+  }
+  full_path = dir / "monster_card.txt";
+  for (auto ca : monster_card_list)
+  {
+    ca->save_game(full_path.string());
+  }
+  full_path = dir / "villager.txt";
+
+  for (auto lo : list_of_location)
+  {
+    for (auto vi : lo->get_villager_list())
+    {
+      vi->save_game(full_path.string());
+    }
+  }
+  full_path = dir / "location.txt";
+  for (auto loc : list_of_location)
+  {
+    loc->save_game(full_path.string());
+  }
+}
+
+void programm::load_game(string file_name)
+{
+  
+  for (auto he : hero_list)
+  {
+    he->load_game(file_name, *this);
+  }
+
+  for (auto ca : monster_card_list)
+  {
+    ca->load_game(file_name, *this);
+  }
+
+  for (auto mo : monster_list)
+  {
+    mo->load_game(file_name, *this);
+  }
+
+
+  for (auto lo : list_of_location)
+  {
+    lo->load_game(file_name, *this);
+    break;
+  }
+
+  for (auto ite : list_of_items)
+  {
+    ite->load_game(file_name, *this);
+    break;
+  }
+
+  for (auto pe : list_of_perks)
+  {
+    pe->load_game(file_name, *this);
+    break;
+  }
+}
 
 bool programm::is_node_connected(int her, int node)
 {
@@ -326,6 +447,9 @@ programm::programm()
 
   hero_list.push_back(new Mayor(5, list_of_location[10], list_of_perks));
   hero_list.push_back(new Archaeologist(4, list_of_location[12], list_of_perks));
+  hero_list.push_back(new scientist(4 ,list_of_location[3],list_of_perks));
+hero_list.push_back(new courier(4,list_of_location[5],list_of_perks));
+
   monster_list.push_back(new Drakula(4, true, 1, list_of_location[0]));
   monster_list.push_back(new invisible_man(5, false, 6, list_of_location[14]));
 
@@ -351,7 +475,6 @@ programm::programm()
   // monster_card_list.push_back(new Hypnotic_Gaze(2, 2, 1));
   monster_card_list.push_back(new On_the_move(2, 3, 3));
   monster_card_list.push_back(new On_the_move(2, 3, 3));
-
   for (int i = 0; i < 12; i++)
   {
 
@@ -848,9 +971,11 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
       {"action left ", to_string(hero_list[1]->get_action())}
 
   };
-  map<string, string> monster_data = {
-      {monster_list[0]->get_mons_name(), " task remain :" + to_string(monster_list[0]->get_hidden_item())},
-      {monster_list[1]->get_mons_name(), " task remain :" + to_string(monster_list[1]->get_hidden_item())}};
+  map<string, string> monster_data;
+  for (auto mon : monster_list)
+  {
+    monster_data[mon->get_mons_name()] = " task remain :" + to_string(mon->get_hidden_item());
+  }
 
   bool show_loc = false;
   bool show_hero = false;
@@ -866,14 +991,14 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
   vector<string> actions = {"Move", "Guide", "Pick Up", "Advance", "Defeat", "special action ", "Quit", "use perk"};
   vector<string> heros = {"hero name ", "item have ", "perk have ", "action left "};
   vector<string> heros1 = {"hero name ", "item have ", "perk have ", "action left "};
-  vector<string> monster_task = {monster_list[0]->get_mons_name(), monster_list[1]->get_mons_name()};
+  // vector<string> monster_task = {monster_list[0]->get_mons_name(), monster_list[1]->get_mons_name()};
   vector<string> locations = {"0 ) Hospital", "1 ) grave_yard", "2 ) church", "3 ) institute", "4 ) Lab", "5 ) shop", "6 ) museum", "7 ) cryptt", "8 ) abbey", "9 ) Mansion", "10 ) theatre", "11 ) tower", "12 ) docks", "13 ) inn", "14 ) precinct", "15 ) barn", "16 ) dungeon", "17 ) cave", "18 ) camp"};
 
   auto loc_menu = Radiobox(&locations, &sel_loc);
   auto act_menu = Radiobox(&actions, &sel_act);
   auto hero_menu = Radiobox(&heros, &sel_hero);
   auto heros1_menu = Radiobox(&heros1, &sel_hero1);
-  auto taks_menu = Radiobox(&monster_task, &sel_taks);
+  // auto taks_menu = Radiobox(&monster_task, &sel_taks);
   Component renderer = Renderer([&]
                                 {
     Elements elements;
@@ -923,10 +1048,12 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
 
 if(show_task)
 {
-  elements.push_back(window(text( "monsters taks info"), vbox({
-        text(monster_list[0]->get_mons_name() + monster_data[monster_list[0]->get_mons_name()]),
-         text(monster_list[1]->get_mons_name() + monster_data[monster_list[1]->get_mons_name()])
-  })));
+string re;
+for (auto i1 : monster_list)
+{
+  re+=i1->get_mons_name()+" has "+to_string(i1->get_hidden_item()) +" task to do \n";
+}
+elements.push_back(window(text("task Detail"),paragraph(re)));
 }
 
    if (show_map)
@@ -1013,10 +1140,10 @@ if (show_map || show_hero ||show_hero1 ||show_task)
     if (show_hero)    return hero_menu->OnEvent(event);
     if (show_act)    return act_menu->OnEvent(event);
     if(show_hero1)   return heros1_menu->OnEvent(event);
-    if (show_task)
-    {
-    return taks_menu->OnEvent(event);
-    }
+    // if (show_task)
+    // {
+    // return taks_menu->OnEvent(event);
+    // }
     
     return false; });
 
@@ -1143,11 +1270,13 @@ void programm::run()
       {
         while (hero->get_action() > 0)
         {
-                cin.get();
-                clearScreen();
-                terminal_handler(data_updater, first_enter, secend_enter);
+          cin.get();
+          clearScreen();
+          terminal_handler(data_updater, first_enter, secend_enter);
           if (first_enter == "Move")
           {
+            this->save_game("/home/amin/Desktop/horrified_board_game/save1");
+            cin.get();
             try
             {
 
@@ -1157,9 +1286,9 @@ void programm::run()
               {
                 cout << "thats far away enter the place again" << endl;
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                // cin.get();
-                // clearScreen();
-                // terminal_handler(data_updater, first_enter, secend_enter);
+                cin.get();
+                clearScreen();
+                terminal_handler(data_updater, first_enter, secend_enter);
                 auto iterat = find(locations.begin(), locations.end(), secend_enter);
                 place_go = iterat - locations.begin();
               }
@@ -1169,7 +1298,6 @@ void programm::run()
               // cin.get();
               // clearScreen();
               // terminal_handler(data_updater, first_enter, secend_enter);
-
             }
             catch (exception &e)
             {
@@ -1186,6 +1314,19 @@ void programm::run()
           {
             try
             {
+              this->load_game("/home/amin/Desktop/horrified_board_game/save1");
+              cin.get();
+              for (auto pe : list_of_perks)
+              {
+                cout << pe->get_name() << endl;
+              }
+
+              for (auto pe : list_of_items)
+              {
+                cout << pe->get_name() << endl;
+              }
+
+              cin.get();
               hero->guide(my_map, *this);
               hero->set_action(hero->get_action() - 1);
               std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -1256,7 +1397,6 @@ void programm::run()
               // cin.get();
               // clearScreen();
               // terminal_handler(data_updater, first_enter, secend_enter);
-
             }
             catch (exception &e)
             {
@@ -1273,13 +1413,12 @@ void programm::run()
           {
             try
             {
-              hero->special_action(my_map, list_of_location);
+              hero->special_action(my_map, *this);
               hero->set_action(hero->get_action() - 1);
               std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
               // cin.get();
               // clearScreen();
               // terminal_handler(data_updater, first_enter, secend_enter);
-
             }
             catch (exception &e)
             {
@@ -1379,9 +1518,9 @@ void programm::run()
       }
     }
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    cin.get();
-    clearScreen();
-    terminal_handler(data_updater, first_enter, secend_enter);
+    // cin.get();
+    // clearScreen();
+    // terminal_handler(data_updater, first_enter, secend_enter);
     hero_phase = true;
 
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -1395,9 +1534,9 @@ void programm::run()
       {
         while (hero->get_action() > 0)
         {
-                cin.get();
-                clearScreen();
-                terminal_handler(data_updater, first_enter, secend_enter);
+          cin.get();
+          clearScreen();
+          terminal_handler(data_updater, first_enter, secend_enter);
           if (first_enter == "Move")
           {
             try
@@ -1409,9 +1548,9 @@ void programm::run()
               {
                 cout << "thats far away enter the place again" << endl;
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                // cin.get();
-                // clearScreen();
-                // terminal_handler(data_updater, first_enter, secend_enter);
+                cin.get();
+                clearScreen();
+                terminal_handler(data_updater, first_enter, secend_enter);
                 auto iterat = find(locations.begin(), locations.end(), secend_enter);
                 place_go = iterat - locations.begin();
               }
@@ -1421,7 +1560,6 @@ void programm::run()
               // cin.get();
               // clearScreen();
               // terminal_handler(data_updater, first_enter, secend_enter);
-
             }
             catch (exception &e)
             {
@@ -1508,7 +1646,6 @@ void programm::run()
               // cin.get();
               // clearScreen();
               // terminal_handler(data_updater, first_enter, secend_enter);
-
             }
             catch (exception &e)
             {
@@ -1525,13 +1662,12 @@ void programm::run()
           {
             try
             {
-              hero->special_action(my_map, list_of_location);
+              hero->special_action(my_map, *this);
               hero->set_action(hero->get_action() - 1);
               std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
               // cin.get();
               // clearScreen();
               // terminal_handler(data_updater, first_enter, secend_enter);
-
             }
             catch (exception &e)
             {
@@ -1631,9 +1767,9 @@ void programm::run()
     }
     cout << "monster_phase is over" << endl;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    cin.get();
-    clearScreen();
-    terminal_handler(data_updater, first_enter, secend_enter);
+    // cin.get();
+    // clearScreen();
+    // terminal_handler(data_updater, first_enter, secend_enter);
     hero_phase = true;
   }
 }

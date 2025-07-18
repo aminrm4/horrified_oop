@@ -65,4 +65,5 @@ Hypnotic_Gaze::Hypnotic_Gaze(int dic, int my_item, int mover)
     item_count = my_item;
     dice_play = dic;
     move_left = mover;
+    this->name_of_card="Hypnotic_Gaze";
 }

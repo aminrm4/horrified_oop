@@ -9,6 +9,8 @@
 #include "location.hpp"
 #include "Color.hpp"
 #include "terminal_color.hpp"
+#include <filesystem>
+#include "item.hpp"
 void remove_hero(programm &, hero *);
 void remove_villager(programm &, villager *);
 void remove_monster(programm &, monster *);
@@ -17,6 +19,7 @@ void message_invisible_man(bool alive);
 void message_drakula(bool alive);
 
 using namespace std;
+namespace fs = std::filesystem;
 
 void hero::move(location *loc, programm &bug)
 {
@@ -181,6 +184,10 @@ void hero::advance(vector<monster *> &monsters, programm &bug)
                             cout << "enter the name of your item" << endl;
                             string name;
                             cin >> name;
+                            if (this->name_of_hero == "scientist")
+                            {
+                                this->ability(name);
+                            }
 
                             for (int item = 0; item < item_have.size(); item++)
                             {
@@ -270,12 +277,18 @@ void hero::advance(vector<monster *> &monsters, programm &bug)
 
                             string namer;
                             cin >> namer;
+                            if (this->name_of_hero=="scientist")
+                            {
+                                this->ability(namer);
+                            }
+                            
                             for (auto item : this->item_have)
                             {
                                 if (item->get_name() == namer && item->get_Color() == rgb::Color::Red)
                                 {
                                     temp.push_back(item);
                                     powe_counter += item->get_power();
+                                    break;
                                 }
                             }
                         }
@@ -361,12 +374,17 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
 
                         string namer;
                         cin >> namer;
+                            if (this->name_of_hero=="scientist")
+                            {
+                                this->ability(namer);
+                            }
                         for (auto item : this->item_have)
                         {
                             if (item->get_name() == namer && item->get_Color() == rgb::Color::Yellow)
                             {
                                 temp.push_back(item);
                                 powe_counter += item->get_power();
+                                break;
                             }
                         }
                     }
@@ -421,7 +439,7 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                     return;
                 }
             }
-           // cerr << "There is no monster here \n";
+            // cerr << "There is no monster here \n";
         }
     }
     if (detect == 'i')
@@ -447,12 +465,17 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
 
                             string namer;
                             cin >> namer;
+                                if (this->name_of_hero=="scientist")
+                            {
+                                this->ability(namer);
+                            }
                             for (auto item : this->item_have)
                             {
                                 if (item->get_name() == namer && item->get_Color() == rgb::Color::Red)
                                 {
                                     temp.push_back(item);
                                     powe_counter += item->get_power();
+                                    break;
                                 }
                             }
                         }
@@ -688,4 +711,163 @@ hero::~hero()
     item_have.clear();
     perk_have.clear();
     loc = nullptr;
+}
+void hero::save_game(const string file_name)
+{
+
+    ofstream data_saver(file_name, ios::app);
+    if (!data_saver)
+    {
+        cerr << "hero file can not be opend" << endl;
+    }
+
+    data_saver << name_of_hero << endl;
+    data_saver << loc->get_loc_relation() << endl;
+    data_saver << action << endl;
+    if (item_have.empty())
+    {
+        data_saver << "no_item" << " " << endl;
+    }
+
+    for (auto ite : item_have)
+    {
+
+        data_saver << ite->get_name() << " " << ite->get_power() << " " << endl;
+    }
+    data_saver << "end_of_item" << " " << endl;
+
+    if (this->perk_have.empty())
+    {
+        data_saver << "no_perk" << " " << endl;
+    }
+
+    for (auto pe : perk_have)
+    {
+        data_saver << pe->get_name() << " " << endl;
+    }
+    data_saver << "end_of_perk" << " " << endl;
+}
+void hero::load_game(std::string file_name, programm &bug)
+{
+    for (auto l : bug.list_of_location)
+    {
+        if (!l->get_item_list().empty())
+        {
+            for (int i = 0; i < l->get_item_list().size(); i++)
+            {
+                bug.list_of_items.push_back(l->get_item_list()[i]);
+            }
+            l->get_item_list().clear();
+        }
+    }
+
+    for (auto pe : this->perk_have)
+    {
+        bug.list_of_perks.push_back(pe);
+    }
+    this->perk_have.clear();
+    fs::path dir = file_name;
+    if (this->name_of_hero == "mayor")
+    {
+        file_name = dir / "mayor.txt";
+    }
+    else if (this->name_of_hero == "archaeologist.txt")
+    {
+        file_name = dir / "archaeologist.txt";
+    }
+    else if (this->name_of_hero == "scientist")
+    {
+        file_name = dir / "scientist";
+    }
+    else if (this->name_of_hero == "courier")
+    {
+        file_name = dir / "courier";
+    }
+    ifstream loader(file_name);
+    if (!loader)
+    {
+        cerr << "hero file can not opend" << endl;
+    }
+
+    int loc_num;
+    int act;
+    string item_have;
+    string perk_have;
+    loader >> this->name_of_hero;
+    loader >> loc_num;
+    this->move(bug.list_of_location[loc_num], bug);
+    loader >> act;
+    this->set_action(act);
+    while (loader >> item_have)
+    {
+        if (item_have != "no_item")
+        {
+
+            if (item_have == "end_of_item")
+            {
+                break;
+            }
+            for (int i = 0; i < bug.list_of_items.size(); i++)
+            {
+                if (item_have == bug.list_of_items[i]->get_name())
+                {
+                    this->item_have.push_back(bug.list_of_items[i]);
+                    bug.list_of_items.erase(bug.list_of_items.begin() + i);
+                    break;
+                }
+            }
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    while (loader >> perk_have)
+    {
+        if (perk_have != "no_perk")
+        {
+            if (perk_have == "end_of_perk")
+            {
+                break;
+            }
+
+            for (int i = 0; i < bug.list_of_perks.size(); i++)
+            {
+
+                if (bug.list_of_perks[i]->get_name() == perk_have)
+                {
+                    this->perk_have.push_back(bug.list_of_perks[i]);
+                    bug.list_of_perks.erase(bug.list_of_perks.begin() + i);
+
+                    break;
+                }
+            }
+        }
+        else
+        {
+            break;
+        }
+    }
+    loader.close();
+}
+void hero::ability(std::string name_of_item)
+{
+    cout << "do you want to use your ability" << endl;
+    char a;
+    cin >> a;
+    if (a == 'y')
+    {
+        for (auto it : this->item_have)
+        {
+            if (it->get_name() == name_of_item)
+            {
+                it->set_power(it->get_power() + 1); // call this function every where you use item
+            }
+        }
+    }
+    else
+    {
+        return;
+    }
 }
