@@ -105,7 +105,124 @@ void programm::clearScreen()
   system("clear");
 #endif
 }
+namespace fs = std::filesystem;
 
+void programm::save_game(string file_name)
+{
+  fs::path dir = file_name;
+  if (!fs::is_empty(dir))
+  {
+    for (auto const &entry : fs::directory_iterator(dir))
+    {
+      fs::remove_all(entry.path());
+    }
+  }
+
+  fs::path full_path = dir / "items.txt";
+  for (auto it : list_of_items)
+  {
+    it->save_game(full_path.string());
+  }
+  full_path = dir / "perks.txt";
+
+  for (auto pe : list_of_perks)
+  {
+    pe->save_game(full_path.string());
+  }
+  full_path = dir / "monster.txt";
+  for (auto mo : monster_list)
+  {
+    if (typeid(*mo).name() == typeid(Drakula).name())
+    {
+      full_path = dir / "Drakula.txt";
+      mo->save_game(full_path.string());
+    }
+    else
+    {
+      full_path = dir / "Invisible_man.txt";
+      mo->save_game(full_path.string());
+    }
+  }
+  for (auto he : hero_list)
+  {
+    if (typeid(*he).name() == typeid(Mayor).name())
+    {
+      full_path = dir / "mayor.txt";
+      he->save_game(full_path.string());
+    }
+    else if (typeid(*he).name() == typeid(Archaeologist).name())
+    {
+      full_path = dir / "archaeologist.txt";
+      he->save_game(full_path.string());
+    }
+    else if (typeid(*he).name() == typeid(scientist).name())
+    {
+      full_path = dir / "scientist";
+      he->save_game(full_path.string());
+    }
+    else if (typeid(*he).name() == typeid(courier).name())
+    {
+      full_path = dir / "courier";
+      he->save_game(full_path.string());
+    }
+  }
+  full_path = dir / "monster_card.txt";
+  for (auto ca : monster_card_list)
+  {
+    ca->save_game(full_path.string());
+  }
+  full_path = dir / "villager.txt";
+
+  for (auto lo : list_of_location)
+  {
+    for (auto vi : lo->get_villager_list())
+    {
+      vi->save_game(full_path.string());
+    }
+  }
+  full_path = dir / "location.txt";
+  for (auto loc : list_of_location)
+  {
+    loc->save_game(full_path.string());
+  }
+}
+
+void programm::load_game(string file_name)
+{
+
+  for (auto he : hero_list)
+  {
+    he->load_game(file_name, *this);
+  }
+
+  for (auto ca : monster_card_list)
+  {
+    ca->load_game(file_name, *this);
+  }
+
+  for (auto mo : monster_list)
+  {
+    mo->load_game(file_name, *this);
+  }
+
+  for (auto lo : list_of_location)
+  {
+    lo->load_game(file_name, *this);
+    break;
+  }
+
+  for (auto ite : list_of_items)
+  {
+    ite->load_game(file_name, *this);
+    break;
+  }
+
+  for (auto pe : list_of_perks)
+  {
+    pe->load_game(file_name, *this);
+    break;
+  }
+}
 programm::programm()
 {
   my_map.resize(maxn);
@@ -198,111 +315,113 @@ programm::programm()
     int x = (i == 1 || i == 7 || i == 16 || i == 17) ? 1 : 0;
     list_of_location.push_back(new location(i, x));
   }
+  // yellow items
+  list_of_items.push_back(new item(2, "Flower", rgb::Color::Yellow, list_of_location[12]));
+  list_of_items.push_back(new item(2, "Flower", rgb::Color::Yellow, list_of_location[12]));
 
-  list_of_items.push_back(new item(2, "flower", rgb::Color::Yellow, list_of_location[12]));
-  list_of_items.push_back(new item(2, "flower", rgb::Color::Yellow, list_of_location[12]));
+  list_of_items.push_back(new item(3, "Tarot", rgb::Color::Yellow, list_of_location[18]));
+  list_of_items.push_back(new item(3, "Tarot", rgb::Color::Yellow, list_of_location[18]));
 
-  list_of_items.push_back(new item(3, "tarot_deck", rgb::Color::Yellow, list_of_location[18]));
-  list_of_items.push_back(new item(3, "tarot_deck", rgb::Color::Yellow, list_of_location[18]));
+  list_of_items.push_back(new item(2, "Garlic", rgb::Color::Yellow, list_of_location[13]));
+  list_of_items.push_back(new item(2, "Garlic", rgb::Color::Yellow, list_of_location[13]));
 
-  list_of_items.push_back(new item(2, "garlic", rgb::Color::Yellow, list_of_location[13]));
-  list_of_items.push_back(new item(2, "garlic", rgb::Color::Yellow, list_of_location[13]));
+  list_of_items.push_back(new item(3, "Mirrored_Box", rgb::Color::Yellow, list_of_location[9]));
+  list_of_items.push_back(new item(3, "Mirrored_Box", rgb::Color::Yellow, list_of_location[9]));
 
-  list_of_items.push_back(new item(3, "mirrored_box", rgb::Color::Yellow, list_of_location[9]));
-  list_of_items.push_back(new item(3, "mirrored_box", rgb::Color::Yellow, list_of_location[9]));
+  list_of_items.push_back(new item(3, "Stake", rgb::Color::Yellow, list_of_location[8]));
+  list_of_items.push_back(new item(3, "Stake", rgb::Color::Yellow, list_of_location[8]));
 
-  list_of_items.push_back(new item(3, "stake", rgb::Color::Yellow, list_of_location[8]));
-  list_of_items.push_back(new item(3, "stake", rgb::Color::Yellow, list_of_location[8]));
+  list_of_items.push_back(new item(4, "Scroll", rgb::Color::Yellow, list_of_location[6]));
+  list_of_items.push_back(new item(4, "Scroll", rgb::Color::Yellow, list_of_location[6]));
 
-  list_of_items.push_back(new item(4, "scroll_of_thoth", rgb::Color::Yellow, list_of_location[6]));
-  list_of_items.push_back(new item(4, "scroll_of_thoth", rgb::Color::Yellow, list_of_location[6]));
+  list_of_items.push_back(new item(3, "Violin", rgb::Color::Yellow, list_of_location[18]));
+  list_of_items.push_back(new item(3, "Violin", rgb::Color::Yellow, list_of_location[18]));
 
-  list_of_items.push_back(new item(3, "violin", rgb::Color::Yellow, list_of_location[18]));
-  list_of_items.push_back(new item(3, "violin", rgb::Color::Yellow, list_of_location[18]));
+  list_of_items.push_back(new item(3, "Tablet", rgb::Color::Yellow, list_of_location[6]));
+  list_of_items.push_back(new item(3, "Tablet", rgb::Color::Yellow, list_of_location[6]));
 
-  list_of_items.push_back(new item(3, "tablet", rgb::Color::Yellow, list_of_location[6]));
-  list_of_items.push_back(new item(3, "tablet", rgb::Color::Yellow, list_of_location[6]));
+  list_of_items.push_back(new item(4, "Wolfsbane", rgb::Color::Yellow, list_of_location[18]));
+  list_of_items.push_back(new item(4, "Wolfsbane", rgb::Color::Yellow, list_of_location[18]));
 
-  list_of_items.push_back(new item(4, "wolfsbane", rgb::Color::Yellow, list_of_location[18]));
-  list_of_items.push_back(new item(4, "wolfsbane", rgb::Color::Yellow, list_of_location[18]));
+  list_of_items.push_back(new item(4, "Charm", rgb::Color::Yellow, list_of_location[18]));
+  list_of_items.push_back(new item(4, "Charm", rgb::Color::Yellow, list_of_location[18]));
 
-  list_of_items.push_back(new item(4, "charm", rgb::Color::Yellow, list_of_location[18]));
-  list_of_items.push_back(new item(4, "charm", rgb::Color::Yellow, list_of_location[18]));
+  // red items
+  list_of_items.push_back(new item(2, "Dart", rgb::Color::Red, list_of_location[13]));
+  list_of_items.push_back(new item(2, "Dart", rgb::Color::Red, list_of_location[13]));
 
-  list_of_items.push_back(new item(2, "dart", rgb::Color::Red, list_of_location[13]));
-  list_of_items.push_back(new item(2, "dart", rgb::Color::Red, list_of_location[13]));
+  list_of_items.push_back(new item(3, "FirePoker", rgb::Color::Red, list_of_location[9]));
+  list_of_items.push_back(new item(3, "FirePoker", rgb::Color::Red, list_of_location[9]));
 
-  list_of_items.push_back(new item(3, "fire_poker", rgb::Color::Red, list_of_location[9]));
-  list_of_items.push_back(new item(3, "fire_poker", rgb::Color::Red, list_of_location[9]));
+  list_of_items.push_back(new item(5, "Rapier", rgb::Color::Red, list_of_location[10]));
+  list_of_items.push_back(new item(5, "Rapier", rgb::Color::Red, list_of_location[10]));
 
-  list_of_items.push_back(new item(5, "rapier", rgb::Color::Red, list_of_location[10]));
-  list_of_items.push_back(new item(5, "rapier", rgb::Color::Red, list_of_location[10]));
+  list_of_items.push_back(new item(2, "Shovel", rgb::Color::Red, list_of_location[1]));
+  list_of_items.push_back(new item(2, "Shovel", rgb::Color::Red, list_of_location[1]));
 
-  list_of_items.push_back(new item(2, "shovel", rgb::Color::Red, list_of_location[1]));
-  list_of_items.push_back(new item(2, "shovel", rgb::Color::Red, list_of_location[1]));
+  list_of_items.push_back(new item(5, "Torch", rgb::Color::Red, list_of_location[15]));
+  list_of_items.push_back(new item(5, "Torch", rgb::Color::Red, list_of_location[15]));
 
-  list_of_items.push_back(new item(5, "torch", rgb::Color::Red, list_of_location[15]));
-  list_of_items.push_back(new item(5, "torch", rgb::Color::Red, list_of_location[15]));
+  list_of_items.push_back(new item(4, "Pitchfork", rgb::Color::Red, list_of_location[15]));
+  list_of_items.push_back(new item(4, "Pitchfork", rgb::Color::Red, list_of_location[15]));
 
-  list_of_items.push_back(new item(4, "pitch_fork", rgb::Color::Red, list_of_location[15]));
-  list_of_items.push_back(new item(4, "pitch_fork", rgb::Color::Red, list_of_location[15]));
+  list_of_items.push_back(new item(6, "Rifle", rgb::Color::Red, list_of_location[15]));
+  list_of_items.push_back(new item(6, "Rifle", rgb::Color::Red, list_of_location[15]));
 
-  list_of_items.push_back(new item(6, "rifle", rgb::Color::Red, list_of_location[15]));
-  list_of_items.push_back(new item(6, "rifle", rgb::Color::Red, list_of_location[15]));
+  list_of_items.push_back(new item(6, "SilverCane", rgb::Color::Red, list_of_location[5]));
+  list_of_items.push_back(new item(6, "SilverCane", rgb::Color::Red, list_of_location[5]));
 
-  list_of_items.push_back(new item(6, "silver_cane", rgb::Color::Red, list_of_location[5]));
-  list_of_items.push_back(new item(6, "silver_cane", rgb::Color::Red, list_of_location[5]));
+  list_of_items.push_back(new item(3, "Knife", rgb::Color::Red, list_of_location[12]));
+  list_of_items.push_back(new item(3, "Knife", rgb::Color::Red, list_of_location[12]));
 
-  list_of_items.push_back(new item(3, "knife", rgb::Color::Red, list_of_location[12]));
-  list_of_items.push_back(new item(3, "knife", rgb::Color::Red, list_of_location[12]));
+  list_of_items.push_back(new item(6, "Pistol", rgb::Color::Red, list_of_location[14]));
+  list_of_items.push_back(new item(6, "Pistol", rgb::Color::Red, list_of_location[14]));
 
-  list_of_items.push_back(new item(6, "pistol", rgb::Color::Red, list_of_location[14]));
-  list_of_items.push_back(new item(6, "pistol", rgb::Color::Red, list_of_location[14]));
+  list_of_items.push_back(new item(4, "BearTrap", rgb::Color::Red, list_of_location[5]));
+  list_of_items.push_back(new item(4, "BearTrap", rgb::Color::Red, list_of_location[5]));
 
-  list_of_items.push_back(new item(4, "bear_trap", rgb::Color::Red, list_of_location[5]));
-  list_of_items.push_back(new item(4, "bear_trap", rgb::Color::Red, list_of_location[5]));
+  list_of_items.push_back(new item(4, "Speargun", rgb::Color::Red, list_of_location[3]));
+  list_of_items.push_back(new item(4, "Speargun", rgb::Color::Red, list_of_location[3]));
 
-  list_of_items.push_back(new item(4, "speargun", rgb::Color::Red, list_of_location[3]));
-  list_of_items.push_back(new item(4, "speargun", rgb::Color::Red, list_of_location[3]));
+  // blue items
+  list_of_items.push_back(new item(1, "AnatomyText", rgb::Color::Blue, list_of_location[3]));
+  list_of_items.push_back(new item(1, "AnatomyText", rgb::Color::Blue, list_of_location[3]));
 
-  list_of_items.push_back(new item(1, "anatomy_text", rgb::Color::Blue, list_of_location[3]));
-  list_of_items.push_back(new item(1, "anatomy_text", rgb::Color::Blue, list_of_location[3]));
+  list_of_items.push_back(new item(1, "Centrifuge", rgb::Color::Blue, list_of_location[4]));
+  list_of_items.push_back(new item(1, "Centrifuge", rgb::Color::Blue, list_of_location[4]));
 
-  list_of_items.push_back(new item(1, "centrifuge", rgb::Color::Blue, list_of_location[4]));
-  list_of_items.push_back(new item(1, "centrifuge", rgb::Color::Blue, list_of_location[4]));
+  list_of_items.push_back(new item(1, "Kite", rgb::Color::Blue, list_of_location[11]));
+  list_of_items.push_back(new item(1, "Kite", rgb::Color::Blue, list_of_location[11]));
 
-  list_of_items.push_back(new item(1, "kite", rgb::Color::Blue, list_of_location[11]));
-  list_of_items.push_back(new item(1, "kite", rgb::Color::Blue, list_of_location[11]));
+  list_of_items.push_back(new item(2, "Research", rgb::Color::Blue, list_of_location[11]));
+  list_of_items.push_back(new item(2, "Research", rgb::Color::Blue, list_of_location[11]));
 
-  list_of_items.push_back(new item(2, "research", rgb::Color::Blue, list_of_location[11]));
-  list_of_items.push_back(new item(2, "research", rgb::Color::Blue, list_of_location[11]));
+  list_of_items.push_back(new item(2, "Telescope", rgb::Color::Blue, list_of_location[9]));
+  list_of_items.push_back(new item(2, "Telescope", rgb::Color::Blue, list_of_location[9]));
 
-  list_of_items.push_back(new item(2, "telescope", rgb::Color::Blue, list_of_location[9]));
-  list_of_items.push_back(new item(2, "telescope", rgb::Color::Blue, list_of_location[9]));
+  list_of_items.push_back(new item(2, "Searchlight", rgb::Color::Blue, list_of_location[14]));
+  list_of_items.push_back(new item(2, "Searchlight", rgb::Color::Blue, list_of_location[14]));
 
-  list_of_items.push_back(new item(2, "searchlight", rgb::Color::Blue, list_of_location[14]));
-  list_of_items.push_back(new item(2, "searchlight", rgb::Color::Blue, list_of_location[14]));
+  list_of_items.push_back(new item(2, "Experiments", rgb::Color::Blue, list_of_location[4]));
+  list_of_items.push_back(new item(2, "Experiments", rgb::Color::Blue, list_of_location[4]));
 
-  list_of_items.push_back(new item(2, "experiment", rgb::Color::Blue, list_of_location[4]));
-  list_of_items.push_back(new item(2, "experiment", rgb::Color::Blue, list_of_location[4]));
+  list_of_items.push_back(new item(2, "Analysis", rgb::Color::Blue, list_of_location[3]));
+  list_of_items.push_back(new item(2, "Analysis", rgb::Color::Blue, list_of_location[3]));
 
-  list_of_items.push_back(new item(2, "analysis", rgb::Color::Blue, list_of_location[3]));
-  list_of_items.push_back(new item(2, "analysis", rgb::Color::Blue, list_of_location[3]));
+  list_of_items.push_back(new item(3, "Rotenone", rgb::Color::Blue, list_of_location[3]));
+  list_of_items.push_back(new item(3, "Rotenone", rgb::Color::Blue, list_of_location[3]));
 
-  list_of_items.push_back(new item(3, "rotenone", rgb::Color::Blue, list_of_location[3]));
-  list_of_items.push_back(new item(3, "rotenone", rgb::Color::Blue, list_of_location[3]));
+  list_of_items.push_back(new item(3, "CosmicRayDiffuser", rgb::Color::Blue, list_of_location[11]));
+  list_of_items.push_back(new item(3, "CosmicRayDiffuser", rgb::Color::Blue, list_of_location[11]));
 
-  list_of_items.push_back(new item(3, "cosmic_diffuser", rgb::Color::Blue, list_of_location[11]));
-  list_of_items.push_back(new item(3, "cosmic_diffuser", rgb::Color::Blue, list_of_location[11]));
+  list_of_items.push_back(new item(3, "Nebularium", rgb::Color::Blue, list_of_location[11]));
+  list_of_items.push_back(new item(3, "Nebularium", rgb::Color::Blue, list_of_location[11]));
 
-  list_of_items.push_back(new item(3, "nebularium", rgb::Color::Blue, list_of_location[11]));
-  list_of_items.push_back(new item(3, "nebularium", rgb::Color::Blue, list_of_location[11]));
+  list_of_items.push_back(new item(3, "MonocaneMixture", rgb::Color::Blue, list_of_location[13]));
+  list_of_items.push_back(new item(3, "MonocaneMixture", rgb::Color::Blue, list_of_location[13]));
 
-  list_of_items.push_back(new item(3, "monocane_mixture", rgb::Color::Blue, list_of_location[13]));
-  list_of_items.push_back(new item(3, "monocane_mixture", rgb::Color::Blue, list_of_location[13]));
-
-  list_of_items.push_back(new item(3, "fossil", rgb::Color::Blue, list_of_location[18]));
-  list_of_items.push_back(new item(3, "fossil", rgb::Color::Blue, list_of_location[18]));
+  list_of_items.push_back(new item(3, "Fossil", rgb::Color::Blue, list_of_location[18]));
+  list_of_items.push_back(new item(3, "Fossil", rgb::Color::Blue, list_of_location[18]));
 
   list_of_perks.push_back(new visit_from_detective());
   list_of_perks.push_back(new visit_from_detective());
@@ -327,6 +446,8 @@ programm::programm()
 
   hero_list.push_back(new Mayor(5, list_of_location[10], list_of_perks));
   hero_list.push_back(new Archaeologist(4, list_of_location[12], list_of_perks));
+  hero_list.push_back(new courier(4, list_of_location[5], list_of_perks));
+  hero_list.push_back(new scientist(4, list_of_location[3], list_of_perks));
 
   monster_list.push_back(new Drakula(4, true, 1, list_of_location[0]));
   monster_list.push_back(new invisible_man(5, false, 6, list_of_location[14]));
@@ -900,17 +1021,101 @@ bool isNumeric(const std::string &str)
 {
   return !str.empty() && std::all_of(str.begin(), str.end(), ::isdigit);
 }
+void loadheroicon(vector<int> numbers)
+{
+}
+void renderItem(location *loc, sf::RenderWindow &window)
+{
+  string defaultt = "../Horrified_Assets/Items";
+  string Ritem = defaultt + "/Red", Bitem = defaultt + "/Blue", Yitem = defaultt + "/Yellow";
+  for (int i = 0; i < loc->get_item_list().size(); i++)
+  {
+    sf::Texture texture;
+    sf::Sprite image;
+    switch (loc->get_item_list()[i]->get_Color())
+    {
+    case rgb::Color::Red:
+    {
+      if (!texture.loadFromFile(Ritem + '/' + loc->get_item_list()[i]->get_name() + ".png"))
+
+      {
+        throw out_of_range("coudnt load a red item");
+      }
+    }
+    break;
+    case rgb::Color::Blue:
+    {
+      if (!texture.loadFromFile(Bitem + '/' + loc->get_item_list()[i]->get_name() + ".png"))
+
+      {
+        throw out_of_range("coudnt load a Blue item");
+      }
+    }
+    break;
+    case rgb::Color::Yellow:
+    {
+      if (!texture.loadFromFile(Yitem + '/' + loc->get_item_list()[i]->get_name() + ".png"))
+
+      {
+        throw out_of_range("coudnt load a yellow item");
+      }
+    }
+    break;
+    default:
+      break;
+    }
+    image.setTexture(texture);
+    image.setScale({200.f / texture.getSize().x, 200.f / texture.getSize().y});
+    image.setPosition({250.f * i, 125.f * (i / 4)});
+    window.draw(image);
+  }
+}
+
+bool isclied(const sf::RectangleShape &rect, const sf::Event &event, const sf::RenderWindow &window)
+{
+  if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+  {
+    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+    if (rect.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)))
+    {
+      return true;
+    }
+  }
+  return false;
+}
 void programm::run()
 {
+  for (auto &hero : hero_list)
+  {
+    delete hero;
+  }
+  hero_list.clear();
+
   vector<pair<string, int>> usersinfo(2);
   enum initstate
   {
+    showitemlocation,
     infopage,
     heroSelection1,
     heroSelection2,
     exit,
     playmenu
   };
+
+  vector<sf::Sprite> allheroicon(4);
+  vector<sf::Sprite> heroicon; // icons to show heros in map
+  sf::Texture T[4];
+  T[0].loadFromFile("../Horrified_Assets/Heros/Mayor.png");
+  T[1].loadFromFile("../Horrified_Assets/Heros/Archaeologist.png");
+  T[2].loadFromFile("../Horrified_Assets/Heros/Courier.png");
+  T[3].loadFromFile("../Horrified_Assets/Heros/Scientist.png");
+  for (int i = 0; i < 4; i++)
+  {
+    allheroicon[i].setPosition({110, 0});
+    allheroicon[i].setTexture(T[i]);
+    allheroicon[i].setScale({100.f / T[i].getSize().x, 135.f / T[i].getSize().y});
+  }
+
   initstate state = initstate::infopage;
   sf::RenderWindow window({1920, 1080}, "Horrified board game"); // starting the game , getting name of players ...
   window.setFramerateLimit(60);
@@ -949,14 +1154,43 @@ void programm::run()
   sf::Vector2f map_origin = map_sprite.getOrigin();
   map_sprite.setPosition({(1920 - 1080) / 2, 0}); // rendering map in mid
   sf::Vector2f button = {200.f, 50.f};
-  Button move(button, {50.f, 400.f}, "Move");
-  Button ability(button, {50.f, move.getPosButton().y + 75}, "Ability");
-  Button defeat(button, {50.f, ability.getPosButton().y + 75}, "Defeat");
-  Button advance(button, {50.f, defeat.getPosButton().y + 75}, "advance");
-  Button pickup(button, {50.f, advance.getPosButton().y + 75}, "pick up");
-  Button guide(button, {50.f, pickup.getPosButton().y + 75}, "Guide");
-  Button items(button , {50.f, guide.getPosButton().y + 75} , "items");
-  Button perks(button , {50.f, items.getPosButton().y + 75} , "perks");
+  Button move(button, {115.f, 350.f}, "Move");
+  Button ability(button, {move.getPosButton().x, move.getPosButton().y + 75}, "Ability");
+  Button defeat(button, {move.getPosButton().x, ability.getPosButton().y + 75}, "Defeat");
+  Button advance(button, {move.getPosButton().x, defeat.getPosButton().y + 75}, "advance");
+  Button pickup(button, {move.getPosButton().x, advance.getPosButton().y + 75}, "pick up");
+  Button guide(button, {move.getPosButton().x, pickup.getPosButton().y + 75}, "Guide");
+  Button items(button, {move.getPosButton().x, guide.getPosButton().y + 75}, "items");
+  Button perks(button, {move.getPosButton().x, items.getPosButton().y + 75}, "perks");
+  std::vector<sf::Vector2f> locationPositions = {
+      {800, 900},  // 0: Hospital
+      {1000, 855}, // 1: Graveyard
+      {880, 750},  // 2: Church
+      {1250, 890}, // 3: Institute
+      {1100, 725}, // 4: Laboratory
+      {1000, 625}, // 5: Shop
+      {600, 735},  // 6: Museum
+      {450, 750},  // 7: Crypt
+      {500, 540},  // 8: Abbey
+      {670, 490},  // 9: Mansion
+      {1055, 305}, // 10: Theatre
+      {1300, 300}, // 11: Tower
+      {1355, 492}, // 12: Docks
+      {1010, 100}, // 13: Inn
+      {790, 150},  // 14: Precinct
+      {1150, 120}, // 15: Barn
+      {1350, 100}, // 16: Dungeon
+      {455, 208},  // 17: Cave
+      {600, 170}   // 18: Camp
+  };
+
+  vector<sf::RectangleShape> location_Button(19);
+  for (int i = 0; i < 19; i++)
+  {
+    location_Button[i].setPosition(locationPositions[i]);
+    location_Button[i].setSize({100.f, 100.f});
+    location_Button[i].setFillColor(sf::Color::Transparent);
+  }
 
   if (!map_texture.loadFromFile("../Horrified_Assets/map.png"))
   {
@@ -970,13 +1204,18 @@ void programm::run()
 
   vector<int> Nohero;
   int heroNo = 0;
+  int locationshow = 0;
   while (window.isOpen())
   {
     sf::Event event;
     while (window.pollEvent(event))
     {
-
-      if (state == initstate::playmenu)
+      if (state == initstate::showitemlocation)
+      {
+        if (back.isClicked(event, window))
+          state = initstate::playmenu;
+      }
+      if (state == initstate::playmenu) // hero phase
       {
         if (hero_list[heroNo]->get_action() <= 0)
         {
@@ -994,21 +1233,32 @@ void programm::run()
             cout << "you lose the game " << endl;
             // exit(0);
           }
-          if(typeid(*hero_list[heroNo]).name() == typeid(class Mayor).name())
+          if (typeid(*hero_list[heroNo]).name() == typeid(class Mayor).name())
           {
             hero_list[heroNo]->set_action(5);
           }
           else
-          hero_list[heroNo]->set_action(4);
+            hero_list[heroNo]->set_action(4);
 
           if (heroNo == 1)
             heroNo = 0;
           else
             heroNo = 1;
-          
         }
+        for (int i = 0; i < location_Button.size(); i++)
+        {
+          if (isclied(location_Button[i], event, window))
+          {
+            state = initstate::showitemlocation;
+            locationshow = i;
+          }
+        }
+
         if (move.isClicked(event, window))
         {
+          
+
+
 
         }
         if (ability.isClicked(event, window))
@@ -1028,57 +1278,83 @@ void programm::run()
         }
       }
 
-      if (state == initstate::heroSelection1)
+      if (state == initstate::heroSelection1) // chosing hero
       {
         if (Mayor.isClicked(event, window) && !Mayor.get_status())
         {
           Nohero.push_back(0);
           state = initstate::heroSelection2;
+          hero_list.push_back(new class Mayor(5, list_of_location[10], list_of_perks));
+          heroicon.push_back(allheroicon[0]);
           Mayor.set_status(!Mayor.get_status());
         }
         if (Archaeologist.isClicked(event, window) && !Archaeologist.get_status())
         {
           Nohero.push_back(1);
           state = initstate::heroSelection2;
+          hero_list.push_back(new class Archaeologist(4, list_of_location[12], list_of_perks));
+          heroicon.push_back(allheroicon[1]);
+
           Archaeologist.set_status(!Archaeologist.get_status());
         }
         if (courier.isClicked(event, window) && !courier.get_status())
         {
           Nohero.push_back(2);
           state = initstate::heroSelection2;
+          hero_list.push_back(new class courier(4, list_of_location[5], list_of_perks));
+          heroicon.push_back(allheroicon[2]);
+
           courier.set_status(!courier.get_status());
         }
         if (scientist.isClicked(event, window) && !scientist.get_status())
         {
           Nohero.push_back(3);
           state = initstate::heroSelection2;
+          heroicon.push_back(allheroicon[3]);
+
+          hero_list.push_back(new class scientist(4, list_of_location[3], list_of_perks));
           scientist.set_status(!scientist.get_status());
         }
       }
-      if (state == initstate::heroSelection2)
+      if (state == initstate::heroSelection2) // chosing hero
       {
         if (Mayor.isClicked(event, window) && !Mayor.get_status())
         {
           Nohero.push_back(0);
           state = initstate::playmenu;
+          heroicon.push_back(allheroicon[0]);
+
+          hero_list.push_back(new class Mayor(5, list_of_location[10], list_of_perks));
+
           Mayor.set_status(!Mayor.get_status());
         }
         if (Archaeologist.isClicked(event, window) && !Archaeologist.get_status())
         {
           Nohero.push_back(1);
+          heroicon.push_back(allheroicon[1]);
+
           state = initstate::playmenu;
+          hero_list.push_back(new class Archaeologist(4, list_of_location[12], list_of_perks));
+
           Archaeologist.set_status(!Archaeologist.get_status());
         }
-                if (courier.isClicked(event, window) && !courier.get_status())
+        if (courier.isClicked(event, window) && !courier.get_status())
         {
           Nohero.push_back(2);
+          heroicon.push_back(allheroicon[2]);
+
           state = initstate::playmenu;
+          hero_list.push_back(new class courier(4, list_of_location[5], list_of_perks));
           courier.set_status(!courier.get_status());
         }
         if (scientist.isClicked(event, window) && !scientist.get_status())
         {
           Nohero.push_back(3);
+          heroicon.push_back(allheroicon[3]);
+
           state = initstate::playmenu;
+          hero_list.push_back(new class scientist(4, list_of_location[3], list_of_perks));
+
           scientist.set_status(!scientist.get_status());
         }
       }
@@ -1112,7 +1388,12 @@ void programm::run()
 
     window.clear();
     window.draw(bg);
-    if(state == initstate::heroSelection1 || state == initstate::heroSelection2)
+    if (state == initstate::showitemlocation)
+    {
+      renderItem(list_of_location[locationshow], window);
+      back.draw(window);
+    }
+    if (state == initstate::heroSelection1 || state == initstate::heroSelection2)
     {
       Mayor.draw(window);
       Archaeologist.draw(window);
@@ -1131,14 +1412,50 @@ void programm::run()
       pickup.draw(window);
       guide.draw(window);
 
-      if (typeid(*hero_list[heroNo]).name() == typeid(class Mayor).name())
+      for (auto &&monster : monster_list)
       {
-        Mayor.draw(window);
+        sf::Sprite m;
+        sf::Texture texture;
+
+        if (typeid(*monster).name() == typeid(Drakula).name())
+        {
+          texture.loadFromFile("../Horrified_Assets/Monsters/Dracula.png");
+              m.setTexture(texture);
+        }
+        if (typeid(*monster).name() == typeid(invisible_man).name())
+        {
+          texture.loadFromFile("../Horrified_Assets/Monsters/InvisibleMan.png");
+              m.setTexture(texture);
+        }
+        m.setScale({66.666f / texture.getSize().x, 100.f / texture.getSize().y});
+        int locId = monster->get_loc()->get_loc_relation();
+
+        m.setPosition(locationPositions[locId].x ,
+                      locationPositions[locId].y );
+        window.draw(m);
       }
-      else
+
+      // Draw each hero at their current location
+      for (int i = 0; i < hero_list.size(); ++i)
       {
-        Archaeologist.draw(window);
+        int locId = hero_list[i]->get_loc()->get_loc_relation();
+        sf::Sprite heroSprite = heroicon[i];
+        heroSprite.setPosition(locationPositions[locId].x ,
+                               locationPositions[locId].y );
+        window.draw(heroSprite);
+        // Draw hero name below the icon
       }
+
+      for (auto &&i : location_Button)
+      {
+        window.draw(i);
+      }
+
+      sf::Sprite her;
+      her.setTexture(T[Nohero[heroNo]]);
+      her.setPosition({100, 25});
+      her.setScale({200.f / T[Nohero[heroNo]].getSize().x, 300.f / T[Nohero[heroNo]].getSize().y});
+      window.draw(her);
     }
     if (state == initstate::infopage)
     {

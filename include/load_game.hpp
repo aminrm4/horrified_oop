@@ -3,15 +3,14 @@
 #include <vector>
 #include <string>
 
-// Enum for load game states
 enum class LoadGameState {
     Save1,
     Save2,
     Save3,
     Save4,
     Save5,
-    Back, // New option for going back
-    None // No selection
+    Back, 
+    None 
 };
 
 class LoadGameMenu {

@@ -12,18 +12,16 @@ LoadGameMenu::LoadGameMenu(float width, float height, const sf::Font& font)
     vector<string> labels = { "Save 1", "Save 2", "Save 3", "Save 4", "Save 5", "Back" };
     saveItems.resize(labels.size());
     float centerX = width / 2.f;
-    // Y-positions for 5 buttons
     vector<float> yPositions = { 380.f, 520.f, 640.f, 760.f, 880.f };
     for (size_t i = 0; i < 5; ++i) {
         saveItems[i].setFont(font);
         saveItems[i].setString(labels[i]);
-        saveItems[i].setCharacterSize(80); // Large, horror style
+        saveItems[i].setCharacterSize(80); 
         saveItems[i].setFillColor(sf::Color(173, 216, 230));
         sf::FloatRect bounds = saveItems[i].getLocalBounds();
         saveItems[i].setOrigin(bounds.width / 2, bounds.height / 2);
         saveItems[i].setPosition(centerX, yPositions[i]);
     }
-    // Back button: bottom right
     int backIdx = 5;
     saveItems[backIdx].setFont(font);
     saveItems[backIdx].setString(labels[backIdx]);
@@ -31,8 +29,8 @@ LoadGameMenu::LoadGameMenu(float width, float height, const sf::Font& font)
     saveItems[backIdx].setFillColor(sf::Color(173, 216, 230));
     sf::FloatRect backBounds = saveItems[backIdx].getLocalBounds();
     float marginX = 60.f;
-    float marginY = 120.f; // Move up from the bottom
-    saveItems[backIdx].setOrigin(backBounds.width, backBounds.height); // anchor bottom right
+    float marginY = 120.f; 
+    saveItems[backIdx].setOrigin(backBounds.width, backBounds.height);
     saveItems[backIdx].setPosition(width - marginX, height - marginY);
     updateHighlight();
 }
@@ -77,11 +75,11 @@ void LoadGameMenu::resetSelection() {
 void LoadGameMenu::updateHighlight() {
     for (size_t i = 0; i < saveItems.size(); ++i) {
         if (static_cast<int>(i) == hoveredIndex) {
-            saveItems[i].setFillColor(sf::Color(255, 0, 0)); // Red highlight for hovered
+            saveItems[i].setFillColor(sf::Color(255, 0, 0)); 
         } else if (stateSelected && static_cast<int>(i) == static_cast<int>(selectedState)) {
-            saveItems[i].setFillColor(sf::Color(255, 0, 0)); // Red for selected
+            saveItems[i].setFillColor(sf::Color(255, 0, 0)); 
         } else {
-            saveItems[i].setFillColor(sf::Color(173, 216, 230)); // Light blue
+            saveItems[i].setFillColor(sf::Color(173, 216, 230)); 
         }
     }
 }
@@ -91,7 +89,6 @@ LoadGameState LoadGameMenu::run() {
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Load Game");
     window.setFramerateLimit(60);
 
-    // Load background
     sf::Texture bgTexture;
     if (!bgTexture.loadFromFile("../Horrified_Assets/load.png")) {
         throw runtime_error("Could not load background image");
@@ -102,13 +99,11 @@ LoadGameState LoadGameMenu::run() {
         float(HEIGHT) / bgTexture.getSize().y
     );
 
-    // Load creep font
     sf::Font font;
     if (!font.loadFromFile("../Horrified_Assets/creep.ttf")) {
         throw runtime_error("Could not load creep font");
     }
 
-    // Re-initialize save items with loaded font and new positions
     *this = LoadGameMenu(WIDTH, HEIGHT, font);
 
     sf::Music music;
@@ -128,12 +123,9 @@ LoadGameState LoadGameMenu::run() {
             if (!showConfirm) {
                 handleEvent(event, window);
             } else {
-                // Handle confirmation dialog events
                 if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
                     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-                    // Yes button
                     sf::FloatRect yesRect(WIDTH/2 - 200, HEIGHT/2 + 60, 150, 80);
-                    // No button
                     sf::FloatRect noRect(WIDTH/2 + 50, HEIGHT/2 + 60, 150, 80);
                     if (yesRect.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
                         confirmResult = true;
@@ -141,7 +133,6 @@ LoadGameState LoadGameMenu::run() {
                     } else if (noRect.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
                         confirmResult = false;
                         showConfirm = false;
-                        // Reset selection
                         stateSelected = false;
                         selectedState = LoadGameState::None;
                     }
@@ -152,7 +143,6 @@ LoadGameState LoadGameMenu::run() {
         window.draw(bgSprite);
         draw(window);
         if (showConfirm) {
-            // Draw confirmation dialog
             sf::RectangleShape dialogBox(sf::Vector2f(600, 300));
             dialogBox.setFillColor(sf::Color(30, 30, 30, 230));
             dialogBox.setOutlineColor(sf::Color::Red);
@@ -171,7 +161,6 @@ LoadGameState LoadGameMenu::run() {
             confirmText.setPosition(WIDTH/2, HEIGHT/2 - 40);
             window.draw(confirmText);
 
-            // Yes button
             sf::RectangleShape yesBtn(sf::Vector2f(150, 80));
             yesBtn.setFillColor(sf::Color(100, 255, 100));
             yesBtn.setOrigin(75, 40);
@@ -187,7 +176,6 @@ LoadGameState LoadGameMenu::run() {
             yesText.setPosition(WIDTH/2 - 125, HEIGHT/2 + 100);
             window.draw(yesText);
 
-            // No button
             sf::RectangleShape noBtn(sf::Vector2f(150, 80));
             noBtn.setFillColor(sf::Color(255, 100, 100));
             noBtn.setOrigin(75, 40);
@@ -205,9 +193,7 @@ LoadGameState LoadGameMenu::run() {
         }
         window.display();
 
-        // Only close and return if:
-        // - Back is confirmed (Yes)
-        // - A save is selected (not Back)
+       
         if (!showConfirm && confirmResult) {
             if (music.getStatus() == sf::Music::Playing) music.stop();
             sf::sleep(sf::seconds(0.3f));
@@ -219,7 +205,6 @@ LoadGameState LoadGameMenu::run() {
                 showConfirm = true;
                 continue;
             } else if (selectedState != LoadGameState::None) {
-                // Save selected, close and return
                 if (music.getStatus() == sf::Music::Playing) music.stop();
                 sf::sleep(sf::seconds(0.3f));
                 window.close();
