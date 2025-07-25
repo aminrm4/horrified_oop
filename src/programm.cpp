@@ -1290,7 +1290,8 @@ void programm::run()
         {
         }
         if (pickup.isClicked(event, window))
-        {
+        { 
+          
         }
         if (guide.isClicked(event, window))
         {

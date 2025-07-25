@@ -324,3 +324,72 @@ int showAssetSelectionBox(sf::RenderWindow &window, const std::string &directory
     }
     return -1;
 }
+
+void showAssetInBox(sf::RenderWindow& window, const std::string& directory, const std::string& assetName) {
+    // Load font for optional text (reuse style)
+    sf::Font font;
+    font.loadFromFile("../Horrified_Assets/creep.ttf");
+
+    // Build the full path to the asset
+    std::string assetPath = directory + "/" + assetName;
+
+    // Load the image as a texture
+    sf::Texture texture;
+    texture.loadFromFile(assetPath);
+    sf::Sprite sprite(texture);
+
+    // Prepare the centered box
+    sf::Vector2u winSize = window.getSize();
+    float maxBoxWidth = 800.f, maxBoxHeight = 600.f;
+    float boxWidth = std::min(winSize.x * 0.6f, maxBoxWidth);
+    float boxHeight = std::min(winSize.y * 0.6f, maxBoxHeight);
+    sf::Vector2f boxSize(boxWidth, boxHeight);
+    sf::RectangleShape box(boxSize);
+    box.setFillColor(sf::Color(30, 30, 30, 220));
+    box.setOutlineColor(sf::Color::White);
+    box.setOutlineThickness(3.f);
+    box.setPosition((winSize.x - boxSize.x) / 2, (winSize.y - boxSize.y) / 2);
+
+    // Scale the sprite to fit inside the box (with margin)
+    float margin = 30.f;
+    float availableWidth = boxWidth - 2 * margin;
+    float availableHeight = boxHeight - 2 * margin;
+    float scaleX = availableWidth / sprite.getLocalBounds().width;
+    float scaleY = availableHeight / sprite.getLocalBounds().height;
+    float scale = std::min(scaleX, scaleY);
+    sprite.setScale(scale, scale);
+    // Center the sprite in the box
+    float spriteX = box.getPosition().x + (boxWidth - sprite.getLocalBounds().width * scale) / 2 - sprite.getLocalBounds().left * scale;
+    float spriteY = box.getPosition().y + (boxHeight - sprite.getLocalBounds().height * scale) / 2 - sprite.getLocalBounds().top * scale;
+    sprite.setPosition(spriteX, spriteY);
+
+    // Optional: Add a message below the image
+    sf::Text infoText("Press Esc or click outside the box to close", font, 22);
+    infoText.setFillColor(sf::Color::White);
+    infoText.setPosition(box.getPosition().x + 20, box.getPosition().y + boxHeight - 36);
+
+    bool running = true;
+    while (window.isOpen() && running) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+                return;
+            }
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+                running = false;
+            }
+            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+                sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                if (!box.getGlobalBounds().contains(mousePos)) {
+                    running = false;
+                }
+            }
+        }
+        window.clear();
+        window.draw(box);
+        window.draw(sprite);
+        window.draw(infoText);
+        window.display();
+    }
+}

@@ -2,8 +2,8 @@
 #include "programm.hpp"
 #include "free_func.hpp"
 #include "Archaeologist.hpp"
-#include"Mayor.hpp"
-#include"scientist.hpp"
+#include "Mayor.hpp"
+#include "scientist.hpp"
 #include <iostream>
 
 void courier::special_action(std::vector<std::vector<int>> &map, programm &bug, sf::RenderWindow &window)
@@ -39,7 +39,7 @@ void courier::special_action(std::vector<std::vector<int>> &map, programm &bug, 
 
     break;
   case 2:
-  for (auto l : bug.list_of_location)
+    for (auto l : bug.list_of_location)
     {
       cout << l->get_hero_list().size() << endl;
       if (!l->get_hero_list().empty())
@@ -58,7 +58,7 @@ void courier::special_action(std::vector<std::vector<int>> &map, programm &bug, 
     }
     break;
   case 3:
-  for (auto l : bug.list_of_location)
+    for (auto l : bug.list_of_location)
     {
       cout << l->get_hero_list().size() << endl;
       if (!l->get_hero_list().empty())
