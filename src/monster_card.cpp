@@ -4,6 +4,7 @@
 #include "item.hpp"
 #include <algorithm>
 #include <random>
+namespace fs=std::filesystem;
 int random_number(int min, int max);
 
 void remove_villager(programm &obj, villager *v);
@@ -14,6 +15,7 @@ int monster_card::get_item_count()
 }
 void monster_card::_strike(int dice_attack, int move, programm &bug, monster *monsters)
 {
+    cout<<"strike"<<endl;
 
     vector<vector<int>> routes;
     for (int i = 0; i < bug.list_of_location.size(); i++)
@@ -23,13 +25,29 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
             routes.push_back(bug.bfs(monsters->get_loc()->get_loc_relation(), vill->get_currnet_location()->get_loc_relation()));
         }
     }
+        cout<<"strike"<<endl;
+    cout<<bug.list_of_location.size()<<endl;
+    cout<<bug.hero_list.size()<<endl;
+    cout<<bug.hero_list[0]->get_loc()->get_loc_relation()<<endl;
+    try{
     for (int i = 0; i < bug.list_of_location.size(); i++)
     {
         for (auto hero : bug.list_of_location.at(i)->get_hero_list())
         {
+            cout<<"im in for"<<endl;
+            if (!hero) { cout << "hero is nullptr" << endl; continue; }
+            if (!hero->get_loc()) { cout << "hero->get_loc() is nullptr" << endl; continue; }
+            if (!monsters) { cout << "monsters is nullptr" << endl; continue; }
+            if (!monsters->get_loc()) { cout << "monsters->get_loc() is nullptr" << endl; continue; }
+            cout << "calling bfs with: " << monsters->get_loc()->get_loc_relation() << " " << hero->get_loc()->get_loc_relation() << endl;
             routes.push_back(bug.bfs(monsters->get_loc()->get_loc_relation(), hero->get_loc()->get_loc_relation()));
         }
-    }
+    }    cout<<"strike"<<endl;
+}
+catch(const std::exception& e)
+{
+    std::cerr << e.what() << '\n';
+}
 
     vector<int> route = *min_element(routes.begin(), routes.end(), [](vector<int> &a, vector<int> &b)
                                      { return a.size() < b.size(); });
@@ -43,6 +61,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
     random_device rd;
     mt19937 gen(rd());
     uniform_int_distribution<> distib(1, 6);
+    cout<<"strike"<<endl;
 
     for (int i = 0; i < dice_attack && !monsters->get_did_attack(); i++)
     {
@@ -77,6 +96,16 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                         cout << "emter the name of your item \n";
                         string name;
                         cin >> name;
+                          for (auto he : monsters->get_loc()->get_hero_list())
+                          {
+                            if (he->get_hero_name()=="scientist")
+                            {
+                                he->ability(name);
+                                break;
+                            }
+                            
+                          }
+                          
                         for (int i = 0; i < monsters->get_loc()->get_hero_list()[0]->get_items().size(); i++)
                         {
                             if (monsters->get_loc()->get_hero_list()[0]->get_items()[i]->get_name() == name)
@@ -143,3 +172,42 @@ void monster_card::item_handler(programm &help_object)
         help_object.list_of_items.erase(help_object.list_of_items.begin() + random);
     }
 }
+void monster_card::save_game(const string file_name)
+{
+    ofstream data_saver(file_name, ios::app);
+    if (!data_saver)
+    {
+        cerr << "monster_card file can not be opend" << endl;
+    }
+    data_saver<<name_of_card<<endl;
+
+}
+  void  monster_card::load_game(std::string file_name,programm& bug)
+  {
+    int counter=0;
+    fs::path dir=file_name;
+    file_name=dir /"monster_card.txt";
+    ifstream loader(file_name);
+    if (!loader)
+    {
+        cerr<<"monster_card file could not load"<<endl;
+    }
+    string name_card;
+    while (loader>>name_card)
+    {
+        counter++;
+        for (int i = 0; i < bug.monster_card_list.size(); i++)
+        {
+            if (bug.monster_card_list[i]->name_of_card==name_card)
+            {
+                rotate(bug.monster_card_list.begin(),bug.monster_card_list.begin()+i,bug.monster_card_list.begin()+i+1);
+                break;
+            }
+            
+        }
+        
+
+    }
+    bug.monster_card_list.erase(bug.monster_card_list.begin()+counter,bug.monster_card_list.end());
+    loader.close();
+  }

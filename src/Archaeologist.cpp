@@ -1,19 +1,17 @@
 #include "Archaeologist.hpp"
+#include "programm.hpp"
+#include "free_func.hpp"
 using namespace std;
-void Archaeologist::special_action(vector<vector<int>> &map, const vector<location *> &loc)
+void Archaeologist::special_action(std::vector<std::vector<int>> &map, programm &bug, sf::RenderWindow &window)
 {
     int node_number = this->get_loc()->get_loc_relation();
 
-    cout << "select one location to pick item from \n";
-    for (auto node_connected : map[node_number])
-        cout << node_connected << ' ';
-    cout << endl;
+    showCenteredTextBox(window, "selec a location to pick item from");
 
     try
     {
-
         int node;
-        cin >> node;
+        node = showLocationTextBox(window);
         bool is_connected{};
         for (auto node_connected : map[node_number])
             if (node == node_connected)
@@ -21,22 +19,21 @@ void Archaeologist::special_action(vector<vector<int>> &map, const vector<locati
 
         if (is_connected)
         {
-            for (auto locations : loc)
+            for (auto locations : bug.list_of_location)
                 if (locations->get_loc_relation() == node)
                 {
                     vector<item *> items(locations->get_item_list());
 
                     if (items.empty())
                     {
-                        cout << "ohhhhh my bad there was nothing" << endl;
+                        showCenteredTextBox(window, "ohh my bad there was nothing there");
                         return;
                     }
 
-                    cout << "you picked these items :\n";
+                    showCenteredTextBox(window, "you picked up these items ");
                     for (auto it : items)
-                        cout << it->get_name() << endl;
+                    showAssetInBox(window,"../Horrified_Assets/Items/General",it->get_name()+".png");
 
-                    cout << endl;
                     this->item_have.insert(item_have.end(), items.begin(), items.end());
 
                     locations->get_item_list().clear();
@@ -49,8 +46,7 @@ void Archaeologist::special_action(vector<vector<int>> &map, const vector<locati
     }
     catch (logic_error &e)
     {
-        cout << e.what();
-      //  special_action(map, loc);
+        showCenteredTextBox(window,"the node you selected is too far");
         return;
     }
 }

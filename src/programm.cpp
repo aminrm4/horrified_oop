@@ -1,14 +1,8 @@
 #include "programm.hpp"
 using namespace std;
-using namespace ftxui;
 #include <bits/stdc++.h>
 #include "Mayor.hpp"
 #include "Archaeologist.hpp"
-#include <ftxui/component/component.hpp>
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/component/component_options.hpp>
-#include <ftxui/screen/color_info.hpp>
-#include <ftxui/dom/elements.hpp>
 #include <iostream>
 #include "Drakula.hpp"
 #include "Invisible_man.hpp"
@@ -28,7 +22,14 @@ using namespace ftxui;
 #include "Color.hpp"
 #include <stdexcept>
 #include <format>
-
+#include "TextInputBox.hpp"
+#include "massage.hpp"
+#include "Button2.hpp"
+#include "courier.hpp"
+#include "scientist.hpp"
+#include "Button.hpp"
+#include <algorithm>
+#include "free_func.hpp"
 bool programm::is_node_connected(int her, int node)
 {
   vector<int> temp;
@@ -104,7 +105,124 @@ void programm::clearScreen()
   system("clear");
 #endif
 }
+namespace fs = std::filesystem;
 
+void programm::save_game(string file_name)
+{
+  fs::path dir = file_name;
+  if (!fs::is_empty(dir))
+  {
+    for (auto const &entry : fs::directory_iterator(dir))
+    {
+      fs::remove_all(entry.path());
+    }
+  }
+
+  fs::path full_path = dir / "items.txt";
+  for (auto it : list_of_items)
+  {
+    it->save_game(full_path.string());
+  }
+  full_path = dir / "perks.txt";
+
+  for (auto pe : list_of_perks)
+  {
+    pe->save_game(full_path.string());
+  }
+  full_path = dir / "monster.txt";
+  for (auto mo : monster_list)
+  {
+    if (typeid(*mo).name() == typeid(Drakula).name())
+    {
+      full_path = dir / "Drakula.txt";
+      mo->save_game(full_path.string());
+    }
+    else
+    {
+      full_path = dir / "Invisible_man.txt";
+      mo->save_game(full_path.string());
+    }
+  }
+  for (auto he : hero_list)
+  {
+    if (typeid(*he).name() == typeid(Mayor).name())
+    {
+      full_path = dir / "mayor.txt";
+      he->save_game(full_path.string());
+    }
+    else if (typeid(*he).name() == typeid(Archaeologist).name())
+    {
+      full_path = dir / "archaeologist.txt";
+      he->save_game(full_path.string());
+    }
+    else if (typeid(*he).name() == typeid(scientist).name())
+    {
+      full_path = dir / "scientist";
+      he->save_game(full_path.string());
+    }
+    else if (typeid(*he).name() == typeid(courier).name())
+    {
+      full_path = dir / "courier";
+      he->save_game(full_path.string());
+    }
+  }
+  full_path = dir / "monster_card.txt";
+  for (auto ca : monster_card_list)
+  {
+    ca->save_game(full_path.string());
+  }
+  full_path = dir / "villager.txt";
+
+  for (auto lo : list_of_location)
+  {
+    for (auto vi : lo->get_villager_list())
+    {
+      vi->save_game(full_path.string());
+    }
+  }
+  full_path = dir / "location.txt";
+  for (auto loc : list_of_location)
+  {
+    loc->save_game(full_path.string());
+  }
+}
+
+void programm::load_game(string file_name)
+{
+
+  for (auto he : hero_list)
+  {
+    he->load_game(file_name, *this);
+  }
+
+  for (auto ca : monster_card_list)
+  {
+    ca->load_game(file_name, *this);
+  }
+
+  for (auto mo : monster_list)
+  {
+    mo->load_game(file_name, *this);
+  }
+
+  for (auto lo : list_of_location)
+  {
+    lo->load_game(file_name, *this);
+    break;
+  }
+
+  for (auto ite : list_of_items)
+  {
+    ite->load_game(file_name, *this);
+    break;
+  }
+
+  for (auto pe : list_of_perks)
+  {
+    pe->load_game(file_name, *this);
+    break;
+  }
+}
 programm::programm()
 {
   my_map.resize(maxn);
@@ -197,111 +315,113 @@ programm::programm()
     int x = (i == 1 || i == 7 || i == 16 || i == 17) ? 1 : 0;
     list_of_location.push_back(new location(i, x));
   }
+  // yellow items
+  list_of_items.push_back(new item(2, "Flower", rgb::Color::Yellow, list_of_location[12]));
+  list_of_items.push_back(new item(2, "Flower", rgb::Color::Yellow, list_of_location[12]));
 
-  list_of_items.push_back(new item(2, "flower", rgb::Color::Yellow, list_of_location[12]));
-  list_of_items.push_back(new item(2, "flower", rgb::Color::Yellow, list_of_location[12]));
+  list_of_items.push_back(new item(3, "Tarot", rgb::Color::Yellow, list_of_location[18]));
+  list_of_items.push_back(new item(3, "Tarot", rgb::Color::Yellow, list_of_location[18]));
 
-  list_of_items.push_back(new item(3, "tarot_deck", rgb::Color::Yellow, list_of_location[18]));
-  list_of_items.push_back(new item(3, "tarot_deck", rgb::Color::Yellow, list_of_location[18]));
+  list_of_items.push_back(new item(2, "Garlic", rgb::Color::Yellow, list_of_location[13]));
+  list_of_items.push_back(new item(2, "Garlic", rgb::Color::Yellow, list_of_location[13]));
 
-  list_of_items.push_back(new item(2, "garlic", rgb::Color::Yellow, list_of_location[13]));
-  list_of_items.push_back(new item(2, "garlic", rgb::Color::Yellow, list_of_location[13]));
+  list_of_items.push_back(new item(3, "Mirrored_Box", rgb::Color::Yellow, list_of_location[9]));
+  list_of_items.push_back(new item(3, "Mirrored_Box", rgb::Color::Yellow, list_of_location[9]));
 
-  list_of_items.push_back(new item(3, "mirrored_box", rgb::Color::Yellow, list_of_location[9]));
-  list_of_items.push_back(new item(3, "mirrored_box", rgb::Color::Yellow, list_of_location[9]));
+  list_of_items.push_back(new item(3, "Stake", rgb::Color::Yellow, list_of_location[8]));
+  list_of_items.push_back(new item(3, "Stake", rgb::Color::Yellow, list_of_location[8]));
 
-  list_of_items.push_back(new item(3, "stake", rgb::Color::Yellow, list_of_location[8]));
-  list_of_items.push_back(new item(3, "stake", rgb::Color::Yellow, list_of_location[8]));
+  list_of_items.push_back(new item(4, "Scroll", rgb::Color::Yellow, list_of_location[6]));
+  list_of_items.push_back(new item(4, "Scroll", rgb::Color::Yellow, list_of_location[6]));
 
-  list_of_items.push_back(new item(4, "scroll_of_thoth", rgb::Color::Yellow, list_of_location[6]));
-  list_of_items.push_back(new item(4, "scroll_of_thoth", rgb::Color::Yellow, list_of_location[6]));
+  list_of_items.push_back(new item(3, "Violin", rgb::Color::Yellow, list_of_location[18]));
+  list_of_items.push_back(new item(3, "Violin", rgb::Color::Yellow, list_of_location[18]));
 
-  list_of_items.push_back(new item(3, "violin", rgb::Color::Yellow, list_of_location[18]));
-  list_of_items.push_back(new item(3, "violin", rgb::Color::Yellow, list_of_location[18]));
+  list_of_items.push_back(new item(3, "Tablet", rgb::Color::Yellow, list_of_location[6]));
+  list_of_items.push_back(new item(3, "Tablet", rgb::Color::Yellow, list_of_location[6]));
 
-  list_of_items.push_back(new item(3, "tablet", rgb::Color::Yellow, list_of_location[6]));
-  list_of_items.push_back(new item(3, "tablet", rgb::Color::Yellow, list_of_location[6]));
+  list_of_items.push_back(new item(4, "Wolfsbane", rgb::Color::Yellow, list_of_location[18]));
+  list_of_items.push_back(new item(4, "Wolfsbane", rgb::Color::Yellow, list_of_location[18]));
 
-  list_of_items.push_back(new item(4, "wolfsbane", rgb::Color::Yellow, list_of_location[18]));
-  list_of_items.push_back(new item(4, "wolfsbane", rgb::Color::Yellow, list_of_location[18]));
+  list_of_items.push_back(new item(4, "Charm", rgb::Color::Yellow, list_of_location[18]));
+  list_of_items.push_back(new item(4, "Charm", rgb::Color::Yellow, list_of_location[18]));
 
-  list_of_items.push_back(new item(4, "charm", rgb::Color::Yellow, list_of_location[18]));
-  list_of_items.push_back(new item(4, "charm", rgb::Color::Yellow, list_of_location[18]));
+  // red items
+  list_of_items.push_back(new item(2, "Dart", rgb::Color::Red, list_of_location[13]));
+  list_of_items.push_back(new item(2, "Dart", rgb::Color::Red, list_of_location[13]));
 
-  list_of_items.push_back(new item(2, "dart", rgb::Color::Red, list_of_location[13]));
-  list_of_items.push_back(new item(2, "dart", rgb::Color::Red, list_of_location[13]));
+  list_of_items.push_back(new item(3, "FirePoker", rgb::Color::Red, list_of_location[9]));
+  list_of_items.push_back(new item(3, "FirePoker", rgb::Color::Red, list_of_location[9]));
 
-  list_of_items.push_back(new item(3, "fire_poker", rgb::Color::Red, list_of_location[9]));
-  list_of_items.push_back(new item(3, "fire_poker", rgb::Color::Red, list_of_location[9]));
+  list_of_items.push_back(new item(5, "Rapier", rgb::Color::Red, list_of_location[10]));
+  list_of_items.push_back(new item(5, "Rapier", rgb::Color::Red, list_of_location[10]));
 
-  list_of_items.push_back(new item(5, "rapier", rgb::Color::Red, list_of_location[10]));
-  list_of_items.push_back(new item(5, "rapier", rgb::Color::Red, list_of_location[10]));
+  list_of_items.push_back(new item(2, "Shovel", rgb::Color::Red, list_of_location[1]));
+  list_of_items.push_back(new item(2, "Shovel", rgb::Color::Red, list_of_location[1]));
 
-  list_of_items.push_back(new item(2, "shovel", rgb::Color::Red, list_of_location[1]));
-  list_of_items.push_back(new item(2, "shovel", rgb::Color::Red, list_of_location[1]));
+  list_of_items.push_back(new item(5, "Torch", rgb::Color::Red, list_of_location[15]));
+  list_of_items.push_back(new item(5, "Torch", rgb::Color::Red, list_of_location[15]));
 
-  list_of_items.push_back(new item(5, "torch", rgb::Color::Red, list_of_location[15]));
-  list_of_items.push_back(new item(5, "torch", rgb::Color::Red, list_of_location[15]));
+  list_of_items.push_back(new item(4, "Pitchfork", rgb::Color::Red, list_of_location[15]));
+  list_of_items.push_back(new item(4, "Pitchfork", rgb::Color::Red, list_of_location[15]));
 
-  list_of_items.push_back(new item(4, "pitch_fork", rgb::Color::Red, list_of_location[15]));
-  list_of_items.push_back(new item(4, "pitch_fork", rgb::Color::Red, list_of_location[15]));
+  list_of_items.push_back(new item(6, "Rifle", rgb::Color::Red, list_of_location[15]));
+  list_of_items.push_back(new item(6, "Rifle", rgb::Color::Red, list_of_location[15]));
 
-  list_of_items.push_back(new item(6, "rifle", rgb::Color::Red, list_of_location[15]));
-  list_of_items.push_back(new item(6, "rifle", rgb::Color::Red, list_of_location[15]));
+  list_of_items.push_back(new item(6, "SilverCane", rgb::Color::Red, list_of_location[5]));
+  list_of_items.push_back(new item(6, "SilverCane", rgb::Color::Red, list_of_location[5]));
 
-  list_of_items.push_back(new item(6, "silver_cane", rgb::Color::Red, list_of_location[5]));
-  list_of_items.push_back(new item(6, "silver_cane", rgb::Color::Red, list_of_location[5]));
+  list_of_items.push_back(new item(3, "Knife", rgb::Color::Red, list_of_location[12]));
+  list_of_items.push_back(new item(3, "Knife", rgb::Color::Red, list_of_location[12]));
 
-  list_of_items.push_back(new item(3, "knife", rgb::Color::Red, list_of_location[12]));
-  list_of_items.push_back(new item(3, "knife", rgb::Color::Red, list_of_location[12]));
+  list_of_items.push_back(new item(6, "Pistol", rgb::Color::Red, list_of_location[14]));
+  list_of_items.push_back(new item(6, "Pistol", rgb::Color::Red, list_of_location[14]));
 
-  list_of_items.push_back(new item(6, "pistol", rgb::Color::Red, list_of_location[14]));
-  list_of_items.push_back(new item(6, "pistol", rgb::Color::Red, list_of_location[14]));
+  list_of_items.push_back(new item(4, "BearTrap", rgb::Color::Red, list_of_location[5]));
+  list_of_items.push_back(new item(4, "BearTrap", rgb::Color::Red, list_of_location[5]));
 
-  list_of_items.push_back(new item(4, "bear_trap", rgb::Color::Red, list_of_location[5]));
-  list_of_items.push_back(new item(4, "bear_trap", rgb::Color::Red, list_of_location[5]));
+  list_of_items.push_back(new item(4, "Speargun", rgb::Color::Red, list_of_location[3]));
+  list_of_items.push_back(new item(4, "Speargun", rgb::Color::Red, list_of_location[3]));
 
-  list_of_items.push_back(new item(4, "speargun", rgb::Color::Red, list_of_location[3]));
-  list_of_items.push_back(new item(4, "speargun", rgb::Color::Red, list_of_location[3]));
+  // blue items
+  list_of_items.push_back(new item(1, "AnatomyText", rgb::Color::Blue, list_of_location[3]));
+  list_of_items.push_back(new item(1, "AnatomyText", rgb::Color::Blue, list_of_location[3]));
 
-  list_of_items.push_back(new item(1, "anatomy_text", rgb::Color::Blue, list_of_location[3]));
-  list_of_items.push_back(new item(1, "anatomy_text", rgb::Color::Blue, list_of_location[3]));
+  list_of_items.push_back(new item(1, "Centrifuge", rgb::Color::Blue, list_of_location[4]));
+  list_of_items.push_back(new item(1, "Centrifuge", rgb::Color::Blue, list_of_location[4]));
 
-  list_of_items.push_back(new item(1, "centrifuge", rgb::Color::Blue, list_of_location[4]));
-  list_of_items.push_back(new item(1, "centrifuge", rgb::Color::Blue, list_of_location[4]));
+  list_of_items.push_back(new item(1, "Kite", rgb::Color::Blue, list_of_location[11]));
+  list_of_items.push_back(new item(1, "Kite", rgb::Color::Blue, list_of_location[11]));
 
-  list_of_items.push_back(new item(1, "kite", rgb::Color::Blue, list_of_location[11]));
-  list_of_items.push_back(new item(1, "kite", rgb::Color::Blue, list_of_location[11]));
+  list_of_items.push_back(new item(2, "Research", rgb::Color::Blue, list_of_location[11]));
+  list_of_items.push_back(new item(2, "Research", rgb::Color::Blue, list_of_location[11]));
 
-  list_of_items.push_back(new item(2, "research", rgb::Color::Blue, list_of_location[11]));
-  list_of_items.push_back(new item(2, "research", rgb::Color::Blue, list_of_location[11]));
+  list_of_items.push_back(new item(2, "Telescope", rgb::Color::Blue, list_of_location[9]));
+  list_of_items.push_back(new item(2, "Telescope", rgb::Color::Blue, list_of_location[9]));
 
-  list_of_items.push_back(new item(2, "telescope", rgb::Color::Blue, list_of_location[9]));
-  list_of_items.push_back(new item(2, "telescope", rgb::Color::Blue, list_of_location[9]));
+  list_of_items.push_back(new item(2, "Searchlight", rgb::Color::Blue, list_of_location[14]));
+  list_of_items.push_back(new item(2, "Searchlight", rgb::Color::Blue, list_of_location[14]));
 
-  list_of_items.push_back(new item(2, "searchlight", rgb::Color::Blue, list_of_location[14]));
-  list_of_items.push_back(new item(2, "searchlight", rgb::Color::Blue, list_of_location[14]));
+  list_of_items.push_back(new item(2, "Experiments", rgb::Color::Blue, list_of_location[4]));
+  list_of_items.push_back(new item(2, "Experiments", rgb::Color::Blue, list_of_location[4]));
 
-  list_of_items.push_back(new item(2, "experiment", rgb::Color::Blue, list_of_location[4]));
-  list_of_items.push_back(new item(2, "experiment", rgb::Color::Blue, list_of_location[4]));
+  list_of_items.push_back(new item(2, "Analysis", rgb::Color::Blue, list_of_location[3]));
+  list_of_items.push_back(new item(2, "Analysis", rgb::Color::Blue, list_of_location[3]));
 
-  list_of_items.push_back(new item(2, "analysis", rgb::Color::Blue, list_of_location[3]));
-  list_of_items.push_back(new item(2, "analysis", rgb::Color::Blue, list_of_location[3]));
+  list_of_items.push_back(new item(3, "Rotenone", rgb::Color::Blue, list_of_location[3]));
+  list_of_items.push_back(new item(3, "Rotenone", rgb::Color::Blue, list_of_location[3]));
 
-  list_of_items.push_back(new item(3, "rotenone", rgb::Color::Blue, list_of_location[3]));
-  list_of_items.push_back(new item(3, "rotenone", rgb::Color::Blue, list_of_location[3]));
+  list_of_items.push_back(new item(3, "CosmicRayDiffuser", rgb::Color::Blue, list_of_location[11]));
+  list_of_items.push_back(new item(3, "CosmicRayDiffuser", rgb::Color::Blue, list_of_location[11]));
 
-  list_of_items.push_back(new item(3, "cosmic_diffuser", rgb::Color::Blue, list_of_location[11]));
-  list_of_items.push_back(new item(3, "cosmic_diffuser", rgb::Color::Blue, list_of_location[11]));
+  list_of_items.push_back(new item(3, "Nebularium", rgb::Color::Blue, list_of_location[11]));
+  list_of_items.push_back(new item(3, "Nebularium", rgb::Color::Blue, list_of_location[11]));
 
-  list_of_items.push_back(new item(3, "nebularium", rgb::Color::Blue, list_of_location[11]));
-  list_of_items.push_back(new item(3, "nebularium", rgb::Color::Blue, list_of_location[11]));
+  list_of_items.push_back(new item(3, "MonocaneMixture", rgb::Color::Blue, list_of_location[13]));
+  list_of_items.push_back(new item(3, "MonocaneMixture", rgb::Color::Blue, list_of_location[13]));
 
-  list_of_items.push_back(new item(3, "monocane_mixture", rgb::Color::Blue, list_of_location[13]));
-  list_of_items.push_back(new item(3, "monocane_mixture", rgb::Color::Blue, list_of_location[13]));
-
-  list_of_items.push_back(new item(3, "fossil", rgb::Color::Blue, list_of_location[18]));
-  list_of_items.push_back(new item(3, "fossil", rgb::Color::Blue, list_of_location[18]));
+  list_of_items.push_back(new item(3, "Fossil", rgb::Color::Blue, list_of_location[18]));
+  list_of_items.push_back(new item(3, "Fossil", rgb::Color::Blue, list_of_location[18]));
 
   list_of_perks.push_back(new visit_from_detective());
   list_of_perks.push_back(new visit_from_detective());
@@ -326,6 +446,9 @@ programm::programm()
 
   hero_list.push_back(new Mayor(5, list_of_location[10], list_of_perks));
   hero_list.push_back(new Archaeologist(4, list_of_location[12], list_of_perks));
+  hero_list.push_back(new courier(4, list_of_location[5], list_of_perks));
+  hero_list.push_back(new scientist(4, list_of_location[3], list_of_perks));
+
   monster_list.push_back(new Drakula(4, true, 1, list_of_location[0]));
   monster_list.push_back(new invisible_man(5, false, 6, list_of_location[14]));
 
@@ -468,17 +591,6 @@ void programm::next_frenzy()
     monster_list[0]->set_is_frenzy(true);
   }
 }
-bool programm::check_terro_night()
-{
-  if (night_terror >= 5)
-  {
-    return false;
-  }
-  else
-  {
-    return true;
-  }
-}
 string programm::show_all_item(const vector<item *> &show, LocationInfo &state)
 {
 
@@ -576,7 +688,6 @@ string programm::show_all_villager(const vector<villager *> &show, LocationInfo 
 }
 string programm::show_all_hero(const vector<hero *> &show, LocationInfo &state)
 {
-
   state.hero = "";
   unordered_map<string, int> same_element;
 
@@ -646,7 +757,6 @@ string programm::show_hero_deatail(T vec)
 void programm::terminal_handler(LocationInfo &info, string &first_enter, string &secend_enter)
 {
   int enter_count = 0;
-  auto screen = ScreenInteractive::TerminalOutput();
   std::string terror_text = "night terror level : " + to_string(get_night_terror());
   static constexpr const char *map_template = R"MAP(
 |{0:^87}|
@@ -848,11 +958,9 @@ void programm::terminal_handler(LocationInfo &info, string &first_enter, string 
       {"action left ", to_string(hero_list[1]->get_action())}
 
   };
-map<string, string> monster_data;
-  for (auto mon : monster_list)
-  {
-    monster_data[mon->get_mons_name()] = " task remain :" + to_string(mon->get_hidden_item());
-  }
+  map<string, string> monster_data = {
+      {monster_list[0]->get_mons_name(), " task remain :" + to_string(monster_list[0]->get_hidden_item())},
+      {monster_list[1]->get_mons_name(), " task remain :" + to_string(monster_list[1]->get_hidden_item())}};
 
   bool show_loc = false;
   bool show_hero = false;
@@ -868,163 +976,8 @@ map<string, string> monster_data;
   vector<string> actions = {"Move", "Guide", "Pick Up", "Advance", "Defeat", "special action ", "Quit", "use perk"};
   vector<string> heros = {"hero name ", "item have ", "perk have ", "action left "};
   vector<string> heros1 = {"hero name ", "item have ", "perk have ", "action left "};
-  //vector<string> monster_task = {monster_list[0]->get_mons_name(), monster_list[1]->get_mons_name()};
+  vector<string> monster_task = {monster_list[0]->get_mons_name(), monster_list[1]->get_mons_name()};
   vector<string> locations = {"0 ) Hospital", "1 ) grave_yard", "2 ) church", "3 ) institute", "4 ) Lab", "5 ) shop", "6 ) museum", "7 ) cryptt", "8 ) abbey", "9 ) Mansion", "10 ) theatre", "11 ) tower", "12 ) docks", "13 ) inn", "14 ) precinct", "15 ) barn", "16 ) dungeon", "17 ) cave", "18 ) camp"};
-
-  auto loc_menu = Radiobox(&locations, &sel_loc);
-  auto act_menu = Radiobox(&actions, &sel_act);
-  auto hero_menu = Radiobox(&heros, &sel_hero);
-  auto heros1_menu = Radiobox(&heros1, &sel_hero1);
-  //auto taks_menu = Radiobox(&monster_task, &sel_taks);
-  Component renderer = Renderer([&]
-                                {
-    Elements elements;
-    
-    elements.push_back(paragraph("Press L:Location, H:Hero,  J: secend Hero , M :show map , A:Action , T:monster_taks, Use arrows+Enter to navigate."));
-    elements.push_back(separator());
-
-    if (show_loc) {
-      elements.push_back(loc_menu->Render()|borderStyled(ftxui::Color(ftxui::Color::Orange1)));
-      auto info = location_data[locations[sel_loc]];
-      
-      elements.push_back(window(text("Location Info"), vbox({
-        text("Location: " + locations[sel_loc]),
-        text("Items: " + info.items),
-        text("Monsters: " + info.monsters),
-        text("Villagers: " + info.villagers),
-        text("coffin status : "+ info.coffin),
-        text("heros :" + info.hero)
-      })));
-    }
-    if (show_hero) {
-      elements.push_back(window(text( " first hero info :"), vbox({
-        text("hero  name :" + heros_data["hero name "]),
-        text("action left : " +heros_data["action left "]),
-        text("item have :" + heros_data["item have "]),
-        text("perk have :" + heros_data["perk have "])
-      })));
-    }
-
-    if (show_hero1)
-    {
-      elements.push_back(window(text( " secend hero info :"), vbox({
-    text("hero  name :" + secend_heros_data["hero name "]),
-        text("action left : " +secend_heros_data["action left "]),
-        text("item have :" + secend_heros_data["item have "]),
-        text("perk have :" + secend_heros_data["perk have "])
-      })));
-    }
-
-    if (show_act) {
-      elements.push_back(act_menu->Render() |borderStyled(ftxui::Color(ftxui::Color::Red1)));
-      elements.push_back(window(text("Action Info"), vbox({
-        text("Action: " + actions[sel_act]),
-        paragraph(action_help[actions[sel_act]])
-      })));
-    }
-
-if(show_task)
-{
-string re;
-for (auto i1 : monster_list)
-{
-  re+=i1->get_mons_name()+" has "+to_string(i1->get_hidden_item()) +" task to do \n";
-}
-elements.push_back(window(text("task Detail"),paragraph(re)));
-}
-
-   if (show_map)
-     { 
-     
-      elements.push_back(window(text("Map Detail"),
-                               paragraph(map_ascii)));
-     }
-    
-    return vbox(std::move(elements)) | border; });
-
-  Component app = renderer | CatchEvent([&](Event event)
-                                        {
-    if (event == Event::Character('l') || event == Event::Character('L')) {
-      show_loc = !show_loc;
-     show_map= show_hero = show_hero1 = show_act = false;
-      return true;
-    }
-    if (event == Event::Character('h') || event == Event::Character('H')) {
-      show_hero = !show_hero;
-     show_map= show_loc = show_hero1 = show_act = false;
-      return true;
-    }
-    if (event == Event::Character('j') || event == Event::Character('J')) {
-      show_hero1 = !show_hero1;
-      show_map=show_loc = show_hero = show_act = false;
-      return true;
-    }
-    if (event == Event::Character('a') || event == Event::Character('A')) {
-      show_act = !show_act;
-     show_map= show_loc = show_hero = show_hero1 = false;
-      return true;
-    }
-
-      if (event==Event::Character('m') || event==Event::Character('M'))
-      {
-        show_map=!show_map;
-        show_act=show_hero1=show_hero=show_loc=false;
-        
-        return true;
-      }      
-        if (event==Event::Character('t')|| event==Event::Character('T'))
-        {
-          show_task=!show_task;
-               show_map= show_loc = show_hero = show_hero1 = false;
-        }
-        
-     if (event == Event::Return) {
-            string message;
-
-
-       
-        
-
-
-if (show_map || show_hero ||show_hero1 ||show_task)
-{
-  return true;
-}
-
-
-      if (show_loc)
-       message = locations[sel_loc];
-     
-      else if (show_act)
-        message =actions[sel_act];
-      else
-        throw invalid_argument("enter not detected\n");
-        ++enter_count;
-        if (enter_count==1)
-        {
-          first_enter=message;
-        }
-        else if (enter_count==2)
-        {
-            secend_enter=message;
-            screen.Exit();
-        }
-        
-        
-      return true;
-     }
-    if (show_loc)    return loc_menu->OnEvent(event);
-    if (show_hero)    return hero_menu->OnEvent(event);
-    if (show_act)    return act_menu->OnEvent(event);
-    if(show_hero1)   return heros1_menu->OnEvent(event);
-    // if (show_task)
-    // {
-    // return taks_menu->OnEvent(event);
-    // }
-    
-    return false; });
-
-  screen.Loop(app);
 }
 programm::~programm()
 {
@@ -1060,578 +1013,528 @@ programm::~programm()
   list_of_location.clear();
   list_of_items.clear();
 }
+void drawheroimage()
+{
+}
+bool isNumeric(const std::string &str)
+{
+  return !str.empty() && std::all_of(str.begin(), str.end(), ::isdigit);
+}
+void loadheroicon(vector<int> numbers)
+{
+}
+void renderItem(location *loc, sf::RenderWindow &window)
+{
+  string defaultt = "../Horrified_Assets/Items";
+  string Ritem = defaultt + "/Red", Bitem = defaultt + "/Blue", Yitem = defaultt + "/Yellow";
+  for (int i = 0; i < loc->get_item_list().size(); i++)
+  {
+    sf::Texture texture;
+    sf::Sprite image;
+    switch (loc->get_item_list()[i]->get_Color())
+    {
+    case rgb::Color::Red:
+    {
+      if (!texture.loadFromFile(Ritem + '/' + loc->get_item_list()[i]->get_name() + ".png"))
+
+      {
+        throw out_of_range("coudnt load a red item");
+      }
+    }
+    break;
+    case rgb::Color::Blue:
+    {
+      if (!texture.loadFromFile(Bitem + '/' + loc->get_item_list()[i]->get_name() + ".png"))
+
+      {
+        throw out_of_range("coudnt load a Blue item");
+      }
+    }
+    break;
+    case rgb::Color::Yellow:
+    {
+      if (!texture.loadFromFile(Yitem + '/' + loc->get_item_list()[i]->get_name() + ".png"))
+
+      {
+        throw out_of_range("coudnt load a yellow item");
+      }
+    }
+    break;
+    default:
+      break;
+    }
+    image.setTexture(texture);
+    image.setScale({200.f / texture.getSize().x, 200.f / texture.getSize().y});
+    image.setPosition({250.f * i, 125.f * (i / 4)});
+    window.draw(image);
+  }
+}
+
+bool isclied(const sf::RectangleShape &rect, const sf::Event &event, const sf::RenderWindow &window)
+{
+  if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+  {
+    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+    if (rect.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)))
+    {
+      return true;
+    }
+  }
+  return false;
+}
 void programm::run()
 {
-  vector<string> locations = {"0 ) Hospital", "1 ) grave_yard", "2 ) church", "3 ) institute", "4 ) Lab", "5 ) shop", "6 ) museum", "7 ) cryptt", "8 ) abbey", "9 ) Mansion", "10 ) theatre", "11 ) tower", "12 ) docks", "13 ) inn", "14 ) precinct", "15 ) barn", "16 ) dungeon", "17 ) cave", "18 ) camp"};
-  int gar_one, gar_two, place_go;
-  string first_enter, secend_enter, player_one, player_two;
-  LocationInfo data_updater;
-  cout << "welcome to the HORRIFIED a city full of mistry" << endl;
-  cout << "Master please enter your name" << endl;
-  cin >> player_one;
-  input_validation(player_one);
-  cout << "Dear lord please enter your name" << endl;
-  cin >> player_two;
-  input_validation(player_two);
-  cout << "get ready for the game  The player who last ate garlic the longest time ago will start the game" << endl;
-  cout << player_one << " enter the last time you ate the garlic base on days " << endl;
-  cin >> gar_one;
-  cout << player_two << " enter the last time you ate the garlic base on days " << endl;
-  cin >> gar_two;
-  try
+
+  for (auto &hero : hero_list)
   {
-    if (gar_one == 0 || gar_two == 0)
+    delete hero;
+  }
+  hero_list.clear();
+  for (auto l : list_of_location)
+  {
+    if (!l->get_hero_list().empty())
     {
-      throw invalid_argument("not acceptable\n");
+      l->get_hero_list().clear();
     }
   }
-  catch (exception &e)
+
+  vector<pair<string, int>> usersinfo(2);
+  enum initstate
   {
-    cerr << e.what();
-    exit(0);
+    showitemlocation,
+    infopage,
+    heroSelection1,
+    heroSelection2,
+    exit,
+    playmenu
+  };
+
+  vector<sf::Sprite> allheroicon(4);
+  vector<sf::Sprite> heroicon; // icons to show heros in map
+  sf::Texture T[4];
+  T[0].loadFromFile("../Horrified_Assets/Heros/Mayor.png");
+  T[1].loadFromFile("../Horrified_Assets/Heros/Archaeologist.png");
+  T[2].loadFromFile("../Horrified_Assets/Heros/Courier.png");
+  T[3].loadFromFile("../Horrified_Assets/Heros/Scientist.png");
+  for (int i = 0; i < 4; i++)
+  {
+    allheroicon[i].setPosition({110, 0});
+    allheroicon[i].setTexture(T[i]);
+    allheroicon[i].setScale({100.f / T[i].getSize().x, 135.f / T[i].getSize().y});
   }
-  if (gar_one <= gar_two)
+
+  initstate state = initstate::infopage;
+  sf::RenderWindow window({1920, 1080}, "Horrified board game"); // starting the game , getting name of players ...
+  window.setFramerateLimit(60);
+  sf::Texture map_texture;
+  sf::Sprite map_sprite;
+
+  sf::Texture bgt;
+  sf::Sprite bg;
+  if (!bgt.loadFromFile("../Horrified_Assets/bg4.png"))
   {
-    cout << "smart! lets start with the " << player_one << endl;
-    cout << "enter the name of the hero  mayor or archaeologist " << endl;
-    cin >> player_one;
-    to_lowercase(player_one);
-    input_validation(player_one);
-    charecter_exist(player_one);
-    if (player_one == "mayor")
-    {
-      cout << player_two << " start with " << "archaeologist" << endl;
-      player_two = "archaeologist";
-    }
-    else
-    {
-      cout << player_two << " start with" << " mayor" << endl;
-      player_two = "mayor";
-    }
+    throw out_of_range("coudnt find the bg asset \n");
   }
-  else
+  bg.setTexture(bgt);
+  bg.setScale({1920.f / bgt.getSize().x, 1080.f / bgt.getSize().y});
+  Button next({200, 100}, {1920 - 400, 1080 - 200}, "Next");
+  Button back({200, 100}, {1920 - 200, 1080 - 100}, "Back");
+
+  massage massage1({(1920.f / 2) - (500.f / 2), 100.f}, "Player one please enter your information", sf::Color::Red, 32);
+  massage massage2({(1920.f / 2) - (500.f / 2), 600.f}, "Player two please enter your information", sf::Color::Red, 32);
+
+  TextInputBox playerName1({(1920.f / 2) - (500.f / 2), 200.f}, {500.f, 50.f});
+  TextInputBox playerGarlic1({(1920.f / 2) - (500.f / 2), 300.f}, {500.f, 50.f});
+
+  TextInputBox playerName2({(1920.f / 2) - (500.f / 2), 700.f}, {500.f, 50.f});
+  TextInputBox playerGarlic2({(1920.f / 2) - (500.f / 2), 800.f}, {500.f, 50.f}); // info page end
+
+  if (!map_texture.loadFromFile("../Horrified_Assets/map.png")) // play menu
   {
-    cout << "smart! lets start with the " << player_two << endl;
-    cout << "enter the name of the hero mayor or archaeologist " << endl;
-    cin >> player_two;
-    to_lowercase(player_two);
-    input_validation(player_two);
-    charecter_exist(player_two);
-    if (player_two == "mayor")
-    {
-      cout << player_one << " start with" << " archaeologist" << endl;
-      player_one = "archaeologist";
-    }
-    else
-    {
-      cout << player_one << " start with" << " mayor" << endl;
-      player_one = "mayor";
-    }
+    throw out_of_range("coudnt find the map asset \n");
   }
-  cin.get();
-  cout << "note : History is written by the victor. History is full of liars. If he survives and we perish, his truth will be recorded and ours will be lost." << endl;
-  cin.get();
-  cout << "enter two enter in the section" << endl;
+  map_sprite.setTexture(map_texture);
+  sf::Vector2u textureSize = map_texture.getSize();
+  float scaleX = 1080.0f / textureSize.x;
+  float scaleY = 1030.0f / textureSize.y;
+  map_sprite.setScale(scaleX, scaleY);
+  sf::Vector2f map_origin = map_sprite.getOrigin();
+  map_sprite.setPosition({(1920 - 1080) / 2, 0}); // rendering map in mid
+  sf::Vector2f button = {200.f, 50.f};
+  Button move(button, {115.f, 350.f}, "Move");
+  Button ability(button, {move.getPosButton().x, move.getPosButton().y + 75}, "Ability");
+  Button defeat(button, {move.getPosButton().x, ability.getPosButton().y + 75}, "Defeat");
+  Button advance(button, {move.getPosButton().x, defeat.getPosButton().y + 75}, "advance");
+  Button pickup(button, {move.getPosButton().x, advance.getPosButton().y + 75}, "pick up");
+  Button guide(button, {move.getPosButton().x, pickup.getPosButton().y + 75}, "Guide");
+  Button items(button, {move.getPosButton().x, guide.getPosButton().y + 75}, "items");
+  Button perks(button, {move.getPosButton().x, items.getPosButton().y + 75}, "perks");
+  std::vector<sf::Vector2f> locationPositions = {
+      {800, 900},  // 0: Hospital
+      {1000, 855}, // 1: Graveyard
+      {880, 750},  // 2: Church
+      {1250, 890}, // 3: Institute
+      {1100, 725}, // 4: Laboratory
+      {1000, 625}, // 5: Shop
+      {600, 735},  // 6: Museum
+      {450, 750},  // 7: Crypt
+      {500, 540},  // 8: Abbey
+      {670, 490},  // 9: Mansion
+      {1055, 305}, // 10: Theatre
+      {1300, 300}, // 11: Tower
+      {1355, 492}, // 12: Docks
+      {1010, 100}, // 13: Inn
+      {790, 150},  // 14: Precinct
+      {1150, 120}, // 15: Barn
+      {1350, 100}, // 16: Dungeon
+      {455, 208},  // 17: Cave
+      {600, 170}   // 18: Camp
+  };
 
-  bool hero_phase = true;
-  while (true)
+  vector<sf::RectangleShape> location_Button(19);
+  for (int i = 0; i < 19; i++)
   {
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    // cin.get();
-    // clearScreen();
-    // terminal_handler(data_updater, first_enter, secend_enter);
+    location_Button[i].setPosition(locationPositions[i]);
+    location_Button[i].setSize({100.f, 100.f});
+    location_Button[i].setFillColor(sf::Color::Transparent);
+  }
 
-    for (auto hero : hero_list)
+  if (!map_texture.loadFromFile("../Horrified_Assets/map.png"))
+  {
+    throw out_of_range("coudnt find the map asset \n");
+  }
+  vector<Button2> B;
+  Button2 Mayor(Button2({225, 300}, {0, 0}, "../Horrified_Assets/Heros/Mayor.png"));
+  Button2 Archaeologist(Button2({225, 300}, {225, 0}, "../Horrified_Assets/Heros/Archaeologist.png"));
+  Button2 courier(Button2({225, 300}, {450, 0}, "../Horrified_Assets/Heros/Courier.png"));
+  Button2 scientist(Button2({225, 300}, {675, 0}, "../Horrified_Assets/Heros/Scientist.png"));
+
+  vector<int> Nohero;
+  int heroNo = 0;
+  int locationshow = 0;
+  while (window.isOpen())
+  {
+    sf::Event event;
+    while (window.pollEvent(event))
     {
-      if (hero->get_hero_name() == player_one)
+      if (state == initstate::showitemlocation)
       {
-        while (hero->get_action() > 0)
+        if (back.isClicked(event, window))
+          state = initstate::playmenu;
+      }
+      if (state == initstate::playmenu) // hero phase
+      {
+        if (hero_list[heroNo]->get_action() <= 0)
         {
-          cin.get();
-          clearScreen();
-          terminal_handler(data_updater, first_enter, secend_enter);
-          if (first_enter == "Move")
-          {
-            try
-            {
 
-              auto iterat = find(locations.begin(), locations.end(), secend_enter);
-              place_go = iterat - locations.begin();
-              while (!is_node_connected(hero->get_loc()->get_loc_relation(), place_go))
-              {
-                cout << "thats far away enter the place again" << endl;
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                cin.get();
-                clearScreen();
-                terminal_handler(data_updater, first_enter, secend_enter);
-                auto iterat = find(locations.begin(), locations.end(), secend_enter);
-                place_go = iterat - locations.begin();
-              }
-              hero->move(list_of_location[place_go], *this);
-              hero->set_action(hero->get_action() - 1);
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-            }
-            catch (exception &e)
-            {
-              cout << e.what() << endl;
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-
-              break;
-            }
-          }
-          if (first_enter == "Guide")
-          {
-            try
-            {
-              hero->guide(my_map, *this);
-              hero->set_action(hero->get_action() - 1);
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-            }
-            catch (exception &e)
-            {
-              cout << e.what() << endl;
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-
-              break;
-            }
-          }
-          if (first_enter == "Pick Up")
-          {
-            try
-            {
-              hero->pickup();
-              hero->set_action(hero->get_action() - 1);
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-            }
-            catch (exception &e)
-            {
-              cout << e.what() << endl;
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-              break;
-            }
-          }
-          if (first_enter == "Advance")
-          {
-            try
-            {
-              hero->advance(monster_list, *this);
-              hero->set_action(hero->get_action() - 1);
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-            }
-            catch (exception &e)
-            {
-              cout << e.what() << endl;
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-              break;
-            }
-          }
-          if (first_enter == "Defeat")
-          {
-            try
-            {
-              hero->defeat(monster_list, *this);
-              hero->set_action(hero->get_action() - 1);
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-            }
-            catch (exception &e)
-            {
-              cout << e.what() << endl;
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-
-              break;
-            }
-          }
-          if (first_enter == "special action ")
-          {
-            try
-            {
-              hero->special_action(my_map, list_of_location);
-              hero->set_action(hero->get_action() - 1);
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-            }
-            catch (exception &e)
-            {
-              cout << e.what() << endl;
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-              break;
-            }
-          }
-          if (first_enter == "use perk")
-          {
-            try
-            {
-              hero->use_perk(*this);
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-            }
-            catch (exception &e)
-            {
-              cout << e.what() << endl;
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-              break;
-            }
-          }
-
-          if (first_enter == "Quit")
-          {
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            cin.get();
-            cout << "there is a message for you" << endl;
-            clearScreen();
-            cout << "Sacrifice is a choice you make. Loss is a choice made for you." << endl;
-            return;
-          }
-        }
-      }
-    }
-    for (auto mon : monster_list)
-    {
-      if (mon->get_did_attack())
-      {
-        mon->set_did_attack(false);
-        continue;
-      }
-      else
-      {
-        try
-        {
-          int rand = 0;
-          rand = random_number(0, static_cast<int>(monster_card_list.size()) - 1);
-          monster_card_list[rand]->item_handler(*this);
-          monster_card_list[rand]->event(my_map, list_of_location, *this);
-          monster_card_list[rand]->monster_strike(*this, monster_list);
-          delete monster_card_list[rand];
-          monster_card_list.erase(monster_card_list.begin() + rand);
-
-          if (monster_card_list.empty())
-          {
-            cout << "you lose the game " << endl;
-            exit(0);
-          }
-          break;
-        }
-        catch (exception &e)
-        {
-          cerr << e.what() << endl;
-          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-          cin.get();
-          clearScreen();
-          terminal_handler(data_updater, first_enter, secend_enter);
-          break;
-        }
-      }
-    }
-
-    cout << "monster_phase is over" << endl;
-    for (auto mons1 : monster_list)
-    {
-      mons1->set_did_attack(false);
-    }
-    for (auto hero : hero_list)
-    {
-      if (typeid(*hero).name() == typeid(Mayor).name())
-      {
-        hero->set_action(5);
-      }
-      else
-      {
-        hero->set_action(4);
-      }
-    }
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    // cin.get();
-    // clearScreen();
-    // terminal_handler(data_updater, first_enter, secend_enter);
-    hero_phase = true;
-
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    // cin.get();
-    // clearScreen();
-    // terminal_handler(data_updater, first_enter, secend_enter);
-
-    for (auto hero : hero_list)
-    {
-      if (hero->get_hero_name() == player_two)
-      {
-        while (hero->get_action() > 0)
-        {
-          cin.get();
-          clearScreen();
-          terminal_handler(data_updater, first_enter, secend_enter);
-          if (first_enter == "Move")
-          {
-            try
-            {
-
-              auto iterat = find(locations.begin(), locations.end(), secend_enter);
-              place_go = iterat - locations.begin();
-              while (!is_node_connected(hero->get_loc()->get_loc_relation(), place_go))
-              {
-                cout << "thats far away enter the place again" << endl;
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                cin.get();
-                clearScreen();
-                terminal_handler(data_updater, first_enter, secend_enter);
-                auto iterat = find(locations.begin(), locations.end(), secend_enter);
-                place_go = iterat - locations.begin();
-              }
-              hero->move(list_of_location[place_go], *this);
-              hero->set_action(hero->get_action() - 1);
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-            }
-            catch (exception &e)
-            {
-              cout << e.what() << endl;
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-
-              break;
-            }
-          }
-          if (first_enter == "Guide")
-          {
-            try
-            {
-              hero->guide(my_map, *this);
-              hero->set_action(hero->get_action() - 1);
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-            }
-            catch (exception &e)
-            {
-              cout << e.what() << endl;
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-
-              break;
-            }
-          }
-          if (first_enter == "Pick Up")
-          {
-            try
-            {
-              hero->pickup();
-              hero->set_action(hero->get_action() - 1);
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-            }
-            catch (exception &e)
-            {
-              cout << e.what() << endl;
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-              break;
-            }
-          }
-          if (first_enter == "Advance")
-          {
-            try
-            {
-              hero->advance(monster_list, *this);
-              hero->set_action(hero->get_action() - 1);
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-            }
-            catch (exception &e)
-            {
-              cout << e.what() << endl;
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-              break;
-            }
-          }
-          if (first_enter == "Defeat")
-          {
-            try
-            {
-              hero->defeat(monster_list, *this);
-              hero->set_action(hero->get_action() - 1);
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-            }
-            catch (exception &e)
-            {
-              cout << e.what() << endl;
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-
-              break;
-            }
-          }
-          if (first_enter == "special action ")
-          {
-            try
-            {
-              hero->special_action(my_map, list_of_location);
-              hero->set_action(hero->get_action() - 1);
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-            }
-            catch (exception &e)
-            {
-              cout << e.what() << endl;
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-              break;
-            }
-          }
-          if (first_enter == "use perk")
-          {
-            try
-            {
-              hero->use_perk(*this);
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-            }
-            catch (exception &e)
-            {
-              cout << e.what() << endl;
-              std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-              // cin.get();
-              // clearScreen();
-              // terminal_handler(data_updater, first_enter, secend_enter);
-              break;
-            }
-          }
-
-          if (first_enter == "Quit")
-          {
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            cin.get();
-            cout << "there is a message for you" << endl;
-            clearScreen();
-            cout << "Sacrifice is a choice you make. Loss is a choice made for you." << endl;
-            return;
-          }
-        }
-      }
-    }
-
-    for (auto mon : monster_list)
-    {
-      if (mon->get_did_attack())
-      {
-        mon->set_did_attack(false);
-        continue;
-      }
-      else
-      {
-        try
-        {
           int rand = 0;
           rand = random_number(0, static_cast<int>(monster_card_list.size()) - 1);
           cout << rand << endl;
           monster_card_list[rand]->item_handler(*this);
           monster_card_list[rand]->event(my_map, list_of_location, *this);
+          cout << "first" << endl;
           monster_card_list[rand]->monster_strike(*this, monster_list);
+          cout << "first" << endl;
+
           delete monster_card_list[rand];
+
           monster_card_list.erase(monster_card_list.begin() + rand);
+
           if (monster_card_list.empty())
           {
-            cout << "you lose the game " << endl;
-            exit(0);
+            // exit(0);
           }
-          break;
+
+          if (typeid(*hero_list[heroNo]).name() == typeid(class Mayor).name())
+          {
+            hero_list[heroNo]->set_action(5);
+          }
+          else
+            hero_list[heroNo]->set_action(4);
+
+          if (heroNo == 1)
+            heroNo = 0;
+          else
+            heroNo = 1;
         }
-        catch (exception &e)
+        for (int i = 0; i < location_Button.size(); i++)
         {
-          cerr << e.what() << endl;
-          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-          cin.get();
-          clearScreen();
-          terminal_handler(data_updater, first_enter, secend_enter);
-          break;
+          if (isclied(location_Button[i], event, window))
+          {
+            state = initstate::showitemlocation;
+            locationshow = i;
+          }
+        }
+
+        if (move.isClicked(event, window))
+        {
+          int location = showLocationTextBox(window);
+          while (!is_node_connected(hero_list[heroNo]->get_loc()->get_loc_relation(), location))
+
+          {
+            showCenteredTextBox(window, "the path its far away enter agein");
+            location = showLocationTextBox(window);
+          }
+
+          hero_list[heroNo]->move(list_of_location[location], *this);
+          hero_list[heroNo]->set_action(hero_list[heroNo]->get_action() - 1);
+        }
+        if (ability.isClicked(event, window))
+        {
+          hero_list[heroNo]->special_action(my_map, *this, window);
+        }
+        if (defeat.isClicked(event, window))
+        {
+        }
+        if (advance.isClicked(event, window))
+        {
+        }
+        if (pickup.isClicked(event, window))
+        { 
+          
+        }
+        if (guide.isClicked(event, window))
+        {
+        }
+      }
+
+      if (state == initstate::heroSelection1) // chosing hero
+      {
+        if (Mayor.isClicked(event, window) && !Mayor.get_status())
+        {
+          Nohero.push_back(0);
+          state = initstate::heroSelection2;
+          hero_list.push_back(new class Mayor(5, list_of_location[10], list_of_perks));
+          for (auto i : hero_list)
+          {
+            i->get_loc()->set_hero_list(i);
+          }
+          heroicon.push_back(allheroicon[0]);
+          Mayor.set_status(!Mayor.get_status());
+        }
+        if (Archaeologist.isClicked(event, window) && !Archaeologist.get_status())
+        {
+          Nohero.push_back(1);
+          state = initstate::heroSelection2;
+          hero_list.push_back(new class Archaeologist(4, list_of_location[12], list_of_perks));
+          for (auto i : hero_list)
+          {
+            i->get_loc()->set_hero_list(i);
+          }
+          heroicon.push_back(allheroicon[1]);
+
+          Archaeologist.set_status(!Archaeologist.get_status());
+        }
+        if (courier.isClicked(event, window) && !courier.get_status())
+        {
+          Nohero.push_back(2);
+          state = initstate::heroSelection2;
+          hero_list.push_back(new class courier(4, list_of_location[5], list_of_perks));
+          for (auto i : hero_list)
+          {
+            i->get_loc()->set_hero_list(i);
+          }
+          heroicon.push_back(allheroicon[2]);
+
+          courier.set_status(!courier.get_status());
+        }
+        if (scientist.isClicked(event, window) && !scientist.get_status())
+        {
+          Nohero.push_back(3);
+          state = initstate::heroSelection2;
+          heroicon.push_back(allheroicon[3]);
+
+          hero_list.push_back(new class scientist(4, list_of_location[3], list_of_perks));
+          for (auto i : hero_list)
+          {
+            i->get_loc()->set_hero_list(i);
+          }
+          scientist.set_status(!scientist.get_status());
+        }
+      }
+      if (state == initstate::heroSelection2) // chosing hero
+      {
+        if (Mayor.isClicked(event, window) && !Mayor.get_status())
+        {
+          Nohero.push_back(0);
+          state = initstate::playmenu;
+          heroicon.push_back(allheroicon[0]);
+
+          hero_list.push_back(new class Mayor(5, list_of_location[10], list_of_perks));
+          for (auto i : hero_list)
+          {
+            i->get_loc()->set_hero_list(i);
+          }
+
+          Mayor.set_status(!Mayor.get_status());
+        }
+        if (Archaeologist.isClicked(event, window) && !Archaeologist.get_status())
+        {
+          Nohero.push_back(1);
+          heroicon.push_back(allheroicon[1]);
+
+          state = initstate::playmenu;
+          hero_list.push_back(new class Archaeologist(4, list_of_location[12], list_of_perks));
+          for (auto i : hero_list)
+          {
+            i->get_loc()->set_hero_list(i);
+          }
+
+          Archaeologist.set_status(!Archaeologist.get_status());
+        }
+        if (courier.isClicked(event, window) && !courier.get_status())
+        {
+          Nohero.push_back(2);
+          heroicon.push_back(allheroicon[2]);
+
+          state = initstate::playmenu;
+          hero_list.push_back(new class courier(4, list_of_location[5], list_of_perks));
+          for (auto i : hero_list)
+          {
+            i->get_loc()->set_hero_list(i);
+          }
+          courier.set_status(!courier.get_status());
+        }
+        if (scientist.isClicked(event, window) && !scientist.get_status())
+        {
+          Nohero.push_back(3);
+          heroicon.push_back(allheroicon[3]);
+
+          state = initstate::playmenu;
+          hero_list.push_back(new class scientist(4, list_of_location[3], list_of_perks));
+          for (auto i : hero_list)
+          {
+            i->get_loc()->set_hero_list(i);
+          }
+
+          scientist.set_status(!scientist.get_status());
+        }
+      }
+
+      if (event.type == sf::Event::Closed)
+        window.close();
+
+      if (state == initstate::infopage)
+      {
+        if (next.isClicked(event, window) && isNumeric(playerGarlic1.getInput()) && isNumeric(playerGarlic2.getInput()))
+        {
+          state = initstate::heroSelection1;
+        }
+
+        playerName1.handleEvent(event, window);
+        playerName2.handleEvent(event, window);
+        usersinfo[0].first = playerName1.getInput();
+        usersinfo[1].first = playerName2.getInput();
+
+        playerGarlic1.handleEvent(event, window);
+        playerGarlic2.handleEvent(event, window);
+        if (isNumeric(playerGarlic1.getInput()) && isNumeric(playerGarlic2.getInput()))
+        {
+          usersinfo[0].second = stoi(playerGarlic1.getInput());
+          usersinfo[1].second = stoi(playerGarlic2.getInput());
+          sort(usersinfo.begin(), usersinfo.end(), [](pair<string, int> &a, pair<string, int> &b)
+               { return a.second > b.second; });
         }
       }
     }
-    for (auto mons1 : monster_list)
+
+    window.clear();
+    window.draw(bg);
+    if (state == initstate::showitemlocation)
     {
-      mons1->set_did_attack(false);
+      renderItem(list_of_location[locationshow], window);
+      back.draw(window);
     }
-    for (auto hero : hero_list)
+    if (state == initstate::heroSelection1 || state == initstate::heroSelection2)
     {
-      if (typeid(*hero).name() == typeid(Mayor).name())
-      {
-        hero->set_action(5);
-      }
-      else
-      {
-        hero->set_action(4);
-      }
+      Mayor.draw(window);
+      Archaeologist.draw(window);
+      courier.draw(window);
+      scientist.draw(window);
     }
-    cout << "monster_phase is over" << endl;
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    // cin.get();
-    // clearScreen();
-    // terminal_handler(data_updater, first_enter, secend_enter);
-    hero_phase = true;
+    if (state == initstate::playmenu)
+    {
+      items.draw(window);
+      perks.draw(window);
+      move.draw(window);
+      ability.draw(window);
+      defeat.draw(window);
+      advance.draw(window);
+      window.draw(map_sprite);
+      pickup.draw(window);
+      guide.draw(window);
+
+      for (auto &&monster : monster_list)
+      {
+        sf::Sprite m;
+        sf::Texture texture;
+
+        if (typeid(*monster).name() == typeid(Drakula).name())
+        {
+          texture.loadFromFile("../Horrified_Assets/Monsters/Dracula.png");
+          m.setTexture(texture);
+        }
+        if (typeid(*monster).name() == typeid(invisible_man).name())
+        {
+          texture.loadFromFile("../Horrified_Assets/Monsters/InvisibleMan.png");
+          m.setTexture(texture);
+        }
+        m.setScale({66.666f / texture.getSize().x, 100.f / texture.getSize().y});
+        int locId = monster->get_loc()->get_loc_relation();
+
+        m.setPosition(locationPositions[locId].x,
+                      locationPositions[locId].y);
+        window.draw(m);
+      }
+
+      // Draw each hero at their current location
+      for (int i = 0; i < hero_list.size(); ++i)
+      {
+        int locId = hero_list[i]->get_loc()->get_loc_relation();
+        sf::Sprite heroSprite = heroicon[i];
+        heroSprite.setPosition(locationPositions[locId].x,
+                               locationPositions[locId].y);
+        window.draw(heroSprite);
+        // Draw hero name below the icon
+      }
+
+      for (auto &&i : location_Button)
+      {
+        window.draw(i);
+      }
+
+      sf::Sprite her;
+      her.setTexture(T[Nohero[heroNo]]);
+      her.setPosition({100, 25});
+      her.setScale({200.f / T[Nohero[heroNo]].getSize().x, 300.f / T[Nohero[heroNo]].getSize().y});
+      window.draw(her);
+    }
+    if (state == initstate::infopage)
+    {
+      if (!isNumeric(playerGarlic1.getInput()))
+      {
+        massage Error({playerGarlic1.getPos().x + 500, playerGarlic1.getPos().y + 50}, "Please Enter only in digits", sf::Color::Red, 15);
+        Error.draw(window);
+      }
+      if (!isNumeric(playerGarlic2.getInput()))
+      {
+        massage Error({playerGarlic2.getPos().x + 500, playerGarlic2.getPos().y + 50}, "Please Enter only in digits", sf::Color::Red, 15);
+        Error.draw(window);
+      }
+      next.draw(window);
+      massage1.draw(window);
+      playerName1.draw(window, "Enter your name");
+      playerGarlic1.draw(window, "last time you ate a garlic");
+      massage2.draw(window);
+      playerName2.draw(window, "Enter your name");
+      playerGarlic2.draw(window, "last time you ate a garlic");
+    }
+    window.display();
   }
+
+  for (auto &&hero : usersinfo)
+  {
+  }
+
+  return;
 }

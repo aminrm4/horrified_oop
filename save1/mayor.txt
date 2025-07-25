@@ -1,0 +1,7 @@
+mayor
+10
+5
+no_item 
+end_of_item 
+break_of_down 
+end_of_perk 

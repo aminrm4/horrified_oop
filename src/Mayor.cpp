@@ -1,9 +1,11 @@
 #include "Mayor.hpp"
+#include"SFML/Graphics.hpp"
+#include"free_func.hpp"
 using namespace std;
 
-void Mayor::special_action(vector<vector<int>> &map, const vector<location *> &loc)
+void Mayor::special_action(std::vector<std::vector<int>> &map,programm & bug,sf::RenderWindow & window)
 {
-    cout << "you fooled you dont have any special action hahaha \n";
+    showCenteredTextBox(window,"you dont have sepcial action haaa");
 }
 Mayor::Mayor(int actions, location *starting_loc, std::vector<perk *> &perks) : hero(perks)
 {

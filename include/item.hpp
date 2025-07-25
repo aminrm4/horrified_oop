@@ -2,6 +2,7 @@
 #include <string>
 #include <Color.hpp>
 class Color;
+class programm;
 class location;
 class item
 {
@@ -16,5 +17,8 @@ public:
     std::string get_name();
     rgb::Color get_Color();
     location *get_loc();
+    void set_power(int);
     ~item();
+    void save_game(const std::string);
+void load_game(std::string ,programm &);
 };
