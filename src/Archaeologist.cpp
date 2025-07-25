@@ -1,11 +1,12 @@
 #include "Archaeologist.hpp"
 #include"programm.hpp"
+#include"free_func.hpp"
 using namespace std;
-void Archaeologist::special_action(std::vector<std::vector<int>> &map,programm & bug)
+void Archaeologist::special_action(std::vector<std::vector<int>> &map,programm & bug,sf::RenderWindow & window)
 {
     int node_number = this->get_loc()->get_loc_relation();
 
-    cout << "select one location to pick item from \n";
+    showCenteredTextBox(window,"selec a location to pick item from");
     for (auto node_connected : map[node_number])
         cout << node_connected << ' ';
     cout << endl;

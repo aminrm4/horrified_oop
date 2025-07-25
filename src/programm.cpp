@@ -28,8 +28,8 @@ using namespace std;
 #include "courier.hpp"
 #include "scientist.hpp"
 #include "Button.hpp"
-
 #include <algorithm>
+#include "free_func.hpp"
 bool programm::is_node_connected(int her, int node)
 {
   vector<int> temp;
@@ -688,7 +688,6 @@ string programm::show_all_villager(const vector<villager *> &show, LocationInfo 
 }
 string programm::show_all_hero(const vector<hero *> &show, LocationInfo &state)
 {
-
   state.hero = "";
   unordered_map<string, int> same_element;
 
@@ -1085,11 +1084,19 @@ bool isclied(const sf::RectangleShape &rect, const sf::Event &event, const sf::R
 }
 void programm::run()
 {
+
   for (auto &hero : hero_list)
   {
     delete hero;
   }
   hero_list.clear();
+  for (auto l : list_of_location)
+  {
+    if (!l->get_hero_list().empty())
+    {
+      l->get_hero_list().clear();
+    }
+  }
 
   vector<pair<string, int>> usersinfo(2);
   enum initstate
@@ -1225,14 +1232,19 @@ void programm::run()
           cout << rand << endl;
           monster_card_list[rand]->item_handler(*this);
           monster_card_list[rand]->event(my_map, list_of_location, *this);
+          cout << "first" << endl;
           monster_card_list[rand]->monster_strike(*this, monster_list);
+          cout << "first" << endl;
+
           delete monster_card_list[rand];
+
           monster_card_list.erase(monster_card_list.begin() + rand);
+
           if (monster_card_list.empty())
           {
-            cout << "you lose the game " << endl;
             // exit(0);
           }
+
           if (typeid(*hero_list[heroNo]).name() == typeid(class Mayor).name())
           {
             hero_list[heroNo]->set_action(5);
@@ -1256,13 +1268,20 @@ void programm::run()
 
         if (move.isClicked(event, window))
         {
-          
+          int location = showLocationTextBox(window);
+          while (!is_node_connected(hero_list[heroNo]->get_loc()->get_loc_relation(), location))
 
+          {
+            showCenteredTextBox(window, "the path its far away enter agein");
+            location = showLocationTextBox(window);
+          }
 
-
+          hero_list[heroNo]->move(list_of_location[location], *this);
+          hero_list[heroNo]->set_action(hero_list[heroNo]->get_action() - 1);
         }
         if (ability.isClicked(event, window))
         {
+          hero_list[heroNo]->special_action(my_map, *this, window);
         }
         if (defeat.isClicked(event, window))
         {
@@ -1285,6 +1304,10 @@ void programm::run()
           Nohero.push_back(0);
           state = initstate::heroSelection2;
           hero_list.push_back(new class Mayor(5, list_of_location[10], list_of_perks));
+          for (auto i : hero_list)
+          {
+            i->get_loc()->set_hero_list(i);
+          }
           heroicon.push_back(allheroicon[0]);
           Mayor.set_status(!Mayor.get_status());
         }
@@ -1293,6 +1316,10 @@ void programm::run()
           Nohero.push_back(1);
           state = initstate::heroSelection2;
           hero_list.push_back(new class Archaeologist(4, list_of_location[12], list_of_perks));
+          for (auto i : hero_list)
+          {
+            i->get_loc()->set_hero_list(i);
+          }
           heroicon.push_back(allheroicon[1]);
 
           Archaeologist.set_status(!Archaeologist.get_status());
@@ -1302,6 +1329,10 @@ void programm::run()
           Nohero.push_back(2);
           state = initstate::heroSelection2;
           hero_list.push_back(new class courier(4, list_of_location[5], list_of_perks));
+          for (auto i : hero_list)
+          {
+            i->get_loc()->set_hero_list(i);
+          }
           heroicon.push_back(allheroicon[2]);
 
           courier.set_status(!courier.get_status());
@@ -1313,6 +1344,10 @@ void programm::run()
           heroicon.push_back(allheroicon[3]);
 
           hero_list.push_back(new class scientist(4, list_of_location[3], list_of_perks));
+          for (auto i : hero_list)
+          {
+            i->get_loc()->set_hero_list(i);
+          }
           scientist.set_status(!scientist.get_status());
         }
       }
@@ -1325,6 +1360,10 @@ void programm::run()
           heroicon.push_back(allheroicon[0]);
 
           hero_list.push_back(new class Mayor(5, list_of_location[10], list_of_perks));
+          for (auto i : hero_list)
+          {
+            i->get_loc()->set_hero_list(i);
+          }
 
           Mayor.set_status(!Mayor.get_status());
         }
@@ -1335,6 +1374,10 @@ void programm::run()
 
           state = initstate::playmenu;
           hero_list.push_back(new class Archaeologist(4, list_of_location[12], list_of_perks));
+          for (auto i : hero_list)
+          {
+            i->get_loc()->set_hero_list(i);
+          }
 
           Archaeologist.set_status(!Archaeologist.get_status());
         }
@@ -1345,6 +1388,10 @@ void programm::run()
 
           state = initstate::playmenu;
           hero_list.push_back(new class courier(4, list_of_location[5], list_of_perks));
+          for (auto i : hero_list)
+          {
+            i->get_loc()->set_hero_list(i);
+          }
           courier.set_status(!courier.get_status());
         }
         if (scientist.isClicked(event, window) && !scientist.get_status())
@@ -1354,6 +1401,10 @@ void programm::run()
 
           state = initstate::playmenu;
           hero_list.push_back(new class scientist(4, list_of_location[3], list_of_perks));
+          for (auto i : hero_list)
+          {
+            i->get_loc()->set_hero_list(i);
+          }
 
           scientist.set_status(!scientist.get_status());
         }
@@ -1420,18 +1471,18 @@ void programm::run()
         if (typeid(*monster).name() == typeid(Drakula).name())
         {
           texture.loadFromFile("../Horrified_Assets/Monsters/Dracula.png");
-              m.setTexture(texture);
+          m.setTexture(texture);
         }
         if (typeid(*monster).name() == typeid(invisible_man).name())
         {
           texture.loadFromFile("../Horrified_Assets/Monsters/InvisibleMan.png");
-              m.setTexture(texture);
+          m.setTexture(texture);
         }
         m.setScale({66.666f / texture.getSize().x, 100.f / texture.getSize().y});
         int locId = monster->get_loc()->get_loc_relation();
 
-        m.setPosition(locationPositions[locId].x ,
-                      locationPositions[locId].y );
+        m.setPosition(locationPositions[locId].x,
+                      locationPositions[locId].y);
         window.draw(m);
       }
 
@@ -1440,8 +1491,8 @@ void programm::run()
       {
         int locId = hero_list[i]->get_loc()->get_loc_relation();
         sf::Sprite heroSprite = heroicon[i];
-        heroSprite.setPosition(locationPositions[locId].x ,
-                               locationPositions[locId].y );
+        heroSprite.setPosition(locationPositions[locId].x,
+                               locationPositions[locId].y);
         window.draw(heroSprite);
         // Draw hero name below the icon
       }

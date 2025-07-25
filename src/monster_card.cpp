@@ -15,6 +15,7 @@ int monster_card::get_item_count()
 }
 void monster_card::_strike(int dice_attack, int move, programm &bug, monster *monsters)
 {
+    cout<<"strike"<<endl;
 
     vector<vector<int>> routes;
     for (int i = 0; i < bug.list_of_location.size(); i++)
@@ -24,13 +25,29 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
             routes.push_back(bug.bfs(monsters->get_loc()->get_loc_relation(), vill->get_currnet_location()->get_loc_relation()));
         }
     }
+        cout<<"strike"<<endl;
+    cout<<bug.list_of_location.size()<<endl;
+    cout<<bug.hero_list.size()<<endl;
+    cout<<bug.hero_list[0]->get_loc()->get_loc_relation()<<endl;
+    try{
     for (int i = 0; i < bug.list_of_location.size(); i++)
     {
         for (auto hero : bug.list_of_location.at(i)->get_hero_list())
         {
+            cout<<"im in for"<<endl;
+            if (!hero) { cout << "hero is nullptr" << endl; continue; }
+            if (!hero->get_loc()) { cout << "hero->get_loc() is nullptr" << endl; continue; }
+            if (!monsters) { cout << "monsters is nullptr" << endl; continue; }
+            if (!monsters->get_loc()) { cout << "monsters->get_loc() is nullptr" << endl; continue; }
+            cout << "calling bfs with: " << monsters->get_loc()->get_loc_relation() << " " << hero->get_loc()->get_loc_relation() << endl;
             routes.push_back(bug.bfs(monsters->get_loc()->get_loc_relation(), hero->get_loc()->get_loc_relation()));
         }
-    }
+    }    cout<<"strike"<<endl;
+}
+catch(const std::exception& e)
+{
+    std::cerr << e.what() << '\n';
+}
 
     vector<int> route = *min_element(routes.begin(), routes.end(), [](vector<int> &a, vector<int> &b)
                                      { return a.size() < b.size(); });
@@ -44,6 +61,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
     random_device rd;
     mt19937 gen(rd());
     uniform_int_distribution<> distib(1, 6);
+    cout<<"strike"<<endl;
 
     for (int i = 0; i < dice_attack && !monsters->get_did_attack(); i++)
     {

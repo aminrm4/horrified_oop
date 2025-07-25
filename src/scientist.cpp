@@ -1,10 +1,11 @@
 #include"scientist.hpp"
 #include<iostream>
+#include<SFML/Graphics.hpp>
+#include"free_func.hpp"
 using namespace std;
- void  scientist::special_action(std::vector<std::vector<int>> &map,programm & bug)
+ void  scientist::special_action(std::vector<std::vector<int>> &map,programm & bug,sf::RenderWindow & window)
  {
-    cout<<"ohhhhh scientist does not have a any special action thats a ability"<<endl;
-
+   showCenteredTextBox(window,"you have ability sir not special action ");
     this->set_action(this->get_action()+1);
 
 

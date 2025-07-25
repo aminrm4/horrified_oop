@@ -5,6 +5,7 @@
 #include "villager.hpp"
 #include "perk.hpp"
 #include "Invisible_man.hpp"
+#include<SFML/Graphics.hpp>
 class villager;
 class location;
 class perk;
@@ -24,7 +25,7 @@ protected:
    std:: string name_of_hero;
 
 public:
-    virtual void special_action(std::vector<std::vector<int>> &map,programm & bug) = 0;
+    virtual void special_action(std::vector<std::vector<int>> &map,programm & bug,sf::RenderWindow & window) = 0;
     void advance(std::vector<monster *> &monsters, programm &bug);
     void guide(std::vector<std::vector<int>> &map, programm &);
     void defeat(std::vector<monster *> &monsters, programm &bug);
