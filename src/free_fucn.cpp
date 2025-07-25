@@ -393,3 +393,73 @@ void showAssetInBox(sf::RenderWindow& window, const std::string& directory, cons
         window.display();
     }
 }
+
+std::string showTextInputBox(sf::RenderWindow& window, const std::string& prompt) {
+    sf::Font font;
+    font.loadFromFile("../Horrified_Assets/arial.ttf");
+
+    unsigned int characterSize = 32;
+    sf::Text promptText(prompt, font, characterSize);
+    promptText.setFillColor(sf::Color::White);
+
+    std::string inputStr;
+    sf::Text inputText("", font, characterSize);
+    inputText.setFillColor(sf::Color::Yellow);
+
+    float padding = 40.f;
+    float minBoxWidth = 400.f;
+    float boxHeight = 140.f;
+    float boxWidth = std::max(promptText.getLocalBounds().width + 2 * padding, minBoxWidth);
+
+    sf::Vector2u winSize = window.getSize();
+    float boxX = (winSize.x - boxWidth) / 2.f;
+    float boxY = (winSize.y - boxHeight) / 2.f;
+    sf::RectangleShape box(sf::Vector2f(boxWidth, boxHeight));
+    box.setFillColor(sf::Color(30, 30, 30, 220));
+    box.setOutlineColor(sf::Color::White);
+    box.setOutlineThickness(3.f);
+    box.setPosition(boxX, boxY);
+
+    promptText.setPosition(boxX + padding, boxY + 10.f);
+    inputText.setPosition(boxX + padding, boxY + 60.f);
+
+    bool running = true;
+    while (window.isOpen() && running) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+                return "";
+            }
+            if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Escape) {
+                    return "";
+                }
+                if (event.key.code == sf::Keyboard::Enter || event.key.code == sf::Keyboard::Return) {
+                    running = false;
+                }
+                if (event.key.code == sf::Keyboard::BackSpace && !inputStr.empty()) {
+                    inputStr.pop_back();
+                }
+            }
+            if (event.type == sf::Event::TextEntered) {
+                if (event.text.unicode >= 32 && event.text.unicode < 127) {
+                    inputStr += static_cast<char>(event.text.unicode);
+                }
+            }
+            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+                sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                if (!box.getGlobalBounds().contains(mousePos)) {
+                    return "";
+                }
+            }
+        }
+        inputText.setString(inputStr + "|"); // show cursor
+        window.clear();
+        window.draw(box);
+        window.draw(promptText);
+        window.draw(inputText);
+        window.display();
+    }
+    return inputStr;
+}

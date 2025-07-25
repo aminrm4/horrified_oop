@@ -10,6 +10,7 @@
 #include "Color.hpp"
 #include <filesystem>
 #include "item.hpp"
+#include "free_func.hpp"
 void remove_hero(programm &, hero *);
 void remove_villager(programm &, villager *);
 void remove_monster(programm &, monster *);
@@ -36,36 +37,31 @@ void hero::move(location *loc, programm &bug)
     }
 }
 
-void hero::guide(vector<vector<int>> &map, programm &p)
+void hero::guide(vector<vector<int>> &map, programm &p, sf::RenderWindow &window)
 {
     int thisNumLoc = this->loc->get_loc_relation();
-    cout << thisNumLoc << ' ';
-    for (auto related_node : map[thisNumLoc])
-        cout << related_node << ' ';
-    cout << "\n select the location to see witch villagers are there and you want to guide them\n";
+    showCenteredTextBox(window, "select the location to see witch villagers are there and you want to guide them ");
     try
     {
         int node_number;
-        cin >> node_number;
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        node_number = showLocationTextBox(window);
         bool is_connected = false;
         if (thisNumLoc == node_number)
         {
-            cout << "wich villager you want to guide" << endl;
+            showCenteredTextBox(window, "wich villager you want to guide");
             for (auto vill : p.list_of_location[thisNumLoc]->get_villager_list())
             {
-                cout << vill->get_name() << endl;
+                showAssetInBox(window, "../Horrified_Assets/Villager", vill->get_name() + ".png");
             }
             string name;
-            cin >> name;
+            name = showTextInputBox(window, "enter  the villager");
             for (auto vill : p.list_of_location[thisNumLoc]->get_villager_list())
             {
                 if (name == vill->get_name())
                 {
-                    cout << "select a node to move" << vill->get_name() << endl;
+                    showCenteredTextBox(window, "enter the location want to guide the villager");
                     int no;
-                    cin >> no;
-
+                    no = showLocationTextBox(window);
                     for (auto i : map[thisNumLoc])
                     {
                         if (i == no)
@@ -78,10 +74,10 @@ void hero::guide(vector<vector<int>> &map, programm &p)
                         vill->set_current_location(p.list_of_location[no]);
                         remove_villager(p, vill);
                         p.list_of_location[no]->set_villager(vill);
-                        cout << vill->get_name() << " moved away" << endl;
+                        showCenteredTextBox(window, "villager moved succesfully");
                         if (vill->get_currnet_location() == vill->get_safe_location())
                         {
-                            cout << "thank you hero you bring me to my safe location";
+                            showCenteredTextBox(window, "thanks for bringing me to my safe loc");
                             this->perk_have.push_back(vill->drop_the_perk());
                             remove_villager(p, vill);
                             delete vill;
@@ -105,12 +101,10 @@ void hero::guide(vector<vector<int>> &map, programm &p)
         {
             for (auto v : p.list_of_location[node_number]->get_villager_list())
             {
-                cout << v->get_name() << endl;
+                showAssetInBox(window, "../Horrified_Assets/Villager", v->get_name() + ".png");
             }
-
-            cout << "wich villager you want to guide" << endl;
             string name1;
-            cin >> name1;
+            name1 = showTextInputBox(window, "the name of the villager want to guide");
             for (auto villl : p.list_of_location[node_number]->get_villager_list())
             {
                 if (name1 == villl->get_name())
@@ -118,10 +112,10 @@ void hero::guide(vector<vector<int>> &map, programm &p)
                     remove_villager(p, villl);
                     p.list_of_location[thisNumLoc]->set_villager(villl);
                     villl->set_current_location(p.list_of_location[thisNumLoc]);
-                    cout << villl->get_name() << " moved to " << this->get_hero_name() << endl;
+                    showCenteredTextBox(window, "villager move succesfully");
                     if (villl->get_currnet_location() == villl->get_safe_location())
                     {
-                        cout << "thank you hero you bring me to my safe location";
+                        showCenteredTextBox(window, "thanks for bringing me to my safe loc");
                         this->perk_have.push_back(villl->drop_the_perk());
                         remove_villager(p, villl);
                         delete villl;
@@ -137,7 +131,7 @@ void hero::guide(vector<vector<int>> &map, programm &p)
     }
     catch (const std::exception &e)
     {
-        std::cerr << e.what() << '\n';
+        showCenteredTextBox(window, "the location that you selected is far away or it doesnt have any villager");
     }
 }
 void hero::advance(vector<monster *> &monsters, programm &bug)
@@ -253,15 +247,15 @@ void hero::advance(vector<monster *> &monsters, programm &bug)
                         {
                             if (ite->get_Color() == rgb::Color::Red)
                             {
-                                cout << " the item name is :" << ite->get_name() << " item color is" << "red :"  << " item power is : " << to_string(ite->get_power()) << endl;
+                                cout << " the item name is :" << ite->get_name() << " item color is" << "red :" << " item power is : " << to_string(ite->get_power()) << endl;
                             }
                             if (ite->get_Color() == rgb::Color::Yellow)
                             {
-                                cout << " the item name is :" << ite->get_name() << " item color is " << "yellow :"  << " item power is : " << to_string(ite->get_power()) << endl;
+                                cout << " the item name is :" << ite->get_name() << " item color is " << "yellow :" << " item power is : " << to_string(ite->get_power()) << endl;
                             }
                             if (ite->get_Color() == rgb::Color::Blue)
                             {
-                                cout << " the item name is :" << ite->get_name() << " item color is " << " blue : "  << " item power is : " << to_string(ite->get_power()) << endl;
+                                cout << " the item name is :" << ite->get_name() << " item color is " << " blue : " << " item power is : " << to_string(ite->get_power()) << endl;
                             }
                         }
 
@@ -276,11 +270,11 @@ void hero::advance(vector<monster *> &monsters, programm &bug)
 
                             string namer;
                             cin >> namer;
-                            if (this->name_of_hero=="scientist")
+                            if (this->name_of_hero == "scientist")
                             {
                                 this->ability(namer);
                             }
-                            
+
                             for (auto item : this->item_have)
                             {
                                 if (item->get_name() == namer && item->get_Color() == rgb::Color::Red)
@@ -373,10 +367,10 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
 
                         string namer;
                         cin >> namer;
-                            if (this->name_of_hero=="scientist")
-                            {
-                                this->ability(namer);
-                            }
+                        if (this->name_of_hero == "scientist")
+                        {
+                            this->ability(namer);
+                        }
                         for (auto item : this->item_have)
                         {
                             if (item->get_name() == namer && item->get_Color() == rgb::Color::Yellow)
@@ -464,7 +458,7 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
 
                             string namer;
                             cin >> namer;
-                                if (this->name_of_hero=="scientist")
+                            if (this->name_of_hero == "scientist")
                             {
                                 this->ability(namer);
                             }

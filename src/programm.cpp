@@ -1290,11 +1290,11 @@ void programm::run()
         {
         }
         if (pickup.isClicked(event, window))
-        { 
-          
+        {
         }
         if (guide.isClicked(event, window))
         {
+          hero_list[heroNo]->guide(my_map, *this, window);
         }
       }
 

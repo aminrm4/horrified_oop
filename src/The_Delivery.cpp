@@ -2,7 +2,7 @@
 
 void The_Delivery::event(std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a)
 {
-    a.list_of_location[12]->set_villager((new villager("Chick_&_Wilbur", loc[16], loc[12], a)));
+    a.list_of_location[12]->set_villager((new villager("WilburAndChick", loc[16], loc[12], a)));
 
     cout << "Chick_&_Wilbur sommend in docks go and help him \n";
 }

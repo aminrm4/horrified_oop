@@ -3,7 +3,7 @@
 void The_chthyologist::event(std::vector<std::vector<int>>& map,std::vector<location*>& loc , programm& a)
 {
     cout << "Dr.Reed sommend in institute go and help him \n";
-    a.list_of_location[3]->set_villager((new villager("Dr.Reed", loc[18], loc[3], a)));
+    a.list_of_location[3]->set_villager((new villager("DrReed", loc[18], loc[3], a)));
 }
 void The_chthyologist::monster_strike(programm &bug, vector<monster *> &monsters)
 {
