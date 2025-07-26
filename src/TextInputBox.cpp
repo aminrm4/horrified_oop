@@ -29,7 +29,7 @@ void TextInputBox::handleEvent(const sf::Event& event, const sf::RenderWindow& w
             box.setOutlineColor(sf::Color::Blue); 
         } else {
             isActive = false;
-            box.setOutlineColor(sf::Color::Black); 
+            box.setOutlineColor(sf::Color::Transparent); 
         }
     }
 
