@@ -4,7 +4,7 @@ massage::massage(sf::Vector2f position, std::string output , sf::Color initcolor
     this->position = position;
     this->output.setString(output);
     this->output.setPosition(position);
-    if (!font.loadFromFile("../Horrified_Assets/arial.ttf"))
+    if (!font.loadFromFile("../Horrified_Assets/creep.ttf"))
     {
         throw std::runtime_error("Could not load font");
     }

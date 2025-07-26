@@ -4,7 +4,7 @@ using namespace std;
 void Former_Employer::event(std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
 {
 
-    a.list_of_location[4]->set_villager((new villager("Dr.cranly", loc[14], loc[4], a)));
+    a.list_of_location[4]->set_villager((new villager("DrCranly", loc[14], loc[4], a)));
 
     cout << "Dr.cranly sommend in labratory go and help him \n";
 }

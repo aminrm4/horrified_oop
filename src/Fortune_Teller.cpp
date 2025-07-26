@@ -3,7 +3,7 @@
 void Fortune_Teller::event(std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
 {
 
-    a.list_of_location[18]->set_villager((new villager("maleva", loc[5], loc[18], a)));
+    a.list_of_location[18]->set_villager((new villager("Maleva", loc[5], loc[18], a)));
 
     cout << "maleva sommend in camp go and help him \n";
 }

@@ -26,6 +26,7 @@ void Thief::event(std::vector<std::vector<int>> &map, std::vector<location *> &l
                     a.list_of_location[i]->set_monster_list(mons);
                     a.list_of_location[i]->delete_item();
                     cout << "Invisible man  teleported to" << (a.list_of_location[i]->get_loc_relation()) << " and  destoyed all the items" << endl;
+                    return;
                 }
             }
         }

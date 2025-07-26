@@ -6,7 +6,7 @@ void Egyptian_Expert::event(std::vector<std::vector<int>> &map, std::vector<loca
 {
 
     cout << "Prof.person sommend in cave go and help him \n";
-    a.list_of_location[17]->set_villager((new villager("Prof.pearson", loc[6], loc[17], a)));
+    a.list_of_location[17]->set_villager((new villager("ProfPearson", loc[6], loc[17], a)));
 }
 void Egyptian_Expert::monster_strike(programm &bug, vector<monster *> &monsters)
 {

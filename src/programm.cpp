@@ -1065,7 +1065,7 @@ void renderItem(location *loc, sf::RenderWindow &window)
     }
     image.setTexture(texture);
     image.setScale({200.f / texture.getSize().x, 200.f / texture.getSize().y});
-    image.setPosition({250.f * i, 125.f * (i / 4)});
+    image.setPosition({250.f * (i % 7), 200.f * (i / 7)});
     window.draw(image);
   }
 }
@@ -1137,17 +1137,17 @@ void programm::run()
   }
   bg.setTexture(bgt);
   bg.setScale({1920.f / bgt.getSize().x, 1080.f / bgt.getSize().y});
-  Button next({200, 100}, {1920 - 400, 1080 - 200}, "Next");
-  Button back({200, 100}, {1920 - 200, 1080 - 100}, "Back");
+  Button next({100, 50}, {1920 - 175, 1080 - 150}, "Next");
+  Button back({100, 50}, {1920 - 400, 1080 - 200}, "Back");
 
-  massage massage1({(1920.f / 2) - (500.f / 2), 100.f}, "Player one please enter your information", sf::Color::Red, 32);
-  massage massage2({(1920.f / 2) - (500.f / 2), 600.f}, "Player two please enter your information", sf::Color::Red, 32);
+  massage massage1({(1920.f / 2) - (850.f / 2), 100.f}, "Player one please enter your information", sf::Color::Red, 52);
+  massage massage2({(1920.f / 2) - (850.f / 2), 600.f}, "Player two please enter your information", sf::Color::Red, 52);
 
   TextInputBox playerName1({(1920.f / 2) - (500.f / 2), 200.f}, {500.f, 50.f});
   TextInputBox playerGarlic1({(1920.f / 2) - (500.f / 2), 300.f}, {500.f, 50.f});
 
   TextInputBox playerName2({(1920.f / 2) - (500.f / 2), 700.f}, {500.f, 50.f});
-  TextInputBox playerGarlic2({(1920.f / 2) - (500.f / 2), 800.f}, {500.f, 50.f}); // info page end
+  TextInputBox playerGarlic2({(1920.f / 2) - (500.f / 2), 800.f}, {500.f, 50.f});
 
   if (!map_texture.loadFromFile("../Horrified_Assets/map.png")) // play menu
   {
@@ -1171,22 +1171,22 @@ void programm::run()
   Button perks(button, {move.getPosButton().x, items.getPosButton().y + 75}, "perks");
   std::vector<sf::Vector2f> locationPositions = {
       {800, 900},  // 0: Hospital
-      {1000, 855}, // 1: Graveyard
-      {880, 750},  // 2: Church
-      {1250, 890}, // 3: Institute
+      {1015, 855}, // 1: Graveyard
+      {870, 750},  // 2: Church
+      {1250, 875}, // 3: Institute
       {1100, 725}, // 4: Laboratory
-      {1000, 625}, // 5: Shop
-      {600, 735},  // 6: Museum
+      {960, 580},  // 5: Shop
+      {610, 735},  // 6: Museum
       {450, 750},  // 7: Crypt
       {500, 540},  // 8: Abbey
       {670, 490},  // 9: Mansion
       {1055, 305}, // 10: Theatre
-      {1300, 300}, // 11: Tower
-      {1355, 492}, // 12: Docks
-      {1010, 100}, // 13: Inn
+      {1300, 300}, // 11: Tower///////
+      {1340, 477}, // 12: Docks///////////
+      {985, 100},  // 13: Inn
       {790, 150},  // 14: Precinct
       {1150, 120}, // 15: Barn
-      {1350, 100}, // 16: Dungeon
+      {1375, 125}, // 16: Dungeon
       {455, 208},  // 17: Cave
       {600, 170}   // 18: Camp
   };
@@ -1204,14 +1204,16 @@ void programm::run()
     throw out_of_range("coudnt find the map asset \n");
   }
   vector<Button2> B;
-  Button2 Mayor(Button2({225, 300}, {0, 0}, "../Horrified_Assets/Heros/Mayor.png"));
-  Button2 Archaeologist(Button2({225, 300}, {225, 0}, "../Horrified_Assets/Heros/Archaeologist.png"));
-  Button2 courier(Button2({225, 300}, {450, 0}, "../Horrified_Assets/Heros/Courier.png"));
-  Button2 scientist(Button2({225, 300}, {675, 0}, "../Horrified_Assets/Heros/Scientist.png"));
+  Button2 Mayor(Button2({225, 300}, {500.f, 300.f}, "../Horrified_Assets/Heros/Mayor.png"));
+  Button2 Archaeologist(Button2({225, 300}, {725, 300}, "../Horrified_Assets/Heros/Archaeologist.png"));
+  Button2 courier(Button2({225, 300}, {950, 300}, "../Horrified_Assets/Heros/Courier.png"));
+  Button2 scientist(Button2({225, 300}, {1175, 300}, "../Horrified_Assets/Heros/Scientist.png"));
 
   vector<int> Nohero;
   int heroNo = 0;
   int locationshow = 0;
+  int selectionNo = 0;
+
   while (window.isOpen())
   {
     sf::Event event;
@@ -1290,11 +1292,11 @@ void programm::run()
         {
         }
         if (pickup.isClicked(event, window))
-        { 
-          
+        {
         }
         if (guide.isClicked(event, window))
         {
+          hero_list[heroNo]->guide(my_map, *this, window);
         }
       }
 
@@ -1304,6 +1306,8 @@ void programm::run()
         {
           Nohero.push_back(0);
           state = initstate::heroSelection2;
+          selectionNo = 1;
+
           hero_list.push_back(new class Mayor(5, list_of_location[10], list_of_perks));
           for (auto i : hero_list)
           {
@@ -1315,6 +1319,8 @@ void programm::run()
         if (Archaeologist.isClicked(event, window) && !Archaeologist.get_status())
         {
           Nohero.push_back(1);
+          selectionNo = 1;
+
           state = initstate::heroSelection2;
           hero_list.push_back(new class Archaeologist(4, list_of_location[12], list_of_perks));
           for (auto i : hero_list)
@@ -1328,6 +1334,8 @@ void programm::run()
         if (courier.isClicked(event, window) && !courier.get_status())
         {
           Nohero.push_back(2);
+          selectionNo = 1;
+
           state = initstate::heroSelection2;
           hero_list.push_back(new class courier(4, list_of_location[5], list_of_perks));
           for (auto i : hero_list)
@@ -1341,6 +1349,8 @@ void programm::run()
         if (scientist.isClicked(event, window) && !scientist.get_status())
         {
           Nohero.push_back(3);
+          selectionNo = 1;
+
           state = initstate::heroSelection2;
           heroicon.push_back(allheroicon[3]);
 
@@ -1447,10 +1457,16 @@ void programm::run()
     }
     if (state == initstate::heroSelection1 || state == initstate::heroSelection2)
     {
-      Mayor.draw(window);
-      Archaeologist.draw(window);
-      courier.draw(window);
-      scientist.draw(window);
+      massage massage({700, 250}, usersinfo[selectionNo].first + " please select your hero", sf::Color::Red, 40);
+      massage.draw(window);
+      if (!Mayor.get_status())
+        Mayor.draw(window);
+      if (!Archaeologist.get_status())
+        Archaeologist.draw(window);
+      if (!courier.get_status())
+        courier.draw(window);
+      if (!scientist.get_status())
+        scientist.draw(window);
     }
     if (state == initstate::playmenu)
     {
@@ -1498,9 +1514,40 @@ void programm::run()
         // Draw hero name below the icon
       }
 
-      for (auto &&i : location_Button)
+      for (int i = 0; i < location_Button.size(); i++)
       {
-        window.draw(i);
+        if (i == 1 || i == 7 || i == 16 || i == 17)
+        {
+          sf::Texture texture;
+          sf::Sprite coffin;
+          if (list_of_location[i]->get_coffin_exist())
+          {
+            if (!texture.loadFromFile("../Horrified_Assets/Items/Coffins/Coffin.png"))
+              throw out_of_range("couldnt open Coffin.png");
+          }
+          else
+          {
+            if (!texture.loadFromFile("../Horrified_Assets/Items/Coffins/SmashedCoffin.png"))
+              throw out_of_range("couldnt open SmashedCoffin.png");
+          }
+          coffin.setTexture(texture);
+          coffin.setScale({75.f / texture.getSize().x, 50.f / texture.getSize().y});
+          coffin.setPosition(locationPositions[i].x, locationPositions[i].y);
+          for (auto &villager : list_of_location[i]->get_villager_list())
+          {
+            sf::Texture texture;
+            sf::Sprite villagerSprite;
+            if (!texture.loadFromFile("../Horrified_Assets/Villager/" + villager->get_name() + ".png"))
+              throw out_of_range("couldnt find villager asset");
+            villagerSprite.setTexture(texture);
+            villagerSprite.setPosition(locationPositions[villager->get_currnet_location()->get_loc_relation()].x - 40, locationPositions[villager->get_currnet_location()->get_loc_relation()].y - 150);
+            villagerSprite.setScale({200.f / texture.getSize().x, 300.f / texture.getSize().y});
+            window.draw(villagerSprite);
+          }
+
+          window.draw(coffin);
+        }
+        window.draw(location_Button[i]);
       }
 
       sf::Sprite her;
@@ -1532,9 +1579,5 @@ void programm::run()
     window.display();
   }
 
-  for (auto &&hero : usersinfo)
-  {
-  }
-
-  return;
+    return;
 }
