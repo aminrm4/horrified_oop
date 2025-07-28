@@ -1162,7 +1162,7 @@ void programm::run()
   map_sprite.setPosition({(1920 - 1080) / 2, 0}); // rendering map in mid
   sf::Vector2f button = {200.f, 50.f};
   Button move(button, {115.f, 350.f}, "Move");
-  Button ability(button, {move.getPosButton().x, move.getPosButton().y + 75}, "Ability");
+  Button ability(button, {move.getPosButton().x, move.getPosButton().y + 75}, "special action");
   Button defeat(button, {move.getPosButton().x, ability.getPosButton().y + 75}, "Defeat");
   Button advance(button, {move.getPosButton().x, defeat.getPosButton().y + 75}, "advance");
   Button pickup(button, {move.getPosButton().x, advance.getPosButton().y + 75}, "pick up");
@@ -1270,24 +1270,24 @@ void programm::run()
 
         if (move.isClicked(event, window))
         {
-          int location = showLocationTextBox(window);
-          while (!is_node_connected(hero_list[heroNo]->get_loc()->get_loc_relation(), location))
-
+          int location = showLocationTextBox(window, *this, *hero_list[heroNo]);
+          if (location >= 0)
           {
-            showCenteredTextBox(window, "the path its far away enter agein");
-            location = showLocationTextBox(window);
+            hero_list[heroNo]->move(list_of_location[location], *this);
+            hero_list[heroNo]->set_action(hero_list[heroNo]->get_action() - 1);
           }
-
-          hero_list[heroNo]->move(list_of_location[location], *this);
-          hero_list[heroNo]->set_action(hero_list[heroNo]->get_action() - 1);
+          else
+          {
+            showCenteredTextBox(window, "ohh you exit the move action");
+          }
         }
         if (ability.isClicked(event, window))
         {
           hero_list[heroNo]->special_action(my_map, *this, window);
+          hero_list[heroNo]->set_action(hero_list[heroNo]->get_action() - 1);
         }
         if (defeat.isClicked(event, window))
         {
-          
         }
         if (advance.isClicked(event, window))
         {
@@ -1295,10 +1295,12 @@ void programm::run()
         if (pickup.isClicked(event, window))
         {
           hero_list[heroNo]->pickup(window);
+          hero_list[heroNo]->set_action(hero_list[heroNo]->get_action() - 1);
         }
         if (guide.isClicked(event, window))
         {
-          hero_list[heroNo]->guide(my_map, *this, window);
+          hero_list[heroNo]->guide(my_map, *this, window, *this);
+          hero_list[heroNo]->set_action(hero_list[heroNo]->get_action() - 1);
         }
       }
 
@@ -1581,5 +1583,5 @@ void programm::run()
     window.display();
   }
 
-    return;
+  return;
 }

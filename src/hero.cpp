@@ -37,14 +37,19 @@ void hero::move(location *loc, programm &bug)
     }
 }
 
-void hero::guide(vector<vector<int>> &map, programm &p, sf::RenderWindow &window)
+void hero::guide(vector<vector<int>> &map, programm &p, sf::RenderWindow &window, programm &bug)
 {
     int thisNumLoc = this->loc->get_loc_relation();
     showCenteredTextBox(window, "select the location to see witch villagers are there and you want to guide them ");
     try
     {
         int node_number;
-        node_number = showLocationTextBox(window);
+        node_number = showLocationTextBox(window, bug, *this);
+        if (node_number < 0)
+        {
+            return;
+        }
+
         bool is_connected = false;
         if (thisNumLoc == node_number)
         {
@@ -61,7 +66,7 @@ void hero::guide(vector<vector<int>> &map, programm &p, sf::RenderWindow &window
                 {
                     showCenteredTextBox(window, "enter the location want to guide the villager");
                     int no;
-                    no = showLocationTextBox(window);
+                    no = showLocationTextBox(window, bug, *this);
                     for (auto i : map[thisNumLoc])
                     {
                         if (i == no)
@@ -550,7 +555,7 @@ void hero::pickup(sf::RenderWindow &window)
         }
         catch (const std::exception &e)
         {
-            showCenteredTextBox(window,"ohhhh that was not a number");
+            showCenteredTextBox(window, "ohhhh that was not a number");
             return;
         }
 
@@ -574,7 +579,6 @@ void hero::pickup(sf::RenderWindow &window)
         cout << "may bad it seems noting is under this rock \n";
         showCenteredTextBox(window, "may bad it seems noting is under this rock");
     }
-
 }
 
 void hero::set_action(int set)

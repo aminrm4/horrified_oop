@@ -3,7 +3,7 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
-int showLocationTextBox(sf::RenderWindow &window)
+int showLocationTextBox(sf::RenderWindow &window, programm &bug, hero &herr)
 {
     // Load font
     sf::Font font;
@@ -28,9 +28,11 @@ int showLocationTextBox(sf::RenderWindow &window)
     // Always load images 0.png to 18.png in order
     std::vector<std::string> imageFiles;
     std::string folder = "../Horrified_Assets/loacation/";
-    for (int i = 0; i < 19; ++i)
+
+    for (auto lo : bug.my_map[herr.get_loc()->get_loc_relation()])
     {
-        std::string path = folder + std::to_string(i) + ".png";
+
+        std::string path = folder + std::to_string(lo) + ".png";
         if (fs::exists(path))
         {
             imageFiles.push_back(path);
@@ -41,6 +43,7 @@ int showLocationTextBox(sf::RenderWindow &window)
             imageFiles.push_back("");
         }
     }
+
     size_t numImages = imageFiles.size();
     if (numImages == 0)
         return 0;
@@ -86,18 +89,18 @@ int showLocationTextBox(sf::RenderWindow &window)
         sf::Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed)
-            {
-                window.close();
-                return 0;
-            }
-            if (event.type == sf::Event::KeyPressed)
-            {
-                if (event.key.code == sf::Keyboard::Escape)
-                {
-                    running = false;
-                }
-            }
+            // if (event.type == sf::Event::Closed)
+            // {
+            //     window.close();
+            //     return -1;
+            // }
+            // if (event.type == sf::Event::KeyPressed)
+            // {
+            //     if (event.key.code == sf::Keyboard::Escape)
+            //     {
+            //         running = false;
+            //     }
+            // }
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
             {
                 sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
@@ -113,7 +116,7 @@ int showLocationTextBox(sf::RenderWindow &window)
                         if (!imageFiles[i].empty() && spriteBounds[i].contains(mousePos))
                         {
                             // Return the exact number of the image clicked (0-18)
-                            return static_cast<int>(i);
+                            return extractNumber(imageFiles[i]);
                         }
                     }
                 }
@@ -325,7 +328,8 @@ int showAssetSelectionBox(sf::RenderWindow &window, const std::string &directory
     return -1;
 }
 
-void showAssetInBox(sf::RenderWindow& window, const std::string& directory, const std::string& assetName) {
+void showAssetInBox(sf::RenderWindow &window, const std::string &directory, const std::string &assetName)
+{
     // Load font for optional text (reuse style)
     sf::Font font;
     font.loadFromFile("../Horrified_Assets/creep.ttf");
@@ -369,19 +373,25 @@ void showAssetInBox(sf::RenderWindow& window, const std::string& directory, cons
     infoText.setPosition(box.getPosition().x + 20, box.getPosition().y + boxHeight - 36);
 
     bool running = true;
-    while (window.isOpen() && running) {
+    while (window.isOpen() && running)
+    {
         sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
                 window.close();
                 return;
             }
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
+            {
                 running = false;
             }
-            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+            {
                 sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-                if (!box.getGlobalBounds().contains(mousePos)) {
+                if (!box.getGlobalBounds().contains(mousePos))
+                {
                     running = false;
                 }
             }
@@ -394,7 +404,8 @@ void showAssetInBox(sf::RenderWindow& window, const std::string& directory, cons
     }
 }
 
-std::string showTextInputBox(sf::RenderWindow& window, const std::string& prompt) {
+std::string showTextInputBox(sf::RenderWindow &window, const std::string &prompt)
+{
     sf::Font font;
     font.loadFromFile("../Horrified_Assets/arial.ttf");
 
@@ -424,32 +435,43 @@ std::string showTextInputBox(sf::RenderWindow& window, const std::string& prompt
     inputText.setPosition(boxX + padding, boxY + 60.f);
 
     bool running = true;
-    while (window.isOpen() && running) {
+    while (window.isOpen() && running)
+    {
         sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
                 window.close();
                 return "";
             }
-            if (event.type == sf::Event::KeyPressed) {
-                if (event.key.code == sf::Keyboard::Escape) {
+            if (event.type == sf::Event::KeyPressed)
+            {
+                if (event.key.code == sf::Keyboard::Escape)
+                {
                     return "";
                 }
-                if (event.key.code == sf::Keyboard::Enter || event.key.code == sf::Keyboard::Return) {
+                if (event.key.code == sf::Keyboard::Enter || event.key.code == sf::Keyboard::Return)
+                {
                     running = false;
                 }
-                if (event.key.code == sf::Keyboard::BackSpace && !inputStr.empty()) {
+                if (event.key.code == sf::Keyboard::BackSpace && !inputStr.empty())
+                {
                     inputStr.pop_back();
                 }
             }
-            if (event.type == sf::Event::TextEntered) {
-                if (event.text.unicode >= 32 && event.text.unicode < 127) {
+            if (event.type == sf::Event::TextEntered)
+            {
+                if (event.text.unicode >= 32 && event.text.unicode < 127)
+                {
                     inputStr += static_cast<char>(event.text.unicode);
                 }
             }
-            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+            {
                 sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-                if (!box.getGlobalBounds().contains(mousePos)) {
+                if (!box.getGlobalBounds().contains(mousePos))
+                {
                     return "";
                 }
             }
@@ -462,4 +484,9 @@ std::string showTextInputBox(sf::RenderWindow& window, const std::string& prompt
         window.display();
     }
     return inputStr;
+}
+int extractNumber(const std::string &pathStr)
+{
+    fs::path p(pathStr);
+    return std::stoi(p.stem().string());
 }

@@ -11,7 +11,7 @@ void Archaeologist::special_action(std::vector<std::vector<int>> &map, programm 
     try
     {
         int node;
-        node = showLocationTextBox(window);
+        node = showLocationTextBox(window,bug,*this);
         bool is_connected{};
         for (auto node_connected : map[node_number])
             if (node == node_connected)
