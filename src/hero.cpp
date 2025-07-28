@@ -533,25 +533,48 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
     }
 }
 
-void hero::pickup()
+void hero::pickup(sf::RenderWindow &window)
 {
-
-    cout << "OH look there is something hidden under this big rock move it using enter \n";
-    cin.get();
+    int user_item = 0;
+    string name_of_it;
+    showCenteredTextBox(window, "OH look there is something hidden under this big rock move it using click");
     if (!this->loc->get_item_list().empty())
     {
-        cout << "WOW look what you just found " << endl;
         for (int i = 0; i < this->loc->get_item_list().size(); i++)
         {
-            cout << this->loc->get_item_list()[i]->get_name() << endl;
+            showAssetInBox(window, "../Horrified_Assets/Items/General", this->loc->get_item_list()[i]->get_name() + ".png");
         }
-        this->item_have.insert(item_have.end(), this->loc->get_item_list().begin(), this->loc->get_item_list().end());
-        this->loc->delete_item();
+        try
+        {
+            user_item = stoi(showTextInputBox(window, "how many item want to pick up"));
+        }
+        catch (const std::exception &e)
+        {
+            showCenteredTextBox(window,"ohhhh that was not a number");
+            return;
+        }
+
+        for (int i = 0; i < user_item; i++)
+        {
+            name_of_it = showTextInputBox(window, "enter the items you want to pick up");
+            for (auto &ite : this->loc->get_item_list())
+            {
+                if (ite->get_name() == name_of_it)
+                {
+                    this->item_have.insert(item_have.end(), ite);
+                    auto it = find(this->loc->get_item_list().begin(), this->loc->get_item_list().end(), ite);
+                    this->loc->get_item_list().erase(it);
+                    break;
+                }
+            }
+        }
     }
     else
     {
         cout << "may bad it seems noting is under this rock \n";
+        showCenteredTextBox(window, "may bad it seems noting is under this rock");
     }
+
 }
 
 void hero::set_action(int set)

@@ -1287,12 +1287,14 @@ void programm::run()
         }
         if (defeat.isClicked(event, window))
         {
+          
         }
         if (advance.isClicked(event, window))
         {
         }
         if (pickup.isClicked(event, window))
         {
+          hero_list[heroNo]->pickup(window);
         }
         if (guide.isClicked(event, window))
         {

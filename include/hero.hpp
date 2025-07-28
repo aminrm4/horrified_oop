@@ -35,7 +35,7 @@ public:
     std::vector<perk *> &get_perks();
     void set_item(std::vector<item *> items);
     std::vector<item *> &get_items(); // refrenced too
-    void pickup();
+    void pickup(sf::RenderWindow & window);
     void set_action(int);
     location *get_loc();
     std::string get_hero_name();
