@@ -4,11 +4,13 @@
 #include "Mayor.hpp"
 #include "Archaeologist.hpp"
 #include<SFML/Graphics.hpp>
+#include"free_func.hpp"
 using namespace std;
-void late_into_night::play(programm &help_obj1,sf::RenderWindow & window)
+void late_into_night::play(programm &help_obj1,sf::RenderWindow & window,hero*her)
 {
-
-    cout << "late_into_the_night used" << endl;
+showCenteredTextBox(window,"your action increased 2 unit");
+her->set_action(her->get_action()+2);
+showCenteredTextBox(window,"late into the night used");
 }
 
 late_into_night::late_into_night()

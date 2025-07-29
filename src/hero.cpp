@@ -57,7 +57,7 @@ void hero::guide(vector<vector<int>> &map, programm &p, sf::RenderWindow &window
         {
             showCenteredTextBox(window, "wich villager you want to guide");
             string name;
-            name=showHerovillagerBox(window, node_number, bug);
+            name = showHerovillagerBox(window, node_number, bug);
             for (auto vill : p.list_of_location[thisNumLoc]->get_villager_list())
             {
                 if (name == vill->get_name())
@@ -110,9 +110,9 @@ void hero::guide(vector<vector<int>> &map, programm &p, sf::RenderWindow &window
         if (is_connected == true && !p.list_of_location[node_number]->get_villager_list().empty())
 
         {
-           
+
             string name1;
-            name1 = showHerovillagerBox(window,node_number,bug);
+            name1 = showHerovillagerBox(window, node_number, bug);
             for (auto villl : p.list_of_location[node_number]->get_villager_list())
             {
                 if (name1 == villl->get_name())
@@ -541,14 +541,14 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
     }
 }
 
-void hero::pickup(sf::RenderWindow &window,programm & bug)
+void hero::pickup(sf::RenderWindow &window, programm &bug)
 {
     int user_item = 0;
     string name_of_it;
     showCenteredTextBox(window, "OH look there is something hidden under this big rock move it using click");
     if (!this->loc->get_item_list().empty())
     {
-        
+
         try
         {
             user_item = stoi(showTextInputBox(window, "how many item want to pick up"));
@@ -561,7 +561,7 @@ void hero::pickup(sf::RenderWindow &window,programm & bug)
 
         for (int i = 0; i < user_item; i++)
         {
-            name_of_it = showHeroitemBox(window,this->get_loc()->get_loc_relation(),bug);
+            name_of_it = showHeroitemBox(window, this->get_loc()->get_loc_relation(), bug);
             for (auto &ite : this->loc->get_item_list())
             {
                 if (ite->get_name() == name_of_it)
@@ -701,11 +701,7 @@ void hero::use_perk(programm &object1, sf::RenderWindow &window)
         if (perk_have[i]->get_name() == temp)
         {
 
-            if (typeid(*perk_have[i]).name() == typeid(late_into_night).name())
-            {
-                this->set_action(this->get_action() + 2);
-            }
-            perk_have[i]->play(object1,window);
+            perk_have[i]->play(object1, window,this);
             delete perk_have[i];
             this->perk_have.erase(perk_have.begin() + i);
         }

@@ -12,25 +12,13 @@ void remove_monster(programm &, monster *);
 void remove_item(programm &, monster *);
 void message_invisible_man(bool alive);
 void message_drakula(bool alive);
-void repel::play(programm &help_obj1,sf::RenderWindow & window)
+void repel::play(programm &help_obj1,sf::RenderWindow & window,hero*her)
 {
 
   for (auto mon : help_obj1.monster_list)
   {
-    if (typeid(*mon).name()==typeid(Drakula).name())
-    {
-      cout<<"this is for Drakula"<<endl;
-    }
-     if (typeid(*mon).name()==typeid(invisible_man).name())
-    {
-      cout<<"this is for Invisible man"<<endl;
-    }
-    for (auto maper : help_obj1.my_map[mon->get_loc()->get_loc_relation()])
-    {
-      cout << maper << " ";
-    }
+   
 
-    cout << endl;
     int new_loc;
     cout<<"enter the location "<<endl;
     cin >> new_loc;

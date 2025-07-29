@@ -10,7 +10,7 @@
 class overstock : public perk
 {
 public:
-     void play(programm &help_obj1,sf::RenderWindow & window) override final;
+     void play(programm &help_obj1,sf::RenderWindow & window,hero*her=nullptr) override final;
      overstock();
      ~overstock() = default;
 };

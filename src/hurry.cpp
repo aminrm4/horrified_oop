@@ -15,7 +15,7 @@ void remove_monster(programm &, monster *);
 void remove_item(programm &, monster *);
 void message_invisible_man(bool alive);
 void message_drakula(bool alive);
-void hurry::play(programm &help_obj1,sf::RenderWindow & window)
+void hurry::play(programm &help_obj1,sf::RenderWindow & window,hero *her)
 {
 
     for (auto her : help_obj1.hero_list)

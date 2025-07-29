@@ -8,7 +8,7 @@
 using namespace std;
 int random_number(int min, int max);
 
-void overstock::play(programm &help_obj1,sf::RenderWindow & window)
+void overstock::play(programm &help_obj1,sf::RenderWindow & window,hero*her)
 
 {
      showCenteredTextBox(window,"those item put in the map");

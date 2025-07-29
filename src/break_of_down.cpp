@@ -8,7 +8,7 @@
 using namespace std;
 int random_number(int min, int max);
 
-void break_of_down::play(programm &help_obj1, sf::RenderWindow &window)
+void break_of_down::play(programm &help_obj1, sf::RenderWindow &window,hero*her)
 {
   for (auto mo : help_obj1.monster_list)
   {

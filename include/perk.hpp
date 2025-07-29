@@ -12,7 +12,7 @@ class perk
 public:
     std::string name;
     std::string get_name();
-    virtual void play(programm &help_obj1,sf::RenderWindow & window) = 0;
+    virtual void play(programm &help_obj1,sf::RenderWindow & window,hero*her=nullptr) = 0;
     perk() = default;
     virtual ~perk() = default;
     void save_game(const std::string);

@@ -11,7 +11,7 @@ class programm;
 class visit_from_detective : public perk
 {
 public:
-    void play(programm &help_obj1,sf::RenderWindow & window) override final;
+    void play(programm &help_obj1,sf::RenderWindow & window,hero * her=nullptr) override final;
 
     visit_from_detective();
     ~visit_from_detective() = default;

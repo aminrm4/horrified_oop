@@ -1306,8 +1306,9 @@ void programm::run()
         }
         if (perks.isClicked(event, window))
         {
-          hero_list[heroNo]->get_perks().push_back(list_of_perks[6]);
+          hero_list[heroNo]->get_perks().push_back(list_of_perks[10]);
            hero_list[heroNo]->use_perk(*this, window);
+           cout<<hero_list[heroNo]->get_action()<<endl;
         }
         if (items.isClicked(event, window))
         {
