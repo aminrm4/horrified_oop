@@ -74,5 +74,5 @@ void repel::play(programm &help_obj1)
 }
  repel::repel()
   {
-    name = "repel";
+    name = "Repel";
   }

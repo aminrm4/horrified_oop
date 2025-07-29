@@ -29,5 +29,5 @@ void visit_from_detective::play(programm &help_obj1)
 }
 visit_from_detective::visit_from_detective()
 {
-    name = "visit_from_detective";
+    name = "VisitFromTheDetective";
 }

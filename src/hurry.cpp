@@ -77,5 +77,5 @@ void hurry::play(programm &help_obj1)
 }
 hurry::hurry()
 {
-    name = "hurry";
+    name = "Hurry";
 }

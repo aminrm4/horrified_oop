@@ -12,6 +12,12 @@ void Archaeologist::special_action(std::vector<std::vector<int>> &map, programm 
     {
         int node;
         node = showLocationTextBox(window,bug,*this);
+        if (node<0)
+        {
+            showCenteredTextBox(window,"ohhh you exit the special action");
+            return;
+        }
+        
         bool is_connected{};
         for (auto node_connected : map[node_number])
             if (node == node_connected)

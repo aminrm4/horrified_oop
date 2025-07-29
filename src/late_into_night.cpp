@@ -12,5 +12,5 @@ void late_into_night::play(programm &help_obj1)
 
 late_into_night::late_into_night()
 {
-    name = "late_into_night";
+    name = "LateIntoTheNight";
 }

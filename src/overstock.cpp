@@ -23,5 +23,5 @@ void overstock::play(programm &help_obj1)
 }
 overstock::overstock()
 {
-     name = "overstock";
+     name = "Overstock";
 }

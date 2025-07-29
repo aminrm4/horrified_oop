@@ -47,6 +47,8 @@ void hero::guide(vector<vector<int>> &map, programm &p, sf::RenderWindow &window
         node_number = showLocationTextBox(window, bug, *this);
         if (node_number < 0)
         {
+            showCenteredTextBox(window, "ohhh you exit the guide action");
+            this->set_action(this->get_action() + 1);
             return;
         }
 
@@ -54,12 +56,8 @@ void hero::guide(vector<vector<int>> &map, programm &p, sf::RenderWindow &window
         if (thisNumLoc == node_number)
         {
             showCenteredTextBox(window, "wich villager you want to guide");
-            for (auto vill : p.list_of_location[thisNumLoc]->get_villager_list())
-            {
-                showAssetInBox(window, "../Horrified_Assets/Villager", vill->get_name() + ".png");
-            }
             string name;
-            name = showTextInputBox(window, "enter  the villager");
+            name=showHerovillagerBox(window, node_number, bug);
             for (auto vill : p.list_of_location[thisNumLoc]->get_villager_list())
             {
                 if (name == vill->get_name())
@@ -67,6 +65,14 @@ void hero::guide(vector<vector<int>> &map, programm &p, sf::RenderWindow &window
                     showCenteredTextBox(window, "enter the location want to guide the villager");
                     int no;
                     no = showLocationTextBox(window, bug, *this);
+                    if (node_number < 0)
+                    {
+                        showCenteredTextBox(window, "ohhh you exit the guide action");
+                        this->set_action(this->get_action() + 1);
+
+                        return;
+                    }
+
                     for (auto i : map[thisNumLoc])
                     {
                         if (i == no)
@@ -104,12 +110,9 @@ void hero::guide(vector<vector<int>> &map, programm &p, sf::RenderWindow &window
         if (is_connected == true && !p.list_of_location[node_number]->get_villager_list().empty())
 
         {
-            for (auto v : p.list_of_location[node_number]->get_villager_list())
-            {
-                showAssetInBox(window, "../Horrified_Assets/Villager", v->get_name() + ".png");
-            }
+           
             string name1;
-            name1 = showTextInputBox(window, "the name of the villager want to guide");
+            name1 = showHerovillagerBox(window,node_number,bug);
             for (auto villl : p.list_of_location[node_number]->get_villager_list())
             {
                 if (name1 == villl->get_name())
@@ -538,17 +541,14 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
     }
 }
 
-void hero::pickup(sf::RenderWindow &window)
+void hero::pickup(sf::RenderWindow &window,programm & bug)
 {
     int user_item = 0;
     string name_of_it;
     showCenteredTextBox(window, "OH look there is something hidden under this big rock move it using click");
     if (!this->loc->get_item_list().empty())
     {
-        for (int i = 0; i < this->loc->get_item_list().size(); i++)
-        {
-            showAssetInBox(window, "../Horrified_Assets/Items/General", this->loc->get_item_list()[i]->get_name() + ".png");
-        }
+        
         try
         {
             user_item = stoi(showTextInputBox(window, "how many item want to pick up"));
@@ -561,7 +561,7 @@ void hero::pickup(sf::RenderWindow &window)
 
         for (int i = 0; i < user_item; i++)
         {
-            name_of_it = showTextInputBox(window, "enter the items you want to pick up");
+            name_of_it = showHeroitemBox(window,this->get_loc()->get_loc_relation(),bug);
             for (auto &ite : this->loc->get_item_list())
             {
                 if (ite->get_name() == name_of_it)
@@ -690,17 +690,11 @@ may still be me.
     }
 }
 
-void hero::use_perk(programm &object1)
+void hero::use_perk(programm &object1, sf::RenderWindow &window)
 {
-    cout << "you have this perk" << endl;
-    for (auto p : this->perk_have)
-    {
-        cout << p->get_name() << " ";
-    }
-    cout << endl;
-    cout << "wich perk want you use enter belwo : " << endl;
+    showCenteredTextBox(window, "you have this perk click to use");
     string temp;
-    cin >> temp;
+    temp = showHeroPerksBox(window, this);
     for (int i = 0; i < perk_have.size(); i++)
     {
 
