@@ -5,10 +5,11 @@
 #include "location.hpp"
 #include <bits/stdc++.h>
 #include "perk.hpp"
+#include<SFML/Graphics.hpp>
 class repel : public perk
 {
 public:
-     void play(programm &help_obj1) override final;
+     void play(programm &help_obj1,sf::RenderWindow & window) override final;
 
      repel();
      ~repel() = default;

@@ -490,7 +490,8 @@ programm::programm()
   {
     i->get_loc()->set_hero_list(i);
   }
-  list_of_location[9]->set_villager(new villager("DrReed", list_of_location[18], list_of_location[9], *this));
+  // added as a villageer test ist_of_location[9]->set_villager(new villager("DrReed", list_of_location[18], list_of_location[9], *this));
+  
 }
 std::vector<int> programm::bfs(int s, int t)
 {
@@ -1168,8 +1169,8 @@ void programm::run()
   Button advance(button, {move.getPosButton().x, defeat.getPosButton().y + 75}, "advance");
   Button pickup(button, {move.getPosButton().x, advance.getPosButton().y + 75}, "pick up");
   Button guide(button, {move.getPosButton().x, pickup.getPosButton().y + 75}, "Guide");
-  Button items(button, {move.getPosButton().x, guide.getPosButton().y + 75}, "items");
-  Button perks(button, {move.getPosButton().x, items.getPosButton().y + 75}, "perks");
+  Button items(button, {move.getPosButton().x, guide.getPosButton().y + 75}, "deatail");
+  Button perks(button, {move.getPosButton().x, items.getPosButton().y + 75}, " use perk");
   std::vector<sf::Vector2f> locationPositions = {
       {800, 900},  // 0: Hospital
       {1015, 855}, // 1: Graveyard
@@ -1295,7 +1296,7 @@ void programm::run()
         }
         if (pickup.isClicked(event, window))
         {
-          hero_list[heroNo]->pickup(window,*this);
+          hero_list[heroNo]->pickup(window, *this);
           hero_list[heroNo]->set_action(hero_list[heroNo]->get_action() - 1);
         }
         if (guide.isClicked(event, window))
@@ -1305,7 +1306,23 @@ void programm::run()
         }
         if (perks.isClicked(event, window))
         {
-          // hero_list[heroNo]->use_perk(*this, window);
+          hero_list[heroNo]->get_perks().push_back(list_of_perks[0]);
+           hero_list[heroNo]->use_perk(*this, window);
+        }
+        if (items.isClicked(event, window))
+        {
+          showCenteredTextBox(window, "you have this items :");
+          for (auto it : hero_list[heroNo]->get_items())
+          {
+            showAssetInBox(window, "../Horrified_Assets/Items/General", it->get_name() + ".png");
+          }
+          showCenteredTextBox(window, "you have this perks :");
+          for (auto pe : hero_list[heroNo]->get_perks())
+          {
+            showAssetInBox(window, "../Horrified_Assets/Perk_Cards", pe->get_name() + ".png");
+          }
+
+          // remain action handel out of it
         }
       }
 

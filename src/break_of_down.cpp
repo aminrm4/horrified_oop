@@ -3,10 +3,11 @@
 #include "map1.hpp"
 #include <bits/stdc++.h>
 #include "programm.hpp"
+#include<SFML/Graphics.hpp>
 using namespace std;
 int random_number(int min, int max);
 
-void break_of_down::play(programm &help_obj1)
+void break_of_down::play(programm &help_obj1,sf::RenderWindow & window)
 {
   for (auto mo : help_obj1.monster_list)
   {

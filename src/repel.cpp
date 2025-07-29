@@ -4,7 +4,7 @@
 #include "Invisible_man.hpp"
 #include "programm.hpp"
 #include "map1.hpp"
-
+#include<SFML/Graphics.hpp>
 using namespace std;
 void remove_hero(programm &, hero *);
 void remove_villager(programm &, villager *);
@@ -12,7 +12,7 @@ void remove_monster(programm &, monster *);
 void remove_item(programm &, monster *);
 void message_invisible_man(bool alive);
 void message_drakula(bool alive);
-void repel::play(programm &help_obj1)
+void repel::play(programm &help_obj1,sf::RenderWindow & window)
 {
 
   for (auto mon : help_obj1.monster_list)

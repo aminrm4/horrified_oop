@@ -705,7 +705,7 @@ void hero::use_perk(programm &object1, sf::RenderWindow &window)
             {
                 this->set_action(this->get_action() + 2);
             }
-            perk_have[i]->play(object1);
+            perk_have[i]->play(object1,window);
             delete perk_have[i];
             this->perk_have.erase(perk_have.begin() + i);
         }
