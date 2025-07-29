@@ -1306,7 +1306,7 @@ void programm::run()
         }
         if (perks.isClicked(event, window))
         {
-          hero_list[heroNo]->get_perks().push_back(list_of_perks[0]);
+          hero_list[heroNo]->get_perks().push_back(list_of_perks[6]);
            hero_list[heroNo]->use_perk(*this, window);
         }
         if (items.isClicked(event, window))

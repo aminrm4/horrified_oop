@@ -546,7 +546,6 @@ std::string showHeroPerksBox(sf::RenderWindow &window, hero *heroPtr)
                     {
                         if (sprites[i].getGlobalBounds().contains(mousePos))
                         {
-                            std::cout << "Selected perk: " << heroPerks[i]->get_name() << std::endl;
                             return heroPerks[i]->get_name();
                         }
                     }
