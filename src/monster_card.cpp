@@ -91,7 +91,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                         break;
                     }
                     dir += monster->get_loc()->get_hero_list()[0]->get_items()[i]->get_name();
-                    Buttonitem.push_back({Button2({200, 100}, {(i % 6) * 300, (i / 6) * 200}, dir), monster->get_loc()->get_hero_list()[0]->get_items()[i]});
+                    Buttonitem.push_back({Button2({200, 100}, {(i % 6) * 300.f, (i / 6) * 200.f}, dir), monster->get_loc()->get_hero_list()[0]->get_items()[i]});
                 }
 
                 massage m({400, 400}, monster->get_mons_name() + " Want to attack " + monster->get_loc()->get_hero_list()[0]->get_hero_name() + "do you want to defend your self ?", sf::Color::Red, 40);

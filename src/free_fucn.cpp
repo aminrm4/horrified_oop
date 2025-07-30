@@ -2,6 +2,7 @@
 #include "free_func.hpp"
 #include <SFML/Audio.hpp>
 #include <filesystem>
+#include"programm.hpp" 
 namespace fs = std::filesystem;
 using namespace std;
 int showLocationTextBox(sf::RenderWindow &window, programm &bug, hero &herr)
@@ -213,7 +214,6 @@ void playSound(std::string SoundDir)
         return;
     }
 
-<<<<<<< HEAD
     sf::Sound sound;
     sound.setBuffer(buffer);
     sound.play();
@@ -223,103 +223,6 @@ void playSound(std::string SoundDir)
     {
         sf::sleep(sf::milliseconds(100));
     }
-}
-int showAssetSelectionBox(sf::RenderWindow &window, const std::string &directory)
-=======
-string show_hero_on_location(sf::RenderWindow &window, programm &bug)
->>>>>>> 58e48885eba0a3db81ab195dabb319639f52c1f6
-{
-    sf::Vector2u winSize = window.getSize();
-    float maxBoxWidth = 1200.f, maxBoxHeight = 800.f;
-    float boxWidth = std::min(winSize.x * 0.8f, maxBoxWidth);
-    float boxHeight = std::min(winSize.y * 0.8f, maxBoxHeight);
-    sf::Vector2f boxSize(boxWidth, boxHeight);
-    sf::RectangleShape textBox(boxSize);
-    textBox.setFillColor(sf::Color(30, 30, 30, 220));
-    textBox.setOutlineColor(sf::Color::White);
-    textBox.setOutlineThickness(3.f);
-    textBox.setPosition((winSize.x - boxSize.x) / 2, (winSize.y - boxSize.y) / 2);
-
-    size_t num_her = 2;
-    size_t cols = 3;
-    size_t rows = (num_her + cols - 1) / cols;
-    float padding = 40.f;
-    float gridWidth = boxSize.x - 2 * padding;
-    float gridHeight = boxSize.y - 2 * padding;
-    float cellWidth = gridWidth / cols;
-    float cellHeight = gridHeight / std::max(rows, size_t(1));
-
-    std::vector<sf::Texture> textures(num_her);
-    std::vector<sf::Sprite> sprites(num_her);
-
-    for (size_t i = 0; i < num_her; ++i)
-    {
-        std::string hero_nam = bug.hero_list[i]->get_hero_name();
-
-        std::string path = "../Horrified_Assets/Heros/" + hero_nam + ".png";
-        if (textures[i].loadFromFile(path))
-        {
-            sprites[i].setTexture(textures[i]);
-            // Scale to fit inside the cell
-            float scaleX = cellWidth / sprites[i].getLocalBounds().width;
-            float scaleY = cellHeight / sprites[i].getLocalBounds().height;
-            float scale = std::min(scaleX, scaleY) * 0.8f;
-            sprites[i].setScale(scale, scale);
-        }
-
-        size_t row = i / cols;
-        size_t col = i % cols;
-        float x = textBox.getPosition().x + padding + col * cellWidth + (cellWidth - (sprites[i].getLocalBounds().width * sprites[i].getScale().x)) / 2;
-        float y = textBox.getPosition().y + padding + row * cellHeight + (cellHeight - (sprites[i].getLocalBounds().height * sprites[i].getScale().y)) / 2;
-        sprites[i].setPosition(x, y);
-    }
-
-    bool running = true;
-    while (window.isOpen() && running)
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-            {
-                window.close();
-                return "";
-            }
-            if (event.type == sf::Event::KeyPressed)
-            {
-                if (event.key.code == sf::Keyboard::Escape)
-                {
-                    running = false;
-                }
-            }
-            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
-            {
-                sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-                if (!textBox.getGlobalBounds().contains(mousePos))
-                {
-                    running = false;
-                }
-                else
-                {
-                    for (size_t i = 0; i < num_her; ++i)
-                    {
-                        if (sprites[i].getGlobalBounds().contains(mousePos))
-                        {
-                            return bug.hero_list[i]->get_hero_name();
-                        }
-                    }
-                }
-            }
-        }
-        window.clear();
-        window.draw(textBox);
-        for (size_t i = 0; i < num_her; ++i)
-        {
-            window.draw(sprites[i]);
-        }
-        window.display();
-    }
-    return "";
 }
 
 void showAssetInBox(sf::RenderWindow &window, const std::string &directory, const std::string &assetName)
