@@ -24,5 +24,5 @@ Hurried_Assistant::Hurried_Assistant(int dic, int my_item, int mover)
     item_count = my_item;
     dice_play = dic;
     move_left = mover;
-    this->name_of_card="Hurried_Assistant";
+    this->name_of_card="HurriedAssistant";
 }

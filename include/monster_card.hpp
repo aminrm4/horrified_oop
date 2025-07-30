@@ -22,6 +22,7 @@ public:
   virtual ~monster_card() {}
   void save_game(const std::string);
  void load_game(std::string,programm&);
+  std::string getName(){ return name_of_card; }
 
 protected:
   int item_count;

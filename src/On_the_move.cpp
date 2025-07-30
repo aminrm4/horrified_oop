@@ -45,5 +45,5 @@ On_the_move::On_the_move(int dic, int my_item, int mover)
     dice_play = dic;
     item_count = my_item;
     move_left = mover;
-    this->name_of_card="On_the_move";
+    this->name_of_card="OnTheMove";
 }

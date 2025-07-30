@@ -21,7 +21,7 @@ void Sunrise::event(std::vector<std::vector<int>> &map, std::vector<location *> 
 
 void Sunrise::monster_strike(programm &bug, vector<monster *> &monsters)
 {
-
+    
     for (int i = 0; i < monsters.size(); i++)
     {
         if (typeid(*monsters[i]).name() == typeid(invisible_man).name())
