@@ -16,5 +16,5 @@ using namespace std;
         throw logic_error("invalid actions \n");
     this->action = actions;
     swap(loc, starting_loc);
-    name_of_hero = "scientist";
+    name_of_hero = "Scientist";
    }

@@ -490,6 +490,7 @@ programm::programm()
   {
     i->get_loc()->set_hero_list(i);
   }
+  // added as a villageer test ist_of_location[9]->set_villager(new villager("DrReed", list_of_location[18], list_of_location[9], *this));
 }
 std::vector<int> programm::bfs(int s, int t)
 {
@@ -1162,13 +1163,13 @@ void programm::run()
   map_sprite.setPosition({(1920 - 1080) / 2, 0}); // rendering map in mid
   sf::Vector2f button = {200.f, 50.f};
   Button move(button, {115.f, 350.f}, "Move");
-  Button ability(button, {move.getPosButton().x, move.getPosButton().y + 75}, "Ability");
+  Button ability(button, {move.getPosButton().x, move.getPosButton().y + 75}, "special action");
   Button defeat(button, {move.getPosButton().x, ability.getPosButton().y + 75}, "Defeat");
   Button advance(button, {move.getPosButton().x, defeat.getPosButton().y + 75}, "advance");
   Button pickup(button, {move.getPosButton().x, advance.getPosButton().y + 75}, "pick up");
   Button guide(button, {move.getPosButton().x, pickup.getPosButton().y + 75}, "Guide");
-  Button items(button, {move.getPosButton().x, guide.getPosButton().y + 75}, "items");
-  Button perks(button, {move.getPosButton().x, items.getPosButton().y + 75}, "perks");
+  Button items(button, {move.getPosButton().x, guide.getPosButton().y + 75}, "deatail");
+  Button perks(button, {move.getPosButton().x, items.getPosButton().y + 75}, " use perk");
   std::vector<sf::Vector2f> locationPositions = {
       {800, 900},  // 0: Hospital
       {1015, 855}, // 1: Graveyard
@@ -1270,20 +1271,21 @@ void programm::run()
 
         if (move.isClicked(event, window))
         {
-          int location = showLocationTextBox(window);
-          while (!is_node_connected(hero_list[heroNo]->get_loc()->get_loc_relation(), location))
-
+          int location = showLocationTextBox(window, *this, *hero_list[heroNo]);
+          if (location >= 0)
           {
-            showCenteredTextBox(window, "the path its far away enter agein");
-            location = showLocationTextBox(window);
+            hero_list[heroNo]->move(list_of_location[location], *this);
+            hero_list[heroNo]->set_action(hero_list[heroNo]->get_action() - 1);
           }
-
-          hero_list[heroNo]->move(list_of_location[location], *this);
-          hero_list[heroNo]->set_action(hero_list[heroNo]->get_action() - 1);
+          else
+          {
+            showCenteredTextBox(window, "ohh you exit the move action");
+          }
         }
         if (ability.isClicked(event, window))
         {
           hero_list[heroNo]->special_action(my_map, *this, window);
+          hero_list[heroNo]->set_action(hero_list[heroNo]->get_action() - 1);
         }
         if (defeat.isClicked(event, window))
         {
@@ -1293,10 +1295,34 @@ void programm::run()
         }
         if (pickup.isClicked(event, window))
         {
+          hero_list[heroNo]->pickup(window, *this);
+          hero_list[heroNo]->set_action(hero_list[heroNo]->get_action() - 1);
         }
         if (guide.isClicked(event, window))
         {
-          hero_list[heroNo]->guide(my_map, *this, window);
+          hero_list[heroNo]->guide(my_map, *this, window, *this);
+          hero_list[heroNo]->set_action(hero_list[heroNo]->get_action() - 1);
+        }
+        if (perks.isClicked(event, window))
+        {
+ 
+
+          hero_list[heroNo]->use_perk(*this, window);
+        }
+        if (items.isClicked(event, window))
+        {
+          showCenteredTextBox(window, "you have this items :");
+          for (auto it : hero_list[heroNo]->get_items())
+          {
+            showAssetInBox(window, "../Horrified_Assets/Items/General", it->get_name() + ".png");
+          }
+          showCenteredTextBox(window, "you have this perks :");
+          for (auto pe : hero_list[heroNo]->get_perks())
+          {
+            showAssetInBox(window, "../Horrified_Assets/Perk_Cards", pe->get_name() + ".png");
+          }
+
+          // remain action handel out of it
         }
       }
 
@@ -1533,19 +1559,19 @@ void programm::run()
           coffin.setTexture(texture);
           coffin.setScale({75.f / texture.getSize().x, 50.f / texture.getSize().y});
           coffin.setPosition(locationPositions[i].x, locationPositions[i].y);
-          for (auto &villager : list_of_location[i]->get_villager_list())
-          {
-            sf::Texture texture;
-            sf::Sprite villagerSprite;
-            if (!texture.loadFromFile("../Horrified_Assets/Villager/" + villager->get_name() + ".png"))
-              throw out_of_range("couldnt find villager asset");
-            villagerSprite.setTexture(texture);
-            villagerSprite.setPosition(locationPositions[villager->get_currnet_location()->get_loc_relation()].x - 40, locationPositions[villager->get_currnet_location()->get_loc_relation()].y - 150);
-            villagerSprite.setScale({200.f / texture.getSize().x, 300.f / texture.getSize().y});
-            window.draw(villagerSprite);
-          }
 
           window.draw(coffin);
+        }
+        for (auto &villager : list_of_location[i]->get_villager_list())
+        {
+          sf::Texture texture;
+          sf::Sprite villagerSprite;
+          if (!texture.loadFromFile("../Horrified_Assets/Villager/" + villager->get_name() + ".png"))
+            throw out_of_range("couldnt find villager asset");
+          villagerSprite.setTexture(texture);
+          villagerSprite.setPosition(locationPositions[villager->get_currnet_location()->get_loc_relation()].x - 40, locationPositions[villager->get_currnet_location()->get_loc_relation()].y - 150);
+          villagerSprite.setScale({200.f / texture.getSize().x, 300.f / texture.getSize().y});
+          window.draw(villagerSprite);
         }
         window.draw(location_Button[i]);
       }
@@ -1579,5 +1605,5 @@ void programm::run()
     window.display();
   }
 
-    return;
+  return;
 }

@@ -11,7 +11,13 @@ void Archaeologist::special_action(std::vector<std::vector<int>> &map, programm 
     try
     {
         int node;
-        node = showLocationTextBox(window);
+        node = showLocationTextBox(window,bug,*this);
+        if (node<0)
+        {
+            showCenteredTextBox(window,"ohhh you exit the special action");
+            return;
+        }
+        
         bool is_connected{};
         for (auto node_connected : map[node_number])
             if (node == node_connected)
@@ -56,5 +62,5 @@ Archaeologist::Archaeologist(int actions, location *starting_loc, std::vector<pe
         throw logic_error("invalid actions \n");
     action = actions;
     swap(loc, starting_loc);
-    name_of_hero = "archaeologist";
+    name_of_hero = "Archaeologist";
 }

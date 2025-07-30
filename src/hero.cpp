@@ -37,31 +37,42 @@ void hero::move(location *loc, programm &bug)
     }
 }
 
-void hero::guide(vector<vector<int>> &map, programm &p, sf::RenderWindow &window)
+void hero::guide(vector<vector<int>> &map, programm &p, sf::RenderWindow &window, programm &bug)
 {
     int thisNumLoc = this->loc->get_loc_relation();
     showCenteredTextBox(window, "select the location to see witch villagers are there and you want to guide them ");
     try
     {
         int node_number;
-        node_number = showLocationTextBox(window);
+        node_number = showLocationTextBox(window, bug, *this);
+        if (node_number < 0)
+        {
+            showCenteredTextBox(window, "ohhh you exit the guide action");
+            this->set_action(this->get_action() + 1);
+            return;
+        }
+
         bool is_connected = false;
         if (thisNumLoc == node_number)
         {
             showCenteredTextBox(window, "wich villager you want to guide");
-            for (auto vill : p.list_of_location[thisNumLoc]->get_villager_list())
-            {
-                showAssetInBox(window, "../Horrified_Assets/Villager", vill->get_name() + ".png");
-            }
             string name;
-            name = showTextInputBox(window, "enter  the villager");
+            name = showHerovillagerBox(window, node_number, bug);
             for (auto vill : p.list_of_location[thisNumLoc]->get_villager_list())
             {
                 if (name == vill->get_name())
                 {
                     showCenteredTextBox(window, "enter the location want to guide the villager");
                     int no;
-                    no = showLocationTextBox(window);
+                    no = showLocationTextBox(window, bug, *this);
+                    if (node_number < 0)
+                    {
+                        showCenteredTextBox(window, "ohhh you exit the guide action");
+                        this->set_action(this->get_action() + 1);
+
+                        return;
+                    }
+
                     for (auto i : map[thisNumLoc])
                     {
                         if (i == no)
@@ -99,12 +110,9 @@ void hero::guide(vector<vector<int>> &map, programm &p, sf::RenderWindow &window
         if (is_connected == true && !p.list_of_location[node_number]->get_villager_list().empty())
 
         {
-            for (auto v : p.list_of_location[node_number]->get_villager_list())
-            {
-                showAssetInBox(window, "../Horrified_Assets/Villager", v->get_name() + ".png");
-            }
+
             string name1;
-            name1 = showTextInputBox(window, "the name of the villager want to guide");
+            name1 = showHerovillagerBox(window, node_number, bug);
             for (auto villl : p.list_of_location[node_number]->get_villager_list())
             {
                 if (name1 == villl->get_name())
@@ -533,24 +541,43 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
     }
 }
 
-void hero::pickup()
+void hero::pickup(sf::RenderWindow &window, programm &bug)
 {
-
-    cout << "OH look there is something hidden under this big rock move it using enter \n";
-    cin.get();
+    int user_item = 0;
+    string name_of_it;
+    showCenteredTextBox(window, "OH look there is something hidden under this big rock move it using click");
     if (!this->loc->get_item_list().empty())
     {
-        cout << "WOW look what you just found " << endl;
-        for (int i = 0; i < this->loc->get_item_list().size(); i++)
+
+        try
         {
-            cout << this->loc->get_item_list()[i]->get_name() << endl;
+            user_item = stoi(showTextInputBox(window, "how many item want to pick up"));
         }
-        this->item_have.insert(item_have.end(), this->loc->get_item_list().begin(), this->loc->get_item_list().end());
-        this->loc->delete_item();
+        catch (const std::exception &e)
+        {
+            showCenteredTextBox(window, "ohhhh that was not a number");
+            return;
+        }
+
+        for (int i = 0; i < user_item; i++)
+        {
+            name_of_it = showHeroitemBox(window, this->get_loc()->get_loc_relation(), bug);
+            for (auto &ite : this->loc->get_item_list())
+            {
+                if (ite->get_name() == name_of_it)
+                {
+                    this->item_have.insert(item_have.end(), ite);
+                    auto it = find(this->loc->get_item_list().begin(), this->loc->get_item_list().end(), ite);
+                    this->loc->get_item_list().erase(it);
+                    break;
+                }
+            }
+        }
     }
     else
     {
         cout << "may bad it seems noting is under this rock \n";
+        showCenteredTextBox(window, "may bad it seems noting is under this rock");
     }
 }
 
@@ -663,28 +690,18 @@ may still be me.
     }
 }
 
-void hero::use_perk(programm &object1)
+void hero::use_perk(programm &object1, sf::RenderWindow &window)
 {
-    cout << "you have this perk" << endl;
-    for (auto p : this->perk_have)
-    {
-        cout << p->get_name() << " ";
-    }
-    cout << endl;
-    cout << "wich perk want you use enter belwo : " << endl;
+    showCenteredTextBox(window, "you have this perk click to use");
     string temp;
-    cin >> temp;
+    temp = showHeroPerksBox(window, this);
     for (int i = 0; i < perk_have.size(); i++)
     {
 
         if (perk_have[i]->get_name() == temp)
         {
 
-            if (typeid(*perk_have[i]).name() == typeid(late_into_night).name())
-            {
-                this->set_action(this->get_action() + 2);
-            }
-            perk_have[i]->play(object1);
+            perk_have[i]->play(object1, window,this);
             delete perk_have[i];
             this->perk_have.erase(perk_have.begin() + i);
         }

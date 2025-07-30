@@ -9,7 +9,7 @@ void Mayor::special_action(std::vector<std::vector<int>> &map,programm & bug,sf:
 }
 Mayor::Mayor(int actions, location *starting_loc, std::vector<perk *> &perks) : hero(perks)
 {
-    name_of_hero = "mayor";
+    name_of_hero = "Mayor";
     if (actions < 0)
         throw logic_error("invalid actions \n");
     action = actions;

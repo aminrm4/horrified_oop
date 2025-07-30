@@ -5,7 +5,7 @@
 #include "villager.hpp"
 #include "perk.hpp"
 #include "Invisible_man.hpp"
-#include<SFML/Graphics.hpp>
+#include <SFML/Graphics.hpp>
 class villager;
 class location;
 class perk;
@@ -22,12 +22,12 @@ protected:
     int action;
     std::vector<item *> item_have;
     std::vector<perk *> perk_have;
-   std:: string name_of_hero;
+    std::string name_of_hero;
 
 public:
-    virtual void special_action(std::vector<std::vector<int>> &map,programm & bug,sf::RenderWindow & window) = 0;
+    virtual void special_action(std::vector<std::vector<int>> &map, programm &bug, sf::RenderWindow &window) = 0;
     void advance(std::vector<monster *> &monsters, programm &bug);
-    void guide(std::vector<std::vector<int>> &map, programm &,sf::RenderWindow & window);
+    void guide(std::vector<std::vector<int>> &map, programm &, sf::RenderWindow &window, programm &bug);
     void defeat(std::vector<monster *> &monsters, programm &bug);
     void move(location *loc, programm &bug);
     int get_action();
@@ -35,14 +35,14 @@ public:
     std::vector<perk *> &get_perks();
     void set_item(std::vector<item *> items);
     std::vector<item *> &get_items(); // refrenced too
-    void pickup();
+    void pickup(sf::RenderWindow &window, programm &bug);
     void set_action(int);
     location *get_loc();
     std::string get_hero_name();
     hero(std::vector<perk *> &);
-    void use_perk(programm &);
+    void use_perk(programm &, sf::RenderWindow &window);
     void save_game(const std::string);
-    void load_game( std::string,programm &bug);
+    void load_game(std::string, programm &bug);
     void ability(std::string);
 
     ~hero();
