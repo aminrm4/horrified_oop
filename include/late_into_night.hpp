@@ -7,10 +7,11 @@
 #include <bits/stdc++.h>
 #include "perk.hpp"
 #include "programm.hpp"
+#include<SFML/Graphics.hpp>
 class late_into_night : public perk
 {
 public:
-    void play(programm &help_obj1) override final;
+    void play(programm &help_obj1,sf::RenderWindow & window,hero * her=nullptr) override final;
     late_into_night();
     ~late_into_night() = default;
 };

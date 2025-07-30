@@ -5,10 +5,11 @@
 #include "location.hpp"
 #include <bits/stdc++.h>
 #include "perk.hpp"
+#include<SFML/Graphics.hpp>
 class break_of_down : public perk
 {
 public:
-    void play(programm &help_obj1) override final;
+    void play(programm &help_obj1,sf::RenderWindow & window,hero*her=nullptr) override final;
     break_of_down();
     ~break_of_down() = default;
 };
