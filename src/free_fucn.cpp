@@ -874,3 +874,125 @@ int show_all_location(sf::RenderWindow &window, programm &bug)
     }
     return 0;
 }
+int show_monster_location(sf::RenderWindow &window, programm &bug, monster* monn)
+{
+  
+
+    // Prepare the text box (rectangle)
+    sf::Vector2u winSize = window.getSize();
+    float maxBoxWidth = 1920.f, maxBoxHeight = 1080.f;
+    float boxWidth = std::min(winSize.x * 0.8f, maxBoxWidth);
+    float boxHeight = std::min(winSize.y * 0.8f, maxBoxHeight);
+    sf::Vector2f boxSize(boxWidth, boxHeight);
+    sf::RectangleShape textBox(boxSize);
+    textBox.setFillColor(sf::Color(30, 30, 30, 220));
+    textBox.setOutlineColor(sf::Color::White);
+    textBox.setOutlineThickness(3.f);
+    textBox.setPosition((winSize.x - boxSize.x) / 2, (winSize.y - boxSize.y) / 2);
+
+    // Always load images 0.png to 18.png in order
+    std::vector<std::string> imageFiles;
+    std::string folder = "../Horrified_Assets/loacation/";
+    std::string path = folder + to_string(monn->get_loc()->get_loc_relation()) + ".png";
+    imageFiles.push_back(path);
+    for (auto lo : bug.my_map[monn->get_loc()->get_loc_relation()])
+    {
+
+        path = folder + std::to_string(lo) + ".png";
+        if (fs::exists(path))
+        {
+            imageFiles.push_back(path);
+        }
+        else
+        {
+            // If any file is missing, fill with empty string (or handle as needed)
+            imageFiles.push_back("");
+        }
+    }
+
+    size_t numImages = imageFiles.size();
+    if (numImages == 0)
+        return 0;
+    size_t cols = 5;
+    size_t rows = 4;
+    float padding = 20.f;
+    float gridWidth = boxSize.x - 2 * padding;
+    float gridHeight = boxSize.y - 2 * padding - 40.f; // leave space for text
+    float cellWidth = gridWidth / cols;
+    float cellHeight = gridHeight / rows;
+
+    // Load textures and sprites
+    std::vector<sf::Texture> textures(numImages);
+    std::vector<sf::Sprite> sprites(numImages);
+    std::vector<sf::FloatRect> spriteBounds(numImages);
+    for (size_t i = 0; i < numImages; ++i)
+    {
+        if (!imageFiles[i].empty() && textures[i].loadFromFile(imageFiles[i]))
+        {
+            sprites[i].setTexture(textures[i]);
+            // Scale to fit inside the cell
+            float scaleX = cellWidth / sprites[i].getLocalBounds().width;
+            float scaleY = cellHeight / sprites[i].getLocalBounds().height;
+            float scale = std::min(scaleX, scaleY) * 0.9f; // add margin
+            sprites[i].setScale(scale, scale);
+        }
+        size_t row = i / cols;
+        size_t col = i % cols;
+        float x = textBox.getPosition().x + padding + col * cellWidth + (cellWidth - (sprites[i].getLocalBounds().width * sprites[i].getScale().x)) / 2;
+        float y = textBox.getPosition().y + padding + row * cellHeight + (cellHeight - (sprites[i].getLocalBounds().height * sprites[i].getScale().y)) / 2;
+        sprites[i].setPosition(x, y);
+        spriteBounds[i] = sprites[i].getGlobalBounds();
+    }
+
+ 
+
+    bool running = true;
+    while (window.isOpen() && running)
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            // if (event.type == sf::Event::Closed)
+            // {
+            //     window.close();
+            //     return -1;
+            // }
+            // if (event.type == sf::Event::KeyPressed)
+            // {
+            //     if (event.key.code == sf::Keyboard::Escape)
+            //     {
+            //         running = false;
+            //     }
+            // }
+            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+            {
+                sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                if (!textBox.getGlobalBounds().contains(mousePos))
+                {
+                    return -1; // Return -1 if clicked outside
+                }
+                else
+                {
+                    // Check if clicked on any sprite
+                    for (size_t i = 0; i < numImages; ++i)
+                    {
+                        if (!imageFiles[i].empty() && spriteBounds[i].contains(mousePos))
+                        {
+                            // Return the exact number of the image clicked (0-18)
+                            return extractNumber(imageFiles[i]);
+                        }
+                    }
+                }
+            }
+        }
+        window.clear();
+        window.draw(textBox);
+        for (size_t i = 0; i < numImages; ++i)
+        {
+            if (!imageFiles[i].empty())
+                window.draw(sprites[i]);
+        }
+        window.display();
+    }
+    return 0;
+}

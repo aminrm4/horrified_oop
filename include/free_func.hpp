@@ -11,3 +11,5 @@ std::string showHeroPerksBox(sf::RenderWindow &window, hero *heroPtr);
 std::string showHeroitemBox(sf::RenderWindow &window, int loc_selec, programm &bug);
 std::string show_hero_on_location(sf::RenderWindow & window,programm &bug);
 int show_all_location(sf::RenderWindow &window,programm & bug);
+int show_monster_location(sf::RenderWindow &window, programm &bug, monster* monn);
+

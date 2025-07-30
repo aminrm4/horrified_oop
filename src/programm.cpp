@@ -491,7 +491,6 @@ programm::programm()
     i->get_loc()->set_hero_list(i);
   }
   // added as a villageer test ist_of_location[9]->set_villager(new villager("DrReed", list_of_location[18], list_of_location[9], *this));
-  
 }
 std::vector<int> programm::bfs(int s, int t)
 {
@@ -1306,9 +1305,9 @@ void programm::run()
         }
         if (perks.isClicked(event, window))
         {
-          hero_list[heroNo]->get_perks().push_back(list_of_perks[10]);
-           hero_list[heroNo]->use_perk(*this, window);
-           cout<<hero_list[heroNo]->get_action()<<endl;
+ 
+
+          hero_list[heroNo]->use_perk(*this, window);
         }
         if (items.isClicked(event, window))
         {
