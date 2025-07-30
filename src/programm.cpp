@@ -1084,15 +1084,14 @@ void MonsterPhase(programm &programm, sf::RenderWindow &window)
   programm.monster_card_list[rand]->item_handler(programm);
   programm.monster_card_list[rand]->event(programm.my_map, programm.list_of_location, programm);
 
-
-  
+  Button next({200, 100}, {1000, 800}, "Next");
   std::string name = programm.monster_card_list[rand]->getName();
 
   if (programm.monster_card_list.empty())
   {
     // exit(0);
   }
-  massage item({100.f, 100.f}, "the " + name + " Card played", sf::Color::Black, 45);
+  massage massage({100.f, 100.f}, "the " + name + " Card played", sf::Color::Red, 64);
 
   sf::Texture texture, bg;
   if (!texture.loadFromFile("../Horrified_Assets/Monster_Cards/" + name + ".png"))
@@ -1110,20 +1109,24 @@ void MonsterPhase(programm &programm, sf::RenderWindow &window)
     sf::Event event;
     while (window.pollEvent(event))
     {
-      if (event.type == sf::Event::Closed) // fix here
-        window.close();
+      if (next.isClicked(event, window))
+      {
+        window.setActive(false);
+        programm.monster_card_list[rand]->monster_strike(programm, programm.monster_list);
+        window.setActive();
+
+        delete programm.monster_card_list[rand];
+        programm.monster_card_list.erase(programm.monster_card_list.begin() + rand);
+        return;
+      }
+      // if (event.type == sf::Event::Closed) // fix here
+      //   window.close();
     }
     window.clear();
     window.draw(Bg);
-    item.draw(window);
+    massage.draw(window);
     window.display();
   }
-  window.setActive(false);
-  programm.monster_card_list[rand]->monster_strike(programm, programm.monster_list);
-  window.setActive();
-
-  delete programm.monster_card_list[rand];
-  programm.monster_card_list.erase(programm.monster_card_list.begin() + rand);
 }
 void programm::run()
 {
@@ -1291,7 +1294,7 @@ void programm::run()
         if (hero_list[heroNo]->get_action() <= 0)
         {
 
-          MonsterPhase(*this , window);
+          MonsterPhase(*this, window);
           if (typeid(*hero_list[heroNo]).name() == typeid(class Mayor).name())
           {
             hero_list[heroNo]->set_action(5);
@@ -1349,7 +1352,6 @@ void programm::run()
         }
         if (perks.isClicked(event, window))
         {
- 
 
           hero_list[heroNo]->use_perk(*this, window);
         }
@@ -1662,7 +1664,7 @@ void programm::run()
       if (!NightTerrorTexture.loadFromFile("../Horrified_Assets/NightTerrorLevel.png"))
         throw out_of_range("coulnt find the NightTerrorLevel.png");
       sf::Sprite NightTerrorSprite(NightTerrorTexture);
-      cout << this->get_night_terror()<<endl;
+      cout << this->get_night_terror() << endl;
       NightTerrorSprite.setScale({75.f / NightTerrorTexture.getSize().x, 75.f / NightTerrorTexture.getSize().y});
       NightTerrorSprite.setPosition(445.f + this->get_night_terror() * 60.f, 0);
 
