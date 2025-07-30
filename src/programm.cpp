@@ -1013,15 +1013,9 @@ programm::~programm()
   list_of_location.clear();
   list_of_items.clear();
 }
-void drawheroimage()
-{
-}
 bool isNumeric(const std::string &str)
 {
   return !str.empty() && std::all_of(str.begin(), str.end(), ::isdigit);
-}
-void loadheroicon(vector<int> numbers)
-{
 }
 void renderItem(location *loc, sf::RenderWindow &window)
 {
@@ -1082,6 +1076,54 @@ bool isclied(const sf::RectangleShape &rect, const sf::Event &event, const sf::R
   }
   return false;
 }
+void MonsterPhase(programm &programm, sf::RenderWindow &window)
+{
+  int rand = 0;
+  rand = random_number(0, static_cast<int>(programm.monster_card_list.size()) - 1);
+  programm.monster_card_list[rand]->item_handler(programm);
+  programm.monster_card_list[rand]->event(programm.my_map, programm.list_of_location, programm);
+
+
+  
+  std::string name = programm.monster_card_list[rand]->getName();
+
+  if (programm.monster_card_list.empty())
+  {
+    // exit(0);
+  }
+  massage item({100.f, 100.f}, "the " + name + " Card played", sf::Color::Black, 45);
+
+  sf::Texture texture, bg;
+  if (!texture.loadFromFile("../Horrified_Assets/Monster_Cards/" + name + ".png"))
+    throw out_of_range("cant open " + name + "monster card");
+  sf::Sprite monsterCard(texture);
+
+  if (!bg.loadFromFile("../Horrified_Assets/MonserPhaseBG.png"))
+    throw out_of_range("cant load MonserPhaseBG.png");
+
+  sf::Sprite Bg(bg);
+  Bg.setScale(1920.f / bg.getSize().x, 1080.f / bg.getSize().y);
+
+  while (window.isOpen())
+  {
+    sf::Event event;
+    while (window.pollEvent(event))
+    {
+      if (event.type == sf::Event::Closed) // fix here
+        window.close();
+    }
+    window.clear();
+    window.draw(Bg);
+    item.draw(window);
+    window.display();
+  }
+  window.setActive(false);
+  programm.monster_card_list[rand]->monster_strike(programm, programm.monster_list);
+  window.setActive();
+
+  delete programm.monster_card_list[rand];
+  programm.monster_card_list.erase(programm.monster_card_list.begin() + rand);
+}
 void programm::run()
 {
 
@@ -1101,6 +1143,7 @@ void programm::run()
   vector<pair<string, int>> usersinfo(2);
   enum initstate
   {
+    showmonstercard,
     showitemlocation,
     infopage,
     heroSelection1,
@@ -1108,7 +1151,12 @@ void programm::run()
     exit,
     playmenu
   };
-
+  sf::Texture Frenzy;
+  if (!Frenzy.loadFromFile("../Horrified_Assets/FerenzyAsset.png"))
+    throw out_of_range("couldnt load FerenzyAsset.png");
+  sf::Sprite FrenzyMonster(Frenzy);
+  FrenzyMonster.setScale({100.f / Frenzy.getSize().x, 100.f / Frenzy.getSize().y});
+  FrenzyMonster.setPosition(1655, 575);
   vector<sf::Sprite> allheroicon(4);
   vector<sf::Sprite> heroicon; // icons to show heros in map
   sf::Texture T[4];
@@ -1126,6 +1174,8 @@ void programm::run()
   initstate state = initstate::infopage;
   sf::RenderWindow window({1920, 1080}, "Horrified board game"); // starting the game , getting name of players ...
   window.setFramerateLimit(60);
+  // MonsterPhase( *this, window);
+
   sf::Texture map_texture;
   sf::Sprite map_sprite;
 
@@ -1148,6 +1198,8 @@ void programm::run()
 
   TextInputBox playerName2({(1920.f / 2) - (500.f / 2), 700.f}, {500.f, 50.f});
   TextInputBox playerGarlic2({(1920.f / 2) - (500.f / 2), 800.f}, {500.f, 50.f});
+
+  Button2 monsterCard({375.f, 250.f}, {1500, 100}, "../Horrified_Assets/MonstercardBack.png");
 
   if (!map_texture.loadFromFile("../Horrified_Assets/map.png")) // play menu
   {
@@ -1224,29 +1276,21 @@ void programm::run()
         if (back.isClicked(event, window))
           state = initstate::playmenu;
       }
+      if (state == initstate::showmonstercard)
+      {
+        if (back.isClicked(event, window))
+          state = initstate::playmenu;
+      }
       if (state == initstate::playmenu) // hero phase
       {
+        if (monsterCard.isClicked(event, window))
+        {
+          state = initstate::showmonstercard;
+        }
         if (hero_list[heroNo]->get_action() <= 0)
         {
 
-          int rand = 0;
-          rand = random_number(0, static_cast<int>(monster_card_list.size()) - 1);
-          cout << rand << endl;
-          monster_card_list[rand]->item_handler(*this);
-          monster_card_list[rand]->event(my_map, list_of_location, *this);
-          cout << "first" << endl;
-          monster_card_list[rand]->monster_strike(*this, monster_list);
-          cout << "first" << endl;
-
-          delete monster_card_list[rand];
-
-          monster_card_list.erase(monster_card_list.begin() + rand);
-
-          if (monster_card_list.empty())
-          {
-            // exit(0);
-          }
-
+          MonsterPhase(*this , window);
           if (typeid(*hero_list[heroNo]).name() == typeid(class Mayor).name())
           {
             hero_list[heroNo]->set_action(5);
@@ -1308,11 +1352,11 @@ void programm::run()
           state = initstate::heroSelection2;
           selectionNo = 1;
 
-          hero_list.push_back(new class Mayor(5, list_of_location[10], list_of_perks));
-          for (auto i : hero_list)
-          {
-            i->get_loc()->set_hero_list(i);
-          }
+          hero_list.push_back(new class Mayor(0, list_of_location[10], list_of_perks));
+          // for (auto i : hero_list)
+          // {
+          //   i->get_loc()->set_hero_list(i);
+          // }
           heroicon.push_back(allheroicon[0]);
           Mayor.set_status(!Mayor.get_status());
         }
@@ -1323,10 +1367,10 @@ void programm::run()
 
           state = initstate::heroSelection2;
           hero_list.push_back(new class Archaeologist(4, list_of_location[12], list_of_perks));
-          for (auto i : hero_list)
-          {
-            i->get_loc()->set_hero_list(i);
-          }
+          // for (auto i : hero_list)
+          // {
+          //   i->get_loc()->set_hero_list(i);
+          // }
           heroicon.push_back(allheroicon[1]);
 
           Archaeologist.set_status(!Archaeologist.get_status());
@@ -1338,10 +1382,10 @@ void programm::run()
 
           state = initstate::heroSelection2;
           hero_list.push_back(new class courier(4, list_of_location[5], list_of_perks));
-          for (auto i : hero_list)
-          {
-            i->get_loc()->set_hero_list(i);
-          }
+          // for (auto i : hero_list)
+          // {
+          //   i->get_loc()->set_hero_list(i);
+          // }
           heroicon.push_back(allheroicon[2]);
 
           courier.set_status(!courier.get_status());
@@ -1355,10 +1399,10 @@ void programm::run()
           heroicon.push_back(allheroicon[3]);
 
           hero_list.push_back(new class scientist(4, list_of_location[3], list_of_perks));
-          for (auto i : hero_list)
-          {
-            i->get_loc()->set_hero_list(i);
-          }
+          // for (auto i : hero_list)
+          // {
+          //   i->get_loc()->set_hero_list(i);
+          // }
           scientist.set_status(!scientist.get_status());
         }
       }
@@ -1450,6 +1494,21 @@ void programm::run()
 
     window.clear();
     window.draw(bg);
+    if (state == initstate::showmonstercard)
+    {
+      back.draw(window);
+      for (int i = 0; i < monster_card_list.size(); i++)
+      {
+        sf::Texture texture;
+        if (!texture.loadFromFile("../Horrified_Assets/Monster_Cards/" + monster_card_list[i]->getName() + ".png"))
+          throw out_of_range("couldnt find " + monster_card_list[i]->getName());
+
+        sf::Sprite monster_c(texture);
+        monster_c.setScale({200.f / texture.getSize().x, 300.f / texture.getSize().y});
+        monster_c.setPosition((i % 7) * 250.f, (i / 7) * 300.f);
+        window.draw(monster_c);
+      }
+    }
     if (state == initstate::showitemlocation)
     {
       renderItem(list_of_location[locationshow], window);
@@ -1480,22 +1539,35 @@ void programm::run()
       pickup.draw(window);
       guide.draw(window);
 
+      monsterCard.draw(window);
       for (auto &&monster : monster_list)
       {
-        sf::Sprite m;
+        sf::Sprite m, f;
         sf::Texture texture;
 
         if (typeid(*monster).name() == typeid(Drakula).name())
         {
           texture.loadFromFile("../Horrified_Assets/Monsters/Dracula.png");
           m.setTexture(texture);
+          if (monster->get_is_frenzy())
+            f.setTexture(texture);
         }
         if (typeid(*monster).name() == typeid(invisible_man).name())
         {
           texture.loadFromFile("../Horrified_Assets/Monsters/InvisibleMan.png");
           m.setTexture(texture);
+          if (monster->get_is_frenzy())
+            f.setTexture(texture);
         }
         m.setScale({66.666f / texture.getSize().x, 100.f / texture.getSize().y});
+        if (monster->get_is_frenzy())
+        {
+
+          window.draw(FrenzyMonster);
+          f.setScale({200.f / texture.getSize().x, 300.f / texture.getSize().y});
+          f.setPosition({1600, 700});
+          window.draw(f);
+        }
         int locId = monster->get_loc()->get_loc_relation();
 
         m.setPosition(locationPositions[locId].x,
@@ -1533,19 +1605,19 @@ void programm::run()
           coffin.setTexture(texture);
           coffin.setScale({75.f / texture.getSize().x, 50.f / texture.getSize().y});
           coffin.setPosition(locationPositions[i].x, locationPositions[i].y);
-          for (auto &villager : list_of_location[i]->get_villager_list())
-          {
-            sf::Texture texture;
-            sf::Sprite villagerSprite;
-            if (!texture.loadFromFile("../Horrified_Assets/Villager/" + villager->get_name() + ".png"))
-              throw out_of_range("couldnt find villager asset");
-            villagerSprite.setTexture(texture);
-            villagerSprite.setPosition(locationPositions[villager->get_currnet_location()->get_loc_relation()].x - 40, locationPositions[villager->get_currnet_location()->get_loc_relation()].y - 150);
-            villagerSprite.setScale({200.f / texture.getSize().x, 300.f / texture.getSize().y});
-            window.draw(villagerSprite);
-          }
 
           window.draw(coffin);
+        }
+        for (auto &villager : list_of_location[i]->get_villager_list())
+        {
+          sf::Texture texture;
+          sf::Sprite villagerSprite;
+          if (!texture.loadFromFile("../Horrified_Assets/Villager/" + villager->get_name() + ".png"))
+            throw out_of_range("couldnt find villager asset");
+          villagerSprite.setTexture(texture);
+          villagerSprite.setPosition(locationPositions[villager->get_currnet_location()->get_loc_relation()].x - 40, locationPositions[villager->get_currnet_location()->get_loc_relation()].y - 150);
+          villagerSprite.setScale({200.f / texture.getSize().x, 300.f / texture.getSize().y});
+          window.draw(villagerSprite);
         }
         window.draw(location_Button[i]);
       }
@@ -1555,6 +1627,20 @@ void programm::run()
       her.setPosition({100, 25});
       her.setScale({200.f / T[Nohero[heroNo]].getSize().x, 300.f / T[Nohero[heroNo]].getSize().y});
       window.draw(her);
+
+      // action info
+      massage massageaction({100, 950}, "Reamaining action is " + to_string(hero_list[heroNo]->get_action()), sf::Color::White, 30);
+      massageaction.draw(window);
+      // loading night terror asset in map
+      sf::Texture NightTerrorTexture;
+      if (!NightTerrorTexture.loadFromFile("../Horrified_Assets/NightTerrorLevel.png"))
+        throw out_of_range("coulnt find the NightTerrorLevel.png");
+      sf::Sprite NightTerrorSprite(NightTerrorTexture);
+      cout << this->get_night_terror()<<endl;
+      NightTerrorSprite.setScale({75.f / NightTerrorTexture.getSize().x, 75.f / NightTerrorTexture.getSize().y});
+      NightTerrorSprite.setPosition(445.f + this->get_night_terror() * 60.f, 0);
+
+      window.draw(NightTerrorSprite);
     }
     if (state == initstate::infopage)
     {
@@ -1579,5 +1665,5 @@ void programm::run()
     window.display();
   }
 
-    return;
+  return;
 }

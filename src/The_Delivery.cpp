@@ -23,5 +23,5 @@ void The_Delivery::set_item(int item_count)
         dice_play=dic;
         item_count=my_item;
         move_left=mover;
-        this->name_of_card="The_Delivery";
+        this->name_of_card="TheDelivery";
     }

@@ -49,5 +49,5 @@ The_Innocent::The_Innocent(int dic, int my_item, int mover)
     dice_play = dic;
     item_count = my_item;
     move_left = mover;
-    this->name_of_card="The_innocent";
+    this->name_of_card="TheInnocent";
 }

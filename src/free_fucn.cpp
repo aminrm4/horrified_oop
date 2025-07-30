@@ -1,5 +1,6 @@
 #include <iostream>
 #include "free_func.hpp"
+#include <SFML/Audio.hpp>
 #include <filesystem>
 namespace fs = std::filesystem;
 
@@ -199,7 +200,25 @@ void showCenteredTextBox(sf::RenderWindow &window, const std::string &text)
         window.display();
     }
 }
+void playSound(std::string SoundDir)
+{
+    sf::SoundBuffer buffer;
+    if (!buffer.loadFromFile(SoundDir))
+    {
+        std::cerr << "Error loading " + SoundDir << std::endl;
+        return;
+    }
 
+    sf::Sound sound;
+    sound.setBuffer(buffer);
+    sound.play();
+
+    // Wait for the sound to finish before exiting the thread
+    while (sound.getStatus() == sf::Sound::Playing)
+    {
+        sf::sleep(sf::milliseconds(100));
+    }
+}
 int showAssetSelectionBox(sf::RenderWindow &window, const std::string &directory)
 {
     namespace fs = std::filesystem;
