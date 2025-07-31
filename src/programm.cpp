@@ -1124,6 +1124,7 @@ void MonsterPhase(programm &programm, sf::RenderWindow &window)
     }
     window.clear();
     window.draw(Bg);
+    next.draw(window);
     massage.draw(window);
     window.display();
   }
@@ -1380,10 +1381,10 @@ void programm::run()
           state = initstate::heroSelection2;
           selectionNo = 1;
 
-          hero_list.push_back(new class Mayor(0, list_of_location[10], list_of_perks));
+          hero_list.push_back(new class Mayor(5, list_of_location[10], list_of_perks));
           // for (auto i : hero_list)
           // {
-          //   i->get_loc()->set_hero_list(i);
+          //   i->get_loc()->set_hero_list(i); 
           // }
           heroicon.push_back(allheroicon[0]);
           Mayor.set_status(!Mayor.get_status());
@@ -1394,7 +1395,7 @@ void programm::run()
           selectionNo = 1;
 
           state = initstate::heroSelection2;
-          hero_list.push_back(new class Archaeologist(4, list_of_location[12], list_of_perks));
+          hero_list.push_back(new class Archaeologist(4, list_of_location[12], list_of_perks)); 
           // for (auto i : hero_list)
           // {
           //   i->get_loc()->set_hero_list(i);
@@ -1435,7 +1436,7 @@ void programm::run()
         }
       }
       if (state == initstate::heroSelection2) // chosing hero
-      {
+      { 
         if (Mayor.isClicked(event, window) && !Mayor.get_status())
         {
           Nohero.push_back(0);
@@ -1567,6 +1568,15 @@ void programm::run()
       pickup.draw(window);
       guide.draw(window);
 
+      for (int i = 0; i < hero_list.size(); ++i)
+      {
+        int locId = hero_list[i]->get_loc()->get_loc_relation();
+        sf::Sprite heroSprite = heroicon[i];
+        heroSprite.setPosition(locationPositions[locId].x,
+                               locationPositions[locId].y);
+        window.draw(heroSprite);
+        // Draw hero name below the icon
+      }
       monsterCard.draw(window);
       for (auto &&monster : monster_list)
       {
@@ -1604,15 +1614,7 @@ void programm::run()
       }
 
       // Draw each hero at their current location
-      for (int i = 0; i < hero_list.size(); ++i)
-      {
-        int locId = hero_list[i]->get_loc()->get_loc_relation();
-        sf::Sprite heroSprite = heroicon[i];
-        heroSprite.setPosition(locationPositions[locId].x,
-                               locationPositions[locId].y);
-        window.draw(heroSprite);
-        // Draw hero name below the icon
-      }
+      
 
       for (int i = 0; i < location_Button.size(); i++)
       {

@@ -91,7 +91,8 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                         break;
                     }
                     dir += monster->get_loc()->get_hero_list()[0]->get_items()[i]->get_name();
-                    Buttonitem.push_back({Button2({200, 100}, {(i % 6) * 300.f, (i / 6) * 200.f}, dir), monster->get_loc()->get_hero_list()[0]->get_items()[i]});
+                    Button2 Button({200, 100}, {(i % 6) * 300.f, (i / 6) * 200.f}, dir + ".png");
+                    Buttonitem.push_back({ Button , monster->get_loc()->get_hero_list()[0]->get_items()[i]});
                 }
 
                 massage m({400, 400}, monster->get_mons_name() + " Want to attack " + monster->get_loc()->get_hero_list()[0]->get_hero_name() + "do you want to defend your self ?", sf::Color::Red, 40);
@@ -99,7 +100,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                 Button No({200.f, 100.f}, {700, 600}, "No");
 
                 sf::Texture texture;
-                if (!texture.loadFromFile("../Horrified_Assets/monster_.png"))
+                if (!texture.loadFromFile("../Horrified_Assets/monster_.png")) 
                     throw out_of_range("cant load MonserPhaseBG.png");
 
                 sf::Sprite Bg(texture);
@@ -117,7 +118,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                         {
                             if (Yes.isClicked(event, window))
                             {
-                                if (!monster->get_loc()->get_hero_list().empty())
+                                if (monster->get_loc()->get_hero_list()[0]->get_items().empty())
                                     state = State::no;
                                 else
                                     state = State::yes;
