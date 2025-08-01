@@ -26,7 +26,7 @@ protected:
 
 public:
     virtual void special_action(std::vector<std::vector<int>> &map, programm &bug, sf::RenderWindow &window) = 0;
-    void advance(std::vector<monster *> &monsters, programm &bug);
+    void advance(std::vector<monster *> &monsters, programm &bug,sf::RenderWindow & window);
     void guide(std::vector<std::vector<int>> &map, programm &, sf::RenderWindow &window, programm &bug);
     void defeat(std::vector<monster *> &monsters, programm &bug,sf::RenderWindow & window);
     void move(location *loc, programm &bug);
