@@ -15,8 +15,8 @@ void remove_hero(programm &, hero *);
 void remove_villager(programm &, villager *);
 void remove_monster(programm &, monster *);
 void remove_item(programm &, monster *);
-void message_invisible_man(bool alive);
-void message_drakula(bool alive);
+void message_invisible_man(bool alive, sf::RenderWindow &window);
+void message_drakula(bool alive, sf::RenderWindow &window);
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -345,13 +345,12 @@ int hero::get_action()
 {
     return action;
 }
-void hero::defeat(vector<monster *> &monsters, programm &bug)
+void hero::defeat(vector<monster *> &monsters, programm &bug, sf::RenderWindow &window)
 {
-    cout << "my lord wich monster gunna be kill" << endl;
-    cout << "D [Drakula] / I [Invisible_man]" << endl;
+    showCenteredTextBox(window, "wich monster gunna be kill");
 
     char detect;
-    cin >> detect;
+    detect = show_monster_asset(window, "../Horrified_Assets/Monsters")[0];
     detect = tolower(detect);
     if (detect == 'd')
     {
@@ -363,48 +362,56 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                 if (m->get_hidden_item() <= 0)
                 {
                     cout << "for killing drakulla you need to put dowm yellow card wich them have overal  power of 6 " << endl;
-                    cin.get();
+                    showCenteredTextBox(window, "for killing drakulla you need to put dowm yellow card wich them have overal  power of 6 ");
                     cout << "who many item want  to drop ? " << endl;
                     int number;
                     int powe_counter = 0;
-                    cin >> number;
+                    number = stoi(showTextInputBox(window, "how many item want to drop"));
                     vector<item *> temp;
                     for (int l = 0; l < number; l++)
                     {
-                        cout << " enter the name of the item " << endl;
 
                         string namer;
-                        cin >> namer;
+                        namer = show_hero_item_have(window, this);
                         if (this->name_of_hero == "scientist")
                         {
                             this->ability(namer);
                         }
-                        for (auto item : this->item_have)
+                        for (int k = 0; k < this->item_have.size(); k++)
                         {
-                            if (item->get_name() == namer && item->get_Color() == rgb::Color::Yellow)
+                            if (this->item_have[k]->get_name() == namer && this->item_have[k]->get_Color() == rgb::Color::Yellow)
                             {
-                                temp.push_back(item);
-                                powe_counter += item->get_power();
+                                powe_counter += this->item_have[k]->get_power();
+
+                                temp.push_back(item_have[k]);
+                                this->item_have.erase(this->item_have.begin() + k);
+
                                 break;
                             }
                         }
                     }
                     if (powe_counter >= 6)
                     {
-                        message_drakula(false);
-                        for (int p = item_have.size() - 1; p >= 0; --p)
+                        message_drakula(false, window);
+                        // for (int p = item_have.size() - 1; p >= 0; --p)
+                        // {
+                        //     for (int b = temp.size() - 1; b >= 0; --b)
+                        //     {
+                        //         if (item_have[p]->get_name() == temp[b]->get_name())
+                        //         {
+                        //             delete item_have[p];
+                        //             item_have.erase(item_have.begin() + p);
+                        //             temp.erase(temp.begin() + b);
+                        //             break;
+                        //         }
+                        //     }
+                        // }
+                        for (int w = 0; w < temp.size(); w++)
                         {
-                            for (int b = temp.size() - 1; b >= 0; --b)
-                            {
-                                if (item_have[p]->get_name() == temp[b]->get_name())
-                                {
-                                    delete item_have[p];
-                                    item_have.erase(item_have.begin() + p);
-                                    temp.erase(temp.begin() + b);
-                                    break;
-                                }
-                            }
+                            delete temp[w];
+                            temp.erase(temp.begin() + w);
                         }
+
                         for (int i = 0; i < monsters.size(); i++)
                         {
                             if (typeid(*monsters[i]).name() == typeid(Drakula).name())
@@ -414,10 +421,8 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                                 bug.monster_list.erase(bug.monster_list.begin() + i);
                                 if (bug.monster_list.size() == 0)
                                 {
-                                    cout << "Heros succesfuly killed all the monsters \n";
-                                    cin.get();
-                                    bug.clearScreen();
-                                    cout << "Victory !\n";
+                                    showCenteredTextBox(window, "heros succesfully killed all monsters");
+                                    showCenteredTextBox(window, "victory");
                                     exit(0);
                                 }
                                 bug.next_frenzy();
@@ -428,19 +433,19 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                     }
                     else
                     {
-                        cout << " ohhhhhhhhhh! the power is low  you made Drakula happy  " << endl;
-                        message_drakula(true);
+                        showCenteredTextBox(window, "ohhhh the power of items are under 6 you made Drakula happy");
+                        this->item_have.insert(this->item_have.end(), temp.begin(), temp.end());
+                        message_drakula(true, window);
                         return;
                     }
                 }
                 else
                 {
-                    cout << "Oh noo Drakula is still strong run Away before he capture you !!! \n";
-                    message_drakula(true);
+                    showCenteredTextBox(window, "ohhh nooo Drakula is  still strong run away before he capture you");
+                    message_drakula(true, window);
                     return;
                 }
             }
-            // cerr << "There is no monster here \n";
         }
     }
     if (detect == 'i')
@@ -452,51 +457,53 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                 {
                     if (m->get_hidden_item() <= 0)
                     {
-                        cout << "for killing Invisible_man you need to put dowm Red card wichthem have overal  power of 9 " << endl;
-                        cin.get();
-                        cout << "who many item want  to drop ? " << endl;
+                        showCenteredTextBox(window, "for killing Invisible_man you need to put dowm Red card wichthem have overal  power of 9 ");
                         int number;
                         int powe_counter = 0;
-                        cin >> number;
+                        number = stoi(showTextInputBox(window, "how many item want to drop"));
                         vector<item *> temp;
                         for (int l = 0; l < number; l++)
                         {
 
-                            cout << " enter the name of the item " << endl;
-
                             string namer;
-                            cin >> namer;
+                            namer = show_hero_item_have(window, this);
                             if (this->name_of_hero == "scientist")
                             {
                                 this->ability(namer);
                             }
-                            for (auto item : this->item_have)
+                            for (int i = 0; i < this->item_have.size(); i++)
                             {
-                                if (item->get_name() == namer && item->get_Color() == rgb::Color::Red)
+                                if (this->item_have[i]->get_name() == namer && this->item_have[i]->get_Color() == rgb::Color::Red)
                                 {
-                                    temp.push_back(item);
-                                    powe_counter += item->get_power();
+                                    temp.push_back(this->item_have[i]);
+                                    powe_counter += this->item_have[i]->get_power();
+                                    this->item_have.erase(this->item_have.begin() + i);
                                     break;
                                 }
                             }
                         }
                         if (powe_counter >= 9)
                         {
-                            message_invisible_man(false);
-                            for (int p = item_have.size() - 1; p >= 0; --p)
-                            {
-                                for (int b = temp.size() - 1; b >= 0; --b)
-                                {
-                                    if (item_have[p]->get_name() == temp[b]->get_name())
-                                    {
-                                        delete item_have[p];
-                                        item_have.erase(item_have.begin() + p);
-                                        temp.erase(temp.begin() + b);
-                                        break;
-                                    }
-                                }
-                            }
+                            message_invisible_man(false, window);
+                            // for (int p = item_have.size() - 1; p >= 0; --p)
+                            // {
+                            //     for (int b = temp.size() - 1; b >= 0; --b)
+                            //     {
+                            //         if (item_have[p]->get_name() == temp[b]->get_name())
+                            //         {
+                            //             delete item_have[p];
+                            //             item_have.erase(item_have.begin() + p);
+                            //             temp.erase(temp.begin() + b);
+                            //             break;
+                            //         }
+                            //     }
+                            // }
 
+                            for (int w = 0; w < temp.size(); w++)
+                            {
+                                delete temp[w];
+                                temp.erase(temp.begin() + w);
+                            }
                             for (int i = 0; i < monsters.size(); i++)
                             {
                                 if (typeid(*monsters[i]).name() == typeid(invisible_man).name())
@@ -506,10 +513,8 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                                     bug.monster_list.erase(bug.monster_list.begin() + i);
                                     if (bug.monster_list.size() == 0)
                                     {
-                                        cout << "Heros succesfuly killed all the monsters \n";
-                                        cin.get();
-                                        bug.clearScreen();
-                                        cout << "Victory !\n";
+                                        showCenteredTextBox(window, "Heros succesfuly killed all the monsters");
+                                        showCenteredTextBox(window, "victory");
                                         exit(0);
                                     }
 
@@ -521,22 +526,23 @@ void hero::defeat(vector<monster *> &monsters, programm &bug)
                         }
                         else
                         {
-                            cout << " ohhhhhhhhhh! the power is low  you made Invisible_man happy  " << endl;
-                            message_invisible_man(true);
+                            showCenteredTextBox(window, "ohhh the power is low invisible man is happy now");
+                            this->item_have.insert(this->item_have.end(), temp.begin(), temp.end());
+                            message_invisible_man(true, window);
                             return;
                         }
                     }
                     else
                     {
-                        cout << "Oh noo invisible man is still strong run Away before he capture you !!! \n";
-                        message_invisible_man(true);
+                        showCenteredTextBox(window, "Oh noo invisible man is still strong run Away before he capture you !!");
+                        message_invisible_man(true, window);
 
                         return;
                     }
                 }
             }
 
-            cerr << "There is no monster here \n";
+            showCenteredTextBox(window,"ohh there is no monster here");
         }
     }
 }
@@ -618,11 +624,11 @@ hero::hero(std::vector<perk *> &perks)
     perks.erase(perks.begin() + random);
 }
 
-void message_drakula(bool alive)
+void message_drakula(bool alive, sf::RenderWindow &window)
 {
     if (!alive)
     {
-        cout << R"(Foolish mortal...
+        showCenteredTextBox(window, R"(Foolish mortal...
 You have not slain evil...
 You have merely unshackled it.
 
@@ -632,11 +638,11 @@ The darkness you feared was held at bay by me.
 Now?
 Now it walks free.
 And it wears your face...
-)";
+)");
     }
     else
     {
-        cout << R"(Four coffins... four hearts...
+        showCenteredTextBox(window, R"(Four coffins... four hearts...
 And yet here you are, thinking a blade alone can end me.
 I do not die by steel.
 I die by wisdom... patience... sacrifice.
@@ -651,14 +657,14 @@ Burn the world to find my weakness—
 And when you return...
 I’ll be waiting.
 Hungrier.
-)";
+)");
     }
 }
-void message_invisible_man(bool alive)
+void message_invisible_man(bool alive, sf::RenderWindow &window)
 {
     if (alive)
     {
-        cout << R"(You can’t kill what you can’t see.
+        showCenteredTextBox(window, R"(You can’t kill what you can’t see.
 You swing at shadows… I carve through souls.
 
 I’ve worn your friend’s voice.
@@ -667,11 +673,11 @@ You prayed last night—and I listened.
 
 You're not hunting me, hero.
 You're hosting me.
-)";
+)");
     }
     else
     {
-        cout << R"(Clever.
+        showCenteredTextBox(window, R"(Clever.
 Painful... but clever.
 
 They’ll sing of you, yes.
@@ -686,7 +692,7 @@ They wait.
 So sleep light, hero.
 The next whisper…
 may still be me.
-)";
+)");
     }
 }
 
@@ -701,7 +707,7 @@ void hero::use_perk(programm &object1, sf::RenderWindow &window)
         if (perk_have[i]->get_name() == temp)
         {
 
-            perk_have[i]->play(object1, window,this);
+            perk_have[i]->play(object1, window, this);
             delete perk_have[i];
             this->perk_have.erase(perk_have.begin() + i);
         }

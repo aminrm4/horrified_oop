@@ -922,3 +922,230 @@ int show_monster_location(sf::RenderWindow &window, programm &bug, monster* monn
     }
     return 0;
 }
+std::string show_monster_asset(sf::RenderWindow &window, const std::string &monster_folder_path)
+{
+    // Prepare the text box (rectangle)
+    sf::Vector2u winSize = window.getSize();
+    float maxBoxWidth = 800.f, maxBoxHeight = 600.f;
+    float boxWidth = std::min(winSize.x * 0.6f, maxBoxWidth);
+    float boxHeight = std::min(winSize.y * 0.6f, maxBoxHeight);
+    sf::Vector2f boxSize(boxWidth, boxHeight);
+    sf::RectangleShape textBox(boxSize);
+    textBox.setFillColor(sf::Color(30, 30, 30, 220));
+    textBox.setOutlineColor(sf::Color::White);
+    textBox.setOutlineThickness(3.f);
+    textBox.setPosition((winSize.x - boxSize.x) / 2, (winSize.y - boxSize.y) / 2);
+
+    // Load all monster assets from the folder
+    std::vector<std::string> monsterFiles;
+    std::vector<std::string> monsterNames;
+    
+    try {
+        for (const auto& entry : fs::directory_iterator(monster_folder_path)) {
+            if (entry.is_regular_file()) {
+                std::string extension = entry.path().extension().string();
+                // Check if it's an image file
+                if (extension == ".png" || extension == ".jpg" || extension == ".jpeg") {
+                    monsterFiles.push_back(entry.path().string());
+                    monsterNames.push_back(entry.path().stem().string());
+                }
+            }
+        }
+    } catch (const fs::filesystem_error& e) {
+        return ""; // Return empty string if folder doesn't exist or can't be accessed
+    }
+
+    size_t numMonsters = monsterFiles.size();
+    if (numMonsters == 0)
+        return "";
+
+    // Calculate grid layout based on number of monsters
+    size_t cols = (numMonsters <= 2) ? 2 : (numMonsters <= 4) ? 2 : 3;
+    size_t rows = (numMonsters + cols - 1) / cols; // Ceiling division
+    
+    float padding = 40.f;
+    float gridWidth = boxSize.x - 2 * padding;
+    float gridHeight = boxSize.y - 2 * padding - 60.f; // leave space for text
+    float cellWidth = gridWidth / cols;
+    float cellHeight = gridHeight / rows;
+
+    // Load textures and sprites
+    std::vector<sf::Texture> textures(numMonsters);
+    std::vector<sf::Sprite> sprites(numMonsters);
+    std::vector<sf::FloatRect> spriteBounds(numMonsters);
+    
+    for (size_t i = 0; i < numMonsters; ++i)
+    {
+        if (textures[i].loadFromFile(monsterFiles[i]))
+        {
+            sprites[i].setTexture(textures[i]);
+            // Scale to fit inside the cell
+            float scaleX = cellWidth / sprites[i].getLocalBounds().width;
+            float scaleY = cellHeight / sprites[i].getLocalBounds().height;
+            float scale = std::min(scaleX, scaleY) * 0.8f; // add margin
+            sprites[i].setScale(scale, scale);
+        }
+        
+        size_t row = i / cols;
+        size_t col = i % cols;
+        float x = textBox.getPosition().x + padding + col * cellWidth + (cellWidth - (sprites[i].getLocalBounds().width * sprites[i].getScale().x)) / 2;
+        float y = textBox.getPosition().y + padding + row * cellHeight + (cellHeight - (sprites[i].getLocalBounds().height * sprites[i].getScale().y)) / 2;
+        sprites[i].setPosition(x, y);
+        spriteBounds[i] = sprites[i].getGlobalBounds();
+    }
+
+    bool running = true;
+    while (window.isOpen() && running)
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::KeyPressed)
+            {
+                if (event.key.code == sf::Keyboard::Escape)
+                {
+                    running = false;
+                }
+            }
+            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+            {
+                sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                if (!textBox.getGlobalBounds().contains(mousePos))
+                {
+                    return ""; // Return empty string if clicked outside
+                }
+                else
+                {
+                    // Check if clicked on any sprite
+                    for (size_t i = 0; i < numMonsters; ++i)
+                    {
+                        if (spriteBounds[i].contains(mousePos))
+                        {
+                            // Return the monster name
+                            return monsterNames[i];
+                        }
+                    }
+                }
+            }
+        }
+        
+        window.clear();
+        window.draw(textBox);
+        
+        for (size_t i = 0; i < numMonsters; ++i)
+        {
+            window.draw(sprites[i]);
+        }
+        
+        window.display();
+    }
+    
+    return "";
+}
+
+std::string show_hero_item_have(sf::RenderWindow &window, hero *heroPtr)
+{
+   // Get hero's items
+    std::vector<item*> &hero_item = heroPtr->get_items();
+
+    if (hero_item.empty())
+    {
+        return "";
+    }
+
+    // Prepare the text box
+    sf::Vector2u winSize = window.getSize();
+    float maxBoxWidth = 1200.f, maxBoxHeight = 800.f;
+    float boxWidth = std::min(winSize.x * 0.8f, maxBoxWidth);
+    float boxHeight = std::min(winSize.y * 0.8f, maxBoxHeight);
+    sf::Vector2f boxSize(boxWidth, boxHeight);
+    sf::RectangleShape textBox(boxSize);
+    textBox.setFillColor(sf::Color(30, 30, 30, 220));
+    textBox.setOutlineColor(sf::Color::White);
+    textBox.setOutlineThickness(3.f);
+    textBox.setPosition((winSize.x - boxSize.x) / 2, (winSize.y - boxSize.y) / 2);
+
+    // Grid layout
+    size_t numitem = hero_item.size();
+    size_t cols = 3;
+    size_t rows = (numitem + cols - 1) / cols;
+    float padding = 40.f;
+    float gridWidth = boxSize.x - 2 * padding;
+    float gridHeight = boxSize.y - 2 * padding;
+    float cellWidth = gridWidth / cols;
+    float cellHeight = gridHeight / std::max(rows, size_t(1));
+
+    // Load textures and sprites (reduced vectors)
+    std::vector<sf::Texture> textures(numitem);
+    std::vector<sf::Sprite> sprites(numitem);
+
+    for (size_t i = 0; i < numitem; ++i)
+    {
+        std::string item_name = hero_item[i]->get_name();
+
+        std::string path = "../Horrified_Assets/Items/General/" + item_name + ".png";
+        if (textures[i].loadFromFile(path))
+        {
+            sprites[i].setTexture(textures[i]);
+            // Scale to fit inside the cell
+            float scaleX = cellWidth / sprites[i].getLocalBounds().width;
+            float scaleY = cellHeight / sprites[i].getLocalBounds().height;
+            float scale = std::min(scaleX, scaleY) * 0.8f;
+            sprites[i].setScale(scale, scale);
+        }
+
+        size_t row = i / cols;
+        size_t col = i % cols;
+        float x = textBox.getPosition().x + padding + col * cellWidth + (cellWidth - (sprites[i].getLocalBounds().width * sprites[i].getScale().x)) / 2;
+        float y = textBox.getPosition().y + padding + row * cellHeight + (cellHeight - (sprites[i].getLocalBounds().height * sprites[i].getScale().y)) / 2;
+        sprites[i].setPosition(x, y);
+    }
+
+    bool running = true;
+    while (window.isOpen() && running)
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
+                window.close();
+                return "";
+            }
+            if (event.type == sf::Event::KeyPressed)
+            {
+                if (event.key.code == sf::Keyboard::Escape)
+                {
+                    running = false;
+                }
+            }
+            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+            {
+                sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                if (!textBox.getGlobalBounds().contains(mousePos))
+                {
+                    running = false;
+                }
+                else
+                {
+                    for (size_t i = 0; i < numitem; ++i)
+                    {
+                        if (sprites[i].getGlobalBounds().contains(mousePos))
+                        {
+                            return hero_item[i]->get_name();
+                        }
+                    }
+                }
+            }
+        }
+        window.clear();
+        window.draw(textBox);
+        for (size_t i = 0; i < numitem; ++i)
+        {
+            window.draw(sprites[i]);
+        }
+        window.display();
+    }
+    return "";  
+}
+
