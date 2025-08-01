@@ -142,27 +142,21 @@ void hero::guide(vector<vector<int>> &map, programm &p, sf::RenderWindow &window
         showCenteredTextBox(window, "the location that you selected is far away or it doesnt have any villager");
     }
 }
-void hero::advance(vector<monster *> &monsters, programm &bug)
+void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow &window)
 {
-    cout << "pls select a monster \n [D]rakula \n [I]nvisible man \n";
+
     try
     {
+        showCenteredTextBox(window, "please select a monster");
         char state;
-        cin >> state;
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
+        state = show_monster_asset(window, "../Horrified_Assets/Monsters")[0];
         state = tolower(state);
-        if (state != 'd' && state != 'i')
-        {
-            throw logic_error("Worng character \n");
-            advance(monsters, bug);
-        }
+
         switch (state)
         {
         case 'i':
         {
-            cout << "For defeating this monster you must find 5 evidence and put them in precinct\n";
-
+            showCenteredTextBox(window, "For defeating this monster you must find 5 evidence and put them in precinct");
             bool is_invisible_alive = false;
             for (auto im : monsters)
             {
@@ -174,17 +168,16 @@ void hero::advance(vector<monster *> &monsters, programm &bug)
 
                         if (im->get_hidden_item() <= 0)
                         {
-                            cout << "all evidence finded now go and defeat the invisible men \n";
+                            showCenteredTextBox(window, "all evidence finded now go and defeat the invisible men ");
                             return;
                         }
-                        cout << "you need  " << im->get_hidden_item() << " more item\n enter how many item u want to put here\n";
+                        showCenteredTextBox(window, "you need" + to_string(im->get_hidden_item()) + "more item ");
                         int number;
-                        cin >> number;
+                        number = stoi(showTextInputBox(window, "how many item want to drop"));
                         for (int i = 0; i < number; i++)
                         {
-                            cout << "enter the name of your item" << endl;
                             string name;
-                            cin >> name;
+                            name = show_hero_item_have(window, this);
                             if (this->name_of_hero == "scientist")
                             {
                                 this->ability(name);
@@ -199,7 +192,8 @@ void hero::advance(vector<monster *> &monsters, programm &bug)
                                      item_have[item]->get_loc()->get_loc_relation() == 4 ||
                                      item_have[item]->get_loc()->get_loc_relation() == 9))
                                 {
-                                    cout << "this item has been puted by you " << name << endl;
+                                    showCenteredTextBox(window, "those item has been puted by you");
+                                    showAssetInBox(window, "../Horrified_Assets/Items/General", name);
                                     for (auto m : monsters)
                                     {
                                         if (typeid(*m) == typeid(invisible_man))
@@ -213,18 +207,17 @@ void hero::advance(vector<monster *> &monsters, programm &bug)
                                 }
                             }
                         }
-                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
                         return;
                     }
                     else
                     {
-                        cout << "you cant put down any item";
+                        showCenteredTextBox(window, "you cant put down any item");
                     }
                 }
             }
             if (!is_invisible_alive)
             {
-                cout << "ohhh invisible man is dead " << endl;
+                showCenteredTextBox(window, "ohhh invisible man is dead");
                 return;
             }
 
@@ -232,8 +225,7 @@ void hero::advance(vector<monster *> &monsters, programm &bug)
         }
 
         case 'd':
-            cout << "For deafeting Drakula you must destroy his coffin's \n";
-
+            showCenteredTextBox(window, "For deafeting Drakula you must destroy his coffin's");
             bool is_drakula_alive = false;
             for (auto mon : monsters)
             {
@@ -241,54 +233,42 @@ void hero::advance(vector<monster *> &monsters, programm &bug)
                 {
                     is_drakula_alive = true;
 
-                    cout << "you need do destroy " << mon->get_hidden_item() << " more coffin to defeat Drakula" << endl;
+                    showCenteredTextBox(window, "you need do destroy " + to_string(mon->get_hidden_item()) + "more coffin to defeat Drakula");
                     if (this->get_loc()->get_loc_relation() == 1 || this->get_loc()->get_loc_relation() == 16 || this->get_loc()->get_loc_relation() == 17 || this->get_loc()->get_loc_relation() == 7)
                     {
                         if (bug.list_of_location[this->get_loc()->get_loc_relation()]->get_coffin_exist() == false)
                         {
                             cout << "coffin has been destroyed by who? find him/her" << endl;
+                            showCenteredTextBox(window, "coffin has been destroyed by who? find him/her");
                             return;
                         }
-                        cout << "those are your item " << endl;
-                        cin.get();
+                        showCenteredTextBox(window, "those are your item");
                         for (auto ite : this->get_items())
                         {
-                            if (ite->get_Color() == rgb::Color::Red)
-                            {
-                                cout << " the item name is :" << ite->get_name() << " item color is" << "red :" << " item power is : " << to_string(ite->get_power()) << endl;
-                            }
-                            if (ite->get_Color() == rgb::Color::Yellow)
-                            {
-                                cout << " the item name is :" << ite->get_name() << " item color is " << "yellow :" << " item power is : " << to_string(ite->get_power()) << endl;
-                            }
-                            if (ite->get_Color() == rgb::Color::Blue)
-                            {
-                                cout << " the item name is :" << ite->get_name() << " item color is " << " blue : " << " item power is : " << to_string(ite->get_power()) << endl;
-                            }
+                            showAssetInBox(window, "../Horrified_Assets/Items/General", ite->get_name());
                         }
 
-                        cout << "how many item want  to drop ? " << endl;
                         int number;
                         int powe_counter = 0;
-                        cin >> number;
+                        number = stoi(showTextInputBox(window, "how many item want to drop"));
                         vector<item *> temp;
                         for (int l = 0; l < number; l++)
                         {
-                            cout << " enter the name of the item " << endl;
 
                             string namer;
-                            cin >> namer;
+                            namer = show_hero_item_have(window, this);
                             if (this->name_of_hero == "scientist")
                             {
                                 this->ability(namer);
                             }
 
-                            for (auto item : this->item_have)
+                            for (int i = 0; i < this->item_have.size(); i++)
                             {
-                                if (item->get_name() == namer && item->get_Color() == rgb::Color::Red)
+                                if (this->item_have[i]->get_name() == namer && this->item_have[i]->get_Color() == rgb::Color::Red)
                                 {
-                                    temp.push_back(item);
-                                    powe_counter += item->get_power();
+                                    temp.push_back(this->item_have[i]);
+                                    powe_counter += this->item_have[i]->get_power();
+                                    this->item_have.erase(this->item_have.begin() + i);
                                     break;
                                 }
                             }
@@ -296,39 +276,34 @@ void hero::advance(vector<monster *> &monsters, programm &bug)
 
                         if (powe_counter >= 6)
                         {
-                            cout << "succesfully  destroyed a  coffin " << endl;
+                            showCenteredTextBox(window, "sucessfully destroyed a coffin");
                             bug.list_of_location[this->get_loc()->get_loc_relation()]->set_coffin_exist(false);
-                            for (int p = item_have.size() - 1; p >= 0; --p)
+
+                            for (int w = 0; w < temp.size(); w++)
                             {
-                                for (int b = temp.size() - 1; b >= 0; --b)
-                                {
-                                    if (item_have[p]->get_name() == temp[b]->get_name())
-                                    {
-                                        delete item_have[p];
-                                        item_have.erase(item_have.begin() + p);
-                                        temp.erase(temp.begin() + b);
-                                        break;
-                                    }
-                                }
+                                delete temp[w];
+                                temp.erase(temp.begin() + w);
                             }
+
                             mon->get_hidden_item()--;
                             return;
                         }
                         else
                         {
-                            cout << "the power is under 6 " << endl;
+                            showCenteredTextBox(window, "the power is under 6 ");
+                            this->item_have.insert(this->item_have.end(),temp.begin(),temp.end());
                             return;
                         }
                     }
                     else
                     {
-                        cout << "ohhhhhhhhh ! sorry ! no coffin exist there " << endl;
+                        showCenteredTextBox(window, "ohhhhhhhhh ! sorry ! no coffin exist there");
                         return;
                     }
                 }
                 else
                 {
-                    cout << "congratulation man ! Drakula is dead " << endl;
+                    showCenteredTextBox(window, "congratulation man ! Drakula is dead");
                     return;
                 }
             }
@@ -337,8 +312,8 @@ void hero::advance(vector<monster *> &monsters, programm &bug)
 
     catch (const logic_error &e)
     {
-        std::cerr << e.what() << '\n';
-        advance(monsters, bug);
+         showCenteredTextBox(window, e.what());
+        advance(monsters, bug, window);
     }
 }
 int hero::get_action()
@@ -542,7 +517,7 @@ void hero::defeat(vector<monster *> &monsters, programm &bug, sf::RenderWindow &
                 }
             }
 
-            showCenteredTextBox(window,"ohh there is no monster here");
+            showCenteredTextBox(window, "ohh there is no monster here");
         }
     }
 }
