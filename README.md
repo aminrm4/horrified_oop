@@ -18,17 +18,17 @@
 
 #### 🎯 Main Menu
 
-![Main Menu](Horrified_Assets/extra_assets/Screenshot from 2025-08-03 00-10-41.png)
+![Main Menu](Horrified_Assets/extra_assets/main_menu.png)
 _The atmospheric main menu featuring the game title with blood-like drips and shadowy monster figures_
 
 #### 🗺️ Game Board
 
-![Game Board](Horrified_Assets/extra_assets/Screenshot from 2025-08-03 00-10-57.png)
+![Game Board](Horrified_Assets/extra_assets/game_board.png)
 _The interactive game board showing locations, characters, and the terror track_
 
 #### 🃏 Monster Cards
 
-![Monster Cards](Horrified_Assets/extra_assets/Screenshot from 2025-08-03 00-11-10.png)
+![Monster Cards](Horrified_Assets/extra_assets/monster_cards.png)
 _Collection of monster action cards that dictate game events and monster behavior_
 
 ### 🎯 Game Features
