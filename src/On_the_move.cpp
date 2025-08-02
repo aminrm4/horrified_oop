@@ -13,7 +13,7 @@ void On_the_move::event(std::vector<std::vector<int>> &map, std::vector<location
             route = (a.bfs(vill->get_currnet_location()->get_loc_relation(), vill->get_safe_location()->get_loc_relation()));
             if (route.empty())
             {
-                return;
+                continue;
             }
             else
             {
