@@ -1,6 +1,6 @@
 # 🎲 Horrified Board Game 👻
 
-> A thrilling cooperative terminal-based board game adventure where heroes battle classic monsters to save a small town!
+> A thrilling cooperative Graphic-based board game adventure where heroes battle classic monsters to save a small town!
 
 <p align="center">
   <img src="https://img.shields.io/badge/C%2B%2B-20-blue.svg" alt="C++20"/>
@@ -18,17 +18,17 @@
 
 #### 🎯 Main Menu
 
-![Main Menu](Horrified_Assets/extra_assets/main_menu.png)
+![Main Menu](Horrified_Assets/extra_assets/monster_cards.png)
 _The atmospheric main menu featuring the game title with blood-like drips and shadowy monster figures_
 
 #### 🗺️ Game Board
 
-![Game Board](Horrified_Assets/extra_assets/game_board.png)
+![Game Board](Horrified_Assets/extra_assets/main_menu.png)
 _The interactive game board showing locations, characters, and the terror track_
 
 #### 🃏 Monster Cards
 
-![Monster Cards](Horrified_Assets/extra_assets/monster_cards.png)
+![Monster Cards](Horrified_Assets/extra_assets/game_board.png)
 _Collection of monster action cards that dictate game events and monster behavior_
 
 ### 🎯 Game Features
