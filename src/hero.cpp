@@ -11,6 +11,7 @@
 #include <filesystem>
 #include "item.hpp"
 #include "free_func.hpp"
+#include "scientist.hpp"
 void remove_hero(programm &, hero *);
 void remove_villager(programm &, villager *);
 void remove_monster(programm &, monster *);
@@ -204,9 +205,9 @@ void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow 
                         {
                             string name;
                             name = show_hero_item_have(window, this);
-                            if (this->name_of_hero == "scientist")
+                            if (typeid(*this).name() == typeid(scientist).name())
                             {
-                                this->ability(name);
+                                this->ability(name, window);
                             }
 
                             for (int item = 0; item < item_have.size(); item++)
@@ -295,9 +296,9 @@ void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow 
 
                             string namer;
                             namer = show_hero_item_have(window, this);
-                            if (this->name_of_hero == "scientist")
+                            if (typeid(*this).name() == typeid(scientist).name())
                             {
-                                this->ability(namer);
+                                this->ability(namer, window);
                             }
 
                             for (int i = 0; i < this->item_have.size(); i++)
@@ -386,10 +387,11 @@ void hero::defeat(vector<monster *> &monsters, programm &bug, sf::RenderWindow &
 
                         string namer;
                         namer = show_hero_item_have(window, this);
-                        if (this->name_of_hero == "scientist")
+                        if (typeid(*this).name() == typeid(scientist).name())
                         {
-                            this->ability(namer);
+                            this->ability(namer, window);
                         }
+
                         for (int k = 0; k < this->item_have.size(); k++)
                         {
                             if (this->item_have[k]->get_name() == namer && this->item_have[k]->get_Color() == rgb::Color::Yellow)
@@ -480,10 +482,11 @@ void hero::defeat(vector<monster *> &monsters, programm &bug, sf::RenderWindow &
 
                             string namer;
                             namer = show_hero_item_have(window, this);
-                            if (this->name_of_hero == "scientist")
+                            if (typeid(*this).name() == typeid(scientist).name())
                             {
-                                this->ability(namer);
+                                this->ability(namer, window);
                             }
+
                             for (int i = 0; i < this->item_have.size(); i++)
                             {
                                 if (this->item_have[i]->get_name() == namer && this->item_have[i]->get_Color() == rgb::Color::Red)
@@ -880,11 +883,11 @@ void hero::load_game(std::string file_name, programm &bug)
     }
     loader.close();
 }
-void hero::ability(std::string name_of_item)
+void hero::ability(std::string name_of_item, sf::RenderWindow &window)
 {
-    cout << "do you want to use your ability" << endl;
     char a;
-    cin >> a;
+    a = showTextInputBox(window, "do you want to use your ability")[0];
+
     if (a == 'y')
     {
         for (auto it : this->item_have)

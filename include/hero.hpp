@@ -43,7 +43,7 @@ public:
     void use_perk(programm &, sf::RenderWindow &window);
     void save_game(const std::string);
     void load_game(std::string, programm &bug);
-    void ability(std::string);
+    void ability(std::string,sf::RenderWindow & window);
 
     ~hero();
 };

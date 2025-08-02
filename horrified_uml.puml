@@ -1,0 +1,428 @@
+@startuml Horrified_Board_Game_UML
+
+!theme plain
+skinparam classAttributeIconSize 0
+skinparam classFontSize 10
+skinparam classFontStyle bold
+skinparam packageFontSize 12
+skinparam packageFontStyle bold
+
+package "Core Game Classes" {
+    class programm {
+        + maxn: int = 19
+        + night_terror: int
+        + list_of_location: vector<location*>
+        + list_of_items: vector<item*>
+        + list_of_perks: vector<perk*>
+        + my_map: vector<vector<int>>
+        + monster_list: vector<monster*>
+        + monster_card_list: vector<monster_card*>
+        + hero_list: vector<hero*>
+        --
+        + set_award(int): perk*
+        + next_frenzy(): void
+        + bfs(int, int): vector<int>
+        + get_night_terror(): int
+        + set_night_terror(int): void
+        + check_terro_night(): bool
+        + run(): void
+        + save_game(string): void
+        + load_game(string): void
+    }
+
+    class location {
+        - loc_relation: int
+        - coffin_exist: bool
+        - villager_list: vector<villager*>
+        - item_list: vector<item*>
+        - hero_list: vector<hero*>
+        - monster_list: vector<monster*>
+        --
+        + set_coffin_exist(bool): void
+        + set_villager(villager*): void
+        + set_loc_relation(int): void
+        + set_item_list(item*): void
+        + set_hero_list(hero*): void
+        + set_monster_list(monster*): void
+        + get_loc_relation(): int
+        + get_coffin_exist(): bool
+        + get_villager_list(): vector<villager*>&
+        + get_item_list(): vector<item*>&
+        + get_hero_list(): vector<hero*>&
+        + get_monster_list(): vector<monster*>&
+        + delete_item(): void
+        + delete_villager_list(): void
+        + delete_monster_list(): void
+        + save_game(string): void
+        + load_game(string, programm&): void
+    }
+}
+
+package "Character Classes" {
+    abstract class hero {
+        # loc: location*
+        # action: int
+        # item_have: vector<item*>
+        # perk_have: vector<perk*>
+        # name_of_hero: string
+        --
+        + {abstract} special_action(map, programm&, window): void
+        + advance(monsters, programm&, window, route): void
+        + guide(map, programm&, window, programm&): void
+        + defeat(monsters, programm&, window): void
+        + move(location*, programm&): void
+        + get_action(): int
+        + set_perks(vector<perk*>): void
+        + get_perks(): vector<perk*>&
+        + set_item(vector<item*>): void
+        + get_items(): vector<item*>&
+        + pickup(window, programm&): void
+        + set_action(int): void
+        + get_loc(): location*
+        + get_hero_name(): string
+        + use_perk(programm&, window): void
+        + save_game(string): void
+        + load_game(string, programm&): void
+        + ability(string, window): void
+    }
+
+    class Archaeologist {
+        + special_action(map, programm&, window): void
+    }
+
+    class Courier {
+        + special_action(map, programm&, window): void
+    }
+
+    class Mayor {
+        + special_action(map, programm&, window): void
+    }
+
+    class Scientist {
+        + special_action(map, programm&, window): void
+    }
+
+    abstract class monster {
+        # is_freenzy: bool
+        # freenzy_order: int
+        # loc: location*
+        # name_of_monster: string
+        # totla_hidden_item: int
+        # did_attack: bool
+        --
+        + {abstract} ability(programm&): void
+        + get_freenzy_status(): bool
+        + move_to_place(route, number_route, programm&): void
+        + set_loc(location*): void
+        + get_loc(): location*
+        + get_is_frenzy(): bool
+        + get_frenzy_order(): int
+        + set_is_frenzy(bool): void
+        + set_frenzy_order(int): void
+        + get_mons_name(): string
+        + get_hidden_item(): int&
+        + get_did_attack(): bool
+        + set_did_attack(bool): void
+        + save_game(string): void
+        + load_game(string, programm&): void
+    }
+
+    class Drakula {
+        + ability(programm&): void
+    }
+
+    class invisible_man {
+        + ability(programm&): void
+        + set_remain_hidden_item(int): void
+    }
+
+    class villager {
+        - name: string
+        - safe_location: location*
+        - current_location: location*
+        - award: perk*
+        --
+        + set_name(string): void
+        + set_current_location(location*): void
+        + get_currnet_location(): location*
+        + get_safe_location(): location*
+        + drop_the_perk(): perk*
+        + get_name(): string
+        + save_game(string): void
+        + load_game(string, programm&): void
+        + set_award(perk*): void
+    }
+}
+
+package "Game Elements" {
+    class item {
+        - power: int
+        - name: string
+        - color: rgb::Color
+        - loc: location*
+        --
+        + get_power(): int
+        + get_name(): string
+        + get_Color(): rgb::Color
+        + get_loc(): location*
+        + set_power(int): void
+        + save_game(string): void
+        + load_game(string, programm&): void
+    }
+
+    abstract class perk {
+        + name: string
+        --
+        + get_name(): string
+        + {abstract} play(programm&, window, hero*): void
+        + save_game(string): void
+        + load_game(string, programm&): void
+    }
+
+    class repel {
+        + play(programm&, window, hero*): void
+    }
+
+    class hurry {
+        + play(programm&, window, hero*): void
+    }
+
+    class late_into_night {
+        + play(programm&, window, hero*): void
+    }
+
+    class break_of_down {
+        + play(programm&, window, hero*): void
+    }
+
+    class overstock {
+        + play(programm&, window, hero*): void
+    }
+
+    class visit_from_detective {
+        + play(programm&, window, hero*): void
+    }
+
+    abstract class monster_card {
+        # item_count: int
+        # dice_play: int
+        # move_left: int
+        # name_of_card: string
+        --
+        + {abstract} event(map, loc, programm&): void
+        + _strike(dice_attack, move, programm&, monster*): void
+        + {abstract} monster_strike(programm&, monsters): void
+        + item_handler(programm&): void
+        + get_item_count(): int
+        + get_dice_play(): int
+        + get_move_count(): int
+        + getName(): string
+        + save_game(string): void
+        + load_game(string, programm&): void
+    }
+
+    class Egyptian_Expert {
+        + event(map, loc, programm&): void
+        + monster_strike(programm&, monsters): void
+    }
+
+    class Former_Employer {
+        + event(map, loc, programm&): void
+        + monster_strike(programm&, monsters): void
+    }
+
+    class Fortune_Teller {
+        + event(map, loc, programm&): void
+        + monster_strike(programm&, monsters): void
+    }
+
+    class Hurried_Assistant {
+        + event(map, loc, programm&): void
+        + monster_strike(programm&, monsters): void
+    }
+
+    class Hypnotic_Gaze {
+        + event(map, loc, programm&): void
+        + monster_strike(programm&, monsters): void
+    }
+
+    class On_the_move {
+        + event(map, loc, programm&): void
+        + monster_strike(programm&, monsters): void
+    }
+
+    class Sunrise {
+        + event(map, loc, programm&): void
+        + monster_strike(programm&, monsters): void
+    }
+
+    class The_chthyologist {
+        + event(map, loc, programm&): void
+        + monster_strike(programm&, monsters): void
+    }
+
+    class The_Delivery {
+        + event(map, loc, programm&): void
+        + monster_strike(programm&, monsters): void
+    }
+
+    class The_Innocent {
+        + event(map, loc, programm&): void
+        + monster_strike(programm&, monsters): void
+    }
+
+    class Thief {
+        + event(map, loc, programm&): void
+        + monster_strike(programm&, monsters): void
+    }
+
+    class form_of_the_bat {
+        + event(map, loc, programm&): void
+        + monster_strike(programm&, monsters): void
+    }
+}
+
+package "UI Classes" {
+    class Menu {
+        - menuItems: vector<sf::Text>
+        - selectedState: MenuState
+        - hoveredIndex: int
+        - stateSelected: bool
+        --
+        + draw(window): void
+        + handleEvent(event, window): void
+        + getSelectedState(): MenuState
+        + isStateSelected(): bool
+        + resetSelection(): void
+        + run(): MenuState
+        - updateHighlight(): void
+    }
+
+    class Button {
+        - shape: sf::RectangleShape
+        - font: sf::Font
+        - label: sf::Text
+        - position: sf::Vector2f
+        --
+        + draw(window): void
+        + isClicked(event, window): bool
+        + getPosButton(): sf::Vector2f
+    }
+
+    class Button2 {
+        + draw(window): void
+        + isClicked(event, window): bool
+        + getPosButton(): sf::Vector2f
+    }
+
+    class TextInputBox {
+        + draw(window): void
+        + handleEvent(event): void
+        + getText(): string
+        + setText(string): void
+    }
+
+    class HintMenu {
+        + draw(window): void
+        + handleEvent(event, window): void
+        + run(): void
+    }
+
+    class LoadGameMenu {
+        + draw(window): void
+        + handleEvent(event, window): void
+        + run(): LoadGameState
+    }
+}
+
+package "Utility Classes" {
+    class Color {
+        + r: int
+        + g: int
+        + b: int
+        --
+        + Color(int, int, int)
+        + getR(): int
+        + getG(): int
+        + getB(): int
+    }
+
+    class map1 {
+        + load_map(): vector<vector<int>>
+        + save_map(vector<vector<int>>): void
+    }
+
+    class load_game {
+        + load_save_file(string): void
+        + save_save_file(string): void
+    }
+
+    class massage {
+        + show_message(string): void
+    }
+}
+
+' Inheritance Relationships
+hero <|-- Archaeologist
+hero <|-- Courier
+hero <|-- Mayor
+hero <|-- Scientist
+
+monster <|-- Drakula
+monster <|-- invisible_man
+
+perk <|-- repel
+perk <|-- hurry
+perk <|-- late_into_night
+perk <|-- break_of_down
+perk <|-- overstock
+perk <|-- visit_from_detective
+
+monster_card <|-- Egyptian_Expert
+monster_card <|-- Former_Employer
+monster_card <|-- Fortune_Teller
+monster_card <|-- Hurried_Assistant
+monster_card <|-- Hypnotic_Gaze
+monster_card <|-- On_the_move
+monster_card <|-- Sunrise
+monster_card <|-- The_chthyologist
+monster_card <|-- The_Delivery
+monster_card <|-- The_Innocent
+monster_card <|-- Thief
+monster_card <|-- form_of_the_bat
+
+' Association Relationships
+programm ||--o{ location : contains
+programm ||--o{ item : manages
+programm ||--o{ perk : manages
+programm ||--o{ monster : controls
+programm ||--o{ monster_card : manages
+programm ||--o{ hero : controls
+
+location ||--o{ villager : contains
+location ||--o{ item : contains
+location ||--o{ hero : contains
+location ||--o{ monster : contains
+
+hero ||--o{ item : has
+hero ||--o{ perk : has
+hero ||--|| location : at
+
+monster ||--|| location : at
+
+villager ||--|| location : at
+villager ||--o| perk : has
+
+item ||--|| location : at
+
+' UI Relationships
+Menu ||--o{ Button : uses
+LoadGameMenu ||--o{ Button : uses
+HintMenu ||--o{ Button : uses
+
+' Utility Relationships
+programm ||--|| map1 : uses
+programm ||--|| load_game : uses
+programm ||--|| massage : uses
+
+@enduml 

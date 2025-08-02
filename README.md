@@ -6,7 +6,6 @@
   <img src="https://img.shields.io/badge/C%2B%2B-20-blue.svg" alt="C++20"/>
   <img src="https://img.shields.io/badge/SFML-2.5+-green.svg" alt="SFML"/>
   <img src="https://img.shields.io/badge/CMake-3.11+-orange.svg" alt="CMake"/>
-  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License"/>
 </p>
 
 ---
