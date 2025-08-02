@@ -689,7 +689,7 @@ void MonsterPhase(programm &programm, sf::RenderWindow &window)
 }
 void programm::run()
 {
-
+std::vector<int>vec={15,13,3,4,9};
   for (auto &hero : hero_list)
   {
     delete hero;
@@ -900,7 +900,7 @@ void programm::run()
         }
         if (advance.isClicked(event, window))
         {
-          hero_list[heroNo]->advance(monster_list,*this,window);
+          hero_list[heroNo]->advance(monster_list,*this,window,vec);
         }
         if (pickup.isClicked(event, window))
         {
