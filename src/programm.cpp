@@ -30,57 +30,9 @@ using namespace std;
 #include "Button.hpp"
 #include <algorithm>
 #include "free_func.hpp"
-bool programm::is_node_connected(int her, int node)
-{
-  vector<int> temp;
-  temp = bfs(her, node);
-  if (temp.size() > 2)
-  {
-    return false;
-  }
-  else
-  {
-    return true;
-  }
-}
 
-void input_validation(string sampel)
-{
-  try
-  {
-    for (unsigned char i : sampel)
-    {
-      if (isdigit(i))
-      {
-        throw invalid_argument("be bcareful in your input\n");
-      }
-      if (!isalpha(i))
-      {
-        throw invalid_argument("be bcareful in your input\n");
-      }
-    }
-  }
-  catch (exception &e)
-  {
-    cerr << e.what() << endl;
-    exit(0);
-  }
-}
-void charecter_exist(string name)
-{
-  try
-  {
-    if (name != "mayor" && name != "archaeologist")
-    {
-      throw invalid_argument("charecter does not exist try again\n");
-    }
-  }
-  catch (exception &e)
-  {
-    cerr << e.what();
-    exit(0);
-  }
-}
+
+
 void to_lowercase(std::string &s)
 {
   for (char &c : s)
@@ -490,7 +442,8 @@ programm::programm()
   {
     i->get_loc()->set_hero_list(i);
   }
-  // added as a villageer test ist_of_location[9]->set_villager(new villager("DrReed", list_of_location[18], list_of_location[9], *this));
+  // added as a villageer test 
+  list_of_location[10]->set_villager(new villager("DrReed", list_of_location[18], list_of_location[10], *this));
 }
 std::vector<int> programm::bfs(int s, int t)
 {

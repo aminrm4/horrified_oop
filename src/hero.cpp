@@ -23,9 +23,33 @@ namespace fs = std::filesystem;
 
 void hero::move(location *loc, programm &bug)
 {
+
+    if (!this->get_loc()->get_villager_list().empty())
+    {
+        string vill_name;
+        sf::RenderWindow window({1920, 1080}, "Horrified board game");
+        window.setFramerateLimit(60);
+        showCenteredTextBox(window, "you  have villager would you like guide them");
+        vill_name = showHerovillagerBox(window, this->get_loc()->get_loc_relation(), bug);
+        for (auto vi : this->get_loc()->get_villager_list())
+        {
+            if (vi->get_name() == vill_name)
+            {
+                vi->set_current_location(loc);
+                remove_villager(bug, vi);
+                loc->set_villager(vi);
+                break;
+            }
+        }
+    }
+
+
+
+
+
+
     try
     {
-
         remove_hero(bug, this);
         loc->set_hero_list(this);
         this->loc = loc;
@@ -33,7 +57,6 @@ void hero::move(location *loc, programm &bug)
     catch (logic_error &e)
     {
         cout << e.what();
-        cout << "try again\n";
     }
 }
 
@@ -291,7 +314,7 @@ void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow 
                         else
                         {
                             showCenteredTextBox(window, "the power is under 6 ");
-                            this->item_have.insert(this->item_have.end(),temp.begin(),temp.end());
+                            this->item_have.insert(this->item_have.end(), temp.begin(), temp.end());
                             return;
                         }
                     }
@@ -312,7 +335,7 @@ void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow 
 
     catch (const logic_error &e)
     {
-         showCenteredTextBox(window, e.what());
+        showCenteredTextBox(window, e.what());
         advance(monsters, bug, window);
     }
 }
