@@ -168,7 +168,7 @@ void hero::guide(vector<vector<int>> &map, programm &p, sf::RenderWindow &window
         showCenteredTextBox(window, "the location that you selected is far away or it doesnt have any villager");
     }
 }
-void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow &window)
+void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow &window, vector<int> &map_check)
 {
 
     try
@@ -182,7 +182,6 @@ void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow 
         {
         case 'i':
         {
-            vector<int> map_check = {13, 15, 3, 4, 9};
             showCenteredTextBox(window, "For defeating this monster you must find 5 evidence and put them in precinct");
             bool is_invisible_alive = false;
             for (auto im : monsters)
@@ -198,7 +197,7 @@ void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow 
                             showCenteredTextBox(window, "all evidence finded now go and defeat the invisible men ");
                             return;
                         }
-                        showCenteredTextBox(window, "you need" + to_string(im->get_hidden_item()) + "more item ");
+                        showCenteredTextBox(window, "you need" + to_string(im->get_hidden_item()) + " more item ");
                         int number;
                         number = stoi(showTextInputBox(window, "how many item want to drop"));
                         for (int i = 0; i < number; i++)
@@ -220,8 +219,10 @@ void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow 
                                      item_have[item]->get_loc()->get_loc_relation() == 9))
                                 {
                                     auto it = find(map_check.begin(), map_check.end(), item_have[item]->get_loc()->get_loc_relation());
+
                                     if (it == map_check.end())
                                     {
+                                        showCenteredTextBox(window, "location of the item is not unique");
                                         continue;
                                     }
                                     else
@@ -230,7 +231,7 @@ void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow 
                                     }
 
                                     showCenteredTextBox(window, "those item has been puted by you");
-                                    showAssetInBox(window, "../Horrified_Assets/Items/General", name);
+                                    showAssetInBox(window, "../Horrified_Assets/Items/General", name + ".png");
                                     for (auto m : monsters)
                                     {
                                         if (typeid(*m) == typeid(invisible_man))
@@ -282,7 +283,7 @@ void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow 
                         showCenteredTextBox(window, "those are your item");
                         for (auto ite : this->get_items())
                         {
-                            showAssetInBox(window, "../Horrified_Assets/Items/General", ite->get_name());
+                            showAssetInBox(window, "../Horrified_Assets/Items/General", ite->get_name() + ".png");
                         }
 
                         int number;
@@ -350,7 +351,7 @@ void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow 
     catch (const logic_error &e)
     {
         showCenteredTextBox(window, e.what());
-        advance(monsters, bug, window);
+        advance(monsters, bug, window, map_check);
     }
 }
 int hero::get_action()
