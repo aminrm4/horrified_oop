@@ -16,15 +16,6 @@
 using namespace std;
 class monster_card;
 class villager;
-struct LocationInfo
-{
-  std::string items;
-  std::string monsters;
-  std::string villagers;
-  std::string hero;
-  std::string coffin;
-};
-
 class programm
 {
 public:
@@ -39,26 +30,15 @@ public:
   vector<hero *> hero_list;
 
 public:
-  perk *set_award(int); // make the data member private and have to add this function
+  perk *set_award(int);
   void next_frenzy();
-  std::set<int> random_generator(int start, int end, int count);
   std::vector<int> bfs(int s, int t);
   int get_night_terror();
   void set_night_terror(int);
   bool check_terro_night();
   void run();
   programm();
-  void terminal_handler(LocationInfo &info, string &, string &);
-  string show_all_item(const vector<item *> &show, LocationInfo &);
-  string show_all_villager(const vector<villager *> &, LocationInfo &);
-  string show_all_hero(const vector<hero *> &, LocationInfo &);
-  string show_all_mosnter(const vector<monster *> &, LocationInfo &);
-  bool is_node_connected(int her, int node);
-  string show_all_item_of_hero(const vector<item *>);
-  void clearScreen();
   ~programm();
-  template <typename T>
-  string show_hero_deatail(T vec);
   void save_game(const std::string file_name);
   void load_game(std::string);
 };
