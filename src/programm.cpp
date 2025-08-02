@@ -390,7 +390,7 @@ programm::programm()
   hero_list.push_back(new courier(4, list_of_location[5], list_of_perks));
   hero_list.push_back(new scientist(4, list_of_location[3], list_of_perks));
 
-  monster_list.push_back(new Drakula(0, true, 1, list_of_location[0]));
+  monster_list.push_back(new Drakula(4, true, 1, list_of_location[0]));
   monster_list.push_back(new invisible_man(5, false, 6, list_of_location[14]));
 
   monster_card_list.push_back(new form_of_the_bat(2, 2, 1));
@@ -900,6 +900,7 @@ void programm::run()
         }
         if (advance.isClicked(event, window))
         {
+          hero_list[heroNo]->advance(monster_list,*this,window);
         }
         if (pickup.isClicked(event, window))
         {

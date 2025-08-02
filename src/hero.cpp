@@ -38,15 +38,18 @@ void hero::move(location *loc, programm &bug)
                 vi->set_current_location(loc);
                 remove_villager(bug, vi);
                 loc->set_villager(vi);
+                if (vi->get_currnet_location() == vi->get_safe_location())
+                {
+                    showCenteredTextBox(window, "thanks for bringing me to my safe loc");
+                    this->perk_have.push_back(vi->drop_the_perk());
+                    remove_villager(bug, vi);
+                    delete vi;
+                }
+
                 break;
             }
         }
     }
-
-
-
-
-
 
     try
     {
@@ -179,6 +182,7 @@ void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow 
         {
         case 'i':
         {
+            vector<int> map_check = {13, 15, 3, 4, 9};
             showCenteredTextBox(window, "For defeating this monster you must find 5 evidence and put them in precinct");
             bool is_invisible_alive = false;
             for (auto im : monsters)
@@ -215,6 +219,16 @@ void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow 
                                      item_have[item]->get_loc()->get_loc_relation() == 4 ||
                                      item_have[item]->get_loc()->get_loc_relation() == 9))
                                 {
+                                    auto it = find(map_check.begin(), map_check.end(), item_have[item]->get_loc()->get_loc_relation());
+                                    if (it == map_check.end())
+                                    {
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        map_check.erase(it);
+                                    }
+
                                     showCenteredTextBox(window, "those item has been puted by you");
                                     showAssetInBox(window, "../Horrified_Assets/Items/General", name);
                                     for (auto m : monsters)
