@@ -30,9 +30,6 @@ using namespace std;
 #include "Button.hpp"
 #include <algorithm>
 #include "free_func.hpp"
-
-
-
 void to_lowercase(std::string &s)
 {
   for (char &c : s)
@@ -49,14 +46,6 @@ int random_number(int min, int max)
   return dist(gen);
 }
 
-void programm::clearScreen()
-{
-#ifdef __WIN32
-  system("cls");
-#else
-  system("clear");
-#endif
-}
 namespace fs = std::filesystem;
 
 void programm::save_game(string file_name)
@@ -267,7 +256,7 @@ programm::programm()
     int x = (i == 1 || i == 7 || i == 16 || i == 17) ? 1 : 0;
     list_of_location.push_back(new location(i, x));
   }
-  // yellow items
+
   list_of_items.push_back(new item(2, "Flower", rgb::Color::Yellow, list_of_location[12]));
   list_of_items.push_back(new item(2, "Flower", rgb::Color::Yellow, list_of_location[12]));
 
@@ -401,7 +390,7 @@ programm::programm()
   hero_list.push_back(new courier(4, list_of_location[5], list_of_perks));
   hero_list.push_back(new scientist(4, list_of_location[3], list_of_perks));
 
-  monster_list.push_back(new Drakula(0  , true, 1, list_of_location[0]));
+  monster_list.push_back(new Drakula(0, true, 1, list_of_location[0]));
   monster_list.push_back(new invisible_man(5, false, 6, list_of_location[14]));
 
   monster_card_list.push_back(new form_of_the_bat(2, 2, 1));
@@ -422,8 +411,6 @@ programm::programm()
   monster_card_list.push_back(new The_Innocent(3, 3, 1));
   monster_card_list.push_back(new Egyptian_Expert(2, 3, 2));
   monster_card_list.push_back(new The_chthyologist(2, 3, 1));
-  // monster_card_list.push_back(new Hypnotic_Gaze(2, 2, 1));
-  // monster_card_list.push_back(new Hypnotic_Gaze(2, 2, 1));
   monster_card_list.push_back(new On_the_move(2, 3, 3));
   monster_card_list.push_back(new On_the_move(2, 3, 3));
 
@@ -442,7 +429,7 @@ programm::programm()
   {
     i->get_loc()->set_hero_list(i);
   }
-  // added as a villageer test 
+  // added as a villageer test
   list_of_location[10]->set_villager(new villager("DrReed", list_of_location[18], list_of_location[10], *this));
 }
 std::vector<int> programm::bfs(int s, int t)
@@ -504,7 +491,6 @@ void programm::set_night_terror(int value)
   {
     cout << "the night terror level reached 5 \n";
     cin.get();
-    this->clearScreen();
     cout << "Game over ";
     exit(0);
   }
@@ -545,394 +531,12 @@ void programm::next_frenzy()
     monster_list[0]->set_is_frenzy(true);
   }
 }
-string programm::show_all_item(const vector<item *> &show, LocationInfo &state)
-{
-
-  state.items = "";
-  unordered_map<string, int> same_element;
-
-  if (show.empty())
-    return state.items;
-
-  for (auto i : show)
-  {
-    if (i != nullptr)
-    {
-      if (i->get_Color() == rgb::Color::Red)
-      {
-        same_element[to_string(i->get_power()) + ' ' + "red" + ' ' + i->get_name()]++;
-      }
-      if (i->get_Color() == rgb::Color::Yellow)
-      {
-        same_element[to_string(i->get_power()) + ' ' + "yellow" + ' ' + i->get_name()]++;
-      }
-      if (i->get_Color() == rgb::Color::Blue)
-      {
-        same_element[to_string(i->get_power()) + ' ' + "blue" + ' ' + i->get_name()]++;
-      }
-    }
-  }
-
-  for (const auto &i : same_element)
-  {
-    state.items = state.items + ' ' + (i.first + '(' + to_string(i.second) + ')');
-  }
-
-  return state.items;
-}
-
-string programm::show_all_item_of_hero(const vector<item *> show)
-{
-  string temp = "";
-  map<string, int> same_element;
-  for (auto i : show)
-  {
-    if (i != nullptr)
-    {
-      if (i->get_Color() == rgb::Color::Red)
-      {
-        same_element[to_string(i->get_power()) + ' ' + "red" + ' ' + i->get_name()]++;
-      }
-      if (i->get_Color() == rgb::Color::Yellow)
-      {
-        same_element[to_string(i->get_power()) + ' ' + "yellow" + ' ' + i->get_name()]++;
-      }
-      if (i->get_Color() == rgb::Color::Blue)
-      {
-        same_element[to_string(i->get_power()) + ' ' + "blue" + ' ' + i->get_name()]++;
-      }
-    }
-  }
-
-  for (const auto &i : same_element)
-  {
-    temp = temp + " " + i.first + "(" + to_string(i.second) + ")";
-  }
-  return temp;
-}
 
 perk *programm::set_award(int index)
 {
   return list_of_perks[index];
 }
-string programm::show_all_villager(const vector<villager *> &show, LocationInfo &state)
-{
 
-  state.villagers = "";
-  unordered_map<string, int> same_element;
-
-  if (show.empty())
-    return state.villagers;
-
-  for (auto i : show)
-  {
-    if (i != nullptr)
-    {
-
-      same_element[i->get_name()]++;
-    }
-  }
-
-  for (const auto &i : same_element)
-  {
-    state.villagers = state.villagers + ' ' + (i.first + '(' + to_string(i.second) + ')');
-  }
-
-  return state.villagers;
-}
-string programm::show_all_hero(const vector<hero *> &show, LocationInfo &state)
-{
-  state.hero = "";
-  unordered_map<string, int> same_element;
-
-  if (show.empty())
-    return state.hero;
-
-  for (auto i : show)
-  {
-
-    if (i != nullptr)
-    {
-
-      same_element[i->get_hero_name()]++;
-    }
-  }
-
-  for (const auto &i : same_element)
-  {
-    state.hero = state.hero + ' ' + (i.first + '(' + to_string(i.second) + ')');
-  }
-
-  return state.hero;
-}
-string programm::show_all_mosnter(const vector<monster *> &show, LocationInfo &state)
-{
-
-  state.monsters = "";
-  unordered_map<string, int> same_element;
-
-  if (show.empty())
-    return state.monsters;
-
-  for (auto i : show)
-  {
-    if (i != nullptr)
-    {
-
-      same_element[i->get_mons_name()]++;
-    }
-  }
-
-  for (const auto &i : same_element)
-  {
-    state.monsters = state.monsters + ' ' + (i.first + '(' + to_string(i.second) + ')');
-  }
-
-  return state.monsters;
-}
-
-template <typename T>
-string programm::show_hero_deatail(T vec)
-{
-
-  string temp = "";
-  map<string, int> same_element;
-  for (const auto &i : vec)
-  {
-    ++same_element[i->get_name()];
-  }
-
-  for (const auto &i : same_element)
-  {
-    temp = temp + " " + i.first + "(" + to_string(i.second) + ")";
-  }
-  return temp;
-}
-void programm::terminal_handler(LocationInfo &info, string &first_enter, string &secend_enter)
-{
-  int enter_count = 0;
-  std::string terror_text = "night terror level : " + to_string(get_night_terror());
-  static constexpr const char *map_template = R"MAP(
-|{0:^87}|
-|                                                                                       |
-|                      hospital(0)     grave_yard(1)                                    |
-|                                \      /                                               |
-|                               church(2)___________                                    |
-|                                  |    \           \                                   |
-|                                  |     museum(6)  |                                   |
-|                                  |    /     |     |                                   |
-|                                  |   /      |     |                                   |
-|                                  |  /       |     |                                   |
-|               laboratory(4)────shop(5)─────mansion(9)────abbey(8)────cryptt(7)        |
-|                    /            │             |                                       |
-|                   /             |   __________|_____________________                  |
-|           institute(3)          │  /          |          \          \                 |
-|                           theatre(10)  precinct(14)  inn(13)    camp(18)────cave(17)  |
-|                            /       \                                                  |
-|                     barn(15)    __tower(11)                                           |
-|                                |       \                                              |
-|                                │      docks(12)                                       |
-|                           dungeon(16)                                                 |
-)MAP";
-
-  std::string map_ascii = std::format(map_template, terror_text);
-  map<string, LocationInfo> location_data = {
-      {"0 ) Hospital", {show_all_item(list_of_location[0]->get_item_list(), info), show_all_mosnter(list_of_location[0]->get_monster_list(), info), show_all_villager(list_of_location[0]->get_villager_list(), info), show_all_hero(list_of_location[0]->get_hero_list(), info), to_string(list_of_location[0]->get_coffin_exist())
-
-                       }},
-
-      {"1 ) grave_yard", {show_all_item(list_of_location[1]->get_item_list(), info), show_all_mosnter(list_of_location[1]->get_monster_list(), info), show_all_villager(list_of_location[1]->get_villager_list(), info), show_all_hero(list_of_location[1]->get_hero_list(), info), to_string(list_of_location[1]->get_coffin_exist())
-
-                         }},
-
-      {"2 ) church",
-       {show_all_item(list_of_location[2]->get_item_list(), info),
-        show_all_mosnter(list_of_location[2]->get_monster_list(), info),
-        show_all_villager(list_of_location[2]->get_villager_list(), info),
-        show_all_hero(list_of_location[2]->get_hero_list(), info),
-        to_string(list_of_location[2]->get_coffin_exist())}},
-
-      {"3 ) institute",
-       {show_all_item(list_of_location[3]->get_item_list(), info),
-        show_all_mosnter(list_of_location[3]->get_monster_list(), info),
-        show_all_villager(list_of_location[3]->get_villager_list(), info),
-        show_all_hero(list_of_location[3]->get_hero_list(), info),
-        to_string(list_of_location[3]->get_coffin_exist())
-
-       }},
-
-      {"4 ) Lab",
-       {show_all_item(list_of_location[4]->get_item_list(), info),
-        show_all_mosnter(list_of_location[4]->get_monster_list(), info),
-        show_all_villager(list_of_location[4]->get_villager_list(), info),
-        show_all_hero(list_of_location[4]->get_hero_list(), info),
-        to_string(list_of_location[4]->get_coffin_exist())
-
-       }},
-      {"5 ) shop",
-       {show_all_item(list_of_location[5]->get_item_list(), info),
-        show_all_mosnter(list_of_location[5]->get_monster_list(), info),
-        show_all_villager(list_of_location[5]->get_villager_list(), info),
-        show_all_hero(list_of_location[5]->get_hero_list(), info),
-        to_string(list_of_location[5]->get_coffin_exist())
-
-       }},
-
-      {"6 ) museum",
-       {show_all_item(list_of_location[6]->get_item_list(), info),
-        show_all_mosnter(list_of_location[6]->get_monster_list(), info),
-        show_all_villager(list_of_location[6]->get_villager_list(), info),
-        show_all_hero(list_of_location[6]->get_hero_list(), info),
-        to_string(list_of_location[6]->get_coffin_exist())
-
-       }},
-      {"7 ) cryptt",
-       {show_all_item(list_of_location[7]->get_item_list(), info),
-        show_all_mosnter(list_of_location[7]->get_monster_list(), info),
-        show_all_villager(list_of_location[7]->get_villager_list(), info),
-        show_all_hero(list_of_location[7]->get_hero_list(), info),
-        to_string(list_of_location[7]->get_coffin_exist())
-
-       }},
-
-      {"8 ) abbey",
-       {show_all_item(list_of_location[8]->get_item_list(), info),
-        show_all_mosnter(list_of_location[8]->get_monster_list(), info),
-        show_all_villager(list_of_location[8]->get_villager_list(), info),
-        show_all_hero(list_of_location[8]->get_hero_list(), info),
-        to_string(list_of_location[8]->get_coffin_exist())
-
-       }},
-
-      {"9 ) Mansion",
-       {show_all_item(list_of_location[9]->get_item_list(), info),
-        show_all_mosnter(list_of_location[9]->get_monster_list(), info),
-        show_all_villager(list_of_location[9]->get_villager_list(), info),
-        show_all_hero(list_of_location[9]->get_hero_list(), info),
-        to_string(list_of_location[9]->get_coffin_exist())
-
-       }},
-      {"10 ) theatre",
-       {show_all_item(list_of_location[10]->get_item_list(), info),
-        show_all_mosnter(list_of_location[10]->get_monster_list(), info),
-        show_all_villager(list_of_location[10]->get_villager_list(), info),
-        show_all_hero(list_of_location[10]->get_hero_list(), info),
-        to_string(list_of_location[10]->get_coffin_exist())
-
-       }},
-      {"11 ) tower",
-       {show_all_item(list_of_location[11]->get_item_list(), info),
-        show_all_mosnter(list_of_location[11]->get_monster_list(), info),
-        show_all_villager(list_of_location[11]->get_villager_list(), info),
-        show_all_hero(list_of_location[11]->get_hero_list(), info),
-        to_string(list_of_location[11]->get_coffin_exist())
-
-       }},
-      {"12 ) docks",
-       {show_all_item(list_of_location[12]->get_item_list(), info),
-        show_all_mosnter(list_of_location[12]->get_monster_list(), info),
-        show_all_villager(list_of_location[12]->get_villager_list(), info),
-        show_all_hero(list_of_location[12]->get_hero_list(), info),
-        to_string(list_of_location[12]->get_coffin_exist())
-
-       }},
-      {"13 ) inn",
-       {show_all_item(list_of_location[13]->get_item_list(), info),
-        show_all_mosnter(list_of_location[13]->get_monster_list(), info),
-        show_all_villager(list_of_location[13]->get_villager_list(), info),
-        show_all_hero(list_of_location[13]->get_hero_list(), info),
-        to_string(list_of_location[13]->get_coffin_exist())
-
-       }},
-      {"14 ) precinct",
-       {show_all_item(list_of_location[14]->get_item_list(), info),
-        show_all_mosnter(list_of_location[14]->get_monster_list(), info),
-        show_all_villager(list_of_location[14]->get_villager_list(), info),
-        show_all_hero(list_of_location[14]->get_hero_list(), info),
-        to_string(list_of_location[14]->get_coffin_exist())
-
-       }},
-      {"15 ) barn",
-       {show_all_item(list_of_location[15]->get_item_list(), info),
-        show_all_mosnter(list_of_location[15]->get_monster_list(), info),
-        show_all_villager(list_of_location[15]->get_villager_list(), info),
-        show_all_hero(list_of_location[15]->get_hero_list(), info),
-        to_string(list_of_location[15]->get_coffin_exist())
-
-       }},
-      {"16 ) dungeon",
-       {show_all_item(list_of_location[16]->get_item_list(), info),
-        show_all_mosnter(list_of_location[16]->get_monster_list(), info),
-        show_all_villager(list_of_location[16]->get_villager_list(), info),
-        show_all_hero(list_of_location[16]->get_hero_list(), info),
-        to_string(list_of_location[16]->get_coffin_exist())
-
-       }},
-
-      {"17 ) cave",
-       {show_all_item(list_of_location[17]->get_item_list(), info),
-        show_all_mosnter(list_of_location[17]->get_monster_list(), info),
-        show_all_villager(list_of_location[17]->get_villager_list(), info),
-        show_all_hero(list_of_location[17]->get_hero_list(), info),
-        to_string(list_of_location[17]->get_coffin_exist())
-
-       }},
-
-      {"18 ) camp",
-       {show_all_item(list_of_location[18]->get_item_list(), info),
-        show_all_mosnter(list_of_location[18]->get_monster_list(), info),
-        show_all_villager(list_of_location[18]->get_villager_list(), info),
-        show_all_hero(list_of_location[18]->get_hero_list(), info),
-        to_string(list_of_location[18]->get_coffin_exist())
-
-       }}};
-  map<string, string> action_help = {
-      {"Move", "Move to another location."},
-      {"Guide", "move the villager one step to the hero,or move a villager to the neighbor house base on the hero location"},
-      {"Pick Up", "can pick up desired items"},
-      {"Advance", "can improve the task for defeating a monster."},
-      {"Defeat", "kill a monster when all taks has been done(should be in the same place with mosnter)"},
-      {"special action", "use it for archzeologist to pick up the items in the  neighbor locations"},
-      {"Quit", "Exit the game.(your data will be lost)"},
-      {"use perk", "use the perk wich hero have(from hero panel)"}};
-
-  map<string, string> heros_data = {
-
-      {"hero name ", hero_list[0]->get_hero_name()},
-      {"item have ", show_all_item_of_hero(hero_list[0]->get_items())},
-      {"perk have ", show_hero_deatail(hero_list[0]->get_perks())},
-      {"action left ", to_string(hero_list[0]->get_action())}
-
-  };
-
-  map<string, string> secend_heros_data = {
-      {"hero name ", hero_list[1]->get_hero_name()},
-      {"item have ", show_all_item_of_hero(hero_list[1]->get_items())},
-      {"perk have ", show_hero_deatail(hero_list[1]->get_perks())},
-      {"action left ", to_string(hero_list[1]->get_action())}
-
-  };
-  map<string, string> monster_data = {
-      {monster_list[0]->get_mons_name(), " task remain :" + to_string(monster_list[0]->get_hidden_item())},
-      {monster_list[1]->get_mons_name(), " task remain :" + to_string(monster_list[1]->get_hidden_item())}};
-
-  bool show_loc = false;
-  bool show_hero = false;
-  bool show_act = false;
-  bool show_hero1 = false;
-  bool show_map = false;
-  bool show_task = false;
-  int sel_loc = 0, sel_act = 0;
-  int sel_hero = 0;
-  int sel_hero1 = 0;
-  int sel_map = 0;
-  int sel_taks = 0;
-  vector<string> actions = {"Move", "Guide", "Pick Up", "Advance", "Defeat", "special action ", "Quit", "use perk"};
-  vector<string> heros = {"hero name ", "item have ", "perk have ", "action left "};
-  vector<string> heros1 = {"hero name ", "item have ", "perk have ", "action left "};
-  vector<string> monster_task = {monster_list[0]->get_mons_name(), monster_list[1]->get_mons_name()};
-  vector<string> locations = {"0 ) Hospital", "1 ) grave_yard", "2 ) church", "3 ) institute", "4 ) Lab", "5 ) shop", "6 ) museum", "7 ) cryptt", "8 ) abbey", "9 ) Mansion", "10 ) theatre", "11 ) tower", "12 ) docks", "13 ) inn", "14 ) precinct", "15 ) barn", "16 ) dungeon", "17 ) cave", "18 ) camp"};
-}
 programm::~programm()
 {
   for (auto item : list_of_items)
@@ -1042,7 +646,7 @@ void MonsterPhase(programm &programm, sf::RenderWindow &window)
 
   if (programm.monster_card_list.empty())
   {
-    // exit(0);
+    exit(0);
   }
   massage massage({100.f, 100.f}, "the " + name + " Card played", sf::Color::Red, 64);
 
@@ -1072,6 +676,7 @@ void MonsterPhase(programm &programm, sf::RenderWindow &window)
         programm.monster_card_list.erase(programm.monster_card_list.begin() + rand);
         return;
       }
+
       // if (event.type == sf::Event::Closed) // fix here
       //   window.close();
     }
@@ -1110,8 +715,10 @@ void programm::run()
     playmenu
   };
   sf::Texture Frenzy;
+
   if (!Frenzy.loadFromFile("../Horrified_Assets/FerenzyAsset.png"))
     throw out_of_range("couldnt load FerenzyAsset.png");
+
   sf::Sprite FrenzyMonster(Frenzy);
   FrenzyMonster.setScale({100.f / Frenzy.getSize().x, 100.f / Frenzy.getSize().y});
   FrenzyMonster.setPosition(1655, 575);
@@ -1132,8 +739,6 @@ void programm::run()
   initstate state = initstate::infopage;
   sf::RenderWindow window({1920, 1080}, "Horrified board game"); // starting the game , getting name of players ...
   window.setFramerateLimit(60);
-  // MonsterPhase( *this, window);
-
   sf::Texture map_texture;
   sf::Sprite map_sprite;
 
@@ -1272,6 +877,7 @@ void programm::run()
 
         if (move.isClicked(event, window))
         {
+
           int location = showLocationTextBox(window, *this, *hero_list[heroNo]);
           if (location >= 0)
           {
@@ -1290,7 +896,7 @@ void programm::run()
         }
         if (defeat.isClicked(event, window))
         {
-          hero_list[heroNo]->defeat(monster_list,*this,window);
+          hero_list[heroNo]->defeat(monster_list, *this, window);
         }
         if (advance.isClicked(event, window))
         {
@@ -1322,8 +928,6 @@ void programm::run()
           {
             showAssetInBox(window, "../Horrified_Assets/Perk_Cards", pe->get_name() + ".png");
           }
-
-          // remain action handel out of it
         }
       }
 
@@ -1338,7 +942,7 @@ void programm::run()
           hero_list.push_back(new class Mayor(5, list_of_location[10], list_of_perks));
           // for (auto i : hero_list)
           // {
-          //   i->get_loc()->set_hero_list(i); 
+          //   i->get_loc()->set_hero_list(i);
           // }
           heroicon.push_back(allheroicon[0]);
           Mayor.set_status(!Mayor.get_status());
@@ -1349,7 +953,7 @@ void programm::run()
           selectionNo = 1;
 
           state = initstate::heroSelection2;
-          hero_list.push_back(new class Archaeologist(4, list_of_location[12], list_of_perks)); 
+          hero_list.push_back(new class Archaeologist(4, list_of_location[12], list_of_perks));
           // for (auto i : hero_list)
           // {
           //   i->get_loc()->set_hero_list(i);
@@ -1390,7 +994,7 @@ void programm::run()
         }
       }
       if (state == initstate::heroSelection2) // chosing hero
-      { 
+      {
         if (Mayor.isClicked(event, window) && !Mayor.get_status())
         {
           Nohero.push_back(0);
@@ -1568,7 +1172,6 @@ void programm::run()
       }
 
       // Draw each hero at their current location
-      
 
       for (int i = 0; i < location_Button.size(); i++)
       {
@@ -1620,7 +1223,6 @@ void programm::run()
       if (!NightTerrorTexture.loadFromFile("../Horrified_Assets/NightTerrorLevel.png"))
         throw out_of_range("coulnt find the NightTerrorLevel.png");
       sf::Sprite NightTerrorSprite(NightTerrorTexture);
-      cout << this->get_night_terror() << endl;
       NightTerrorSprite.setScale({75.f / NightTerrorTexture.getSize().x, 75.f / NightTerrorTexture.getSize().y});
       NightTerrorSprite.setPosition(445.f + this->get_night_terror() * 60.f, 0);
 
