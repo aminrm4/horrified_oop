@@ -14,6 +14,23 @@
 
 **Horrified** is an immersive cooperative board game experience that brings classic horror monsters to life in your terminal. Players take on the roles of heroic characters racing against time to save a small town from legendary creatures like Dracula, The Invisible Man, and other iconic monsters.
 
+### 🖼️ Game Screenshots
+
+#### 🎯 Main Menu
+
+![Main Menu](Horrified_Assets/extra_assets/Screenshot from 2025-08-03 00-10-41.png)
+_The atmospheric main menu featuring the game title with blood-like drips and shadowy monster figures_
+
+#### 🗺️ Game Board
+
+![Game Board](Horrified_Assets/extra_assets/Screenshot from 2025-08-03 00-10-57.png)
+_The interactive game board showing locations, characters, and the terror track_
+
+#### 🃏 Monster Cards
+
+![Monster Cards](Horrified_Assets/extra_assets/Screenshot from 2025-08-03 00-11-10.png)
+_Collection of monster action cards that dictate game events and monster behavior_
+
 ### 🎯 Game Features
 
 - **🏃‍♂️ Cooperative Gameplay:** Work together with up to 5 players to defeat monsters before they unleash chaos
