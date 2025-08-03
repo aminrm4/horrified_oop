@@ -430,7 +430,7 @@ programm::programm()
     i->get_loc()->set_hero_list(i);
   }
   // added as a villageer test
-  list_of_location[10]->set_villager(new villager("DrReed", list_of_location[18], list_of_location[10], *this));
+   list_of_location[10]->set_villager(new villager("DrReed", list_of_location[18], list_of_location[10], *this));
 }
 std::vector<int> programm::bfs(int s, int t)
 {
@@ -641,14 +641,14 @@ void MonsterPhase(programm &programm, sf::RenderWindow &window)
   programm.monster_card_list[rand]->item_handler(programm);
   programm.monster_card_list[rand]->event(programm.my_map, programm.list_of_location, programm);
 
-  Button next({200, 100}, {1000, 800}, "Next");
+  Button next({100, 50}, {1500, 800}, "Next");
   std::string name = programm.monster_card_list[rand]->getName();
 
   if (programm.monster_card_list.empty())
   {
     exit(0);
   }
-  massage massage({100.f, 100.f}, "the " + name + " Card played", sf::Color::Red, 64);
+  massage massage({600.f, 450.f}, "the " + name + " Card played", sf::Color::Red, 64);
 
   sf::Texture texture, bg;
   if (!texture.loadFromFile("../Horrified_Assets/Monster_Cards/" + name + ".png"))
@@ -657,10 +657,14 @@ void MonsterPhase(programm &programm, sf::RenderWindow &window)
 
   if (!bg.loadFromFile("../Horrified_Assets/MonserPhaseBG.png"))
     throw out_of_range("cant load MonserPhaseBG.png");
+  sf::Texture t3;
+  t3.create(window.getSize().x, window.getSize().y);
+  t3.update(window);
 
-  sf::Sprite Bg(bg);
-  Bg.setScale(1920.f / bg.getSize().x, 1080.f / bg.getSize().y);
-
+  sf::Image screenshot = t3.copyToImage();//
+  sf::Sprite Bg(t3);
+  sf::RectangleShape fade({1920 , 1080});
+  fade.setFillColor(sf::Color(0,0,0,175));
   while (window.isOpen())
   {
     sf::Event event;
@@ -680,8 +684,9 @@ void MonsterPhase(programm &programm, sf::RenderWindow &window)
       // if (event.type == sf::Event::Closed) // fix here
       //   window.close();
     }
-    window.clear();
+    window.clear(sf::Color(0 , 0 , 0 , 175));
     window.draw(Bg);
+    window.draw(fade);
     next.draw(window);
     massage.draw(window);
     window.display();

@@ -7,6 +7,7 @@
 #include <SFML/Graphics.hpp>
 #include <algorithm>
 #include <random>
+#include <memory>
 #include "Button2.hpp"
 namespace fs = std::filesystem;
 int random_number(int min, int max);
@@ -51,7 +52,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
     mt19937 gen(rd());
     uniform_int_distribution<> distib(1, 6);
 
-    vector<pair<Button2, item *>> Buttonitem;
+    vector<pair<std::unique_ptr<Button2>, item *>> Buttonitem;
     for (int i = 0; i < dice_attack && !monster->get_did_attack(); i++)
     {
         int rand = distib(gen);
@@ -91,16 +92,20 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                         break;
                     }
                     dir += monster->get_loc()->get_hero_list()[0]->get_items()[i]->get_name();
-                    Button2 Button({200, 100}, {(i % 6) * 300.f, (i / 6) * 200.f}, dir + ".png");
-                    Buttonitem.push_back({ Button , monster->get_loc()->get_hero_list()[0]->get_items()[i]});
+                    Buttonitem.emplace_back(
+                        std::make_unique<Button2>(
+                            sf::Vector2f(200.f, 200.f),
+                            sf::Vector2f((i % 6) * 300.f , (i / 6) * 200.f + 200.f),
+                            dir + ".png"),
+                        monster->get_loc()->get_hero_list()[0]->get_items()[i]);
                 }
-
-                massage m({400, 400}, monster->get_mons_name() + " Want to attack " + monster->get_loc()->get_hero_list()[0]->get_hero_name() + "do you want to defend your self ?", sf::Color::Red, 40);
-                Button Yes({200.f, 100.f}, {400, 600}, "Yes");
-                Button No({200.f, 100.f}, {700, 600}, "No");
+                massage info({800, 50}, "please click one item", sf::Color::Red, 50);
+                massage m({600, 400}, monster->get_mons_name() + " Want to attack " + monster->get_loc()->get_hero_list()[0]->get_hero_name() + "do you want to defend your self ?", sf::Color::Red, 40);
+                Button Yes({100.f, 50.f}, {500, 600}, "Yes");
+                Button No({100.f, 50.f}, {800, 600}, "No");
 
                 sf::Texture texture;
-                if (!texture.loadFromFile("../Horrified_Assets/monster_.png")) 
+                if (!texture.loadFromFile("../Horrified_Assets/monster_.png"))
                     throw out_of_range("cant load MonserPhaseBG.png");
 
                 sf::Sprite Bg(texture);
@@ -132,7 +137,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                         {
                             for (int i = 0; i < Buttonitem.size(); i++)
                             {
-                                if (Buttonitem[i].first.isClicked(event, window))
+                                if (Buttonitem[i].first->isClicked(event, window))
                                 {
                                     delete monster->get_loc()->get_hero_list()[0]->get_items()[i];
                                     monster->get_loc()->get_hero_list()[0]->get_items().erase(monster->get_loc()->get_hero_list()[0]->get_items().begin() + i);
@@ -160,9 +165,10 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                     }
                     if (state == State::yes)
                     {
+                        info.draw(window);
                         for (auto &&Button : Buttonitem)
                         {
-                            Button.first.draw(window);
+                            Button.first->draw(window);
                         }
                     }
 
@@ -179,78 +185,6 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                 cout << "a villager has been killed by a monster and night terror level increased \n";
                 return;
             }
-
-            //     cout << "dice rolled a attack" << endl;
-
-            //     try
-            //     {
-
-            //         char state;
-            //         cin >> state;
-            //         state = tolower(state);
-            //         if (state == 'y')
-            //         {
-            //             for (auto item : monster->get_loc()->get_hero_list()[0]->get_items())
-            //             {
-            //                 cout << item->get_name() << endl;
-            //             }
-            //             cout << "emter the name of your item \n";
-            //             string name;
-            //             cin >> name;
-            //             for (auto he : monster->get_loc()->get_hero_list())
-            //             {
-            //                 if (he->get_hero_name() == "scientist")
-            //                 {
-            //                     he->ability(name);
-            //                     break;
-            //                 }
-            //             }
-
-            //             for (int i = 0; i < monsters->get_loc()->get_hero_list()[0]->get_items().size(); i++)
-            //             {
-            //                 if (monsters->get_loc()->get_hero_list()[0]->get_items()[i]->get_name() == name)
-            //                 {
-            //                     delete monsters->get_loc()->get_hero_list()[0]->get_items()[i];
-            //                     monsters->get_loc()->get_hero_list()[0]->get_items().erase(monsters->get_loc()->get_hero_list()[0]->get_items().begin() + i);
-            //                     return;
-            //                 }
-            //             }
-            //             cout << "im sorry i couldnt find your item and monster attacked you and night terror level increasd \n";
-            //             monsters->get_loc()->get_hero_list()[0]->move(bug.list_of_location[0], bug);
-            //             bug.set_night_terror(bug.get_night_terror() + 1);
-            //             monsters->set_did_attack(true);
-
-            //             return;
-            //         }
-            //         if (state == 'n')
-            //         {
-            //             cout << "the monster attakced you and i saved " << monsters->get_loc()->get_hero_list()[0]->get_hero_name() << "now you are in hospital \n";
-            //             monsters->get_loc()->get_hero_list()[0]->move(bug.list_of_location[0], bug);
-            //             bug.set_night_terror(bug.get_night_terror() + 1);
-            //             monsters->set_did_attack(true);
-            //             return;
-            //         }
-
-            //         throw invalid_argument("wrong charachter\n");
-            //     }
-            //     catch (const std::exception &e)
-            //     {
-            //         cout << e.what();
-            //     }
-
-            //     return;
-            // }
-
-            // if (!monsters->get_loc()->get_villager_list().empty())
-            // {
-            //     monsters->set_did_attack(true);
-            //     remove_villager(bug, monsters->get_loc()->get_villager_list()[0]);
-            //     delete monsters->get_loc()->get_villager_list()[0]->drop_the_perk();
-            //     delete monsters->get_loc()->get_villager_list()[0];
-            //     bug.set_night_terror(bug.get_night_terror() + 1);
-            //     cout << "a villager has been killed by a monster and night terror level increased \n";
-            //     return;
-            // }
         }
     }
 }
