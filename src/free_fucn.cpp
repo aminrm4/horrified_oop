@@ -1149,3 +1149,104 @@ std::string show_hero_item_have(sf::RenderWindow &window, hero *heroPtr)
     return "";  
 }
 
+std::string show_folder_save(sf::RenderWindow &window)
+{
+
+    // Prepare the text box
+    sf::Vector2u winSize = window.getSize();
+    float maxBoxWidth = 1200.f, maxBoxHeight = 800.f;
+    float boxWidth = std::min(winSize.x * 0.8f, maxBoxWidth);
+    float boxHeight = std::min(winSize.y * 0.8f, maxBoxHeight);
+    sf::Vector2f boxSize(boxWidth, boxHeight);
+    sf::RectangleShape textBox(boxSize);
+    textBox.setFillColor(sf::Color(30, 30, 30, 220));
+    textBox.setOutlineColor(sf::Color::White);
+    textBox.setOutlineThickness(3.f);
+    textBox.setPosition((winSize.x - boxSize.x) / 2, (winSize.y - boxSize.y) / 2);
+
+    // Grid layout for 5 assets
+    size_t numAssets = 5;
+    size_t cols = 3;
+    size_t rows = 2;
+    float padding = 40.f;
+    float gridWidth = boxSize.x - 2 * padding;
+    float gridHeight = boxSize.y - 2 * padding - 60.f; // leave space for text
+    float cellWidth = gridWidth / cols;
+    float cellHeight = gridHeight / rows;
+
+    // Load textures and sprites
+    std::vector<sf::Texture> textures(numAssets);
+    std::vector<sf::Sprite> sprites(numAssets);
+    std::vector<sf::FloatRect> spriteBounds(numAssets);
+
+    for (size_t i = 0; i < numAssets; ++i)
+    {
+        std::string assetName = std::to_string(i + 1) + ".png";
+        std::string path = "../Horrified_Assets/extra_assets/" + assetName;
+        
+        if (textures[i].loadFromFile(path))
+        {
+            sprites[i].setTexture(textures[i]);
+            // Scale to fit inside the cell
+            float scaleX = cellWidth / sprites[i].getLocalBounds().width;
+            float scaleY = cellHeight / sprites[i].getLocalBounds().height;
+            float scale = std::min(scaleX, scaleY) * 0.8f;
+            sprites[i].setScale(scale, scale);
+        }
+
+        size_t row = i / cols;
+        size_t col = i % cols;
+        float x = textBox.getPosition().x + padding + col * cellWidth + (cellWidth - (sprites[i].getLocalBounds().width * sprites[i].getScale().x)) / 2;
+        float y = textBox.getPosition().y + padding + row * cellHeight + (cellHeight - (sprites[i].getLocalBounds().height * sprites[i].getScale().y)) / 2;
+        sprites[i].setPosition(x, y);
+        spriteBounds[i] = sprites[i].getGlobalBounds();
+    }
+
+    bool running = true;
+    while (window.isOpen() && running)
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
+                window.close();
+                return "";
+            }
+            if (event.type == sf::Event::KeyPressed)
+            {
+                if (event.key.code == sf::Keyboard::Escape)
+                {
+                    running = false;
+                }
+            }
+            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+            {
+                sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+                if (!textBox.getGlobalBounds().contains(mousePos))
+                {
+                    running = false;
+                }
+                else
+                {
+                    for (size_t i = 0; i < numAssets; ++i)
+                    {
+                        if (spriteBounds[i].contains(mousePos))
+                        {
+                            return std::to_string(i + 1);
+                        }
+                    }
+                }
+            }
+        }
+        window.clear();
+        window.draw(textBox);
+        for (size_t i = 0; i < numAssets; ++i)
+        {
+            window.draw(sprites[i]);
+        }
+        window.display();
+    }
+    return "";
+}
+

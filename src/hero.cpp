@@ -11,6 +11,7 @@
 #include <filesystem>
 #include "item.hpp"
 #include "free_func.hpp"
+#include "scientist.hpp"
 void remove_hero(programm &, hero *);
 void remove_villager(programm &, villager *);
 void remove_monster(programm &, monster *);
@@ -38,15 +39,18 @@ void hero::move(location *loc, programm &bug)
                 vi->set_current_location(loc);
                 remove_villager(bug, vi);
                 loc->set_villager(vi);
+                if (vi->get_currnet_location() == vi->get_safe_location())
+                {
+                    showCenteredTextBox(window, "thanks for bringing me to my safe loc");
+                    this->perk_have.push_back(vi->drop_the_perk());
+                    remove_villager(bug, vi);
+                    delete vi;
+                }
+
                 break;
             }
         }
     }
-
-
-
-
-
 
     try
     {
@@ -165,7 +169,7 @@ void hero::guide(vector<vector<int>> &map, programm &p, sf::RenderWindow &window
         showCenteredTextBox(window, "the location that you selected is far away or it doesnt have any villager");
     }
 }
-void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow &window)
+void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow &window, vector<int> &map_check)
 {
 
     try
@@ -194,16 +198,16 @@ void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow 
                             showCenteredTextBox(window, "all evidence finded now go and defeat the invisible men ");
                             return;
                         }
-                        showCenteredTextBox(window, "you need" + to_string(im->get_hidden_item()) + "more item ");
+                        showCenteredTextBox(window, "you need" + to_string(im->get_hidden_item()) + " more item ");
                         int number;
                         number = stoi(showTextInputBox(window, "how many item want to drop"));
                         for (int i = 0; i < number; i++)
                         {
                             string name;
                             name = show_hero_item_have(window, this);
-                            if (this->name_of_hero == "scientist")
+                            if (typeid(*this).name() == typeid(scientist).name())
                             {
-                                this->ability(name);
+                                this->ability(name, window);
                             }
 
                             for (int item = 0; item < item_have.size(); item++)
@@ -215,8 +219,20 @@ void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow 
                                      item_have[item]->get_loc()->get_loc_relation() == 4 ||
                                      item_have[item]->get_loc()->get_loc_relation() == 9))
                                 {
+                                    auto it = find(map_check.begin(), map_check.end(), item_have[item]->get_loc()->get_loc_relation());
+
+                                    if (it == map_check.end())
+                                    {
+                                        showCenteredTextBox(window, "location of the item is not unique");
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        map_check.erase(it);
+                                    }
+
                                     showCenteredTextBox(window, "those item has been puted by you");
-                                    showAssetInBox(window, "../Horrified_Assets/Items/General", name);
+                                    showAssetInBox(window, "../Horrified_Assets/Items/General", name + ".png");
                                     for (auto m : monsters)
                                     {
                                         if (typeid(*m) == typeid(invisible_man))
@@ -268,7 +284,7 @@ void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow 
                         showCenteredTextBox(window, "those are your item");
                         for (auto ite : this->get_items())
                         {
-                            showAssetInBox(window, "../Horrified_Assets/Items/General", ite->get_name());
+                            showAssetInBox(window, "../Horrified_Assets/Items/General", ite->get_name() + ".png");
                         }
 
                         int number;
@@ -280,9 +296,9 @@ void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow 
 
                             string namer;
                             namer = show_hero_item_have(window, this);
-                            if (this->name_of_hero == "scientist")
+                            if (typeid(*this).name() == typeid(scientist).name())
                             {
-                                this->ability(namer);
+                                this->ability(namer, window);
                             }
 
                             for (int i = 0; i < this->item_have.size(); i++)
@@ -336,7 +352,7 @@ void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow 
     catch (const logic_error &e)
     {
         showCenteredTextBox(window, e.what());
-        advance(monsters, bug, window);
+        advance(monsters, bug, window, map_check);
     }
 }
 int hero::get_action()
@@ -371,10 +387,11 @@ void hero::defeat(vector<monster *> &monsters, programm &bug, sf::RenderWindow &
 
                         string namer;
                         namer = show_hero_item_have(window, this);
-                        if (this->name_of_hero == "scientist")
+                        if (typeid(*this).name() == typeid(scientist).name())
                         {
-                            this->ability(namer);
+                            this->ability(namer, window);
                         }
+
                         for (int k = 0; k < this->item_have.size(); k++)
                         {
                             if (this->item_have[k]->get_name() == namer && this->item_have[k]->get_Color() == rgb::Color::Yellow)
@@ -465,10 +482,11 @@ void hero::defeat(vector<monster *> &monsters, programm &bug, sf::RenderWindow &
 
                             string namer;
                             namer = show_hero_item_have(window, this);
-                            if (this->name_of_hero == "scientist")
+                            if (typeid(*this).name() == typeid(scientist).name())
                             {
-                                this->ability(namer);
+                                this->ability(namer, window);
                             }
+
                             for (int i = 0; i < this->item_have.size(); i++)
                             {
                                 if (this->item_have[i]->get_name() == namer && this->item_have[i]->get_Color() == rgb::Color::Red)
@@ -865,11 +883,11 @@ void hero::load_game(std::string file_name, programm &bug)
     }
     loader.close();
 }
-void hero::ability(std::string name_of_item)
+void hero::ability(std::string name_of_item, sf::RenderWindow &window)
 {
-    cout << "do you want to use your ability" << endl;
     char a;
-    cin >> a;
+    a = showTextInputBox(window, "do you want to use your ability")[0];
+
     if (a == 'y')
     {
         for (auto it : this->item_have)

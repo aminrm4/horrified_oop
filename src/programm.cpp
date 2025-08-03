@@ -694,7 +694,7 @@ void MonsterPhase(programm &programm, sf::RenderWindow &window)
 }
 void programm::run()
 {
-
+  std::vector<int> vec = {15, 13, 3, 4, 9};
   for (auto &hero : hero_list)
   {
     delete hero;
@@ -902,9 +902,12 @@ void programm::run()
         if (defeat.isClicked(event, window))
         {
           hero_list[heroNo]->defeat(monster_list, *this, window);
+          hero_list[heroNo]->set_action(hero_list[heroNo]->get_action() - 1);
         }
         if (advance.isClicked(event, window))
         {
+          hero_list[heroNo]->advance(monster_list, *this, window, vec);
+          hero_list[heroNo]->set_action(hero_list[heroNo]->get_action() - 1);
         }
         if (pickup.isClicked(event, window))
         {
@@ -1058,8 +1061,23 @@ void programm::run()
       }
 
       if (event.type == sf::Event::Closed)
+      { 
+        if (state==initstate::playmenu)
+        {
+        string folder;
+        char detector;
+        detector=tolower(showTextInputBox(window,"do you want to save the game ? y:yes  n:no")[0]);
+        folder=show_folder_save(window);
+        if (detector='y')
+        {
+          this->save_game("../save"+folder);
+        }
+        
+        window.setActive(false);
         window.close();
-
+      }
+      //need to check logic
+    }
       if (state == initstate::infopage)
       {
         if (next.isClicked(event, window) && isNumeric(playerGarlic1.getInput()) && isNumeric(playerGarlic2.getInput()))

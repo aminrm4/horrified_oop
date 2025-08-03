@@ -1,0 +1,12 @@
+1 Shovel
+5 BearTrap
+6 Tablet
+9 Mirrored_Box
+11 Kite
+13 Dart
+13 Garlic
+15 Torch
+15 Pitchfork
+18 Wolfsbane
+18 Fossil
+18 Fossil
