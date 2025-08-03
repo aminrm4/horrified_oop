@@ -15,4 +15,5 @@ int show_monster_location(sf::RenderWindow &window, programm &bug, monster* monn
 void playSound(std::string SoundDir);
 std::string show_hero_item_have(sf::RenderWindow &window, hero *heroPtr);
 std::string show_monster_asset(sf::RenderWindow &window, const std::string &monster_folder_path);
+std::string show_folder_save(sf::RenderWindow &window);
 
