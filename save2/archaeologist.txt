@@ -1,7 +1,7 @@
-mayor
-10
-5
+Archaeologist
+12
+4
 no_item 
 end_of_item 
-break_of_down 
+BreakOfDawn 
 end_of_perk 

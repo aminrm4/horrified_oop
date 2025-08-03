@@ -1056,8 +1056,23 @@ void programm::run()
       }
 
       if (event.type == sf::Event::Closed)
+      { 
+        if (state==initstate::playmenu)
+        {
+        string folder;
+        char detector;
+        detector=tolower(showTextInputBox(window,"do you want to save the game ? y:yes  n:no")[0]);
+        folder=show_folder_save(window);
+        if (detector='y')
+        {
+          this->save_game("../save"+folder);
+        }
+        
+        window.setActive(false);
         window.close();
-
+      }
+      //need to check logic
+    }
       if (state == initstate::infopage)
       {
         if (next.isClicked(event, window) && isNumeric(playerGarlic1.getInput()) && isNumeric(playerGarlic2.getInput()))
