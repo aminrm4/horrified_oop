@@ -36,7 +36,7 @@ public:
   int get_night_terror();
   void set_night_terror(int);
   bool check_terro_night();
-  void run();
+  void run(bool);
   programm();
   ~programm();
   void save_game(const std::string file_name);

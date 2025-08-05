@@ -430,7 +430,7 @@ programm::programm()
     i->get_loc()->set_hero_list(i);
   }
   // added as a villageer test
-   list_of_location[10]->set_villager(new villager("DrReed", list_of_location[18], list_of_location[10], *this));
+  list_of_location[10]->set_villager(new villager("DrReed", list_of_location[18], list_of_location[10], *this));
 }
 std::vector<int> programm::bfs(int s, int t)
 {
@@ -661,10 +661,10 @@ void MonsterPhase(programm &programm, sf::RenderWindow &window)
   t3.create(window.getSize().x, window.getSize().y);
   t3.update(window);
 
-  sf::Image screenshot = t3.copyToImage();//
+  sf::Image screenshot = t3.copyToImage(); //
   sf::Sprite Bg(t3);
-  sf::RectangleShape fade({1920 , 1080});
-  fade.setFillColor(sf::Color(0,0,0,175));
+  sf::RectangleShape fade({1920, 1080});
+  fade.setFillColor(sf::Color(0, 0, 0, 175));
   while (window.isOpen())
   {
     sf::Event event;
@@ -684,7 +684,7 @@ void MonsterPhase(programm &programm, sf::RenderWindow &window)
       // if (event.type == sf::Event::Closed) // fix here
       //   window.close();
     }
-    window.clear(sf::Color(0 , 0 , 0 , 175));
+    window.clear(sf::Color(0, 0, 0, 175));
     window.draw(Bg);
     window.draw(fade);
     next.draw(window);
@@ -692,7 +692,10 @@ void MonsterPhase(programm &programm, sf::RenderWindow &window)
     window.display();
   }
 }
-void programm::run()
+void programm::run(bool delemator)
+//if delemator == true means we want load game else its new game;
+
+//load games logic need a total change dont pay attention to them,gunna be changed;
 {
   std::vector<int> vec = {15, 13, 3, 4, 9};
   for (auto &hero : hero_list)
@@ -1061,23 +1064,23 @@ void programm::run()
       }
 
       if (event.type == sf::Event::Closed)
-      { 
-        if (state==initstate::playmenu)
+      {
+        if (state == initstate::playmenu)
         {
-        string folder;
-        char detector;
-        detector=tolower(showTextInputBox(window,"do you want to save the game ? y:yes  n:no")[0]);
-        folder=show_folder_save(window);
-        if (detector='y')
-        {
-          this->save_game("../save"+folder);
+          string folder;
+          char detector;
+          detector = tolower(showTextInputBox(window, "do you want to save the game ? y:yes  n:no")[0]);
+          if (detector == 'y')
+          {
+            this->save_game("../save" + folder);
+            folder = show_folder_save(window);
+          }
+
+          window.setActive(false);
+          window.close();
         }
-        
-        window.setActive(false);
-        window.close();
+        // need to check logic
       }
-      //need to check logic
-    }
       if (state == initstate::infopage)
       {
         if (next.isClicked(event, window) && isNumeric(playerGarlic1.getInput()) && isNumeric(playerGarlic2.getInput()))
