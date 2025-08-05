@@ -1,0 +1,12 @@
+1 Shovel
+3 Rotenone
+8 Stake
+9 Mirrored_Box
+11 Kite
+11 CosmicRayDiffuser
+12 Flower
+12 Knife
+13 Garlic
+13 Dart
+18 Wolfsbane
+18 Fossil

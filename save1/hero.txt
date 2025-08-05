@@ -1,0 +1,12 @@
+Mayor
+11
+4
+no_item 
+end_of_item 
+end_of_perk 
+Archaeologist
+12
+4
+no_item 
+end_of_item 
+end_of_perk 

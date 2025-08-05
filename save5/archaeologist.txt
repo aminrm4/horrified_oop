@@ -1,0 +1,7 @@
+Archaeologist
+12
+4
+no_item 
+end_of_item 
+VisitFromTheDetective 
+end_of_perk 
