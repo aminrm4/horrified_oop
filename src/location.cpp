@@ -182,14 +182,15 @@ void location::save_game(std::string file_name)
     saver.close();
 }
 void location::load_game(std::string file_name, programm &bug)
-{       string vill_file_name=file_name;
+{
+    string vill_file_name = file_name;
 
     fs::path dir = file_name;
     file_name = dir / "location.txt";
     ifstream loader(file_name);
     if (!loader)
     {
-        cerr << "locations file could not load" << endl;
+        throw invalid_argument("location file could not open");
     }
 
     int lo;
@@ -213,10 +214,6 @@ void location::load_game(std::string file_name, programm &bug)
     fs::path dir_v = vill_file_name;
     vill_file_name = dir_v / "villager.txt";
     ifstream loader_vil(vill_file_name);
-    if (!loader_vil)
-    {
-        cerr << "villager file can not be load" << endl;
-    }
     string vil_name, perk_hav;
     int saf, final;
     int count = 0;
@@ -229,8 +226,8 @@ void location::load_game(std::string file_name, programm &bug)
         {
             if (bug.list_of_perks[i]->get_name() == perk_hav)
             {
-                count=bug.list_of_location.size();
-                bug.list_of_location[final]->get_villager_list()[count]->set_award(bug.list_of_perks[i]); // danger index
+                count = bug.list_of_location[final]->get_villager_list().size();
+                bug.list_of_location[final]->get_villager_list()[count - 1]->set_award(bug.list_of_perks[i]); // danger index
                 bug.list_of_perks.erase(bug.list_of_perks.begin() + i);
                 break;
             }

@@ -223,7 +223,7 @@ void monster_card::load_game(std::string file_name, programm &bug)
     ifstream loader(file_name);
     if (!loader)
     {
-        cerr << "monster_card file could not load" << endl;
+        throw invalid_argument("monster card file can not open");
     }
     string name_card;
     while (loader >> name_card)

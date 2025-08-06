@@ -86,26 +86,8 @@ void programm::save_game(string file_name)
   }
   for (auto he : hero_list)
   {
-    if (typeid(*he).name() == typeid(Mayor).name())
-    {
-      full_path = dir / "mayor.txt";
-      he->save_game(full_path.string());
-    }
-    else if (typeid(*he).name() == typeid(Archaeologist).name())
-    {
-      full_path = dir / "archaeologist.txt";
-      he->save_game(full_path.string());
-    }
-    else if (typeid(*he).name() == typeid(scientist).name())
-    {
-      full_path = dir / "scientist";
-      he->save_game(full_path.string());
-    }
-    else if (typeid(*he).name() == typeid(courier).name())
-    {
-      full_path = dir / "courier";
-      he->save_game(full_path.string());
-    }
+    full_path = dir / "hero.txt";
+    he->save_game(full_path.string());
   }
   full_path = dir / "monster_card.txt";
   for (auto ca : monster_card_list)
@@ -130,39 +112,46 @@ void programm::save_game(string file_name)
 
 void programm::load_game(string file_name)
 {
+  sf::RenderWindow window({1920, 1080}, "Horrified board game");
 
   for (auto he : hero_list)
   {
     he->load_game(file_name, *this);
+    break;
   }
-
+  showCenteredTextBox(window, "after hero");
   for (auto ca : monster_card_list)
   {
     ca->load_game(file_name, *this);
   }
+  showCenteredTextBox(window, "after monster card");
 
   for (auto mo : monster_list)
   {
     mo->load_game(file_name, *this);
   }
+  showCenteredTextBox(window, "after monster");
 
   for (auto lo : list_of_location)
   {
     lo->load_game(file_name, *this);
     break;
   }
+  showCenteredTextBox(window, "after location");
 
   for (auto ite : list_of_items)
   {
     ite->load_game(file_name, *this);
     break;
   }
+  showCenteredTextBox(window, "after item");
 
   for (auto pe : list_of_perks)
   {
     pe->load_game(file_name, *this);
     break;
   }
+  showCenteredTextBox(window, "after perk");
 }
 programm::programm()
 {
@@ -693,23 +682,23 @@ void MonsterPhase(programm &programm, sf::RenderWindow &window)
   }
 }
 void programm::run(bool delemator)
-//if delemator == true means we want load game else its new game;
+// if delemator == true means we want load game else its new game;
 
-//load games logic need a total change dont pay attention to them,gunna be changed;
+// load games logic need a total change dont pay attention to them,gunna be changed;
 {
   std::vector<int> vec = {15, 13, 3, 4, 9};
-  for (auto &hero : hero_list)
-  {
-    delete hero;
-  }
-  hero_list.clear();
-  for (auto l : list_of_location)
-  {
-    if (!l->get_hero_list().empty())
-    {
-      l->get_hero_list().clear();
-    }
-  }
+  // for (auto &hero : hero_list)
+  // {
+  //   delete hero;
+  // }
+  // hero_list.clear();
+  // for (auto l : list_of_location)
+  // {
+  //   if (!l->get_hero_list().empty())
+  //   {
+  //     l->get_hero_list().clear();
+  //   }
+  // }
 
   vector<pair<string, int>> usersinfo(2);
   enum initstate
@@ -836,6 +825,15 @@ void programm::run(bool delemator)
   int heroNo = 0;
   int locationshow = 0;
   int selectionNo = 0;
+
+  this->load_game("../save1");
+  showCenteredTextBox(window, to_string(hero_list.size()));
+  showCenteredTextBox(window, to_string(monster_card_list.size()));
+  showCenteredTextBox(window,list_of_location[18]->get_item_list()[0]->get_name());
+  for (auto h : hero_list)
+  {
+    showCenteredTextBox(window, h->get_perks()[0]->get_name());
+  }
 
   while (window.isOpen())
   {
@@ -1072,8 +1070,9 @@ void programm::run(bool delemator)
           detector = tolower(showTextInputBox(window, "do you want to save the game ? y:yes  n:no")[0]);
           if (detector == 'y')
           {
-            this->save_game("../save" + folder);
             folder = show_folder_save(window);
+
+            this->save_game("../save" + folder);
           }
 
           window.setActive(false);

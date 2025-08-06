@@ -59,6 +59,7 @@ void item::load_game(std::string file_name, programm &bug)
     if (!loader)
     {
         cerr << "item file can not load" << endl;
+        throw invalid_argument("item file could not be opend");
     }
     int counter = 0;
     string nam;

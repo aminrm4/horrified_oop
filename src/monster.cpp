@@ -112,7 +112,7 @@ void monster::load_game(std::string file_name, programm &bug)
     ifstream loader(file_name);
     if (!loader)
     {
-        cerr << "hero file can not opend" << endl;
+        throw invalid_argument("monster file could not load");
     }
     loader>>this->name_of_monster;
     int reader;

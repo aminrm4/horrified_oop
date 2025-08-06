@@ -1,12 +1,14 @@
 Mayor
-11
+1
 4
 no_item 
 end_of_item 
+Hurry 
 end_of_perk 
 Archaeologist
 12
 4
 no_item 
 end_of_item 
+Hurry 
 end_of_perk 
