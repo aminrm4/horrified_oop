@@ -1,0 +1,7 @@
+Mayor
+5
+3
+no_item 
+end_of_item 
+Hurry 
+end_of_perk 

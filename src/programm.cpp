@@ -692,50 +692,6 @@ void MonsterPhase(programm &programm, sf::RenderWindow &window)
     window.display();
   }
 }
-void showInvisiblemanMat(sf::RenderWindow &window , vector<int>& map_check)
-{
-  sf::Texture texture;
-  if(!texture.loadFromFile("../Horrified_Assets/Monster_Mat/InvisibleManMat.png"))
-  {
-    throw out_of_range("coulnt open InvisibleManMat.png");
-  }
-  sf::Sprite bg(texture , sf::IntRect(0 , 950,texture.getSize().x ,texture.getSize().y - 950));
-  bg.setScale({1920.f / texture.getSize().x , 1050.f / (texture.getSize().y - 950) });
-  Button back({100, 50}, {1920 - 400, 1080 - 200}, "Back");
-  massage inn({500 , 400} , "X" , sf::Color::Red , 100);
-  massage barn({1320 , 365} , "X" , sf::Color::Red , 100);
-  massage mansion({345 , 725} , "X" , sf::Color::Red , 100);
-  massage lab({910 , 750} , "X" , sf::Color::Red , 100);
-  massage institude({1475 , 700} , "X" , sf::Color::Red , 100);
-  
-                                    // (item_have[item]->get_loc()->get_loc_relation() == 13 ||
-                                    //  item_have[item]->get_loc()->get_loc_relation() == 15 ||
-                                    //  item_have[item]->get_loc()->get_loc_relation() == 3 ||
-                                    //  item_have[item]->get_loc()->get_loc_relation() == 4 ||
-                                    //  item_have[item]->get_loc()->get_loc_relation() == 9))
-
-  while (window.isOpen())
-  {
-    sf::Event event;
-    while (window.pollEvent(event))
-    {
-      if(back.isClicked(event , window))
-      return;
-    }
-    window.clear();
-    window.draw(bg);
-    back.draw(window);
-    barn.draw(window);
-    mansion.draw(window);
-    lab.draw(window);
-    institude.draw(window);
-    inn.draw(window);
-    window.display();
-    
-  }
-  
-}
-
 void programm::run()
 {
   std::vector<int> vec = {15, 13, 3, 4, 9};
@@ -1090,20 +1046,20 @@ void programm::run()
       {
         if (state == initstate::playmenu)
         {
-          string folder;
-          char detector;
-          detector = tolower(showTextInputBox(window, "do you want to save the game ? y:yes  n:no")[0]);
-          folder = show_folder_save(window);
-          if (detector = 'y')
-          {
-            this->save_game("../save" + folder);
-          }
-
-          window.setActive(false);
-          window.close();
+        string folder;
+        char detector;
+        detector=tolower(showTextInputBox(window,"do you want to save the game ? y:yes  n:no")[0]);
+        folder=show_folder_save(window);
+        if (detector='y')
+        {
+          this->save_game("../save"+folder);
         }
-        // need to check logic
+        
+        window.setActive(false);
+        window.close();
       }
+      //need to check logic
+    }
       if (state == initstate::infopage)
       {
         if (next.isClicked(event, window) && isNumeric(playerGarlic1.getInput()) && isNumeric(playerGarlic2.getInput()))
