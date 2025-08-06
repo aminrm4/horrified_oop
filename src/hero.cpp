@@ -198,7 +198,7 @@ void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow 
                             showCenteredTextBox(window, "all evidence finded now go and defeat the invisible men ");
                             return;
                         }
-                        showCenteredTextBox(window, "you need" + to_string(im->get_hidden_item()) + " more item ");
+                        showCenteredTextBox(window, "you need " + to_string(im->get_hidden_item()) + " more item ");
                         int number;
                         number = stoi(showTextInputBox(window, "how many item want to drop"));
                         for (int i = 0; i < number; i++)
@@ -272,7 +272,7 @@ void hero::advance(vector<monster *> &monsters, programm &bug, sf::RenderWindow 
                 {
                     is_drakula_alive = true;
 
-                    showCenteredTextBox(window, "you need do destroy " + to_string(mon->get_hidden_item()) + "more coffin to defeat Drakula");
+                    showCenteredTextBox(window, "you need do destroy " + to_string(mon->get_hidden_item()) + " more coffin to defeat Drakula");
                     if (this->get_loc()->get_loc_relation() == 1 || this->get_loc()->get_loc_relation() == 16 || this->get_loc()->get_loc_relation() == 17 || this->get_loc()->get_loc_relation() == 7)
                     {
                         if (bug.list_of_location[this->get_loc()->get_loc_relation()]->get_coffin_exist() == false)

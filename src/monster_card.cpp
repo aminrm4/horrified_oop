@@ -95,7 +95,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                     Buttonitem.emplace_back(
                         std::make_unique<Button2>(
                             sf::Vector2f(200.f, 200.f),
-                            sf::Vector2f((i % 6) * 300.f , (i / 6) * 200.f + 200.f),
+                            sf::Vector2f((i % 6) * 300.f, (i / 6) * 200.f + 200.f),
                             dir + ".png"),
                         monster->get_loc()->get_hero_list()[0]->get_items()[i]);
                 }
@@ -142,6 +142,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                                     delete monster->get_loc()->get_hero_list()[0]->get_items()[i];
                                     monster->get_loc()->get_hero_list()[0]->get_items().erase(monster->get_loc()->get_hero_list()[0]->get_items().begin() + i);
                                     window.close();
+                                    Buttonitem.clear();
                                     return;
                                 }
                             }
@@ -152,6 +153,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
                             monster->get_loc()->get_hero_list()[0]->move(bug.list_of_location[0], bug);
                             monster->set_did_attack(true);
                             window.close();
+                            Buttonitem.clear();
                             return;
                         }
                     }

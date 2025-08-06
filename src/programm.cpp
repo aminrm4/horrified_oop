@@ -430,7 +430,7 @@ programm::programm()
     i->get_loc()->set_hero_list(i);
   }
   // added as a villageer test
-   list_of_location[10]->set_villager(new villager("DrReed", list_of_location[18], list_of_location[10], *this));
+  list_of_location[10]->set_villager(new villager("DrReed", list_of_location[18], list_of_location[10], *this));
 }
 std::vector<int> programm::bfs(int s, int t)
 {
@@ -661,10 +661,10 @@ void MonsterPhase(programm &programm, sf::RenderWindow &window)
   t3.create(window.getSize().x, window.getSize().y);
   t3.update(window);
 
-  sf::Image screenshot = t3.copyToImage();//
+  sf::Image screenshot = t3.copyToImage(); //
   sf::Sprite Bg(t3);
-  sf::RectangleShape fade({1920 , 1080});
-  fade.setFillColor(sf::Color(0,0,0,175));
+  sf::RectangleShape fade({1920, 1080});
+  fade.setFillColor(sf::Color(0, 0, 0, 175));
   while (window.isOpen())
   {
     sf::Event event;
@@ -684,7 +684,7 @@ void MonsterPhase(programm &programm, sf::RenderWindow &window)
       // if (event.type == sf::Event::Closed) // fix here
       //   window.close();
     }
-    window.clear(sf::Color(0 , 0 , 0 , 175));
+    window.clear(sf::Color(0, 0, 0, 175));
     window.draw(Bg);
     window.draw(fade);
     next.draw(window);
@@ -692,6 +692,50 @@ void MonsterPhase(programm &programm, sf::RenderWindow &window)
     window.display();
   }
 }
+void showInvisiblemanMat(sf::RenderWindow &window , vector<int>& map_check)
+{
+  sf::Texture texture;
+  if(!texture.loadFromFile("../Horrified_Assets/Monster_Mat/InvisibleManMat.png"))
+  {
+    throw out_of_range("coulnt open InvisibleManMat.png");
+  }
+  sf::Sprite bg(texture , sf::IntRect(0 , 950,texture.getSize().x ,texture.getSize().y - 950));
+  bg.setScale({1920.f / texture.getSize().x , 1050.f / (texture.getSize().y - 950) });
+  Button back({100, 50}, {1920 - 400, 1080 - 200}, "Back");
+  massage inn({500 , 400} , "X" , sf::Color::Red , 100);
+  massage barn({1320 , 365} , "X" , sf::Color::Red , 100);
+  massage mansion({345 , 725} , "X" , sf::Color::Red , 100);
+  massage lab({910 , 750} , "X" , sf::Color::Red , 100);
+  massage institude({1475 , 700} , "X" , sf::Color::Red , 100);
+  
+                                    // (item_have[item]->get_loc()->get_loc_relation() == 13 ||
+                                    //  item_have[item]->get_loc()->get_loc_relation() == 15 ||
+                                    //  item_have[item]->get_loc()->get_loc_relation() == 3 ||
+                                    //  item_have[item]->get_loc()->get_loc_relation() == 4 ||
+                                    //  item_have[item]->get_loc()->get_loc_relation() == 9))
+
+  while (window.isOpen())
+  {
+    sf::Event event;
+    while (window.pollEvent(event))
+    {
+      if(back.isClicked(event , window))
+      return;
+    }
+    window.clear();
+    window.draw(bg);
+    back.draw(window);
+    barn.draw(window);
+    mansion.draw(window);
+    lab.draw(window);
+    institude.draw(window);
+    inn.draw(window);
+    window.display();
+    
+  }
+  
+}
+
 void programm::run()
 {
   std::vector<int> vec = {15, 13, 3, 4, 9};
@@ -727,19 +771,6 @@ void programm::run()
   sf::Sprite FrenzyMonster(Frenzy);
   FrenzyMonster.setScale({100.f / Frenzy.getSize().x, 100.f / Frenzy.getSize().y});
   FrenzyMonster.setPosition(1655, 575);
-  vector<sf::Sprite> allheroicon(4);
-  vector<sf::Sprite> heroicon; // icons to show heros in map
-  sf::Texture T[4];
-  T[0].loadFromFile("../Horrified_Assets/Heros/Mayor.png");
-  T[1].loadFromFile("../Horrified_Assets/Heros/Archaeologist.png");
-  T[2].loadFromFile("../Horrified_Assets/Heros/Courier.png");
-  T[3].loadFromFile("../Horrified_Assets/Heros/Scientist.png");
-  for (int i = 0; i < 4; i++)
-  {
-    allheroicon[i].setPosition({110, 0});
-    allheroicon[i].setTexture(T[i]);
-    allheroicon[i].setScale({100.f / T[i].getSize().x, 135.f / T[i].getSize().y});
-  }
 
   initstate state = initstate::infopage;
   sf::RenderWindow window({1920, 1080}, "Horrified board game"); // starting the game , getting name of players ...
@@ -828,7 +859,7 @@ void programm::run()
   Button2 Archaeologist(Button2({225, 300}, {725, 300}, "../Horrified_Assets/Heros/Archaeologist.png"));
   Button2 courier(Button2({225, 300}, {950, 300}, "../Horrified_Assets/Heros/Courier.png"));
   Button2 scientist(Button2({225, 300}, {1175, 300}, "../Horrified_Assets/Heros/Scientist.png"));
-
+  Button2 invisiblemanMat({270, 180}, {1550.f, 400.f}, "../Horrified_Assets/Monster_Mat/Precinct.png");
   vector<int> Nohero;
   int heroNo = 0;
   int locationshow = 0;
@@ -879,7 +910,10 @@ void programm::run()
             locationshow = i;
           }
         }
-
+        if (invisiblemanMat.isClicked(event, window))
+        {
+          showInvisiblemanMat(window , vec);
+        }
         if (move.isClicked(event, window))
         {
 
@@ -952,7 +986,6 @@ void programm::run()
           // {
           //   i->get_loc()->set_hero_list(i);
           // }
-          heroicon.push_back(allheroicon[0]);
           Mayor.set_status(!Mayor.get_status());
         }
         if (Archaeologist.isClicked(event, window) && !Archaeologist.get_status())
@@ -966,7 +999,6 @@ void programm::run()
           // {
           //   i->get_loc()->set_hero_list(i);
           // }
-          heroicon.push_back(allheroicon[1]);
 
           Archaeologist.set_status(!Archaeologist.get_status());
         }
@@ -981,7 +1013,6 @@ void programm::run()
           // {
           //   i->get_loc()->set_hero_list(i);
           // }
-          heroicon.push_back(allheroicon[2]);
 
           courier.set_status(!courier.get_status());
         }
@@ -991,7 +1022,6 @@ void programm::run()
           selectionNo = 1;
 
           state = initstate::heroSelection2;
-          heroicon.push_back(allheroicon[3]);
 
           hero_list.push_back(new class scientist(4, list_of_location[3], list_of_perks));
           // for (auto i : hero_list)
@@ -1007,7 +1037,6 @@ void programm::run()
         {
           Nohero.push_back(0);
           state = initstate::playmenu;
-          heroicon.push_back(allheroicon[0]);
 
           hero_list.push_back(new class Mayor(5, list_of_location[10], list_of_perks));
           for (auto i : hero_list)
@@ -1020,7 +1049,6 @@ void programm::run()
         if (Archaeologist.isClicked(event, window) && !Archaeologist.get_status())
         {
           Nohero.push_back(1);
-          heroicon.push_back(allheroicon[1]);
 
           state = initstate::playmenu;
           hero_list.push_back(new class Archaeologist(4, list_of_location[12], list_of_perks));
@@ -1034,7 +1062,6 @@ void programm::run()
         if (courier.isClicked(event, window) && !courier.get_status())
         {
           Nohero.push_back(2);
-          heroicon.push_back(allheroicon[2]);
 
           state = initstate::playmenu;
           hero_list.push_back(new class courier(4, list_of_location[5], list_of_perks));
@@ -1047,7 +1074,6 @@ void programm::run()
         if (scientist.isClicked(event, window) && !scientist.get_status())
         {
           Nohero.push_back(3);
-          heroicon.push_back(allheroicon[3]);
 
           state = initstate::playmenu;
           hero_list.push_back(new class scientist(4, list_of_location[3], list_of_perks));
@@ -1061,23 +1087,23 @@ void programm::run()
       }
 
       if (event.type == sf::Event::Closed)
-      { 
-        if (state==initstate::playmenu)
+      {
+        if (state == initstate::playmenu)
         {
-        string folder;
-        char detector;
-        detector=tolower(showTextInputBox(window,"do you want to save the game ? y:yes  n:no")[0]);
-        folder=show_folder_save(window);
-        if (detector='y')
-        {
-          this->save_game("../save"+folder);
+          string folder;
+          char detector;
+          detector = tolower(showTextInputBox(window, "do you want to save the game ? y:yes  n:no")[0]);
+          folder = show_folder_save(window);
+          if (detector = 'y')
+          {
+            this->save_game("../save" + folder);
+          }
+
+          window.setActive(false);
+          window.close();
         }
-        
-        window.setActive(false);
-        window.close();
+        // need to check logic
       }
-      //need to check logic
-    }
       if (state == initstate::infopage)
       {
         if (next.isClicked(event, window) && isNumeric(playerGarlic1.getInput()) && isNumeric(playerGarlic2.getInput()))
@@ -1151,8 +1177,14 @@ void programm::run()
 
       for (int i = 0; i < hero_list.size(); ++i)
       {
+        sf::Texture texture;
+        if(!texture.loadFromFile("../Horrified_Assets/Heros/" + hero_list[i]->get_hero_name() + ".png"))
+        throw out_of_range("coulnt load " + hero_list[i]->get_hero_name() + ".png");
+
+        
         int locId = hero_list[i]->get_loc()->get_loc_relation();
-        sf::Sprite heroSprite = heroicon[i];
+        sf::Sprite heroSprite(texture);
+        heroSprite.setScale(100.f / texture.getSize().x , 135.f / texture.getSize().y);
         heroSprite.setPosition(locationPositions[locId].x,
                                locationPositions[locId].y);
         window.draw(heroSprite);
@@ -1231,11 +1263,12 @@ void programm::run()
         }
         window.draw(location_Button[i]);
       }
-
-      sf::Sprite her;
-      her.setTexture(T[Nohero[heroNo]]);
+      sf::Texture texture;
+      if(!texture.loadFromFile("../Horrified_Assets/Heros/" + hero_list[heroNo]->get_hero_name() + ".png"))
+      throw out_of_range("coulnt load "+ hero_list[heroNo]->get_hero_name() + ".png");
+      sf::Sprite her(texture);
       her.setPosition({100, 25});
-      her.setScale({200.f / T[Nohero[heroNo]].getSize().x, 300.f / T[Nohero[heroNo]].getSize().y});
+      her.setScale({200.f / texture.getSize().x, 300.f / texture.getSize().y});
       window.draw(her);
 
       // action info
@@ -1250,6 +1283,7 @@ void programm::run()
       NightTerrorSprite.setPosition(445.f + this->get_night_terror() * 60.f, 0);
 
       window.draw(NightTerrorSprite);
+      invisiblemanMat.draw(window);
     }
     if (state == initstate::infopage)
     {
