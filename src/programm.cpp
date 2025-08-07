@@ -385,11 +385,6 @@ programm::programm()
   list_of_perks.push_back(new hurry());
   list_of_perks.push_back(new hurry());
 
-  hero_list.push_back(new Mayor(5, list_of_location[10], list_of_perks));
-  hero_list.push_back(new Archaeologist(4, list_of_location[12], list_of_perks));
-  hero_list.push_back(new courier(4, list_of_location[5], list_of_perks));
-  hero_list.push_back(new scientist(4, list_of_location[3], list_of_perks));
-
   monster_list.push_back(new Drakula(4, true, 1, list_of_location[0]));
   monster_list.push_back(new invisible_man(5, false, 6, list_of_location[14]));
 
@@ -692,14 +687,56 @@ void MonsterPhase(programm &programm, sf::RenderWindow &window)
     window.display();
   }
 }
-void programm::run()
+void showInvisiblemanMat(sf::RenderWindow &window, vector<int> &map_check)
+{
+  sf::Texture texture;
+  if (!texture.loadFromFile("../Horrified_Assets/Monster_Mat/InvisibleManMat.png"))
+  {
+    throw out_of_range("coulnt open InvisibleManMat.png");
+  }
+  sf::Sprite bg(texture, sf::IntRect(0, 950, texture.getSize().x, texture.getSize().y - 950));
+  bg.setScale({1920.f / texture.getSize().x, 1050.f / (texture.getSize().y - 950)});
+
+  Button back({100, 50}, {1920 - 400, 1080 - 200}, "Back");
+  massage inn({500, 400}, "X", sf::Color::Red, 100);
+  massage barn({1320, 365}, "X", sf::Color::Red, 100);
+  massage mansion({345, 725}, "X", sf::Color::Red, 100);
+  massage lab({910, 750}, "X", sf::Color::Red, 100);
+  massage institude({1475, 700}, "X", sf::Color::Red, 100);
+  map<int, massage> infos;
+  infos[3] = institude;
+  infos[4] = lab;
+  infos[9] = mansion;
+  infos[13] = inn;
+  infos[15] = barn;
+
+  for (int val : map_check)
+  {
+    infos.erase(val);
+  }
+  while (window.isOpen())
+  {
+    sf::Event event;
+    while (window.pollEvent(event))
+    {
+      if (back.isClicked(event, window))
+        return;
+    }
+    window.clear();
+    window.draw(bg);
+    back.draw(window);
+    for ( auto &[key, msg] : infos)
+    {
+      msg.draw(window); 
+    }
+
+    window.display();
+  }
+}
+void programm::run(bool loadingSave)
 {
   std::vector<int> vec = {15, 13, 3, 4, 9};
-  for (auto &hero : hero_list)
-  {
-    delete hero;
-  }
-  hero_list.clear();
+
   for (auto l : list_of_location)
   {
     if (!l->get_hero_list().empty())
@@ -729,6 +766,10 @@ void programm::run()
   FrenzyMonster.setPosition(1655, 575);
 
   initstate state = initstate::infopage;
+  if (loadingSave)
+  {
+    state = initstate::playmenu;
+  }
   sf::RenderWindow window({1920, 1080}, "Horrified board game"); // starting the game , getting name of players ...
   window.setFramerateLimit(60);
   sf::Texture map_texture;
@@ -868,7 +909,7 @@ void programm::run()
         }
         if (invisiblemanMat.isClicked(event, window))
         {
-          showInvisiblemanMat(window , vec);
+          showInvisiblemanMat(window, vec);
         }
         if (move.isClicked(event, window))
         {
@@ -1046,20 +1087,20 @@ void programm::run()
       {
         if (state == initstate::playmenu)
         {
-        string folder;
-        char detector;
-        detector=tolower(showTextInputBox(window,"do you want to save the game ? y:yes  n:no")[0]);
-        folder=show_folder_save(window);
-        if (detector='y')
-        {
-          this->save_game("../save"+folder);
+          string folder;
+          char detector;
+          detector = tolower(showTextInputBox(window, "do you want to save the game ? y:yes  n:no")[0]);
+          folder = show_folder_save(window);
+          if (detector = 'y')
+          {
+            this->save_game("../save" + folder);
+          }
+
+          window.setActive(false);
+          window.close();
         }
-        
-        window.setActive(false);
-        window.close();
+        // need to check logic
       }
-      //need to check logic
-    }
       if (state == initstate::infopage)
       {
         if (next.isClicked(event, window) && isNumeric(playerGarlic1.getInput()) && isNumeric(playerGarlic2.getInput()))
@@ -1134,13 +1175,12 @@ void programm::run()
       for (int i = 0; i < hero_list.size(); ++i)
       {
         sf::Texture texture;
-        if(!texture.loadFromFile("../Horrified_Assets/Heros/" + hero_list[i]->get_hero_name() + ".png"))
-        throw out_of_range("coulnt load " + hero_list[i]->get_hero_name() + ".png");
+        if (!texture.loadFromFile("../Horrified_Assets/Heros/" + hero_list[i]->get_hero_name() + ".png"))
+          throw out_of_range("coulnt load " + hero_list[i]->get_hero_name() + ".png");
 
-        
         int locId = hero_list[i]->get_loc()->get_loc_relation();
         sf::Sprite heroSprite(texture);
-        heroSprite.setScale(100.f / texture.getSize().x , 135.f / texture.getSize().y);
+        heroSprite.setScale(100.f / texture.getSize().x, 135.f / texture.getSize().y);
         heroSprite.setPosition(locationPositions[locId].x,
                                locationPositions[locId].y);
         window.draw(heroSprite);
@@ -1220,8 +1260,8 @@ void programm::run()
         window.draw(location_Button[i]);
       }
       sf::Texture texture;
-      if(!texture.loadFromFile("../Horrified_Assets/Heros/" + hero_list[heroNo]->get_hero_name() + ".png"))
-      throw out_of_range("coulnt load "+ hero_list[heroNo]->get_hero_name() + ".png");
+      if (!texture.loadFromFile("../Horrified_Assets/Heros/" + hero_list[heroNo]->get_hero_name() + ".png"))
+        throw out_of_range("coulnt load " + hero_list[heroNo]->get_hero_name() + ".png");
       sf::Sprite her(texture);
       her.setPosition({100, 25});
       her.setScale({200.f / texture.getSize().x, 300.f / texture.getSize().y});
