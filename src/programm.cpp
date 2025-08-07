@@ -385,11 +385,6 @@ programm::programm()
   list_of_perks.push_back(new hurry());
   list_of_perks.push_back(new hurry());
 
-  hero_list.push_back(new Mayor(5, list_of_location[10], list_of_perks));
-  hero_list.push_back(new Archaeologist(4, list_of_location[12], list_of_perks));
-  hero_list.push_back(new courier(4, list_of_location[5], list_of_perks));
-  hero_list.push_back(new scientist(4, list_of_location[3], list_of_perks));
-
   monster_list.push_back(new Drakula(4, true, 1, list_of_location[0]));
   monster_list.push_back(new invisible_man(5, false, 6, list_of_location[14]));
 
@@ -692,17 +687,56 @@ void MonsterPhase(programm &programm, sf::RenderWindow &window)
     window.display();
   }
 }
-void programm::run(bool delemator)
-//if delemator == true means we want load game else its new game;
+void showInvisiblemanMat(sf::RenderWindow &window, vector<int> &map_check)
+{
+  sf::Texture texture;
+  if (!texture.loadFromFile("../Horrified_Assets/Monster_Mat/InvisibleManMat.png"))
+  {
+    throw out_of_range("coulnt open InvisibleManMat.png");
+  }
+  sf::Sprite bg(texture, sf::IntRect(0, 950, texture.getSize().x, texture.getSize().y - 950));
+  bg.setScale({1920.f / texture.getSize().x, 1050.f / (texture.getSize().y - 950)});
 
-//load games logic need a total change dont pay attention to them,gunna be changed;
+  Button back({100, 50}, {1920 - 400, 1080 - 200}, "Back");
+  massage inn({500, 400}, "X", sf::Color::Red, 100);
+  massage barn({1320, 365}, "X", sf::Color::Red, 100);
+  massage mansion({345, 725}, "X", sf::Color::Red, 100);
+  massage lab({910, 750}, "X", sf::Color::Red, 100);
+  massage institude({1475, 700}, "X", sf::Color::Red, 100);
+  map<int, massage> infos;
+  infos[3] = institude;
+  infos[4] = lab;
+  infos[9] = mansion;
+  infos[13] = inn;
+  infos[15] = barn;
+
+  for (int val : map_check)
+  {
+    infos.erase(val);
+  }
+  while (window.isOpen())
+  {
+    sf::Event event;
+    while (window.pollEvent(event))
+    {
+      if (back.isClicked(event, window))
+        return;
+    }
+    window.clear();
+    window.draw(bg);
+    back.draw(window);
+    for ( auto &[key, msg] : infos)
+    {
+      msg.draw(window); 
+    }
+
+    window.display();
+  }
+}
+void programm::run(bool loadingSave)
 {
   std::vector<int> vec = {15, 13, 3, 4, 9};
-  for (auto &hero : hero_list)
-  {
-    delete hero;
-  }
-  hero_list.clear();
+
   for (auto l : list_of_location)
   {
     if (!l->get_hero_list().empty())
@@ -730,21 +764,12 @@ void programm::run(bool delemator)
   sf::Sprite FrenzyMonster(Frenzy);
   FrenzyMonster.setScale({100.f / Frenzy.getSize().x, 100.f / Frenzy.getSize().y});
   FrenzyMonster.setPosition(1655, 575);
-  vector<sf::Sprite> allheroicon(4);
-  vector<sf::Sprite> heroicon; // icons to show heros in map
-  sf::Texture T[4];
-  T[0].loadFromFile("../Horrified_Assets/Heros/Mayor.png");
-  T[1].loadFromFile("../Horrified_Assets/Heros/Archaeologist.png");
-  T[2].loadFromFile("../Horrified_Assets/Heros/Courier.png");
-  T[3].loadFromFile("../Horrified_Assets/Heros/Scientist.png");
-  for (int i = 0; i < 4; i++)
-  {
-    allheroicon[i].setPosition({110, 0});
-    allheroicon[i].setTexture(T[i]);
-    allheroicon[i].setScale({100.f / T[i].getSize().x, 135.f / T[i].getSize().y});
-  }
 
   initstate state = initstate::infopage;
+  if (loadingSave)
+  {
+    state = initstate::playmenu;
+  }
   sf::RenderWindow window({1920, 1080}, "Horrified board game"); // starting the game , getting name of players ...
   window.setFramerateLimit(60);
   sf::Texture map_texture;
@@ -831,7 +856,7 @@ void programm::run(bool delemator)
   Button2 Archaeologist(Button2({225, 300}, {725, 300}, "../Horrified_Assets/Heros/Archaeologist.png"));
   Button2 courier(Button2({225, 300}, {950, 300}, "../Horrified_Assets/Heros/Courier.png"));
   Button2 scientist(Button2({225, 300}, {1175, 300}, "../Horrified_Assets/Heros/Scientist.png"));
-
+  Button2 invisiblemanMat({270, 180}, {1550.f, 400.f}, "../Horrified_Assets/Monster_Mat/Precinct.png");
   vector<int> Nohero;
   int heroNo = 0;
   int locationshow = 0;
@@ -882,7 +907,10 @@ void programm::run(bool delemator)
             locationshow = i;
           }
         }
-
+        if (invisiblemanMat.isClicked(event, window))
+        {
+          showInvisiblemanMat(window, vec);
+        }
         if (move.isClicked(event, window))
         {
 
@@ -955,7 +983,6 @@ void programm::run(bool delemator)
           // {
           //   i->get_loc()->set_hero_list(i);
           // }
-          heroicon.push_back(allheroicon[0]);
           Mayor.set_status(!Mayor.get_status());
         }
         if (Archaeologist.isClicked(event, window) && !Archaeologist.get_status())
@@ -969,7 +996,6 @@ void programm::run(bool delemator)
           // {
           //   i->get_loc()->set_hero_list(i);
           // }
-          heroicon.push_back(allheroicon[1]);
 
           Archaeologist.set_status(!Archaeologist.get_status());
         }
@@ -984,7 +1010,6 @@ void programm::run(bool delemator)
           // {
           //   i->get_loc()->set_hero_list(i);
           // }
-          heroicon.push_back(allheroicon[2]);
 
           courier.set_status(!courier.get_status());
         }
@@ -994,7 +1019,6 @@ void programm::run(bool delemator)
           selectionNo = 1;
 
           state = initstate::heroSelection2;
-          heroicon.push_back(allheroicon[3]);
 
           hero_list.push_back(new class scientist(4, list_of_location[3], list_of_perks));
           // for (auto i : hero_list)
@@ -1010,7 +1034,6 @@ void programm::run(bool delemator)
         {
           Nohero.push_back(0);
           state = initstate::playmenu;
-          heroicon.push_back(allheroicon[0]);
 
           hero_list.push_back(new class Mayor(5, list_of_location[10], list_of_perks));
           for (auto i : hero_list)
@@ -1023,7 +1046,6 @@ void programm::run(bool delemator)
         if (Archaeologist.isClicked(event, window) && !Archaeologist.get_status())
         {
           Nohero.push_back(1);
-          heroicon.push_back(allheroicon[1]);
 
           state = initstate::playmenu;
           hero_list.push_back(new class Archaeologist(4, list_of_location[12], list_of_perks));
@@ -1037,7 +1059,6 @@ void programm::run(bool delemator)
         if (courier.isClicked(event, window) && !courier.get_status())
         {
           Nohero.push_back(2);
-          heroicon.push_back(allheroicon[2]);
 
           state = initstate::playmenu;
           hero_list.push_back(new class courier(4, list_of_location[5], list_of_perks));
@@ -1050,7 +1071,6 @@ void programm::run(bool delemator)
         if (scientist.isClicked(event, window) && !scientist.get_status())
         {
           Nohero.push_back(3);
-          heroicon.push_back(allheroicon[3]);
 
           state = initstate::playmenu;
           hero_list.push_back(new class scientist(4, list_of_location[3], list_of_perks));
@@ -1070,10 +1090,10 @@ void programm::run(bool delemator)
           string folder;
           char detector;
           detector = tolower(showTextInputBox(window, "do you want to save the game ? y:yes  n:no")[0]);
-          if (detector == 'y')
+          folder = show_folder_save(window);
+          if (detector = 'y')
           {
             this->save_game("../save" + folder);
-            folder = show_folder_save(window);
           }
 
           window.setActive(false);
@@ -1154,8 +1174,13 @@ void programm::run(bool delemator)
 
       for (int i = 0; i < hero_list.size(); ++i)
       {
+        sf::Texture texture;
+        if (!texture.loadFromFile("../Horrified_Assets/Heros/" + hero_list[i]->get_hero_name() + ".png"))
+          throw out_of_range("coulnt load " + hero_list[i]->get_hero_name() + ".png");
+
         int locId = hero_list[i]->get_loc()->get_loc_relation();
-        sf::Sprite heroSprite = heroicon[i];
+        sf::Sprite heroSprite(texture);
+        heroSprite.setScale(100.f / texture.getSize().x, 135.f / texture.getSize().y);
         heroSprite.setPosition(locationPositions[locId].x,
                                locationPositions[locId].y);
         window.draw(heroSprite);
@@ -1234,11 +1259,12 @@ void programm::run(bool delemator)
         }
         window.draw(location_Button[i]);
       }
-
-      sf::Sprite her;
-      her.setTexture(T[Nohero[heroNo]]);
+      sf::Texture texture;
+      if (!texture.loadFromFile("../Horrified_Assets/Heros/" + hero_list[heroNo]->get_hero_name() + ".png"))
+        throw out_of_range("coulnt load " + hero_list[heroNo]->get_hero_name() + ".png");
+      sf::Sprite her(texture);
       her.setPosition({100, 25});
-      her.setScale({200.f / T[Nohero[heroNo]].getSize().x, 300.f / T[Nohero[heroNo]].getSize().y});
+      her.setScale({200.f / texture.getSize().x, 300.f / texture.getSize().y});
       window.draw(her);
 
       // action info
@@ -1253,6 +1279,7 @@ void programm::run(bool delemator)
       NightTerrorSprite.setPosition(445.f + this->get_night_terror() * 60.f, 0);
 
       window.draw(NightTerrorSprite);
+      invisiblemanMat.draw(window);
     }
     if (state == initstate::infopage)
     {

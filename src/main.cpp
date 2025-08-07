@@ -15,7 +15,7 @@ int main()
         switch (selected)
         {
         case MenuState::NewGame:
-            obj1.run();
+            obj1.run(false);
             break;
         case MenuState::LoadGame:
         {
