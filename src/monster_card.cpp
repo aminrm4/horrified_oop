@@ -64,7 +64,6 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
         }
 
         rand = distib(gen);
-        rand = 3;
         if (rand == 5 || rand == 3) // attack dice
         {
             enum State
@@ -180,9 +179,10 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
             if (!monster->get_loc()->get_villager_list().empty())
             {
                 monster->set_did_attack(true);
-                remove_villager(bug, monster->get_loc()->get_villager_list()[0]);
                 delete monster->get_loc()->get_villager_list()[0]->drop_the_perk();
                 delete monster->get_loc()->get_villager_list()[0];
+                remove_villager(bug, monster->get_loc()->get_villager_list()[0]);
+
                 bug.set_night_terror(bug.get_night_terror() + 1);
                 cout << "a villager has been killed by a monster and night terror level increased \n";
                 return;

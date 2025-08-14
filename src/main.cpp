@@ -8,73 +8,64 @@ int main()
 {
     string detector;
     programm obj1;
-    sf::RenderWindow window({1920, 1080}, "Horrified board game");
 
     while (true)
     {
-        Menu menu(1920, 1080, sf::Font());
-        MenuState selected = menu.run();
+        Menu menu;
+        int selected = menu.run();
 
         switch (selected)
         {
-        case MenuState::NewGame:
+        case 0: // new game
             obj1.run(false);
             break;
-        case MenuState::LoadGame:
+        case 1: // Load game
+
         {
+            LoadGameMenu loadMenu;
+            detector = loadMenu.run();
 
-            while (true)
+            try
             {
-                LoadGameMenu menu;
-                detector = menu.run();
-                try
+                if (detector == "Save 1")
                 {
-
-                    if (detector == "save1")
-                    {
-                        obj1.load_game("../save1");
-                    }
-                    if (detector == "save2")
-                    {
-                        obj1.load_game("../save2");
-                    }
-                    if (detector == "save3")
-                    {
-                        obj1.load_game("../save3");
-                    }
-                    if (detector == "save4")
-                    {
-                        obj1.load_game("../save4");
-                    }
-                    if (detector == "save5")
-                    {
-                        obj1.load_game("../save5");
-                    }
-
-                    if (detector=="back")
-                    {
-                        break;
-                        window.setActive(false);
-                    }
-                
-                
+                    obj1.load_game("../save1");
+                    obj1.run(true);
                 }
-                catch (std::exception &e)
+                else if (detector == "Save 2")
                 {
-                    cerr << e.what();
-                    showCenteredTextBox(window, e.what());
+                    obj1.load_game("../save2");
+                    obj1.run(true);
+                }
+                else if (detector == "Save 3")
+                {
+                    obj1.load_game("../save3");
+                    obj1.run(true);
+                }
+                else if (detector == "Save 4")
+                {
+                    obj1.load_game("../save4");
+                    obj1.run(true);
+                }
+                else if (detector == "Save 5")
+                {
+                    obj1.load_game("../save5");
+                    obj1.run(true);
                 }
             }
-
+            catch (std::exception &e)
+            {
+                cerr << "Error loading game: " << e.what() << endl;
+            }
             break;
         }
-        case MenuState::HowToPlay:
+        case 2: //  how to play
         {
-            HintMenu hintMenu(1920, 1080, sf::Font());
+            HintMenu hintMenu;
             hintMenu.run();
             break;
         }
-        case MenuState::Exit:
+        case 3: // exit
             return 0;
         default:
             break;

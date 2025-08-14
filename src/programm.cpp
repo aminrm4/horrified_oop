@@ -48,7 +48,7 @@ int random_number(int min, int max)
 
 namespace fs = std::filesystem;
 
-void programm::save_game(string file_name)
+void programm::save_game(string file_name,vector<int>&st)
 {
   fs::path dir = file_name;
   if (!fs::is_empty(dir))
@@ -86,26 +86,9 @@ void programm::save_game(string file_name)
   }
   for (auto he : hero_list)
   {
-    if (typeid(*he).name() == typeid(Mayor).name())
-    {
-      full_path = dir / "mayor.txt";
-      he->save_game(full_path.string());
-    }
-    else if (typeid(*he).name() == typeid(Archaeologist).name())
-    {
-      full_path = dir / "archaeologist.txt";
-      he->save_game(full_path.string());
-    }
-    else if (typeid(*he).name() == typeid(scientist).name())
-    {
-      full_path = dir / "scientist";
-      he->save_game(full_path.string());
-    }
-    else if (typeid(*he).name() == typeid(courier).name())
-    {
-      full_path = dir / "courier";
-      he->save_game(full_path.string());
-    }
+    full_path=dir/"hero.txt";
+    he->save_game(full_path.string());
+    
   }
   full_path = dir / "monster_card.txt";
   for (auto ca : monster_card_list)
@@ -126,15 +109,15 @@ void programm::save_game(string file_name)
   {
     loc->save_game(full_path.string());
   }
+  
+  full_path = dir / "game_state.txt";
+  save_game_state(st,full_path.string());
+
 }
 
 void programm::load_game(string file_name)
 {
-
-  for (auto he : hero_list)
-  {
-    he->load_game(file_name, *this);
-  }
+  load_game_hero(file_name, *this);
 
   for (auto ca : monster_card_list)
   {
@@ -163,6 +146,7 @@ void programm::load_game(string file_name)
     pe->load_game(file_name, *this);
     break;
   }
+  load_game_state(file_name,*this);
 }
 programm::programm()
 {
@@ -424,8 +408,7 @@ programm::programm()
   {
     i->get_loc()->set_hero_list(i);
   }
-  // added as a villageer test
-  list_of_location[10]->set_villager(new villager("DrReed", list_of_location[18], list_of_location[10], *this));
+
 }
 std::vector<int> programm::bfs(int s, int t)
 {
@@ -725,9 +708,9 @@ void showInvisiblemanMat(sf::RenderWindow &window, vector<int> &map_check)
     window.clear();
     window.draw(bg);
     back.draw(window);
-    for ( auto &[key, msg] : infos)
+    for (auto &[key, msg] : infos)
     {
-      msg.draw(window); 
+      msg.draw(window);
     }
 
     window.display();
@@ -735,15 +718,9 @@ void showInvisiblemanMat(sf::RenderWindow &window, vector<int> &map_check)
 }
 void programm::run(bool loadingSave)
 {
-  std::vector<int> vec = {15, 13, 3, 4, 9};
+  
 
-  for (auto l : list_of_location)
-  {
-    if (!l->get_hero_list().empty())
-    {
-      l->get_hero_list().clear();
-    }
-  }
+ 
 
   vector<pair<string, int>> usersinfo(2);
   enum initstate
@@ -861,6 +838,11 @@ void programm::run(bool loadingSave)
   int heroNo = 0;
   int locationshow = 0;
   int selectionNo = 0;
+
+  if (loadingSave == true)
+  {
+    state = initstate::playmenu;
+  }
 
   while (window.isOpen())
   {
@@ -1084,16 +1066,16 @@ void programm::run(bool loadingSave)
       }
 
       if (event.type == sf::Event::Closed)
-      {
+      {//sdfsdfsdsdf
         if (state == initstate::playmenu)
         {
           string folder;
           char detector;
           detector = tolower(showTextInputBox(window, "do you want to save the game ? y:yes  n:no")[0]);
-          folder = show_folder_save(window);
-          if (detector = 'y')
+          if (detector == 'y')
           {
-            this->save_game("../save" + folder);
+            folder = show_folder_save(window);
+            this->save_game("../save" + folder,vec);
           }
 
           window.setActive(false);

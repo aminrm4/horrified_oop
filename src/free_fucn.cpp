@@ -2,7 +2,11 @@
 #include "free_func.hpp"
 #include <SFML/Audio.hpp>
 #include <filesystem>
-#include"programm.hpp" 
+#include "programm.hpp"
+#include "Mayor.hpp"
+#include "courier.hpp"
+#include "scientist.hpp"
+#include "Archaeologist.hpp"
 namespace fs = std::filesystem;
 using namespace std;
 int showLocationTextBox(sf::RenderWindow &window, programm &bug, hero &herr)
@@ -748,8 +752,6 @@ int show_all_location(sf::RenderWindow &window, programm &bug)
         spriteBounds[i] = sprites[i].getGlobalBounds();
     }
 
-  
-
     bool running = true;
     while (window.isOpen() && running)
     {
@@ -800,9 +802,8 @@ int show_all_location(sf::RenderWindow &window, programm &bug)
     }
     return 0;
 }
-int show_monster_location(sf::RenderWindow &window, programm &bug, monster* monn)
+int show_monster_location(sf::RenderWindow &window, programm &bug, monster *monn)
 {
-  
 
     // Prepare the text box (rectangle)
     sf::Vector2u winSize = window.getSize();
@@ -869,8 +870,6 @@ int show_monster_location(sf::RenderWindow &window, programm &bug, monster* monn
         sprites[i].setPosition(x, y);
         spriteBounds[i] = sprites[i].getGlobalBounds();
     }
-
- 
 
     bool running = true;
     while (window.isOpen() && running)
@@ -939,19 +938,25 @@ std::string show_monster_asset(sf::RenderWindow &window, const std::string &mons
     // Load all monster assets from the folder
     std::vector<std::string> monsterFiles;
     std::vector<std::string> monsterNames;
-    
-    try {
-        for (const auto& entry : fs::directory_iterator(monster_folder_path)) {
-            if (entry.is_regular_file()) {
+
+    try
+    {
+        for (const auto &entry : fs::directory_iterator(monster_folder_path))
+        {
+            if (entry.is_regular_file())
+            {
                 std::string extension = entry.path().extension().string();
                 // Check if it's an image file
-                if (extension == ".png" || extension == ".jpg" || extension == ".jpeg") {
+                if (extension == ".png" || extension == ".jpg" || extension == ".jpeg")
+                {
                     monsterFiles.push_back(entry.path().string());
                     monsterNames.push_back(entry.path().stem().string());
                 }
             }
         }
-    } catch (const fs::filesystem_error& e) {
+    }
+    catch (const fs::filesystem_error &e)
+    {
         return ""; // Return empty string if folder doesn't exist or can't be accessed
     }
 
@@ -960,9 +965,10 @@ std::string show_monster_asset(sf::RenderWindow &window, const std::string &mons
         return "";
 
     // Calculate grid layout based on number of monsters
-    size_t cols = (numMonsters <= 2) ? 2 : (numMonsters <= 4) ? 2 : 3;
+    size_t cols = (numMonsters <= 2) ? 2 : (numMonsters <= 4) ? 2
+                                                              : 3;
     size_t rows = (numMonsters + cols - 1) / cols; // Ceiling division
-    
+
     float padding = 40.f;
     float gridWidth = boxSize.x - 2 * padding;
     float gridHeight = boxSize.y - 2 * padding - 60.f; // leave space for text
@@ -973,7 +979,7 @@ std::string show_monster_asset(sf::RenderWindow &window, const std::string &mons
     std::vector<sf::Texture> textures(numMonsters);
     std::vector<sf::Sprite> sprites(numMonsters);
     std::vector<sf::FloatRect> spriteBounds(numMonsters);
-    
+
     for (size_t i = 0; i < numMonsters; ++i)
     {
         if (textures[i].loadFromFile(monsterFiles[i]))
@@ -985,7 +991,7 @@ std::string show_monster_asset(sf::RenderWindow &window, const std::string &mons
             float scale = std::min(scaleX, scaleY) * 0.8f; // add margin
             sprites[i].setScale(scale, scale);
         }
-        
+
         size_t row = i / cols;
         size_t col = i % cols;
         float x = textBox.getPosition().x + padding + col * cellWidth + (cellWidth - (sprites[i].getLocalBounds().width * sprites[i].getScale().x)) / 2;
@@ -1028,25 +1034,25 @@ std::string show_monster_asset(sf::RenderWindow &window, const std::string &mons
                 }
             }
         }
-        
+
         window.clear();
         window.draw(textBox);
-        
+
         for (size_t i = 0; i < numMonsters; ++i)
         {
             window.draw(sprites[i]);
         }
-        
+
         window.display();
     }
-    
+
     return "";
 }
 
 std::string show_hero_item_have(sf::RenderWindow &window, hero *heroPtr)
 {
-   // Get hero's items
-    std::vector<item*> &hero_item = heroPtr->get_items();
+    // Get hero's items
+    std::vector<item *> &hero_item = heroPtr->get_items();
 
     if (hero_item.empty())
     {
@@ -1146,7 +1152,7 @@ std::string show_hero_item_have(sf::RenderWindow &window, hero *heroPtr)
         }
         window.display();
     }
-    return "";  
+    return "";
 }
 
 std::string show_folder_save(sf::RenderWindow &window)
@@ -1183,7 +1189,7 @@ std::string show_folder_save(sf::RenderWindow &window)
     {
         std::string assetName = std::to_string(i + 1) + ".png";
         std::string path = "../Horrified_Assets/extra_assets/" + assetName;
-        
+
         if (textures[i].loadFromFile(path))
         {
             sprites[i].setTexture(textures[i]);
@@ -1249,4 +1255,154 @@ std::string show_folder_save(sf::RenderWindow &window)
     }
     return "";
 }
+void load_game_hero(std::string file_name, programm &bug)
+{
+    for (auto l : bug.list_of_location)
+    {
+        if (!l->get_item_list().empty())
+        {
+            for (int i = 0; i < l->get_item_list().size(); i++)
+            {
+                bug.list_of_items.push_back(l->get_item_list()[i]);
+            }
+            l->get_item_list().clear();
+        }
+    }
 
+    fs::path dir = file_name;
+    file_name = dir / "hero.txt";
+
+    ifstream loader(file_name);
+    if (!loader)
+    {
+        throw invalid_argument("hero file can not opend");
+    }
+    programm temp;
+    int loc_num;
+    int act;
+    string item_have;
+    string namer;
+    string perk_have;
+    while (loader >> namer >> loc_num >> act)
+    {
+
+        if (namer == "Mayor")
+        {
+            bug.hero_list.push_back(new Mayor(act, bug.list_of_location[loc_num], temp.list_of_perks));
+        }
+        else if (namer == "Archaeologist")
+        {
+
+            bug.hero_list.push_back(new Archaeologist(act, bug.list_of_location[loc_num], temp.list_of_perks));
+        }
+        else if (namer == "Courier")
+        {
+            bug.hero_list.push_back(new courier(act, bug.list_of_location[loc_num], temp.list_of_perks));
+        }
+
+        else if (namer == "Scientist")
+        {
+            bug.hero_list.push_back(new scientist(act, bug.list_of_location[loc_num], temp.list_of_perks));
+        }
+
+        while (loader >> item_have)
+        {
+            if (item_have != "no_item")
+            {
+
+                if (item_have == "end_of_item")
+                {
+                    break;
+                }
+                for (int i = 0; i < bug.list_of_items.size(); i++)
+                {
+                    if (item_have == bug.list_of_items[i]->get_name())
+                    {
+                        for (auto he : bug.hero_list)
+                        {
+                            if (he->get_hero_name() == namer)
+                            {
+                                he->get_items().push_back(bug.list_of_items[i]);
+                                bug.list_of_items.erase(bug.list_of_items.begin() + i);
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        while (loader >> perk_have)
+        {
+            if (perk_have != "no_perk")
+            {
+                if (perk_have == "end_of_perk")
+                {
+                    break;
+                }
+
+                for (int i = 0; i < bug.list_of_perks.size(); i++)
+                {
+
+                    if (bug.list_of_perks[i]->get_name() == perk_have)
+                    {
+                        for (auto &her : bug.hero_list)
+                        {
+                            if (her->get_hero_name() == namer)
+                            {
+                                her->get_perks().clear();
+                                her->get_perks().push_back(bug.list_of_perks[i]);
+                                bug.list_of_perks.erase(bug.list_of_perks.begin() + i);
+
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    loader.close();
+}
+void save_game_state(vector<int> &state, string file_name)
+{
+    ofstream data_saver(file_name, ios::app);
+    if (!data_saver)
+    {
+        cerr << "state file could not load" << endl;
+    }
+
+    for (auto count : state)
+    {
+        data_saver << count;
+    }
+    data_saver.close();
+}
+void load_game_state(string file_name, programm &bug)
+{
+    bug.vec.clear();
+    int evidence=0;
+    fs::path dir = file_name;
+    file_name = dir / "game_state.txt";
+    ifstream loader(file_name);
+    if (!loader)
+    {
+        cerr << "load state file could not open" << endl;
+    }
+    while (loader>>evidence)
+    {
+        bug.vec.push_back(evidence);
+    }
+    loader.close();
+
+}
