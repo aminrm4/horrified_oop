@@ -24,15 +24,11 @@ void perk::load_game(std::string file_name, programm &bug)
     ifstream loader(file_name);
     if (!loader)
     {
-        cerr << "perks file could not be loaded" << endl;
+        throw invalid_argument("perks file could not be opend");
     }
     string nam;
     int counter = 0;
-    for (auto pp : bug.list_of_perks)
-    {
-        cout<<pp->get_name()<<endl;
-    }
-    
+
     while (loader >> nam)
     {
         counter++;
@@ -47,4 +43,8 @@ void perk::load_game(std::string file_name, programm &bug)
     }
     bug.list_of_perks.erase(bug.list_of_perks.begin() + counter, bug.list_of_perks.end());
     loader.close();
+    for (auto pp : bug.list_of_perks)
+    {
+        cout << pp->get_name() << endl;
+    }
 }

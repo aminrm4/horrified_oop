@@ -1,364 +1,126 @@
 #include "hint.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <iostream>
 #include <vector>
 #include <string>
-#include <stdexcept>
-#include <iostream>
-#include <filesystem>
+
 using namespace std;
 
-HintMenu::HintMenu(float width, float height, const sf::Font &font)
-    : selectedState(HintState::None), hoveredIndex(-1), stateSelected(false), showInfoBox(false), infoBoxIndex(-1)
+int HintMenu::run()
 {
-    if (!bgTexture.loadFromFile("../Horrified_Assets/final.png"))
-    {
-        throw runtime_error("Could not load background image");
-    }
-    bgSprite.setTexture(bgTexture);
-    bgSprite.setColor(sf::Color::White);
-    heroNames = {"Archaeologist", "Courier", "Mayor", "Scientist"};
-    heroDescriptions = {
-        "Archaeologist: Can dig up ancient secrets and decipher runes.",
-        "Courier: Moves quickly and delivers items across the map.",
-        "Mayor: Influences villagers and can call for help.",
-        "Scientist: Analyzes monster weaknesses and crafts items."};
-    vector<string> heroFiles = {
+    const unsigned int width = 1920, height = 1080;
+    sf::RenderWindow window(sf::VideoMode(width, height), "How to Play");
+    window.setFramerateLimit(60);
+
+    sf::Texture bg_texture;
+    bg_texture.loadFromFile("../Horrified_Assets/final.png");
+    sf::Sprite bg_sprite;
+    bg_sprite.setTexture(bg_texture);
+    bg_sprite.setScale(
+        float(width) / bg_texture.getSize().x,
+        float(height) / bg_texture.getSize().y);
+
+    sf::Font font;
+    font.loadFromFile("../Horrified_Assets/creep.ttf");
+
+    sf::Music music;
+    music.openFromFile("../sounds/hint.mp3");
+    music.setLoop(true);
+    music.play();
+
+    vector<string> hero_files = {
         "../Horrified_Assets/Heros/Archaeologist.png",
         "../Horrified_Assets/Heros/Courier.png",
         "../Horrified_Assets/Heros/Mayor.png",
         "../Horrified_Assets/Heros/Scientist.png"};
-    heroTextures.resize(heroFiles.size());
-    heroSprites.resize(heroFiles.size());
-    float startX = 100.f;
-    float y = 50.f;
-    float spacing = 220.f;
-    for (size_t i = 0; i < heroFiles.size(); ++i)
-    {
-        if (!heroTextures[i].loadFromFile(heroFiles[i]))
-        {
-            throw runtime_error("Could not load hero asset: " + heroFiles[i]);
-        }
-        heroSprites[i].setTexture(heroTextures[i]);
-        sf::Vector2u texSize = heroTextures[i].getSize();
-        float scaleX = 200.f / texSize.x;
-        float scaleY = 200.f / texSize.y;
-        heroSprites[i].setScale(scaleX, scaleY);
-        heroSprites[i].setPosition(startX + i * spacing, y);
-    }
+    vector<string> hero_names = {"Archaeologist", "Courier", "Mayor", "Scientist"};
+    vector<string> hero_descriptions = {
+        "can pick up item from a neghibour house",
+        "Courier: teleport your self to your team mate",
+        "Mayor: guid the villager to their safe location to win.",
+        "Scientist: increase items power to win"};
 
-    monsterNames = {"Drakula", "Invisible Man"};
-    monsterDescriptions = {
-        "Drakula: Can mesmerize and drain villagers. Avoid his gaze!",
-        "Invisible Man: Sneaks around unseen, sabotaging your plans."};
-    vector<string> monsterFiles = {
+    vector<string> monster_files = {
         "../Horrified_Assets/Monsters/Dracula.png",
         "../Horrified_Assets/Monsters/InvisibleMan.png"};
-    monsterTextures.resize(monsterFiles.size());
-    monsterSprites.resize(monsterFiles.size());
-    for (size_t i = 0; i < monsterFiles.size(); ++i)
-    {
-        if (!monsterTextures[i].loadFromFile(monsterFiles[i]))
-        {
-            throw runtime_error("Could not load monster asset: " + monsterFiles[i]);
-        }
-        monsterSprites[i].setTexture(monsterTextures[i]);
-        sf::Vector2u texSize = monsterTextures[i].getSize();
-        float scaleX = 200.f / texSize.x;
-        float scaleY = 200.f / texSize.y;
-        monsterSprites[i].setScale(scaleX, scaleY);
-        monsterSprites[i].setPosition(startX + (heroFiles.size() + i) * spacing, y);
-    }
+    vector<string> monster_names = {"Drakula", "Invisible Man"};
+    vector<string> monster_descriptions = {
+        "Drakula: watch his dark charem might be teleported",
+        "Invisible Man: use your item to run away,watch the nightterror"};
 
-    extraNames = {"Perk Button", "IT"};
-    extraDescriptions = {
-        "Perk Button: Grants special one-time abilities to players.",
-        "IT: Special event or item that can change the course of the game."};
-    vector<string> extraFiles = {
+    vector<string> extra_files = {
         "../Horrified_Assets/perkbut.png",
         "../Horrified_Assets/it.png"};
-    extraTextures.resize(extraFiles.size());
-    extraSprites.resize(extraFiles.size());
-    for (size_t i = 0; i < extraFiles.size(); ++i)
-    {
-        if (!extraTextures[i].loadFromFile(extraFiles[i]))
-        {
-            throw runtime_error("Could not load extra asset: " + extraFiles[i]);
-        }
-        extraSprites[i].setTexture(extraTextures[i]);
-        sf::Vector2u texSize = extraTextures[i].getSize();
-        float scaleX = 200.f / texSize.x;
-        float scaleY = 200.f / texSize.y;
-        extraSprites[i].setScale(scaleX, scaleY);
-        extraSprites[i].setPosition(startX + (heroFiles.size() + monsterFiles.size() + i) * spacing, y);
-    }
-}
+    vector<string> extra_names = {"Perk Button", "IT"};
+    vector<string> extra_descriptions = {
+        "use to get more power ,win the game befor monster card finished",
+        "IT: use them to do monsters task and kill monsters to win"};
 
-void HintMenu::draw(sf::RenderWindow &window)
-{
-    sf::Vector2u winSize = window.getSize();
-    sf::Vector2u texSize = bgTexture.getSize();
-    bgSprite.setScale(
-        float(winSize.x) / texSize.x,
-        float(winSize.y) / texSize.y);
-    window.draw(bgSprite);
-    for (size_t i = 0; i < heroSprites.size(); ++i)
-    {
-        if (hoveredIndex == int(i))
-        {
-            sf::RectangleShape highlight(sf::Vector2f(200, 200));
-            highlight.setFillColor(sf::Color(255, 255, 102, 80));
-            highlight.setPosition(heroSprites[i].getPosition());
-            window.draw(highlight);
-        }
-        window.draw(heroSprites[i]);
-    }
-    for (size_t i = 0; i < monsterSprites.size(); ++i)
-    {
-        if (hoveredIndex == int(heroSprites.size() + i))
-        {
-            sf::RectangleShape highlight(sf::Vector2f(200, 200));
-            highlight.setFillColor(sf::Color(255, 255, 102, 80));
-            highlight.setPosition(monsterSprites[i].getPosition());
-            window.draw(highlight);
-        }
-        window.draw(monsterSprites[i]);
-    }
-    for (size_t i = 0; i < extraSprites.size(); ++i)
-    {
-        if (hoveredIndex == int(heroSprites.size() + monsterSprites.size() + i))
-        {
-            sf::RectangleShape highlight(sf::Vector2f(200, 200));
-            highlight.setFillColor(sf::Color(255, 255, 102, 80));
-            highlight.setPosition(extraSprites[i].getPosition());
-            window.draw(highlight);
-        }
-        window.draw(extraSprites[i]);
-    }
-    if (showInfoBox && infoBoxIndex >= 0)
-    {
-        float scale = infoBoxAnim;
-        sf::Vector2f center(960, 540);
-        sf::Vector2f infoBoxPos = center;
-        sf::RectangleShape box(sf::Vector2f(600, 400));
-        box.setFillColor(sf::Color(30, 30, 30, 230));
-        box.setOutlineColor(sf::Color::White);
-        box.setOutlineThickness(4);
-        box.setOrigin(300, 200);
-        box.setPosition(infoBoxPos);
-        box.setScale(scale, scale);
-        window.draw(box);
-        sf::Font font;
-        if (!font.loadFromFile("../Horrified_Assets/creep.ttf"))
-            return;
-        sf::Text title, desc;
-        title.setFont(font);
-        desc.setFont(font);
-        title.setCharacterSize(40);
-        desc.setCharacterSize(28);
-        title.setFillColor(sf::Color(255, 255, 102));
-        desc.setFillColor(sf::Color(220, 220, 220));
-        std::string tStr, dStr;
-        if (infoBoxIndex < int(heroNames.size()))
-        {
-            tStr = heroNames[infoBoxIndex];
-            dStr = heroDescriptions[infoBoxIndex];
-        }
-        else if (infoBoxIndex < int(heroNames.size() + monsterNames.size()))
-        {
-            int idx = infoBoxIndex - heroNames.size();
-            tStr = monsterNames[idx];
-            dStr = monsterDescriptions[idx];
-        }
-        else
-        {
-            int idx = infoBoxIndex - heroNames.size() - monsterNames.size();
-            tStr = extraNames[idx];
-            dStr = extraDescriptions[idx];
-        }
-        title.setString(tStr);
-        desc.setString(dStr);
-        sf::FloatRect tB = title.getLocalBounds();
-        title.setOrigin(tB.width / 2, tB.height / 2);
-        title.setPosition(infoBoxPos.x, infoBoxPos.y - 60);
-        title.setScale(scale, scale);
-        sf::FloatRect dB = desc.getLocalBounds();
-        desc.setOrigin(dB.width / 2, dB.height / 2);
-        desc.setPosition(infoBoxPos.x, infoBoxPos.y + 30);
-        desc.setScale(scale, scale);
-        window.draw(title);
-        window.draw(desc);
-        sf::RectangleShape closeBtn(sf::Vector2f(40, 40));
-        closeBtn.setFillColor(sf::Color(200, 80, 80));
-        closeBtn.setOrigin(20, 20);
-        closeBtn.setPosition(infoBoxPos.x + 300 * scale - 30 * scale, infoBoxPos.y - 200 * scale + 30 * scale);
-        closeBtn.setScale(scale, scale);
-        window.draw(closeBtn);
-        sf::Text xText;
-        xText.setFont(font);
-        xText.setString("X");
-        xText.setCharacterSize(28);
-        xText.setFillColor(sf::Color::White);
-        sf::FloatRect xB = xText.getLocalBounds();
-        xText.setOrigin(xB.width / 2, xB.height / 2);
-        xText.setPosition(infoBoxPos.x + 300 * scale - 30 * scale, infoBoxPos.y - 200 * scale + 30 * scale);
-        xText.setScale(scale, scale);
-        window.draw(xText);
-    }
-    sf::Font font;
-    if (!font.loadFromFile("../Horrified_Assets/creep.ttf"))
-        return;
-    sf::Text backText;
-    backText.setFont(font);
-    backText.setString("Back");
-    backText.setCharacterSize(48);
-    backText.setFillColor(hoveredIndex == -2 ? sf::Color(255, 255, 102) : sf::Color(173, 216, 230));
-    backText.setPosition(1760, 900);
-    window.draw(backText);
-}
+    float start_x = 100.f;
+    float y = 50.f;
+    float spacing = 220.f;
 
-void HintMenu::handleEvent(const sf::Event &event, const sf::RenderWindow &window)
-{
-    if (showInfoBox)
-    {
-        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
-        {
-            sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-            sf::FloatRect closeRect(960 + 300 - 30, 540 - 200 + 30, 40, 40);
-            if (closeRect.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)))
-            {
-                showInfoBox = false;
-                infoBoxIndex = -1;
-                return;
-            }
-            sf::FloatRect boxRect(960 - 300, 540 - 200, 600, 400);
-            if (!boxRect.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)))
-            {
-                showInfoBox = false;
-                infoBoxIndex = -1;
-                return;
-            }
-        }
-        return;
-    }
-    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-    hoveredIndex = -1;
-    for (size_t i = 0; i < heroSprites.size(); ++i)
-    {
-        if (heroSprites[i].getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)))
-        {
-            hoveredIndex = static_cast<int>(i);
-            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
-            {
-                showInfoBox = true;
-                infoBoxIndex = i;
-                return;
-            }
-        }
-    }
-    for (size_t i = 0; i < monsterSprites.size(); ++i)
-    {
-        if (monsterSprites[i].getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)))
-        {
-            hoveredIndex = static_cast<int>(heroSprites.size() + i);
-            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
-            {
-                showInfoBox = true;
-                infoBoxIndex = heroSprites.size() + i;
-                return;
-            }
-        }
-    }
-    for (size_t i = 0; i < extraSprites.size(); ++i)
-    {
-        if (extraSprites[i].getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)))
-        {
-            hoveredIndex = static_cast<int>(heroSprites.size() + monsterSprites.size() + i);
-            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
-            {
-                showInfoBox = true;
-                infoBoxIndex = heroSprites.size() + monsterSprites.size() + i;
-                return;
-            }
-        }
-    }
-    sf::FloatRect backRect(1760, 900, 120, 60); // moved to right side
-    if (backRect.contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y)))
-    {
-        hoveredIndex = -2;
-        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
-        {
-            stateSelected = true;
-            selectedState = HintState::None; // Or a special value for 'back'
-            return;
-        }
-    }
-}
+    vector<sf::Texture> hero_textures(hero_files.size());
+    vector<sf::Sprite> hero_sprites(hero_files.size());
 
-HintState HintMenu::getSelectedState() const
-{
-    return selectedState;
-}
-
-bool HintMenu::isStateSelected() const
-{
-    return stateSelected;
-}
-
-void HintMenu::resetSelection()
-{
-    stateSelected = false;
-}
-
-void HintMenu::updateHighlight()
-{
-}
-
-HintState HintMenu::run()
-{
-    const unsigned int WIDTH = 1920, HEIGHT = 1080;
-    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "How to Play");
-    window.setFramerateLimit(60);
-
-    if (!bgTexture.loadFromFile("../Horrified_Assets/final.png"))
+    for (size_t i = 0; i < hero_files.size(); ++i)
     {
-        throw runtime_error("Could not load background image");
+        hero_textures[i].loadFromFile(hero_files[i]);
+        hero_sprites[i].setTexture(hero_textures[i]);
+        sf::Vector2u tex_size = hero_textures[i].getSize();
+        float scale_x = 200.f / tex_size.x;
+        float scale_y = 200.f / tex_size.y;
+        hero_sprites[i].setScale(scale_x, scale_y);
+        hero_sprites[i].setPosition(start_x + i * spacing, y);
     }
-    bgSprite.setTexture(bgTexture);
-    bgSprite.setScale(
-        float(WIDTH) / bgTexture.getSize().x,
-        float(HEIGHT) / bgTexture.getSize().y);
 
-    sf::Music music;
-    if (!music.openFromFile("../sounds/hint.mp3"))
-    {
-        throw runtime_error("Could not load hint music");
-    }
-    music.setLoop(true);
-    music.play();
+    vector<sf::Texture> monster_textures(monster_files.size());
+    vector<sf::Sprite> monster_sprites(monster_files.size());
 
-    sf::SoundBuffer clickBuffer;
-    if (!clickBuffer.loadFromFile("../sounds/click.mp3"))
+    for (size_t i = 0; i < monster_files.size(); ++i)
     {
-        throw runtime_error("Could not load click sound");
+        monster_textures[i].loadFromFile(monster_files[i]);
+        monster_sprites[i].setTexture(monster_textures[i]);
+        sf::Vector2u tex_size = monster_textures[i].getSize();
+        float scale_x = 200.f / tex_size.x;
+        float scale_y = 200.f / tex_size.y;
+        monster_sprites[i].setScale(scale_x, scale_y);
+        monster_sprites[i].setPosition(start_x + (hero_files.size() + i) * spacing, y);
     }
-    sf::Sound clickSound;
-    clickSound.setBuffer(clickBuffer);
 
-    sf::Font font;
-    if (!font.loadFromFile("../Horrified_Assets/creep.ttf"))
+    vector<sf::Texture> extra_textures(extra_files.size());
+    vector<sf::Sprite> extra_sprites(extra_files.size());
+
+    for (size_t i = 0; i < extra_files.size(); ++i)
     {
-        throw runtime_error("Could not load creep font");
+        extra_textures[i].loadFromFile(extra_files[i]);
+        extra_sprites[i].setTexture(extra_textures[i]);
+        sf::Vector2u tex_size = extra_textures[i].getSize();
+        float scale_x = 200.f / tex_size.x;
+        float scale_y = 200.f / tex_size.y;
+        extra_sprites[i].setScale(scale_x, scale_y);
+        extra_sprites[i].setPosition(start_x + (hero_files.size() + monster_files.size() + i) * spacing, y);
     }
-    *this = HintMenu(WIDTH, HEIGHT, font);
-    if (!bgTexture.loadFromFile("../Horrified_Assets/final.png"))
-    {
-        throw runtime_error("Could not load background image");
-    }
-    bgSprite.setTexture(bgTexture);
-    bgSprite.setScale(
-        float(WIDTH) / bgTexture.getSize().x,
-        float(HEIGHT) / bgTexture.getSize().y);
+
+    sf::Text back_button;
+    back_button.setFont(font);
+    back_button.setString("Back to Menu");
+    back_button.setCharacterSize(48);
+    back_button.setFillColor(sf::Color(173, 216, 230));
+    sf::FloatRect back_bounds = back_button.getLocalBounds();
+    back_button.setOrigin(back_bounds.width / 2.f, back_bounds.height / 2.f);
+    back_button.setPosition(width / 2.f, height - 100.f);
+
+    sf::Text info_text;
+    info_text.setFont(font);
+    info_text.setCharacterSize(24);
+    info_text.setFillColor(sf::Color::Yellow);
+    info_text.setPosition(width / 2.f, height / 2.f);
+    string current_info;
+
+    int hovered_index = -1;
+    bool show_info = false;
 
     while (window.isOpen())
     {
@@ -366,37 +128,135 @@ HintState HintMenu::run()
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
-                window.close();
-            int prevInfoBox = infoBoxIndex;
-            bool prevShowInfoBox = showInfoBox;
-            handleEvent(event, window);
-            if (!prevShowInfoBox && showInfoBox)
             {
-                infoBoxAnim = 0.0f;
-                infoBoxJustOpened = true;
+                window.close();
+            }
+
+            if (event.type == sf::Event::MouseMoved)
+            {
+                sf::Vector2i mouse_pos = sf::Mouse::getPosition(window);
+                hovered_index = -1;
+
+                for (size_t i = 0; i < hero_files.size(); ++i)
+                {
+                    if (hero_sprites[i].getGlobalBounds().contains(static_cast<float>(mouse_pos.x), static_cast<float>(mouse_pos.y)))
+                    {
+                        hovered_index = static_cast<int>(i);
+                        break;
+                    }
+                }
+
+                if (hovered_index == -1)
+                {
+                    for (size_t i = 0; i < monster_files.size(); ++i)
+                    {
+                        int global_i = static_cast<int>(hero_files.size() + i);
+                        if (monster_sprites[i].getGlobalBounds().contains(static_cast<float>(mouse_pos.x), static_cast<float>(mouse_pos.y)))
+                        {
+                            hovered_index = global_i;
+                            break;
+                        }
+                    }
+                }
+
+                if (hovered_index == -1)
+                {
+                    for (size_t i = 0; i < extra_files.size(); ++i)
+                    {
+                        int global_i = static_cast<int>(hero_files.size() + monster_files.size() + i);
+                        if (extra_sprites[i].getGlobalBounds().contains(static_cast<float>(mouse_pos.x), static_cast<float>(mouse_pos.y)))
+                        {
+                            hovered_index = global_i;
+                            break;
+                        }
+                    }
+                }
+
+                // Check back button
+                if (hovered_index == -1 && back_button.getGlobalBounds().contains(static_cast<float>(mouse_pos.x), static_cast<float>(mouse_pos.y)))
+                {
+                    hovered_index = -2;
+                }
+            }
+
+            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
+            {
+                if (hovered_index == -2)
+                {
+                    music.stop();
+                    sf::sleep(sf::seconds(0.2f));
+                    window.close();
+                    return 0;
+                }
+                else if (hovered_index >= 0)
+                {
+                    show_info = true;
+                    
+                    if (hovered_index < hero_files.size())
+                    {
+                        current_info = hero_descriptions[hovered_index];
+                    }
+                    else if (hovered_index < hero_files.size() + monster_files.size())
+                    {
+                        size_t monster_index = hovered_index - hero_files.size();
+                        current_info = monster_descriptions[monster_index];
+                    }
+                    else if (hovered_index < hero_files.size() + monster_files.size() + extra_files.size())
+                    {
+                        size_t extra_index = hovered_index - hero_files.size() - monster_files.size();
+                        current_info = extra_descriptions[extra_index];
+                    }
+                }
             }
         }
-        if (showInfoBox && infoBoxAnim < 1.0f)
+
+        if (hovered_index == -2)
         {
-            infoBoxAnim += 0.12f;
-            if (infoBoxAnim > 1.0f)
-                infoBoxAnim = 1.0f;
+            back_button.setFillColor(sf::Color(255, 255, 102));
         }
-        if (!showInfoBox)
+        else
         {
-            infoBoxAnim = 1.0f;
-            infoBoxJustOpened = false;
+            back_button.setFillColor(sf::Color(173, 216, 230));
         }
-        window.clear(sf::Color::Black);
-        draw(window);
+
+        info_text.setString(current_info);
+        sf::FloatRect text_bounds = info_text.getLocalBounds();
+        info_text.setOrigin(text_bounds.width / 2.f, text_bounds.height / 2.f);
+        info_text.setPosition(width / 2.f, height / 2.f);
+
+        window.clear();
+        window.draw(bg_sprite);
+
+        for (size_t i = 0; i < hero_files.size(); ++i)
+        {
+            window.draw(hero_sprites[i]);
+        }
+        for (size_t i = 0; i < monster_files.size(); ++i)
+        {
+            window.draw(monster_sprites[i]);
+        }
+        for (size_t i = 0; i < extra_files.size(); ++i)
+        {
+            window.draw(extra_sprites[i]);
+        }
+
+        if (show_info)
+        {
+            sf::RectangleShape text_bg;
+            text_bg.setSize(sf::Vector2f(800.f, 100.f));
+            text_bg.setFillColor(sf::Color(0, 0, 0, 180));
+            text_bg.setOutlineColor(sf::Color::White);
+            text_bg.setOutlineThickness(2.f);
+            text_bg.setOrigin(400.f, 50.f);
+            text_bg.setPosition(width / 2.f, height / 2.f);
+            window.draw(text_bg);
+
+            window.draw(info_text);
+        }
+
+        window.draw(back_button);
         window.display();
-        if (isStateSelected())
-        {
-            music.stop();
-            sf::sleep(sf::seconds(0.3f));
-            window.close();
-        }
     }
-    music.stop();
-    return getSelectedState();
+
+    return 0;
 }

@@ -19,7 +19,7 @@ class villager;
 class programm
 {
 public:
-  static constexpr int maxn = 19;
+  static constexpr int maxn = 10000;
   int night_terror = 0;
   std::vector<location *> list_of_location;
   std::vector<item *> list_of_items;
@@ -28,6 +28,7 @@ public:
   std::vector<monster *> monster_list;
   std::vector<monster_card *> monster_card_list;
   vector<hero *> hero_list;
+  std::vector<int> vec = {15, 13, 3, 4, 9};
 
 public:
   perk *set_award(int);
@@ -39,6 +40,6 @@ public:
   void run(bool);
   programm();
   ~programm();
-  void save_game(const std::string file_name);
+  void save_game(const std::string file_name,std::vector<int>&);
   void load_game(std::string);
 };

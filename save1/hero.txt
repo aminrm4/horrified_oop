@@ -1,12 +1,14 @@
 Mayor
-11
-4
-no_item 
+14
+5
+Torch 5 
 end_of_item 
+Repel 
 end_of_perk 
 Archaeologist
-12
+7
 4
-no_item 
+Telescope 2 
 end_of_item 
+VisitFromTheDetective 
 end_of_perk 

@@ -12,6 +12,9 @@
 #include "item.hpp"
 #include "free_func.hpp"
 #include "scientist.hpp"
+#include "Archaeologist.hpp"
+#include "Mayor.hpp"
+#include "courier.hpp"
 void remove_hero(programm &, hero *);
 void remove_villager(programm &, villager *);
 void remove_monster(programm &, monster *);
@@ -781,6 +784,7 @@ void hero::save_game(const string file_name)
 }
 void hero::load_game(std::string file_name, programm &bug)
 {
+
     for (auto l : bug.list_of_location)
     {
         if (!l->get_item_list().empty())
@@ -793,92 +797,107 @@ void hero::load_game(std::string file_name, programm &bug)
         }
     }
 
-    for (auto pe : this->perk_have)
-    {
-        bug.list_of_perks.push_back(pe);
-    }
-    this->perk_have.clear();
     fs::path dir = file_name;
-    if (this->name_of_hero == "mayor")
-    {
-        file_name = dir / "mayor.txt";
-    }
-    else if (this->name_of_hero == "archaeologist.txt")
-    {
-        file_name = dir / "archaeologist.txt";
-    }
-    else if (this->name_of_hero == "scientist")
-    {
-        file_name = dir / "scientist";
-    }
-    else if (this->name_of_hero == "courier")
-    {
-        file_name = dir / "courier";
-    }
+    file_name = dir / "hero.txt";
+
     ifstream loader(file_name);
     if (!loader)
     {
-        cerr << "hero file can not opend" << endl;
+        throw invalid_argument("hero file can not opend");
     }
-
+    programm temp;
     int loc_num;
     int act;
     string item_have;
+    string namer;
     string perk_have;
-    loader >> this->name_of_hero;
-    loader >> loc_num;
-    this->move(bug.list_of_location[loc_num], bug);
-    loader >> act;
-    this->set_action(act);
-    while (loader >> item_have)
+    while (loader >> namer >> loc_num >> act)
     {
-        if (item_have != "no_item")
+
+        if (namer == "Mayor")
+        {
+            bug.hero_list.push_back(new Mayor(act, bug.list_of_location[loc_num], temp.list_of_perks));
+        }
+        else if (namer == "Archaeologist")
         {
 
-            if (item_have == "end_of_item")
+            bug.hero_list.push_back(new Archaeologist(act, bug.list_of_location[loc_num], temp.list_of_perks));
+        }
+        else if (namer == "Courier")
+        {
+            bug.hero_list.push_back(new courier(act, bug.list_of_location[loc_num], temp.list_of_perks));
+        }
+
+        else if (namer == "Scientist")
+        {
+            bug.hero_list.push_back(new scientist(act, bug.list_of_location[loc_num], temp.list_of_perks));
+        }
+
+        while (loader >> item_have)
+        {
+            if (item_have != "no_item")
+            {
+
+                if (item_have == "end_of_item")
+                {
+                    break;
+                }
+                for (int i = 0; i < bug.list_of_items.size(); i++)
+                {
+                    if (item_have == bug.list_of_items[i]->get_name())
+                    {
+                        for (auto he : bug.hero_list)
+                        {
+                            if (he->get_hero_name() == namer)
+                            {
+                                he->item_have.push_back(bug.list_of_items[i]);
+                                bug.list_of_items.erase(bug.list_of_items.begin() + i);
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            else
             {
                 break;
             }
-            for (int i = 0; i < bug.list_of_items.size(); i++)
+        }
+
+        while (loader >> perk_have)
+        {
+            if (perk_have != "no_perk")
             {
-                if (item_have == bug.list_of_items[i]->get_name())
+                if (perk_have == "end_of_perk")
                 {
-                    this->item_have.push_back(bug.list_of_items[i]);
-                    bug.list_of_items.erase(bug.list_of_items.begin() + i);
                     break;
                 }
-            }
-        }
-        else
-        {
-            break;
-        }
-    }
 
-    while (loader >> perk_have)
-    {
-        if (perk_have != "no_perk")
-        {
-            if (perk_have == "end_of_perk")
+                for (int i = 0; i < bug.list_of_perks.size(); i++)
+                {
+
+                    if (bug.list_of_perks[i]->get_name() == perk_have)
+                    {
+                        for (auto her : bug.hero_list)
+                        {
+                            if (her->get_hero_name() == namer)
+                            {
+                                her->perk_have.clear();
+                                her->perk_have.push_back(bug.list_of_perks[i]);
+                                bug.list_of_perks.erase(bug.list_of_perks.begin() + i);
+
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            else
             {
                 break;
             }
-
-            for (int i = 0; i < bug.list_of_perks.size(); i++)
-            {
-
-                if (bug.list_of_perks[i]->get_name() == perk_have)
-                {
-                    this->perk_have.push_back(bug.list_of_perks[i]);
-                    bug.list_of_perks.erase(bug.list_of_perks.begin() + i);
-
-                    break;
-                }
-            }
-        }
-        else
-        {
-            break;
         }
     }
     loader.close();
