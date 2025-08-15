@@ -9,6 +9,7 @@
 #include <random>
 #include <memory>
 #include "Button2.hpp"
+#include "free_func.hpp"
 namespace fs = std::filesystem;
 int random_number(int min, int max);
 
@@ -58,7 +59,8 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
         int rand = distib(gen);
         if (rand == 1) // power dice aval
         {
-            cout << "dice rolled a power" << endl;
+            sf::RenderWindow window({1920, 1080}, "Horrified board game");
+            showCenteredTextBox(window, "dice rolled a power");
             vector<int> s;
             monster->ability(bug);
         }
@@ -66,6 +68,8 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
         rand = distib(gen);
         if (rand == 5 || rand == 3) // attack dice
         {
+            sf::RenderWindow window({1920, 1080}, "Horrified board game");
+            showCenteredTextBox(window, "dice rolled a attack");
             enum State
             {
                 info,

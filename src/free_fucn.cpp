@@ -1374,7 +1374,7 @@ void load_game_hero(std::string file_name, programm &bug)
     }
     loader.close();
 }
-void save_game_state(vector<int> &state, string file_name)
+void save_game_state(vector<int> &state, string file_name, programm &bug)
 {
     ofstream data_saver(file_name, ios::app);
     if (!data_saver)
@@ -1384,14 +1384,15 @@ void save_game_state(vector<int> &state, string file_name)
 
     for (auto count : state)
     {
-        data_saver << count;
+        data_saver << count << endl;
     }
+    data_saver << bug.night_terror;
     data_saver.close();
 }
 void load_game_state(string file_name, programm &bug)
 {
     bug.vec.clear();
-    int evidence=0;
+    int evidence = 0;
     fs::path dir = file_name;
     file_name = dir / "game_state.txt";
     ifstream loader(file_name);
@@ -1399,10 +1400,13 @@ void load_game_state(string file_name, programm &bug)
     {
         cerr << "load state file could not open" << endl;
     }
-    while (loader>>evidence)
+    for (size_t i = 0; i < 5; i++)
     {
+        loader >> evidence;
         bug.vec.push_back(evidence);
     }
-    loader.close();
 
+    loader >> bug.night_terror;
+
+    loader.close();
 }

@@ -1,428 +1,557 @@
-@startuml Horrified_Board_Game_UML
+@startuml Horrified_Board_Game_Class_Diagram
 
 !theme plain
 skinparam classAttributeIconSize 0
 skinparam classFontSize 10
-skinparam classFontStyle bold
+skinparam classFontName Arial
 skinparam packageFontSize 12
-skinparam packageFontStyle bold
+skinparam packageFontName Arial-Bold
 
-package "Core Game Classes" {
-    class programm {
-        + maxn: int = 19
-        + night_terror: int
-        + list_of_location: vector<location*>
-        + list_of_items: vector<item*>
-        + list_of_perks: vector<perk*>
-        + my_map: vector<vector<int>>
-        + monster_list: vector<monster*>
-        + monster_card_list: vector<monster_card*>
-        + hero_list: vector<hero*>
-        --
-        + set_award(int): perk*
-        + next_frenzy(): void
-        + bfs(int, int): vector<int>
-        + get_night_terror(): int
-        + set_night_terror(int): void
-        + check_terro_night(): bool
-        + run(): void
-        + save_game(string): void
-        + load_game(string): void
-    }
-
-    class location {
-        - loc_relation: int
-        - coffin_exist: bool
-        - villager_list: vector<villager*>
-        - item_list: vector<item*>
-        - hero_list: vector<hero*>
-        - monster_list: vector<monster*>
-        --
-        + set_coffin_exist(bool): void
-        + set_villager(villager*): void
-        + set_loc_relation(int): void
-        + set_item_list(item*): void
-        + set_hero_list(hero*): void
-        + set_monster_list(monster*): void
-        + get_loc_relation(): int
-        + get_coffin_exist(): bool
-        + get_villager_list(): vector<villager*>&
-        + get_item_list(): vector<item*>&
-        + get_hero_list(): vector<hero*>&
-        + get_monster_list(): vector<monster*>&
-        + delete_item(): void
-        + delete_villager_list(): void
-        + delete_monster_list(): void
-        + save_game(string): void
-        + load_game(string, programm&): void
-    }
+' Main Game Controller
+class programm {
+  + static constexpr int maxn = 10000
+  + int night_terror = 0
+  + std::vector<location *> list_of_location
+  + std::vector<item *> list_of_items
+  + std::vector<perk *> list_of_perks
+  + std::vector<std::vector<int>> my_map
+  + std::vector<monster *> monster_list
+  + std::vector<monster_card *> monster_card_list
+  + std::vector<hero *> hero_list
+  + std::vector<int> vec = {15, 13, 3, 4, 9}
+  --
+  + perk *set_award(int)
+  + void next_frenzy()
+  + std::vector<int> bfs(int s, int t)
+  + int get_night_terror()
+  + void set_night_terror(int)
+  + bool check_terro_night()
+  + void run(bool)
+  + programm()
+  + ~programm()
+  + void save_game(const std::string file_name, std::vector<int>&)
+  + void load_game(std::string)
 }
 
-package "Character Classes" {
-    abstract class hero {
-        # loc: location*
-        # action: int
-        # item_have: vector<item*>
-        # perk_have: vector<perk*>
-        # name_of_hero: string
-        --
-        + {abstract} special_action(map, programm&, window): void
-        + advance(monsters, programm&, window, route): void
-        + guide(map, programm&, window, programm&): void
-        + defeat(monsters, programm&, window): void
-        + move(location*, programm&): void
-        + get_action(): int
-        + set_perks(vector<perk*>): void
-        + get_perks(): vector<perk*>&
-        + set_item(vector<item*>): void
-        + get_items(): vector<item*>&
-        + pickup(window, programm&): void
-        + set_action(int): void
-        + get_loc(): location*
-        + get_hero_name(): string
-        + use_perk(programm&, window): void
-        + save_game(string): void
-        + load_game(string, programm&): void
-        + ability(string, window): void
-    }
-
-    class Archaeologist {
-        + special_action(map, programm&, window): void
-    }
-
-    class Courier {
-        + special_action(map, programm&, window): void
-    }
-
-    class Mayor {
-        + special_action(map, programm&, window): void
-    }
-
-    class Scientist {
-        + special_action(map, programm&, window): void
-    }
-
-    abstract class monster {
-        # is_freenzy: bool
-        # freenzy_order: int
-        # loc: location*
-        # name_of_monster: string
-        # totla_hidden_item: int
-        # did_attack: bool
-        --
-        + {abstract} ability(programm&): void
-        + get_freenzy_status(): bool
-        + move_to_place(route, number_route, programm&): void
-        + set_loc(location*): void
-        + get_loc(): location*
-        + get_is_frenzy(): bool
-        + get_frenzy_order(): int
-        + set_is_frenzy(bool): void
-        + set_frenzy_order(int): void
-        + get_mons_name(): string
-        + get_hidden_item(): int&
-        + get_did_attack(): bool
-        + set_did_attack(bool): void
-        + save_game(string): void
-        + load_game(string, programm&): void
-    }
-
-    class Drakula {
-        + ability(programm&): void
-    }
-
-    class invisible_man {
-        + ability(programm&): void
-        + set_remain_hidden_item(int): void
-    }
-
-    class villager {
-        - name: string
-        - safe_location: location*
-        - current_location: location*
-        - award: perk*
-        --
-        + set_name(string): void
-        + set_current_location(location*): void
-        + get_currnet_location(): location*
-        + get_safe_location(): location*
-        + drop_the_perk(): perk*
-        + get_name(): string
-        + save_game(string): void
-        + load_game(string, programm&): void
-        + set_award(perk*): void
-    }
+' Abstract Base Classes
+abstract class hero {
+  # location *loc
+  # int action
+  # std::vector<item *> item_have
+  # std::vector<perk *> perk_have
+  # std::string name_of_hero
+  --
+  + {abstract} void special_action(std::vector<std::vector<int>> &map, programm &bug, sf::RenderWindow &window)
+  + void advance(std::vector<monster *> &monsters, programm &bug, sf::RenderWindow &window, std::vector<int>&)
+  + void guide(std::vector<std::vector<int>> &map, programm &, sf::RenderWindow &window, programm &bug)
+  + void defeat(std::vector<monster *> &monsters, programm &bug, sf::RenderWindow &window)
+  + void move(location *loc, programm &bug)
+  + int get_action()
+  + void set_perks(std::vector<perk *> perks)
+  + std::vector<perk *> &get_perks()
+  + void set_item(std::vector<item *> items)
+  + std::vector<item *> &get_items()
+  + void pickup(sf::RenderWindow &window, programm &bug)
+  + void set_action(int)
+  + location *get_loc()
+  + std::string get_hero_name()
+  + hero(std::vector<perk *> &)
+  + void use_perk(programm &, sf::RenderWindow &window)
+  + void save_game(const std::string)
+  + void load_game(std::string, programm &bug)
+  + void ability(std::string, sf::RenderWindow &window)
+  + ~hero()
 }
 
-package "Game Elements" {
-    class item {
-        - power: int
-        - name: string
-        - color: rgb::Color
-        - loc: location*
-        --
-        + get_power(): int
-        + get_name(): string
-        + get_Color(): rgb::Color
-        + get_loc(): location*
-        + set_power(int): void
-        + save_game(string): void
-        + load_game(string, programm&): void
-    }
-
-    abstract class perk {
-        + name: string
-        --
-        + get_name(): string
-        + {abstract} play(programm&, window, hero*): void
-        + save_game(string): void
-        + load_game(string, programm&): void
-    }
-
-    class repel {
-        + play(programm&, window, hero*): void
-    }
-
-    class hurry {
-        + play(programm&, window, hero*): void
-    }
-
-    class late_into_night {
-        + play(programm&, window, hero*): void
-    }
-
-    class break_of_down {
-        + play(programm&, window, hero*): void
-    }
-
-    class overstock {
-        + play(programm&, window, hero*): void
-    }
-
-    class visit_from_detective {
-        + play(programm&, window, hero*): void
-    }
-
-    abstract class monster_card {
-        # item_count: int
-        # dice_play: int
-        # move_left: int
-        # name_of_card: string
-        --
-        + {abstract} event(map, loc, programm&): void
-        + _strike(dice_attack, move, programm&, monster*): void
-        + {abstract} monster_strike(programm&, monsters): void
-        + item_handler(programm&): void
-        + get_item_count(): int
-        + get_dice_play(): int
-        + get_move_count(): int
-        + getName(): string
-        + save_game(string): void
-        + load_game(string, programm&): void
-    }
-
-    class Egyptian_Expert {
-        + event(map, loc, programm&): void
-        + monster_strike(programm&, monsters): void
-    }
-
-    class Former_Employer {
-        + event(map, loc, programm&): void
-        + monster_strike(programm&, monsters): void
-    }
-
-    class Fortune_Teller {
-        + event(map, loc, programm&): void
-        + monster_strike(programm&, monsters): void
-    }
-
-    class Hurried_Assistant {
-        + event(map, loc, programm&): void
-        + monster_strike(programm&, monsters): void
-    }
-
-    class Hypnotic_Gaze {
-        + event(map, loc, programm&): void
-        + monster_strike(programm&, monsters): void
-    }
-
-    class On_the_move {
-        + event(map, loc, programm&): void
-        + monster_strike(programm&, monsters): void
-    }
-
-    class Sunrise {
-        + event(map, loc, programm&): void
-        + monster_strike(programm&, monsters): void
-    }
-
-    class The_chthyologist {
-        + event(map, loc, programm&): void
-        + monster_strike(programm&, monsters): void
-    }
-
-    class The_Delivery {
-        + event(map, loc, programm&): void
-        + monster_strike(programm&, monsters): void
-    }
-
-    class The_Innocent {
-        + event(map, loc, programm&): void
-        + monster_strike(programm&, monsters): void
-    }
-
-    class Thief {
-        + event(map, loc, programm&): void
-        + monster_strike(programm&, monsters): void
-    }
-
-    class form_of_the_bat {
-        + event(map, loc, programm&): void
-        + monster_strike(programm&, monsters): void
-    }
+abstract class monster {
+  # bool is_freenzy
+  # int freenzy_order
+  # location *loc
+  # std::string name_of_monster
+  # int totla_hidden_item
+  # bool did_attack = false
+  --
+  + {abstract} void ability(programm &bug)
+  + bool get_freenzy_status()
+  + void move_to_place(std::vector<int> &route, int number_route, programm &bug)
+  + void set_loc(location *)
+  + location *get_loc()
+  + bool get_is_frenzy()
+  + int get_frenzy_order()
+  + void set_is_frenzy(bool)
+  + void set_frenzy_order(int)
+  + std::string get_mons_name()
+  + int &get_hidden_item()
+  + bool get_did_attack()
+  + void set_did_attack(bool did_attack)
+  + void save_game(const std::string)
+  + void load_game(std::string, programm &)
+  + ~monster()
 }
 
-package "UI Classes" {
-    class Menu {
-        - menuItems: vector<sf::Text>
-        - selectedState: MenuState
-        - hoveredIndex: int
-        - stateSelected: bool
-        --
-        + draw(window): void
-        + handleEvent(event, window): void
-        + getSelectedState(): MenuState
-        + isStateSelected(): bool
-        + resetSelection(): void
-        + run(): MenuState
-        - updateHighlight(): void
-    }
-
-    class Button {
-        - shape: sf::RectangleShape
-        - font: sf::Font
-        - label: sf::Text
-        - position: sf::Vector2f
-        --
-        + draw(window): void
-        + isClicked(event, window): bool
-        + getPosButton(): sf::Vector2f
-    }
-
-    class Button2 {
-        + draw(window): void
-        + isClicked(event, window): bool
-        + getPosButton(): sf::Vector2f
-    }
-
-    class TextInputBox {
-        + draw(window): void
-        + handleEvent(event): void
-        + getText(): string
-        + setText(string): void
-    }
-
-    class HintMenu {
-        + draw(window): void
-        + handleEvent(event, window): void
-        + run(): void
-    }
-
-    class LoadGameMenu {
-        + draw(window): void
-        + handleEvent(event, window): void
-        + run(): LoadGameState
-    }
+abstract class perk {
+  + std::string name
+  --
+  + std::string get_name()
+  + {abstract} void play(programm &help_obj1, sf::RenderWindow &window, hero *her=nullptr)
+  + perk()
+  + virtual ~perk()
+  + void save_game(const std::string)
+  + void load_game(std::string, programm &)
 }
 
-package "Utility Classes" {
-    class Color {
-        + r: int
-        + g: int
-        + b: int
-        --
-        + Color(int, int, int)
-        + getR(): int
-        + getG(): int
-        + getB(): int
-    }
-
-    class map1 {
-        + load_map(): vector<vector<int>>
-        + save_map(vector<vector<int>>): void
-    }
-
-    class load_game {
-        + load_save_file(string): void
-        + save_save_file(string): void
-    }
-
-    class massage {
-        + show_message(string): void
-    }
+abstract class monster_card {
+  # int item_count
+  # int dice_play
+  # int move_left
+  # std::string name_of_card
+  --
+  + {abstract} void event(std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
+  + void _strike(int dice_attack, int move, programm &bug, monster *monsters)
+  + {abstract} void monster_strike(programm &bug, std::vector<monster *> &monsters)
+  + void item_handler(programm &help_object)
+  + int get_item_count()
+  + int get_dice_play()
+  + int get_move_count()
+  + virtual ~monster_card()
+  + void save_game(const std::string)
+  + void load_game(std::string, programm&)
+  + std::string getName()
 }
 
-' Inheritance Relationships
+' Location and Map
+class location {
+  - int loc_relation
+  - bool coffin_exist
+  - std::vector<villager *> villager_list
+  - std::vector<item *> item_list
+  - std::vector<hero *> hero_list
+  - std::vector<monster *> monster_list
+  --
+  + void set_coffin_exist(bool)
+  + void set_villager(villager *)
+  + void set_loc_relation(int)
+  + void set_item_list(item *)
+  + void set_hero_list(hero *)
+  + void set_monster_list(monster *)
+  + int get_loc_relation() const
+  + bool get_coffin_exist() const
+  + std::vector<villager *> &get_villager_list()
+  + std::vector<item *> &get_item_list()
+  + std::vector<hero *> &get_hero_list()
+  + std::vector<monster *> &get_monster_list()
+  + location(int relation, bool coffin)
+  + void delete_item()
+  + void delete_villager_list()
+  + void delete_monster_list()
+  + ~location()
+  + void save_game(std::string)
+  + void load_game(std::string, programm &)
+}
+
+enum map1 {
+  hospital = 0
+  grave_yard = 1
+  church = 2
+  institute = 3
+  laboratory = 4
+  shop = 5
+  museum = 6
+  cryptt = 7
+  abbey = 8
+  mansion = 9
+  theatre = 10
+  tower = 11
+  docks = 12
+  inn = 13
+  precinct = 14
+  barn = 15
+  dungeon = 16
+  cave = 17
+  camp = 18
+}
+
+' Item and Color System
+class item {
+  - int power
+  - std::string name
+  - rgb::Color color
+  - location *loc
+  --
+  + item(int, std::string, rgb::Color, location *)
+  + int get_power()
+  + std::string get_name()
+  + rgb::Color get_Color()
+  + location *get_loc()
+  + void set_power(int)
+  + ~item()
+  + void save_game(const std::string)
+  + void load_game(std::string, programm &)
+}
+
+namespace rgb {
+  enum Color {
+    Red
+    Blue
+    Yellow
+  }
+}
+
+' Villager System
+class villager {
+  - std::string name
+  - location *safe_location
+  - location *current_location
+  - perk *award
+  --
+  + void set_name(std::string)
+  + void set_current_location(location *)
+  + villager(std::string, location *, location *, programm &help_object)
+  + ~villager()
+  + location *get_currnet_location()
+  + location *const get_safe_location()
+  + perk *drop_the_perk()
+  + std::string get_name()
+  + void save_game(const std::string)
+  + void load_game(std::string, programm &)
+  + void set_award(perk *)
+}
+
+' Hero Implementations (CORRECTED - only 4 actual heroes)
+class Archaeologist {
+  --
+  + void special_action(std::vector<std::vector<int>> &map, programm &bug, sf::RenderWindow &window)
+  + Archaeologist(int, location *, std::vector<perk *> &)
+}
+
+class scientist {
+  --
+  + void special_action(std::vector<std::vector<int>> &map, programm &bug, sf::RenderWindow &window)
+  + scientist(int, location *, std::vector<perk *> &)
+}
+
+class courier {
+  --
+  + void special_action(std::vector<std::vector<int>> &map, programm &bug, sf::RenderWindow &window)
+  + courier(int, location *, std::vector<perk *> &)
+}
+
+class Mayor {
+  --
+  + void special_action(std::vector<std::vector<int>> &map, programm &bug, sf::RenderWindow &window)
+  + Mayor(int, location *, std::vector<perk *> &)
+}
+
+' Monster Implementations
+class Drakula {
+  --
+  + void ability(programm &bug)
+  + Drakula(int coffin, bool is_freenzy, int freenzy_order, location *ptr)
+}
+
+' Monster Card Implementations (CORRECTED - these are NOT heroes!)
+class Thief {
+  --
+  + void event(std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
+  + void monster_strike(programm &bug, std::vector<monster *> &monsters)
+  + void set_item(int item_count)
+  + Thief(int dic, int my_item, int mover)
+}
+
+class The_Innocent {
+  --
+  + void event(std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
+  + void monster_strike(programm &bug, std::vector<monster *> &monsters)
+  + void set_item(int item_count)
+  + The_Innocent(int dic, int my_item, int mover)
+}
+
+class The_Delivery {
+  --
+  + void event(std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
+  + void monster_strike(programm &bug, std::vector<monster *> &monsters)
+  + void set_item(int item_count)
+  + The_Delivery(int dic, int my_item, int mover)
+}
+
+class The_chthyologist {
+  --
+  + void event(std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
+  + void monster_strike(programm &bug, std::vector<monster *> &monsters)
+  + void set_item(int item_count)
+  + The_chthyologist(int dic, int my_item, int mover)
+}
+
+class Sunrise {
+  --
+  + void event(std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
+  + void monster_strike(programm &bug, std::vector<monster *> &monsters)
+  + void set_item(int item_count)
+  + Sunrise(int dic, int my_item, int mover)
+}
+
+class On_the_move {
+  --
+  + void event(std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
+  + void monster_strike(programm &bug, std::vector<monster *> &monsters)
+  + void set_item(int item_count)
+  + On_the_move(int dic, int my_item, int mover)
+}
+
+class Hypnotic_Gaze {
+  --
+  + void event(std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
+  + void monster_strike(programm &bug, std::vector<monster *> &monsters)
+  + void set_item(int item_count)
+  + Hypnotic_Gaze(int dic, int my_item, int mover)
+}
+
+class Hurried_Assistant {
+  --
+  + void event(std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
+  + void monster_strike(programm &bug, std::vector<monster *> &monsters)
+  + void set_item(int item_count)
+  + Hurried_Assistant(int dic, int my_item, int mover)
+}
+
+class Fortune_Teller {
+  --
+  + void event(std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
+  + void monster_strike(programm &bug, std::vector<monster *> &monsters)
+  + void set_item(int item_count)
+  + Fortune_Teller(int dic, int my_item, int mover)
+}
+
+class Former_Employer {
+  --
+  + void event(std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
+  + void monster_strike(programm &bug, std::vector<monster *> &monsters)
+  + void set_item(int item_count)
+  + Former_Employer(int, int, int mover)
+}
+
+class form_of_the_bat {
+  --
+  + void event(std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
+  + void monster_strike(programm &bug, std::vector<monster *> &monsters)
+  + void set_item(int item_count)
+  + int get_item()
+  + form_of_the_bat(int dic, int my_item, int mover)
+}
+
+class Egyptian_Expert {
+  --
+  + void event(std::vector<std::vector<int>> &map, std::vector<location *> &loc, programm &a)
+  + void monster_strike(programm &bug, std::vector<monster *> &monsters)
+  + void set_item(int item_count)
+  + Egyptian_Expert(int dic, int my_item, int mover)
+}
+
+' Perk Implementations
+class repel {
+  --
+  + void play(programm &help_obj1, sf::RenderWindow &window, hero *her=nullptr)
+  + repel()
+  + ~repel()
+}
+
+class hurry {
+  --
+  + void play(programm &help_obj1, sf::RenderWindow &window, hero *her=nullptr)
+  + hurry()
+  + ~hurry()
+}
+
+class visit_from_detective {
+  --
+  + void play(programm &help_obj1, sf::RenderWindow &window, hero *her=nullptr)
+  + visit_from_detective()
+  + ~visit_from_detective()
+}
+
+class overstock {
+  --
+  + void play(programm &help_obj1, sf::RenderWindow &window, hero *her=nullptr)
+  + overstock()
+  + ~overstock()
+}
+
+class late_into_night {
+  --
+  + void play(programm &help_obj1, sf::RenderWindow &window, hero *her=nullptr)
+  + late_into_night()
+  + ~late_into_night()
+}
+
+class break_of_down {
+  --
+  + void play(programm &help_obj1, sf::RenderWindow &window, hero *her=nullptr)
+  + break_of_down()
+  + ~break_of_down()
+}
+
+class massage {
+  --
+  + void play(programm &help_obj1, sf::RenderWindow &window, hero *her=nullptr)
+  + massage()
+  + ~massage()
+}
+
+' UI Components
+class Button {
+  - sf::RectangleShape shape
+  - sf::Font font
+  - sf::Text label
+  - sf::Vector2f position
+  --
+  + Button(const sf::Vector2f& size, const sf::Vector2f& position, const std::string& text)
+  + void draw(sf::RenderWindow& window)
+  + bool isClicked(const sf::Event& event, const sf::RenderWindow& window)
+  + sf::Vector2f getPosButton()
+}
+
+class Button2 {
+  - sf::RectangleShape shape
+  - sf::Font font
+  - sf::Text label
+  - sf::Vector2f position
+  --
+  + Button2(const sf::Vector2f& size, const sf::Vector2f& position, const std::string& text)
+  + void draw(sf::RenderWindow& window)
+  + bool isClicked(const sf::Event& event, const sf::RenderWindow& window)
+  + sf::Vector2f getPosButton()
+}
+
+class TextInputBox {
+  - sf::RectangleShape box
+  - sf::Text text
+  - sf::Font font
+  - std::string input
+  - bool isActive
+  --
+  + TextInputBox(sf::Vector2f position, sf::Vector2f size)
+  + void handleEvent(const sf::Event& event, const sf::RenderWindow& window)
+  + void draw(sf::RenderWindow& window, std::string massage)
+  + std::string getInput() const
+  + void clear()
+  + sf::Vector2f getPos()
+}
+
+' Menu System
+class Menu {
+  - std::vector<sf::Text> buttons
+  - int hovered_index
+  --
+  + int run()
+}
+
+class LoadGameMenu {
+  - std::string clickedButton
+  - sf::RenderWindow window
+  --
+  + LoadGameMenu()
+  + std::string run()
+}
+
+class HintMenu {
+  --
+  + int run()
+}
+
+' Utility Functions
+class free_func {
+  --
+  + int showLocationTextBox(sf::RenderWindow &window, programm &bug, hero &herr)
+  + void showCenteredTextBox(sf::RenderWindow &window, const std::string &text)
+  + void showAssetInBox(sf::RenderWindow &window, const std::string &directory, const std::string &assetName)
+  + std::string showTextInputBox(sf::RenderWindow &window, const std::string &prompt)
+  + int extractNumber(const std::string &pathStr)
+  + std::string showHerovillagerBox(sf::RenderWindow &window, int loc_selec, programm &bug)
+  + std::string showHeroPerksBox(sf::RenderWindow &window, hero *heroPtr)
+  + std::string showHeroitemBox(sf::RenderWindow &window, int loc_selec, programm &bug)
+  + std::string show_hero_on_location(sf::RenderWindow &window, programm &bug)
+  + int show_all_location(sf::RenderWindow &window, programm &bug)
+  + int show_monster_location(sf::RenderWindow &window, programm &bug, monster* monn)
+  + void playSound(std::string SoundDir)
+  + std::string show_hero_item_have(sf::RenderWindow &window, hero *heroPtr)
+  + std::string show_monster_asset(sf::RenderWindow &window, const std::string &monster_folder_path)
+  + std::string show_folder_save(sf::RenderWindow &window)
+  + void load_game_hero(std::string file_name, programm &bug)
+  + void save_game_state(std::vector<int>&, std::string, programm &bug)
+  + void load_game_state(std::string file_name, programm &bug)
+}
+
+' CORRECTED Inheritance Relationships
 hero <|-- Archaeologist
-hero <|-- Courier
+hero <|-- scientist
+hero <|-- courier
 hero <|-- Mayor
-hero <|-- Scientist
 
 monster <|-- Drakula
-monster <|-- invisible_man
 
 perk <|-- repel
 perk <|-- hurry
+perk <|-- visit_from_detective
+perk <|-- overstock
 perk <|-- late_into_night
 perk <|-- break_of_down
-perk <|-- overstock
-perk <|-- visit_from_detective
+perk <|-- massage
 
-monster_card <|-- Egyptian_Expert
-monster_card <|-- Former_Employer
-monster_card <|-- Fortune_Teller
-monster_card <|-- Hurried_Assistant
-monster_card <|-- Hypnotic_Gaze
-monster_card <|-- On_the_move
-monster_card <|-- Sunrise
-monster_card <|-- The_chthyologist
-monster_card <|-- The_Delivery
-monster_card <|-- The_Innocent
 monster_card <|-- Thief
+monster_card <|-- The_Innocent
+monster_card <|-- The_Delivery
+monster_card <|-- The_chthyologist
+monster_card <|-- Sunrise
+monster_card <|-- On_the_move
+monster_card <|-- Hypnotic_Gaze
+monster_card <|-- Hurried_Assistant
+monster_card <|-- Fortune_Teller
+monster_card <|-- Former_Employer
 monster_card <|-- form_of_the_bat
+monster_card <|-- Egyptian_Expert
 
-' Association Relationships
-programm ||--o{ location : contains
-programm ||--o{ item : manages
-programm ||--o{ perk : manages
-programm ||--o{ monster : controls
-programm ||--o{ monster_card : manages
-programm ||--o{ hero : controls
+' Associations
+programm ||--o{ location : "manages"
+programm ||--o{ item : "contains"
+programm ||--o{ perk : "provides"
+programm ||--o{ monster : "controls"
+programm ||--o{ monster_card : "uses"
+programm ||--o{ hero : "manages"
 
-location ||--o{ villager : contains
-location ||--o{ item : contains
-location ||--o{ hero : contains
-location ||--o{ monster : contains
+hero ||--o{ location : "occupies"
+hero ||--o{ item : "carries"
+hero ||--o{ perk : "has"
+hero ||--o{ programm : "interacts with"
 
-hero ||--o{ item : has
-hero ||--o{ perk : has
-hero ||--|| location : at
+monster ||--o{ location : "occupies"
+monster ||--o{ programm : "controlled by"
 
-monster ||--|| location : at
+location ||--o{ villager : "contains"
+location ||--o{ item : "contains"
+location ||--o{ hero : "contains"
+location ||--o{ monster : "contains"
 
-villager ||--|| location : at
-villager ||--o| perk : has
+villager ||--o{ location : "located in"
+villager ||--o{ perk : "drops"
 
-item ||--|| location : at
+item ||--o{ location : "found in"
+item ||--o{ rgb::Color : "has color"
 
-' UI Relationships
-Menu ||--o{ Button : uses
-LoadGameMenu ||--o{ Button : uses
-HintMenu ||--o{ Button : uses
+monster_card ||--o{ programm : "affects"
 
-' Utility Relationships
-programm ||--|| map1 : uses
-programm ||--|| load_game : uses
-programm ||--|| massage : uses
+' UI Associations
+Menu ||--o{ Button : "contains"
+LoadGameMenu ||--o{ Button : "contains"
+HintMenu ||--o{ Button : "contains"
+
+' Notes
+note top of programm : "Main Game Controller\nManages game state, monsters, heroes, and locations"
+note top of hero : "Abstract base class for all playable characters\nOnly 4 actual hero implementations"
+note top of monster : "Abstract base class for all enemy entities\nMonsters have AI behavior and frenzy states"
+note top of location : "Represents game board locations\nContains items, NPCs, heroes, and monsters"
+note top of perk : "Abstract base class for special abilities\nPerks provide strategic advantages to heroes"
+note top of monster_card : "Abstract base class for monster action cards\nControls monster behavior and events\nMany classes I initially thought were heroes are actually monster cards!"
+
+note right of map1 : "Enumeration of all game locations\nUsed for navigation and positioning"
 
 @enduml 

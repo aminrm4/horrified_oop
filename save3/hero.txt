@@ -1,11 +1,11 @@
-Archaeologist
-2
-4
+Mayor
+6
+5
 no_item 
 end_of_item 
-LateIntoTheNight 
+VisitFromTheDetective 
 end_of_perk 
-Courier
+Archaeologist
 0
 4
 no_item 
