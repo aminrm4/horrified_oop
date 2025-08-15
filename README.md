@@ -1,18 +1,27 @@
 # 🎲 Horrified Board Game 👻
 
-> A thrilling cooperative Graphic-based board game adventure where heroes battle classic monsters to save a small town!
+> A thrilling cooperative C++ board game adventure where heroes battle classic monsters to save a small town from darkness!
 
 <p align="center">
   <img src="https://img.shields.io/badge/C%2B%2B-20-blue.svg" alt="C++20"/>
   <img src="https://img.shields.io/badge/SFML-2.5+-green.svg" alt="SFML"/>
   <img src="https://img.shields.io/badge/CMake-3.11+-orange.svg" alt="CMake"/>
+  <img src="https://img.shields.io/badge/License-Educational-brightgreen.svg" alt="License"/>
 </p>
 
 ---
 
 ## 🎮 About the Game
 
-**Horrified** is an immersive cooperative board game experience that brings classic horror monsters to life in your terminal. Players take on the roles of heroic characters racing against time to save a small town from legendary creatures like Dracula, The Invisible Man, and other iconic monsters.
+**Horrified** is an immersive cooperative board game experience built in C++ that brings classic horror monsters to life on your screen. Players take on the roles of heroic characters racing against time to save a small town from legendary creatures like Dracula, The Invisible Man, and other iconic monsters.
+
+This project demonstrates advanced C++ programming concepts including:
+
+- **Object-Oriented Design** with inheritance and polymorphism
+- **Game State Management** with save/load functionality
+- **Graphics Programming** using SFML
+- **Algorithm Implementation** (BFS pathfinding, game logic)
+- **Memory Management** and resource handling
 
 ### 🖼️ Game Screenshots
 
@@ -31,24 +40,47 @@ _The interactive game board showing locations, characters, and the terror track_
 ![Monster Cards](Horrified_Assets/extra_assets/game_board.png)
 _Collection of monster action cards that dictate game events and monster behavior_
 
-### 🎯 Game Features
+---
 
-- **🏃‍♂️ Cooperative Gameplay:** Work together with up to 5 players to defeat monsters before they unleash chaos
+## 🎯 Game Features
+
+### 🎮 Core Gameplay
+
+- **🏃‍♂️ Cooperative Experience:** Work together with up to 5 players to defeat monsters before they unleash chaos
 - **👹 Dynamic Monster AI:** Each monster has unique abilities and behavior patterns that adapt throughout the game
 - **🗺️ Modular Map System:** Explore a town with multiple locations, each offering different strategic opportunities
 - **⚔️ Hero Abilities & Items:** Choose from various heroes with special powers and collect items to enhance your capabilities
+
+### 🛠️ Technical Features
+
 - **🎲 Perk System:** Unlock and use special perks that provide strategic advantages
 - **💾 Save/Load System:** Save your progress and continue your adventure later
 - **🎵 Audio Experience:** Immersive sound effects and background music
 - **🎨 Rich Visual Assets:** Beautiful graphics and animations using SFML
+- **🔍 Pathfinding:** Intelligent monster movement using BFS algorithm
+- **📊 Game State Management:** Comprehensive save/load system for multiple save slots
 
-### 🎪 Game Mechanics
+---
 
-- **Turn-Based Strategy:** Plan your moves carefully as each action counts
-- **Resource Management:** Collect and manage items, perks, and abilities
-- **Monster Frenzy:** Monsters become more dangerous as the game progresses
-- **Location-Based Actions:** Different locations offer unique opportunities and challenges
-- **Villager Rescue:** Protect innocent townspeople from monster attacks
+## 🎪 Game Mechanics
+
+### 🎲 Turn-Based Strategy
+
+- **Action Points:** Each hero has limited actions per turn - plan carefully!
+- **Movement System:** Navigate between locations on the map strategically
+- **Combat Resolution:** Engage monsters with items, perks, and special abilities
+
+### 🏘️ Location-Based Gameplay
+
+- **Strategic Positioning:** Different locations offer unique opportunities and challenges
+- **Resource Collection:** Gather items and perks from various town locations
+- **Villager Protection:** Rescue innocent townspeople from monster attacks
+
+### 👻 Monster Behavior
+
+- **Frenzy System:** Monsters become more dangerous as the game progresses
+- **AI Movement:** Intelligent pathfinding and behavior patterns
+- **Special Abilities:** Each monster has unique powers and weaknesses
 
 ---
 
@@ -89,7 +121,7 @@ sudo dnf install gcc-c++ cmake SFML-devel
 ### 1. Clone the Repository
 
 ```bash
-git clone https://codeberg.org/Ali_kermani/horrified_board_game
+git clone https://github.com/SSCBasu/horrified_board_game
 cd horrified_board_game
 ```
 
@@ -120,7 +152,7 @@ make -j$(nproc)
 
 ### 🎪 Game Setup
 
-1. **Choose Your Hero:** Select from available characters (Archaeologist, Courier, Mayor, Scientist)
+1. **Choose Your Hero:** Select from available characters with unique abilities
 2. **Select Monsters:** Choose which monsters to face in your adventure
 3. **Plan Your Strategy:** Coordinate with other players to defeat the monsters
 
@@ -145,29 +177,70 @@ make -j$(nproc)
 
 ---
 
-## 🏗️ Project Structure
+## 🏗️ Project Architecture
+
+### 📁 Directory Structure
 
 ```
 horrified_board_game/
 ├── src/                    # Source files
-│   ├── main.cpp           # Entry point
-│   ├── programm.cpp       # Main game logic
+│   ├── main.cpp           # Entry point and game loop
+│   ├── programm.cpp       # Main game logic and state management
 │   ├── hero.cpp           # Hero class implementations
 │   ├── monster.cpp        # Monster class implementations
-│   └── ...                # Other game components
+│   ├── location.cpp       # Location and map management
+│   ├── item.cpp           # Item system implementation
+│   ├── perk.cpp           # Perk and ability system
+│   ├── villager.cpp       # NPC and villager management
+│   ├── free_func.cpp      # Utility functions and helpers
+│   ├── load_game.cpp      # Save/load system
+│   ├── hint.cpp           # Game help and tutorial system
+│   ├── starting_menu.cpp  # Main menu interface
+│   └── ...                # Additional game components
 ├── include/               # Header files
 │   ├── hero.hpp           # Hero class definitions
 │   ├── monster.hpp        # Monster class definitions
+│   ├── location.hpp       # Location class definitions
+│   ├── programm.hpp       # Main game class definitions
 │   └── ...                # Other headers
 ├── Horrified_Assets/      # Game assets
 │   ├── Heros/            # Hero character sprites
 │   ├── Monsters/         # Monster sprites
 │   ├── Items/            # Item graphics
-│   └── ...               # Other assets
+│   └── extra_assets/     # UI and menu assets
 ├── sounds/               # Audio files
-├── save1/                # Save game files
-└── CMakeLists.txt        # Build configuration
+├── save1/ - save5/       # Save game directories
+├── build/                # Build output directory
+├── CMakeLists.txt        # Build configuration
+└── horrified_uml.puml   # UML class diagram
 ```
+
+### 🏛️ Class Architecture
+
+#### Core Game Classes
+
+- **`programm`**: Main game controller managing game state, monsters, and heroes
+- **`hero`**: Abstract base class for all playable characters
+- **`monster`**: Abstract base class for all enemy entities
+- **`location`**: Represents game board locations with items, NPCs, and monsters
+- **`item`**: Collectible objects that provide benefits
+- **`perk`**: Special abilities and bonuses
+
+#### Hero Implementations
+
+- **`Archaeologist`**: Expert in ancient artifacts and monster lore
+- **`Courier`**: Fast movement and delivery abilities
+- **`Mayor`**: Leadership skills and town influence
+- **`Scientist`**: Advanced research and item creation
+- **`Thief`**: Stealth and lockpicking abilities
+- **`The_Innocent`**: Special survivor mechanics
+
+#### Monster Implementations
+
+- **`Drakula`**: Classic vampire with hypnotic powers
+- **`Invisible_man`**: Stealth and surprise attacks
+- **`form_of_the_bat`**: Shapeshifting abilities
+- **`The_chthyologist`**: Aquatic monster with water-based powers
 
 ---
 
@@ -175,18 +248,27 @@ horrified_board_game/
 
 ### 🦸‍♂️ Heroes
 
+Each hero has unique abilities and starting perks:
+
 - **Archaeologist:** Expert in ancient artifacts and monster lore
 - **Courier:** Fast movement and delivery abilities
 - **Mayor:** Leadership skills and town influence
 - **Scientist:** Advanced research and item creation
+- **Thief:** Stealth and lockpicking abilities
+- **The Innocent:** Special survivor mechanics
 
 ### 👹 Monsters
 
+Each monster presents unique challenges:
+
 - **Dracula:** Classic vampire with hypnotic powers
 - **Invisible Man:** Stealth and surprise attacks
-- **Additional monsters** with unique abilities and behaviors
+- **Form of the Bat:** Shapeshifting abilities
+- **The Ichthyologist:** Aquatic monster with water-based powers
 
 ### 🏘️ Villagers
+
+Protect these innocent townspeople:
 
 - **Dr. Cranly:** Town doctor with medical knowledge
 - **Dr. Reed:** Scientific expertise
@@ -202,42 +284,22 @@ horrified_board_game/
 
 ### 🔧 Building for Development
 
-For development with VS Code, create a `.vscode/c_cpp_properties.json` file:
-
-```json
-{
-  "configurations": [
-    {
-      "name": "Linux",
-      "compileCommands": "${workspaceFolder}/build/compile_commands.json",
-      "includePath": [
-        "${workspaceFolder}/include",
-        "${workspaceFolder}/src",
-        "/usr/include/SFML"
-      ],
-      "defines": [],
-      "compilerPath": "/usr/bin/g++",
-      "cStandard": "c11",
-      "cppStandard": "c++20",
-      "intelliSenseMode": "linux-gcc-x64"
-    }
-  ],
-  "version": 4
-}
-```
+For development with VS Code, the project includes a `.vscode/` directory with configuration files for IntelliSense and debugging.
 
 ### 🐛 Debugging Tips
 
 - Use `Ctrl+Shift+P` and reset IntelliSense database if needed
 - Check console output for error messages
 - Verify SFML installation with `pkg-config --modversion sfml-all`
+- Use the included UML diagram for understanding class relationships
 
----
+### 📊 UML Diagram
 
-## 📊 UML Diagram
+The project includes a comprehensive UML class diagram:
 
-View the complete class diagram and architecture:
-[UML Diagram](https://www.plantuml.com/plantuml/png/bLTTSzIy5RxVNw616Uga2KE0yE6132b92XTCEmtJMuyidrshAqiUITxWqFxtIhBsH5fitZTSx72Uy_XywqZvP2pLTkZ4ocovxAcc7M626aD-hWZv9sqQBZVax8KJlb6zuPASdRl_NsgjxcwKjBVy7iZPImSzIA-TT6j1Wx9Z3pdhRvHjDreDilciXDBawStLpPlhLrwZT0CwekVlti3RyzN_3gEwj5RpUh3mbIaPhBwO3VoBqlpUEQRYjgVCft3kK_WtQCjP2ZeNgx-GZuV_oBKSElChlWA7auxsPy4D8QqoFNTko4SNYGSsckwW6gbk77GM8DOEchLEV1b4BetbrkNWa5S14RHMcbgbHmUz3f1fLU-4yo1qWu6XS-ARoPuUUskT-3Q8jAx1V_Xkub9fk99EVXzasmAr6dmmKu1MtO7suXHSezZMU74VdFJ255UlmPM9MOzCOTLK1_qKLpF83QW0nCXSxbvw6wMkzzAxfI9_zls2kJBJsbXDcOqjRK6hMF2dH2XM-XzgNPx74QJCIwMBtqQ4M-YgrWLKaXqmg_G7ZnnVH7KFUfkhFO9gIJkerBhodalYWd7ZiWgwlnBJ0-DKL9FFegCzsjXxalRYuiG7YHeC-E8ecg7DZae6HQUaiQ0DKYDmx2pKmwOalLORJRjk_-5cu0qikvt_g84rKFjuPvtQGP6NV2aiiFkI764ZVBaSxcjhYl1xK6_y6bb71undYHtVGbE4twojYHra7UKCjDDpjXtwuWZDOjZ94ANcNEBU6EQVgFnuL7vMF25EYHlsW_7rUP2VyJFFHYvQEZGIGnLqB5eGVQNg_wGLTpucqpwrQFgKzFveFvJ-DFCL8QQ4SXozgSioBDk8vosEenxC5mzcJpAB9xyQEpcmatNNcy7HM4mS5TwuusUnBZS5Iu8GbiK1bGP1iRbOYlMQomf-S6DBKYibecB7XQ0Rq9Nm6Zna4OqxuZGK9wTu1DL-DdArHr0T3rxEYA0Z9TEPnbdig1XWYZQTu7rmnQua66XAI8iGZU2SHmhcK_0o99SPm7IAjWovPTeqcw8hzzbb0v25S3W7UPP7KuQ9Ekc9ryzqvHcoqrGMjW2UtaEMnt8MffOJ8-ovE7eX68wJDtV-35r3jH_HT7xZJ0vQWxI_OT0xgfkIXDs8Kx8_Hwd3j3s7Pek5Opf7NLXzcCWIgT6ghsmBOQqxGWmPBVpntembnfkVcsgjGTwFE1qUdQ1AwGQNt-8x0U_rQ1gTJrghB1LLovi6P9YXr5x3cufQIzaske-fq9eBRiTYyVgihAfwGHaKMWtMzIUvhf-vbJfqDUxNtCYVkuImB3F79YqEdhb7Tw1Y_ZtxCtrPCJL8cvU7WKzpJC6Gle1rP4RNi0Df7_rkEl5rcIjnZD4diOMy3ITUE_FOURX1aOeNjB7E8ICT_I5zrE7r-pxg9D-qjd8cjD9fCVrky6ErZtOc_0Fct1lcW3BtNDhdF5OBvKF6xwyN965xSsQgGVhYZHRrUd2BOEcn_rKwChTKCfXvy7j3vCD_Jq_9fMOj1INKnZbAy6zqL7hbgp39jGQwzMLgr9rCy7RGUanaGIrKN5fLXUOb6hK3RQnYsmJJq8D8v1qtt9yYrLKDM62Mxs0LYpCnhZJT3eBc89V-mrg0QvDSfSMSzDURiRUSokhwX_DbPnXhfJkVdL-WDPrZt3Y60wwxNgWHz3p33XAgxo34BE7Be3M7fheqXXjBfPtZZBrKbhFgx_GUPlJ_a276JktcjBU3rDpCQRwxZrXhsp6sUe5o1SALN8yBwgzIAWPo_ciEw_bP_5TyXPYMzsPf6fMpWM_9i7aH3olGOVWtveCcZCvqrqsQ5TeupZyC9odJullXuGqtGmgkfYVOZ7O_XcMs0LOudZDPhN057kVAmws6n3ILRA6b3An5jizondoqEIVhR9c9ENk-Ecu0hg07sO1a78m_MAG3swh6J5rx_lo2F9bPf4-yCzgJdZhZO44_qD5ZYQRIi1vXClyiDnskoTKd5_hGYVy3)
+- **File:** `horrified_uml.puml`
+- **Visual:** `uml.drawio.png`
+- **Tool:** PlantUML compatible
 
 ---
 
@@ -257,13 +319,20 @@ We welcome contributions! Please feel free to submit issues, feature requests, o
 - Explain how it would improve the game
 - Consider implementation complexity
 
+### 🔧 Development Guidelines
+
+- Follow the existing code style and architecture
+- Add appropriate header documentation
+- Test your changes thoroughly
+- Update the UML diagram if adding new classes
+
 ---
 
 ## 📝 License
 
 This project is licensed under the **Basu University Computer Engineering Department** as an advanced programming project.
 
-For more information, visit: [https://codeberg.org/SSCES](https://codeberg.org/SSCES)
+For more information, visit: [https://github.com/SSCBasu](https://github.com/SSCBasu)
 
 ---
 
@@ -277,8 +346,9 @@ For more information, visit: [https://codeberg.org/SSCES](https://codeberg.org/S
 ## 🙏 Acknowledgements
 
 - **SFML Team** for the excellent multimedia library
-- **Basu University** for educational support
+- **Basu University** for educational support and guidance
 - **Open Source Community** for inspiration and tools
+- **Game Design Community** for board game mechanics inspiration
 
 ---
 
@@ -286,11 +356,34 @@ For more information, visit: [https://codeberg.org/SSCES](https://codeberg.org/S
 
 If you encounter any issues or have questions:
 
-1. Check the [Issues](https://codeberg.org/Ali_kermani/horrified_board_game/issues) page
+1. Check the [Issues](https://github.com/SSCBasu/horrified_board_game/issues) page
 2. Review the installation requirements
 3. Ensure all dependencies are properly installed
 4. Contact the development team
 
 ---
 
+## 🎯 Future Enhancements
+
+### 🚀 Planned Features
+
+- **Multiplayer Support:** Network-based cooperative gameplay
+- **Additional Monsters:** More classic horror creatures
+- **Enhanced Graphics:** Improved visual effects and animations
+- **Sound Design:** More immersive audio experience
+- **Mobile Support:** Cross-platform compatibility
+
+### 🔧 Technical Improvements
+
+- **Performance Optimization:** Better memory management and rendering
+- **Mod Support:** User-created content and modifications
+- **AI Enhancement:** More sophisticated monster behavior
+- **Accessibility:** Better UI for different user needs
+
+---
+
 **🎮 Ready to face the horrors? Start your adventure now!**
+
+<p align="center">
+  <em>Built with ❤️ by Computer Engineering students at Basu University</em>
+</p>
