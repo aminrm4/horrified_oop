@@ -17,7 +17,7 @@ std::string show_hero_item_have(sf::RenderWindow &window, hero *heroPtr);
 std::string show_monster_asset(sf::RenderWindow &window, const std::string &monster_folder_path);
 std::string show_folder_save(sf::RenderWindow &window);
 void load_game_hero(std::string file_name, programm &bug);
-void save_game_state(std::vector<int>&,std::string);
+void save_game_state(std::vector<int>&,std::string,programm & bug);
 void load_game_state(std::string file_name,programm & bug);
 
 

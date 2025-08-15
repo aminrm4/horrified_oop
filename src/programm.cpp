@@ -111,7 +111,7 @@ void programm::save_game(string file_name,vector<int>&st)
   }
   
   full_path = dir / "game_state.txt";
-  save_game_state(st,full_path.string());
+  save_game_state(st,full_path.string(),*this);
 
 }
 
