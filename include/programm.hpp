@@ -40,6 +40,8 @@ public:
   void run(bool);
   programm();
   ~programm();
+  void CheckItemsPouchEmpty();
+
   void save_game(const std::string file_name,std::vector<int>&);
   void load_game(std::string);
 };

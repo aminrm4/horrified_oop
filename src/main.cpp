@@ -7,10 +7,11 @@
 int main()
 {
     string detector;
-    programm obj1;
 
     while (true)
     {
+        programm obj1;
+
         Menu menu;
         int selected = menu.run();
 
