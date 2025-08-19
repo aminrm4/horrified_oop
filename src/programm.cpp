@@ -48,7 +48,7 @@ int random_number(int min, int max)
 
 namespace fs = std::filesystem;
 
-void programm::save_game(string file_name,vector<int>&st)
+void programm::save_game(string file_name, vector<int> &st)
 {
   fs::path dir = file_name;
   if (!fs::is_empty(dir))
@@ -86,9 +86,8 @@ void programm::save_game(string file_name,vector<int>&st)
   }
   for (auto he : hero_list)
   {
-    full_path=dir/"hero.txt";
+    full_path = dir / "hero.txt";
     he->save_game(full_path.string());
-    
   }
   full_path = dir / "monster_card.txt";
   for (auto ca : monster_card_list)
@@ -109,10 +108,9 @@ void programm::save_game(string file_name,vector<int>&st)
   {
     loc->save_game(full_path.string());
   }
-  
-  full_path = dir / "game_state.txt";
-  save_game_state(st,full_path.string(),*this);
 
+  full_path = dir / "game_state.txt";
+  save_game_state(st, full_path.string(), *this);
 }
 
 void programm::load_game(string file_name)
@@ -146,7 +144,7 @@ void programm::load_game(string file_name)
     pe->load_game(file_name, *this);
     break;
   }
-  load_game_state(file_name,*this);
+  load_game_state(file_name, *this);
 }
 programm::programm()
 {
@@ -408,7 +406,6 @@ programm::programm()
   {
     i->get_loc()->set_hero_list(i);
   }
-
 }
 std::vector<int> programm::bfs(int s, int t)
 {
@@ -468,9 +465,9 @@ void programm::set_night_terror(int value)
   if (night_terror == 5)
   {
     cout << "the night terror level reached 5 \n";
-    cin.get();
+    // cin.get();
     cout << "Game over ";
-    exit(0);
+    // exit(0); // test
   }
 }
 void programm::next_frenzy()
@@ -716,11 +713,121 @@ void showInvisiblemanMat(sf::RenderWindow &window, vector<int> &map_check)
     window.display();
   }
 }
+
+void programm::CheckItemsPouchEmpty()
+{
+  if (list_of_items.empty())
+  {
+    list_of_items.push_back(new item(2, "Flower", rgb::Color::Yellow, list_of_location[12]));
+    list_of_items.push_back(new item(2, "Flower", rgb::Color::Yellow, list_of_location[12]));
+
+    list_of_items.push_back(new item(3, "Tarot", rgb::Color::Yellow, list_of_location[18]));
+    list_of_items.push_back(new item(3, "Tarot", rgb::Color::Yellow, list_of_location[18]));
+
+    list_of_items.push_back(new item(2, "Garlic", rgb::Color::Yellow, list_of_location[13]));
+    list_of_items.push_back(new item(2, "Garlic", rgb::Color::Yellow, list_of_location[13]));
+
+    list_of_items.push_back(new item(3, "Mirrored_Box", rgb::Color::Yellow, list_of_location[9]));
+    list_of_items.push_back(new item(3, "Mirrored_Box", rgb::Color::Yellow, list_of_location[9]));
+
+    list_of_items.push_back(new item(3, "Stake", rgb::Color::Yellow, list_of_location[8]));
+    list_of_items.push_back(new item(3, "Stake", rgb::Color::Yellow, list_of_location[8]));
+
+    list_of_items.push_back(new item(4, "Scroll", rgb::Color::Yellow, list_of_location[6]));
+    list_of_items.push_back(new item(4, "Scroll", rgb::Color::Yellow, list_of_location[6]));
+
+    list_of_items.push_back(new item(3, "Violin", rgb::Color::Yellow, list_of_location[18]));
+    list_of_items.push_back(new item(3, "Violin", rgb::Color::Yellow, list_of_location[18]));
+
+    list_of_items.push_back(new item(3, "Tablet", rgb::Color::Yellow, list_of_location[6]));
+    list_of_items.push_back(new item(3, "Tablet", rgb::Color::Yellow, list_of_location[6]));
+
+    list_of_items.push_back(new item(4, "Wolfsbane", rgb::Color::Yellow, list_of_location[18]));
+    list_of_items.push_back(new item(4, "Wolfsbane", rgb::Color::Yellow, list_of_location[18]));
+
+    list_of_items.push_back(new item(4, "Charm", rgb::Color::Yellow, list_of_location[18]));
+    list_of_items.push_back(new item(4, "Charm", rgb::Color::Yellow, list_of_location[18]));
+
+    // red items
+    list_of_items.push_back(new item(2, "Dart", rgb::Color::Red, list_of_location[13]));
+    list_of_items.push_back(new item(2, "Dart", rgb::Color::Red, list_of_location[13]));
+
+    list_of_items.push_back(new item(3, "FirePoker", rgb::Color::Red, list_of_location[9]));
+    list_of_items.push_back(new item(3, "FirePoker", rgb::Color::Red, list_of_location[9]));
+
+    list_of_items.push_back(new item(5, "Rapier", rgb::Color::Red, list_of_location[10]));
+    list_of_items.push_back(new item(5, "Rapier", rgb::Color::Red, list_of_location[10]));
+
+    list_of_items.push_back(new item(2, "Shovel", rgb::Color::Red, list_of_location[1]));
+    list_of_items.push_back(new item(2, "Shovel", rgb::Color::Red, list_of_location[1]));
+
+    list_of_items.push_back(new item(5, "Torch", rgb::Color::Red, list_of_location[15]));
+    list_of_items.push_back(new item(5, "Torch", rgb::Color::Red, list_of_location[15]));
+
+    list_of_items.push_back(new item(4, "Pitchfork", rgb::Color::Red, list_of_location[15]));
+    list_of_items.push_back(new item(4, "Pitchfork", rgb::Color::Red, list_of_location[15]));
+
+    list_of_items.push_back(new item(6, "Rifle", rgb::Color::Red, list_of_location[15]));
+    list_of_items.push_back(new item(6, "Rifle", rgb::Color::Red, list_of_location[15]));
+
+    list_of_items.push_back(new item(6, "SilverCane", rgb::Color::Red, list_of_location[5]));
+    list_of_items.push_back(new item(6, "SilverCane", rgb::Color::Red, list_of_location[5]));
+
+    list_of_items.push_back(new item(3, "Knife", rgb::Color::Red, list_of_location[12]));
+    list_of_items.push_back(new item(3, "Knife", rgb::Color::Red, list_of_location[12]));
+
+    list_of_items.push_back(new item(6, "Pistol", rgb::Color::Red, list_of_location[14]));
+    list_of_items.push_back(new item(6, "Pistol", rgb::Color::Red, list_of_location[14]));
+
+    list_of_items.push_back(new item(4, "BearTrap", rgb::Color::Red, list_of_location[5]));
+    list_of_items.push_back(new item(4, "BearTrap", rgb::Color::Red, list_of_location[5]));
+
+    list_of_items.push_back(new item(4, "Speargun", rgb::Color::Red, list_of_location[3]));
+    list_of_items.push_back(new item(4, "Speargun", rgb::Color::Red, list_of_location[3]));
+
+    // blue items
+    list_of_items.push_back(new item(1, "AnatomyText", rgb::Color::Blue, list_of_location[3]));
+    list_of_items.push_back(new item(1, "AnatomyText", rgb::Color::Blue, list_of_location[3]));
+
+    list_of_items.push_back(new item(1, "Centrifuge", rgb::Color::Blue, list_of_location[4]));
+    list_of_items.push_back(new item(1, "Centrifuge", rgb::Color::Blue, list_of_location[4]));
+
+    list_of_items.push_back(new item(1, "Kite", rgb::Color::Blue, list_of_location[11]));
+    list_of_items.push_back(new item(1, "Kite", rgb::Color::Blue, list_of_location[11]));
+
+    list_of_items.push_back(new item(2, "Research", rgb::Color::Blue, list_of_location[11]));
+    list_of_items.push_back(new item(2, "Research", rgb::Color::Blue, list_of_location[11]));
+
+    list_of_items.push_back(new item(2, "Telescope", rgb::Color::Blue, list_of_location[9]));
+    list_of_items.push_back(new item(2, "Telescope", rgb::Color::Blue, list_of_location[9]));
+
+    list_of_items.push_back(new item(2, "Searchlight", rgb::Color::Blue, list_of_location[14]));
+    list_of_items.push_back(new item(2, "Searchlight", rgb::Color::Blue, list_of_location[14]));
+
+    list_of_items.push_back(new item(2, "Experiments", rgb::Color::Blue, list_of_location[4]));
+    list_of_items.push_back(new item(2, "Experiments", rgb::Color::Blue, list_of_location[4]));
+
+    list_of_items.push_back(new item(2, "Analysis", rgb::Color::Blue, list_of_location[3]));
+    list_of_items.push_back(new item(2, "Analysis", rgb::Color::Blue, list_of_location[3]));
+
+    list_of_items.push_back(new item(3, "Rotenone", rgb::Color::Blue, list_of_location[3]));
+    list_of_items.push_back(new item(3, "Rotenone", rgb::Color::Blue, list_of_location[3]));
+
+    list_of_items.push_back(new item(3, "CosmicRayDiffuser", rgb::Color::Blue, list_of_location[11]));
+    list_of_items.push_back(new item(3, "CosmicRayDiffuser", rgb::Color::Blue, list_of_location[11]));
+
+    list_of_items.push_back(new item(3, "Nebularium", rgb::Color::Blue, list_of_location[11]));
+    list_of_items.push_back(new item(3, "Nebularium", rgb::Color::Blue, list_of_location[11]));
+
+    list_of_items.push_back(new item(3, "MonocaneMixture", rgb::Color::Blue, list_of_location[13]));
+    list_of_items.push_back(new item(3, "MonocaneMixture", rgb::Color::Blue, list_of_location[13]));
+
+    list_of_items.push_back(new item(3, "Fossil", rgb::Color::Blue, list_of_location[18]));
+    list_of_items.push_back(new item(3, "Fossil", rgb::Color::Blue, list_of_location[18]));
+  }
+}
 void programm::run(bool loadingSave)
 {
-  
-
- 
 
   vector<pair<string, int>> usersinfo(2);
   enum initstate
@@ -731,7 +838,8 @@ void programm::run(bool loadingSave)
     heroSelection1,
     heroSelection2,
     exit,
-    playmenu
+    playmenu,
+    End
   };
   sf::Texture Frenzy;
 
@@ -1066,8 +1174,8 @@ void programm::run(bool loadingSave)
       }
 
       if (event.type == sf::Event::Closed)
-      {//sdfsdfsdsdf
-        if (state == initstate::playmenu)
+      { // sdfsdfsdsdf
+        if (state == initstate::playmenu || state == initstate::End)
         {
           string folder;
           char detector;
@@ -1075,7 +1183,7 @@ void programm::run(bool loadingSave)
           if (detector == 'y')
           {
             folder = show_folder_save(window);
-            this->save_game("../save" + folder,vec);
+            this->save_game("../save" + folder, vec);
           }
 
           window.setActive(false);
@@ -1142,8 +1250,9 @@ void programm::run(bool loadingSave)
       if (!scientist.get_status())
         scientist.draw(window);
     }
-    if (state == initstate::playmenu)
+    if (state == initstate::playmenu || state == initstate::End)
     {
+
       items.draw(window);
       perks.draw(window);
       move.draw(window);
@@ -1262,6 +1371,39 @@ void programm::run(bool loadingSave)
 
       window.draw(NightTerrorSprite);
       invisiblemanMat.draw(window);
+
+      {
+
+        massage Goodbye({600.f, 450.f}, "", sf::Color::Red, 64);
+
+        bool isEnded = false;
+        if (monster_list.size() == 0)
+        {
+          Goodbye.set_massage("Victory");
+          state =initstate::End ;
+        }
+        
+          
+        if (monster_card_list.size() == 0 || night_terror >= 5)
+        {
+          Goodbye.set_massage("Game Over");
+          state =initstate::End;
+        }
+        
+          
+
+        sf::RectangleShape fade({1920, 1080});
+        fade.setFillColor(sf::Color(0, 0, 0, 175));
+
+         if(state == initstate::End)
+          {
+            window.draw(fade);
+            Goodbye.draw(window);
+          }
+  // end the game and
+      }
+      std::thread t2(&programm::CheckItemsPouchEmpty, this); // there is a bug here that i cant use thread of this func cuz program shuts down and gives no error or anything when arrives here
+      t2.detach();
     }
     if (state == initstate::infopage)
     {

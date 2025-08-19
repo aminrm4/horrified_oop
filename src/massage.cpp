@@ -16,3 +16,7 @@ void massage::draw(sf::RenderWindow &window)
 {
     window.draw(output);
 }
+void massage::set_massage(std::string massage)
+{
+    this->output.setString(massage);
+}
