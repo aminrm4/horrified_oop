@@ -1,7 +1,0 @@
-Archaeologist
-12
-4
-no_item 
-end_of_item 
-BreakOfDawn 
-end_of_perk 
