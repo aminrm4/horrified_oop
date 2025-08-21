@@ -51,6 +51,11 @@ namespace fs = std::filesystem;
 void programm::save_game(string file_name, vector<int> &st)
 {
   fs::path dir = file_name;
+  if (!fs::exists(dir))
+  {
+      fs::create_directory(dir);   //added to create the folder if not exist
+  }
+  
   if (!fs::is_empty(dir))
   {
     for (auto const &entry : fs::directory_iterator(dir))
