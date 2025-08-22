@@ -1,16 +1,14 @@
 Scientist
 2
-4
-Experiments 2 
-BearTrap 4 
-Speargun 4 
-end_of_item 
-no_perk 
-end_of_perk 
-Mayor
-17
-2
-Searchlight 2 
+1
+no_item 
 end_of_item 
 LateIntoTheNight 
+end_of_perk 
+Courier
+2
+4
+no_item 
+end_of_item 
+Hurry 
 end_of_perk 

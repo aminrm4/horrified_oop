@@ -21,8 +21,7 @@ int monster_card::get_item_count()
 }
 void monster_card::_strike(int dice_attack, int move, programm &bug, monster *monster)
 {
-  cerr << "kir";
-
+cerr<<"im in strike one"<<endl;
     // move
     vector<vector<int>> routes;
     for (int i = 0; i < bug.list_of_location.size(); i++)
@@ -226,27 +225,39 @@ void monster_card::save_game(const string file_name)
 }
 void monster_card::load_game(std::string file_name, programm &bug)
 {
-    int counter = 0;
     fs::path dir = file_name;
     file_name = dir / "monster_card.txt";
+
     ifstream loader(file_name);
     if (!loader)
-    {
-        throw invalid_argument("monster card file can not open");
-    }
+        throw runtime_error("monster card file can not open");
+
+    unordered_map<string, int> unused_counts;
     string name_card;
     while (loader >> name_card)
     {
-        counter++;
-        for (int i = 0; i < bug.monster_card_list.size(); i++)
+        unused_counts[name_card]++; 
+    }
+
+    vector<monster_card*> result;
+
+    for (auto it = bug.monster_card_list.begin(); it != bug.monster_card_list.end(); )
+    {
+        monster_card* card = *it;
+        auto found = unused_counts.find(card->name_of_card);
+
+        if (found != unused_counts.end() && found->second > 0)
         {
-            if (bug.monster_card_list[i]->name_of_card == name_card)
-            {
-                swap(bug.monster_card_list[i] , bug.monster_card_list[counter]);
-                break;
-            }
+            result.push_back(card);
+            found->second--;
+            ++it;
+        }
+        else
+        {
+            delete card;
+            it = bug.monster_card_list.erase(it);
         }
     }
-    bug.monster_card_list.erase(bug.monster_card_list.begin() + counter, bug.monster_card_list.end());
-    loader.close();
+
+    bug.monster_card_list = std::move(result);
 }

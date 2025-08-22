@@ -1387,7 +1387,6 @@ void load_game_state(string file_name, programm &bug)
     {
         int check;
         loader >> check;
-        cerr << check;
         loc->set_coffin_exist(check);
     }
     loader.close();
