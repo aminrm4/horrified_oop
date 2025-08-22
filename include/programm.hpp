@@ -29,6 +29,8 @@ public:
   std::vector<monster_card *> monster_card_list;
   vector<hero *> hero_list;
   std::vector<int> vec = {15, 13, 3, 4, 9};
+      int heroNo = 0;
+
 
 public:
   perk *set_award(int);
@@ -44,4 +46,5 @@ public:
 
   void save_game(const std::string file_name,std::vector<int>&);
   void load_game(std::string);
+
 };
