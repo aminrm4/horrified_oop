@@ -11,15 +11,12 @@ namespace fs = std::filesystem;
 using namespace std;
 int showLocationTextBox(sf::RenderWindow &window, programm &bug, hero &herr)
 {
-    // Load font
     sf::Font font;
     if (!font.loadFromFile("../Horrified_Assets/creep.ttf"))
     {
-        // Handle error
         return 0;
     }
 
-    // Prepare the text box (rectangle)
     sf::Vector2u winSize = window.getSize();
     float maxBoxWidth = 1920.f, maxBoxHeight = 1080.f;
     float boxWidth = std::min(winSize.x * 0.8f, maxBoxWidth);
@@ -31,7 +28,7 @@ int showLocationTextBox(sf::RenderWindow &window, programm &bug, hero &herr)
     textBox.setOutlineThickness(3.f);
     textBox.setPosition((winSize.x - boxSize.x) / 2, (winSize.y - boxSize.y) / 2);
 
-    // Always load images 0.png to 18.png in order
+ 
     std::vector<std::string> imageFiles;
     std::string folder = "../Horrified_Assets/loacation/";
     std::string path = folder + to_string(herr.get_loc()->get_loc_relation()) + ".png";
@@ -46,7 +43,7 @@ int showLocationTextBox(sf::RenderWindow &window, programm &bug, hero &herr)
         }
         else
         {
-            // If any file is missing, fill with empty string (or handle as needed)
+         
             imageFiles.push_back("");
         }
     }
@@ -58,11 +55,11 @@ int showLocationTextBox(sf::RenderWindow &window, programm &bug, hero &herr)
     size_t rows = 4;
     float padding = 20.f;
     float gridWidth = boxSize.x - 2 * padding;
-    float gridHeight = boxSize.y - 2 * padding - 40.f; // leave space for text
+    float gridHeight = boxSize.y - 2 * padding - 40.f; 
     float cellWidth = gridWidth / cols;
     float cellHeight = gridHeight / rows;
 
-    // Load textures and sprites
+   
     std::vector<sf::Texture> textures(numImages);
     std::vector<sf::Sprite> sprites(numImages);
     std::vector<sf::FloatRect> spriteBounds(numImages);
@@ -71,10 +68,10 @@ int showLocationTextBox(sf::RenderWindow &window, programm &bug, hero &herr)
         if (!imageFiles[i].empty() && textures[i].loadFromFile(imageFiles[i]))
         {
             sprites[i].setTexture(textures[i]);
-            // Scale to fit inside the cell
+            
             float scaleX = cellWidth / sprites[i].getLocalBounds().width;
             float scaleY = cellHeight / sprites[i].getLocalBounds().height;
-            float scale = std::min(scaleX, scaleY) * 0.9f; // add margin
+            float scale = std::min(scaleX, scaleY) * 0.9f; 
             sprites[i].setScale(scale, scale);
         }
         size_t row = i / cols;
@@ -85,7 +82,6 @@ int showLocationTextBox(sf::RenderWindow &window, programm &bug, hero &herr)
         spriteBounds[i] = sprites[i].getGlobalBounds();
     }
 
-    // Text for instructions
     sf::Text infoText("All locations. Click an image for its number, click outside to close, Esc to close", font, 24);
     infoText.setFillColor(sf::Color::White);
     infoText.setPosition(textBox.getPosition().x + 20, textBox.getPosition().y + boxSize.y - 40);
@@ -113,16 +109,16 @@ int showLocationTextBox(sf::RenderWindow &window, programm &bug, hero &herr)
                 sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
                 if (!textBox.getGlobalBounds().contains(mousePos))
                 {
-                    return -1; // Return -1 if clicked outside
+                    return -1; 
                 }
                 else
                 {
-                    // Check if clicked on any sprite
+                    
                     for (size_t i = 0; i < numImages; ++i)
                     {
                         if (!imageFiles[i].empty() && spriteBounds[i].contains(mousePos))
                         {
-                            // Return the exact number of the image clicked (0-18)
+                           
                             return extractNumber(imageFiles[i]);
                         }
                     }
@@ -144,26 +140,25 @@ int showLocationTextBox(sf::RenderWindow &window, programm &bug, hero &herr)
 
 void showCenteredTextBox(sf::RenderWindow &window, const std::string &text)
 {
-    // Load font
+  
     sf::Font font;
     if (!font.loadFromFile("../Horrified_Assets/creep.ttf"))
     {
-        // Handle error (could throw, or just return)
+    
         return;
     }
 
-    // Prepare the text
+    
     unsigned int characterSize = 32;
     sf::Text displayText(text, font, characterSize);
     displayText.setFillColor(sf::Color::White);
 
-    // Calculate size of the text box based on text bounds
     sf::FloatRect textBounds = displayText.getLocalBounds();
     float padding = 40.f;
     float boxWidth = textBounds.width + 2 * padding;
     float boxHeight = textBounds.height + 2 * padding;
 
-    // Get window size and center the box
+ 
     sf::Vector2u winSize = window.getSize();
     float boxX = (winSize.x - boxWidth) / 2.f;
     float boxY = (winSize.y - boxHeight) / 2.f;
@@ -174,7 +169,7 @@ void showCenteredTextBox(sf::RenderWindow &window, const std::string &text)
     textBox.setOutlineThickness(3.f);
     textBox.setPosition(boxX, boxY);
 
-    // Center the text inside the box
+ 
     displayText.setPosition(
         boxX + padding - textBounds.left,
         boxY + padding - textBounds.top);
@@ -222,7 +217,7 @@ void playSound(std::string SoundDir)
     sound.setBuffer(buffer);
     sound.play();
 
-    // Wait for the sound to finish before exiting the thread
+   
     while (sound.getStatus() == sf::Sound::Playing)
     {
         sf::sleep(sf::milliseconds(100));
@@ -231,19 +226,17 @@ void playSound(std::string SoundDir)
 
 void showAssetInBox(sf::RenderWindow &window, const std::string &directory, const std::string &assetName)
 {
-    // Load font for optional text (reuse style)
+    
     sf::Font font;
     font.loadFromFile("../Horrified_Assets/creep.ttf");
 
-    // Build the full path to the asset
     std::string assetPath = directory + "/" + assetName;
 
-    // Load the image as a texture
+    
     sf::Texture texture;
     texture.loadFromFile(assetPath);
     sf::Sprite sprite(texture);
 
-    // Prepare the centered box
     sf::Vector2u winSize = window.getSize();
     float maxBoxWidth = 800.f, maxBoxHeight = 600.f;
     float boxWidth = std::min(winSize.x * 0.6f, maxBoxWidth);
@@ -255,7 +248,6 @@ void showAssetInBox(sf::RenderWindow &window, const std::string &directory, cons
     box.setOutlineThickness(3.f);
     box.setPosition((winSize.x - boxSize.x) / 2, (winSize.y - boxSize.y) / 2);
 
-    // Scale the sprite to fit inside the box (with margin)
     float margin = 30.f;
     float availableWidth = boxWidth - 2 * margin;
     float availableHeight = boxHeight - 2 * margin;
@@ -263,12 +255,12 @@ void showAssetInBox(sf::RenderWindow &window, const std::string &directory, cons
     float scaleY = availableHeight / sprite.getLocalBounds().height;
     float scale = std::min(scaleX, scaleY);
     sprite.setScale(scale, scale);
-    // Center the sprite in the box
+
     float spriteX = box.getPosition().x + (boxWidth - sprite.getLocalBounds().width * scale) / 2 - sprite.getLocalBounds().left * scale;
     float spriteY = box.getPosition().y + (boxHeight - sprite.getLocalBounds().height * scale) / 2 - sprite.getLocalBounds().top * scale;
     sprite.setPosition(spriteX, spriteY);
 
-    // Optional: Add a message below the image
+ 
     sf::Text infoText("Press Esc or click outside the box to close", font, 22);
     infoText.setFillColor(sf::Color::White);
     infoText.setPosition(box.getPosition().x + 20, box.getPosition().y + boxHeight - 36);
@@ -377,7 +369,7 @@ std::string showTextInputBox(sf::RenderWindow &window, const std::string &prompt
                 }
             }
         }
-        inputText.setString(inputStr + "|"); // show cursor
+        inputText.setString(inputStr + "|"); 
         window.clear();
         window.draw(box);
         window.draw(promptText);
@@ -389,7 +381,7 @@ std::string showTextInputBox(sf::RenderWindow &window, const std::string &prompt
 
 std::string showHeroPerksBox(sf::RenderWindow &window, hero *heroPtr)
 {
-    // Get hero's perks
+   
     std::vector<perk *> &heroPerks = heroPtr->get_perks();
 
     if (heroPerks.empty())
@@ -397,7 +389,7 @@ std::string showHeroPerksBox(sf::RenderWindow &window, hero *heroPtr)
         return "";
     }
 
-    // Prepare the text box
+ 
     sf::Vector2u winSize = window.getSize();
     float maxBoxWidth = 1200.f, maxBoxHeight = 800.f;
     float boxWidth = std::min(winSize.x * 0.8f, maxBoxWidth);
@@ -409,7 +401,7 @@ std::string showHeroPerksBox(sf::RenderWindow &window, hero *heroPtr)
     textBox.setOutlineThickness(3.f);
     textBox.setPosition((winSize.x - boxSize.x) / 2, (winSize.y - boxSize.y) / 2);
 
-    // Grid layout
+    
     size_t numPerks = heroPerks.size();
     size_t cols = 3;
     size_t rows = (numPerks + cols - 1) / cols;
@@ -419,7 +411,7 @@ std::string showHeroPerksBox(sf::RenderWindow &window, hero *heroPtr)
     float cellWidth = gridWidth / cols;
     float cellHeight = gridHeight / std::max(rows, size_t(1));
 
-    // Load textures and sprites (reduced vectors)
+   
     std::vector<sf::Texture> textures(numPerks);
     std::vector<sf::Sprite> sprites(numPerks);
 
@@ -431,7 +423,7 @@ std::string showHeroPerksBox(sf::RenderWindow &window, hero *heroPtr)
         if (textures[i].loadFromFile(path))
         {
             sprites[i].setTexture(textures[i]);
-            // Scale to fit inside the cell
+           
             float scaleX = cellWidth / sprites[i].getLocalBounds().width;
             float scaleY = cellHeight / sprites[i].getLocalBounds().height;
             float scale = std::min(scaleX, scaleY) * 0.8f;
@@ -532,7 +524,7 @@ std::string showHerovillagerBox(sf::RenderWindow &window, int loc_selec, program
         if (textures[i].loadFromFile(path))
         {
             sprites[i].setTexture(textures[i]);
-            // Scale to fit inside the cell
+          
             float scaleX = cellWidth / sprites[i].getLocalBounds().width;
             float scaleY = cellHeight / sprites[i].getLocalBounds().height;
             float scale = std::min(scaleX, scaleY) * 0.8f;
@@ -627,7 +619,7 @@ std::string showHeroitemBox(sf::RenderWindow &window, int loc_selec, programm &b
         if (textures[i].loadFromFile(path))
         {
             sprites[i].setTexture(textures[i]);
-            // Scale to fit inside the cell
+        
             float scaleX = cellWidth / sprites[i].getLocalBounds().width;
             float scaleY = cellHeight / sprites[i].getLocalBounds().height;
             float scale = std::min(scaleX, scaleY) * 0.8f;
@@ -714,7 +706,7 @@ int show_all_location(sf::RenderWindow &window, programm &bug)
         }
         else
         {
-            // If any file is missing, fill with empty string (or handle as needed)
+            
             imageFiles.push_back("");
         }
     }
@@ -725,11 +717,11 @@ int show_all_location(sf::RenderWindow &window, programm &bug)
     size_t rows = 4;
     float padding = 20.f;
     float gridWidth = boxSize.x - 2 * padding;
-    float gridHeight = boxSize.y - 2 * padding - 40.f; // leave space for text
+    float gridHeight = boxSize.y - 2 * padding - 40.f; 
     float cellWidth = gridWidth / cols;
     float cellHeight = gridHeight / rows;
 
-    // Load textures and sprites
+    
     std::vector<sf::Texture> textures(numImages);
     std::vector<sf::Sprite> sprites(numImages);
     std::vector<sf::FloatRect> spriteBounds(numImages);
@@ -805,7 +797,7 @@ int show_all_location(sf::RenderWindow &window, programm &bug)
 int show_monster_location(sf::RenderWindow &window, programm &bug, monster *monn)
 {
 
-    // Prepare the text box (rectangle)
+   
     sf::Vector2u winSize = window.getSize();
     float maxBoxWidth = 1920.f, maxBoxHeight = 1080.f;
     float boxWidth = std::min(winSize.x * 0.8f, maxBoxWidth);
@@ -817,7 +809,7 @@ int show_monster_location(sf::RenderWindow &window, programm &bug, monster *monn
     textBox.setOutlineThickness(3.f);
     textBox.setPosition((winSize.x - boxSize.x) / 2, (winSize.y - boxSize.y) / 2);
 
-    // Always load images 0.png to 18.png in order
+   
     std::vector<std::string> imageFiles;
     std::string folder = "../Horrified_Assets/loacation/";
     std::string path = folder + to_string(monn->get_loc()->get_loc_relation()) + ".png";
@@ -832,7 +824,7 @@ int show_monster_location(sf::RenderWindow &window, programm &bug, monster *monn
         }
         else
         {
-            // If any file is missing, fill with empty string (or handle as needed)
+           
             imageFiles.push_back("");
         }
     }
@@ -848,7 +840,7 @@ int show_monster_location(sf::RenderWindow &window, programm &bug, monster *monn
     float cellWidth = gridWidth / cols;
     float cellHeight = gridHeight / rows;
 
-    // Load textures and sprites
+  
     std::vector<sf::Texture> textures(numImages);
     std::vector<sf::Sprite> sprites(numImages);
     std::vector<sf::FloatRect> spriteBounds(numImages);
@@ -894,16 +886,16 @@ int show_monster_location(sf::RenderWindow &window, programm &bug, monster *monn
                 sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
                 if (!textBox.getGlobalBounds().contains(mousePos))
                 {
-                    return -1; // Return -1 if clicked outside
+                    return -1; 
                 }
                 else
                 {
-                    // Check if clicked on any sprite
+                 
                     for (size_t i = 0; i < numImages; ++i)
                     {
                         if (!imageFiles[i].empty() && spriteBounds[i].contains(mousePos))
                         {
-                            // Return the exact number of the image clicked (0-18)
+                            
                             return extractNumber(imageFiles[i]);
                         }
                     }
@@ -923,7 +915,7 @@ int show_monster_location(sf::RenderWindow &window, programm &bug, monster *monn
 }
 std::string show_monster_asset(sf::RenderWindow &window, const std::string &monster_folder_path)
 {
-    // Prepare the text box (rectangle)
+   
     sf::Vector2u winSize = window.getSize();
     float maxBoxWidth = 800.f, maxBoxHeight = 600.f;
     float boxWidth = std::min(winSize.x * 0.6f, maxBoxWidth);
@@ -935,7 +927,7 @@ std::string show_monster_asset(sf::RenderWindow &window, const std::string &mons
     textBox.setOutlineThickness(3.f);
     textBox.setPosition((winSize.x - boxSize.x) / 2, (winSize.y - boxSize.y) / 2);
 
-    // Load all monster assets from the folder
+  
     std::vector<std::string> monsterFiles;
     std::vector<std::string> monsterNames;
 
@@ -946,7 +938,7 @@ std::string show_monster_asset(sf::RenderWindow &window, const std::string &mons
             if (entry.is_regular_file())
             {
                 std::string extension = entry.path().extension().string();
-                // Check if it's an image file
+            
                 if (extension == ".png" || extension == ".jpg" || extension == ".jpeg")
                 {
                     monsterFiles.push_back(entry.path().string());
@@ -957,25 +949,25 @@ std::string show_monster_asset(sf::RenderWindow &window, const std::string &mons
     }
     catch (const fs::filesystem_error &e)
     {
-        return ""; // Return empty string if folder doesn't exist or can't be accessed
+        return ""; 
     }
 
     size_t numMonsters = monsterFiles.size();
     if (numMonsters == 0)
         return "";
 
-    // Calculate grid layout based on number of monsters
+   
     size_t cols = (numMonsters <= 2) ? 2 : (numMonsters <= 4) ? 2
                                                               : 3;
-    size_t rows = (numMonsters + cols - 1) / cols; // Ceiling division
+    size_t rows = (numMonsters + cols - 1) / cols; 
 
     float padding = 40.f;
     float gridWidth = boxSize.x - 2 * padding;
-    float gridHeight = boxSize.y - 2 * padding - 60.f; // leave space for text
+    float gridHeight = boxSize.y - 2 * padding - 60.f; 
     float cellWidth = gridWidth / cols;
     float cellHeight = gridHeight / rows;
 
-    // Load textures and sprites
+   
     std::vector<sf::Texture> textures(numMonsters);
     std::vector<sf::Sprite> sprites(numMonsters);
     std::vector<sf::FloatRect> spriteBounds(numMonsters);
@@ -985,10 +977,10 @@ std::string show_monster_asset(sf::RenderWindow &window, const std::string &mons
         if (textures[i].loadFromFile(monsterFiles[i]))
         {
             sprites[i].setTexture(textures[i]);
-            // Scale to fit inside the cell
+            
             float scaleX = cellWidth / sprites[i].getLocalBounds().width;
             float scaleY = cellHeight / sprites[i].getLocalBounds().height;
-            float scale = std::min(scaleX, scaleY) * 0.8f; // add margin
+            float scale = std::min(scaleX, scaleY) * 0.8f; 
             sprites[i].setScale(scale, scale);
         }
 
@@ -1018,16 +1010,16 @@ std::string show_monster_asset(sf::RenderWindow &window, const std::string &mons
                 sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
                 if (!textBox.getGlobalBounds().contains(mousePos))
                 {
-                    return ""; // Return empty string if clicked outside
+                    return ""; 
                 }
                 else
                 {
-                    // Check if clicked on any sprite
+                   
                     for (size_t i = 0; i < numMonsters; ++i)
                     {
                         if (spriteBounds[i].contains(mousePos))
                         {
-                            // Return the monster name
+                         
                             return monsterNames[i];
                         }
                     }
@@ -1051,7 +1043,7 @@ std::string show_monster_asset(sf::RenderWindow &window, const std::string &mons
 
 std::string show_hero_item_have(sf::RenderWindow &window, hero *heroPtr)
 {
-    // Get hero's items
+
     std::vector<item *> &hero_item = heroPtr->get_items();
 
     if (hero_item.empty())
@@ -1059,7 +1051,7 @@ std::string show_hero_item_have(sf::RenderWindow &window, hero *heroPtr)
         return "";
     }
 
-    // Prepare the text box
+
     sf::Vector2u winSize = window.getSize();
     float maxBoxWidth = 1200.f, maxBoxHeight = 800.f;
     float boxWidth = std::min(winSize.x * 0.8f, maxBoxWidth);
@@ -1071,7 +1063,7 @@ std::string show_hero_item_have(sf::RenderWindow &window, hero *heroPtr)
     textBox.setOutlineThickness(3.f);
     textBox.setPosition((winSize.x - boxSize.x) / 2, (winSize.y - boxSize.y) / 2);
 
-    // Grid layout
+    
     size_t numitem = hero_item.size();
     size_t cols = 3;
     size_t rows = (numitem + cols - 1) / cols;
@@ -1081,7 +1073,7 @@ std::string show_hero_item_have(sf::RenderWindow &window, hero *heroPtr)
     float cellWidth = gridWidth / cols;
     float cellHeight = gridHeight / std::max(rows, size_t(1));
 
-    // Load textures and sprites (reduced vectors)
+
     std::vector<sf::Texture> textures(numitem);
     std::vector<sf::Sprite> sprites(numitem);
 
@@ -1093,7 +1085,7 @@ std::string show_hero_item_have(sf::RenderWindow &window, hero *heroPtr)
         if (textures[i].loadFromFile(path))
         {
             sprites[i].setTexture(textures[i]);
-            // Scale to fit inside the cell
+   
             float scaleX = cellWidth / sprites[i].getLocalBounds().width;
             float scaleY = cellHeight / sprites[i].getLocalBounds().height;
             float scale = std::min(scaleX, scaleY) * 0.8f;
@@ -1158,7 +1150,7 @@ std::string show_hero_item_have(sf::RenderWindow &window, hero *heroPtr)
 std::string show_folder_save(sf::RenderWindow &window)
 {
 
-    // Prepare the text box
+
     sf::Vector2u winSize = window.getSize();
     float maxBoxWidth = 1200.f, maxBoxHeight = 800.f;
     float boxWidth = std::min(winSize.x * 0.8f, maxBoxWidth);
@@ -1170,17 +1162,17 @@ std::string show_folder_save(sf::RenderWindow &window)
     textBox.setOutlineThickness(3.f);
     textBox.setPosition((winSize.x - boxSize.x) / 2, (winSize.y - boxSize.y) / 2);
 
-    // Grid layout for 5 assets
+   
     size_t numAssets = 5;
     size_t cols = 3;
     size_t rows = 2;
     float padding = 40.f;
     float gridWidth = boxSize.x - 2 * padding;
-    float gridHeight = boxSize.y - 2 * padding - 60.f; // leave space for text
+    float gridHeight = boxSize.y - 2 * padding - 60.f; 
     float cellWidth = gridWidth / cols;
     float cellHeight = gridHeight / rows;
 
-    // Load textures and sprites
+
     std::vector<sf::Texture> textures(numAssets);
     std::vector<sf::Sprite> sprites(numAssets);
     std::vector<sf::FloatRect> spriteBounds(numAssets);
@@ -1193,7 +1185,7 @@ std::string show_folder_save(sf::RenderWindow &window)
         if (textures[i].loadFromFile(path))
         {
             sprites[i].setTexture(textures[i]);
-            // Scale to fit inside the cell
+           
             float scaleX = cellWidth / sprites[i].getLocalBounds().width;
             float scaleY = cellHeight / sprites[i].getLocalBounds().height;
             float scale = std::min(scaleX, scaleY) * 0.8f;
