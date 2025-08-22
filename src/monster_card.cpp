@@ -21,6 +21,7 @@ int monster_card::get_item_count()
 }
 void monster_card::_strike(int dice_attack, int move, programm &bug, monster *monster)
 {
+  cerr << "kir";
 
     // move
     vector<vector<int>> routes;
@@ -56,7 +57,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
     vector<pair<std::unique_ptr<Button2>, item *>> Buttonitem;
     for (int i = 0; i < dice_attack && !monster->get_did_attack(); i++)
     {
-        int rand = distib(gen);
+        int rand = distib(gen); 
         if (rand == 1) // power dice aval
         {
             sf::RenderWindow window({1920, 1080}, "Horrified board game");
@@ -68,8 +69,7 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
         rand = distib(gen);
         if (rand == 5 || rand == 3) // attack dice
         {
-            sf::RenderWindow window({1920, 1080}, "Horrified board game");
-            showCenteredTextBox(window, "dice rolled a attack");
+
             enum State
             {
                 info,
@@ -79,6 +79,9 @@ void monster_card::_strike(int dice_attack, int move, programm &bug, monster *mo
             State state = State::info;
             if (!monster->get_loc()->get_hero_list().empty()) // fixe
             {
+                sf::RenderWindow window1({1920, 1080}, "Horrified board game");
+                showCenteredTextBox(window1, "dice rolled a attack");
+                window1.close();
                 for (int i = 0; i < monster->get_loc()->get_hero_list()[0]->get_items().size(); i++)
                 {
                     string dir = "../Horrified_Assets/Items/";
@@ -239,7 +242,7 @@ void monster_card::load_game(std::string file_name, programm &bug)
         {
             if (bug.monster_card_list[i]->name_of_card == name_card)
             {
-                rotate(bug.monster_card_list.begin(), bug.monster_card_list.begin() + i, bug.monster_card_list.begin() + i + 1);
+                swap(bug.monster_card_list[i] , bug.monster_card_list[counter]);
                 break;
             }
         }
