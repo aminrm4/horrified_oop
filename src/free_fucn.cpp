@@ -1361,7 +1361,7 @@ void save_game_state(vector<int> &state, string file_name, programm &bug)
     {
         data_saver << loc->get_coffin_exist() << endl;
     }
-
+    data_saver<<bug.heroNo<<endl;
     data_saver.close();
 }
 void load_game_state(string file_name, programm &bug)
@@ -1387,8 +1387,8 @@ void load_game_state(string file_name, programm &bug)
     {
         int check;
         loader >> check;
-        cerr << check;
         loc->set_coffin_exist(check);
     }
+    loader>>bug.heroNo;
     loader.close();
 }

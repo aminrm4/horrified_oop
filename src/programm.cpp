@@ -949,7 +949,6 @@ void programm::run(bool loadingSave)
   Button2 scientist(Button2({225, 300}, {1175, 300}, "../Horrified_Assets/Heros/Scientist.png"));
   Button2 invisiblemanMat({270, 180}, {1550.f, 400.f}, "../Horrified_Assets/Monster_Mat/Precinct.png");
   vector<int> Nohero;
-  int heroNo = 0;
   int locationshow = 0;
   int selectionNo = 0;
 
