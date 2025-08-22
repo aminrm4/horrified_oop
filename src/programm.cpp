@@ -53,9 +53,9 @@ void programm::save_game(string file_name, vector<int> &st)
   fs::path dir = file_name;
   if (!fs::exists(dir))
   {
-      fs::create_directory(dir);   //added to create the folder if not exist
+    fs::create_directory(dir); // added to create the folder if not exist
   }
-  
+
   if (!fs::is_empty(dir))
   {
     for (auto const &entry : fs::directory_iterator(dir))
@@ -125,6 +125,7 @@ void programm::load_game(string file_name)
   for (auto ca : monster_card_list)
   {
     ca->load_game(file_name, *this);
+    break;
   }
 
   for (auto mo : monster_list)
@@ -980,19 +981,34 @@ void programm::run(bool loadingSave)
         }
         if (hero_list[heroNo]->get_action() <= 0)
         {
-
-          MonsterPhase(*this, window);
-          if (typeid(*hero_list[heroNo]).name() == typeid(class Mayor).name())
+          bool detect = true;
+          for (auto &&monster : this->monster_list)
           {
-            hero_list[heroNo]->set_action(5);
+            if (monster->get_did_attack())
+              detect = false;
           }
-          else
-            hero_list[heroNo]->set_action(4);
+          if (detect)
+            MonsterPhase(*this, window);
+
+          for (auto hero : hero_list)
+          {
+            if (typeid(*hero).name() == typeid(class Mayor).name())
+            {
+              hero->set_action(5);
+            }
+            else
+              hero->set_action(4);
+          }
 
           if (heroNo == 1)
             heroNo = 0;
           else
             heroNo = 1;
+
+          for (auto &&monster : this->monster_list)
+          {
+           monster->set_did_attack(false);
+          }
         }
         for (int i = 0; i < location_Button.size(); i++)
         {
@@ -1385,27 +1401,24 @@ void programm::run(bool loadingSave)
         if (monster_list.size() == 0)
         {
           Goodbye.set_massage("Victory");
-          state =initstate::End ;
+          state = initstate::End;
         }
-        
-          
+
         if (monster_card_list.size() == 0 || night_terror >= 5)
         {
           Goodbye.set_massage("Game Over");
-          state =initstate::End;
+          state = initstate::End;
         }
-        
-          
 
         sf::RectangleShape fade({1920, 1080});
         fade.setFillColor(sf::Color(0, 0, 0, 175));
 
-         if(state == initstate::End)
-          {
-            window.draw(fade);
-            Goodbye.draw(window);
-          }
-  // end the game and
+        if (state == initstate::End)
+        {
+          window.draw(fade);
+          Goodbye.draw(window);
+        }
+        // end the game and
       }
       std::thread t2(&programm::CheckItemsPouchEmpty, this); // there is a bug here that i cant use thread of this func cuz program shuts down and gives no error or anything when arrives here
       t2.detach();

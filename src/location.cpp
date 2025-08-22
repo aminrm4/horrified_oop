@@ -197,7 +197,7 @@ void location::load_game(std::string file_name, programm &bug)
     string nam;
     while (loader >> lo >> nam)
     {
-
+        
         for (int i = 0; i < bug.list_of_items.size(); i++)
         {
 
@@ -208,7 +208,9 @@ void location::load_game(std::string file_name, programm &bug)
                 break;
             }
         }
+
     }
+    
     loader.close();
 
     fs::path dir_v = vill_file_name;
